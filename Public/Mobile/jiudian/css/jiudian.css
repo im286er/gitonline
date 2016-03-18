@@ -1,0 +1,247 @@
+/* CSS Document */
+.jiudian section
+{
+	border-top:none;
+	background:none;
+	margin-bottom:0
+}
+.jiudian-activity .sec-body{
+	border-bottom:none
+}
+.jiudian-infor .sec-body{
+	border-bottom:none
+}
+.jiudian-coupon .sec-body{
+	border-bottom:none
+}
+.bg-f6f9fd{
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(105, 164, 215, 1)  100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(105, 164, 215, 1) 100%);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(105, 164, 215, 1) 100%);
+	background:linear-gradient(top, rgba(255,255,255,1) 0%,rgba(105, 164, 215, 1) 100%);
+}
+.jiudian-header {
+	background-color:#4b94d0
+}
+.jiudian-header h1 {
+	color: #ffffff;
+}
+.jiudian .jiudian-banner {
+	margin-bottom: 0;
+}
+.jiudian-page {
+	bottom: 0.5rem;
+}
+.jiudian-page .swiper-pagination-bullet {
+    background-color: #f4f4f5;
+    border-color: #f4f4f5;
+}
+.jiudian-page .swiper-pagination-bullet-active {
+    background-color: #81bbe4;
+    border-color: #81bbe4;
+}
+.jiudian-nav{
+	background-color:#fff;
+	overflow:hidden;
+	text-align:center;
+	padding:.45rem
+}
+.jiudian-nav ul li{
+	width:33.33%;
+	float:left;
+	padding:.15rem;
+}
+.jiudian-nav ul li a{
+	display:block;
+	height:8rem;
+}
+.jiudian-nav ul li:nth-child(1) a{
+	background:#d5758c;
+}
+.jiudian-nav ul li:nth-child(2) a{
+	background:#cdcd3a;
+}
+.jiudian-nav ul li:nth-child(3) a{
+	background:#be9ec9;
+}
+.jiudian-nav ul li:nth-child(4) a{
+	background:#dc9015;
+}
+.jiudian-nav ul li:nth-child(5) a{
+	background:#84c583;
+}
+.jiudian-nav ul li:nth-child(6) a{
+	background:#4b94d0;
+}
+.jiudian-nav ul li img{
+	width:3.6rem;
+	height:3.6rem;
+	border-radius:50%;
+	-moz-border-radius:50%;
+	-o-border-radius:50%;
+	-webkit-border-radius:50%;
+	margin-top:.9rem
+}
+.jiudian-nav ul li span{
+	display:block;
+	font-size:1.2rem;
+	color:#fff;
+	margin-top:.4rem
+}
+.sec-title{
+	background:#4b93d0;
+	border-top-left-radius:.3rem;
+	border-top-right-radius:.3rem;
+	border-bottom:none;
+	line-height:3.3rem;
+	color:#fff;
+	height:3.3rem;
+	margin:.6rem
+}
+a.jiudian-more{
+	position:absolute;
+	right:0;
+	color:#fff;
+	font-size:1.4rem;
+	font-weight:normal;
+	height:3.3rem;
+	display:block;
+	width:5rem;
+	text-align:center
+}
+.sec-body{
+	margin:0 .35rem ;
+}
+.jiudian-activity .sec-title{
+	margin:.6rem .6rem .25rem
+}
+.jiudian-activity ul li{
+	padding:.25rem;
+	width:50%;
+	float:left;
+}
+.jiudian-activity ul li a{
+	background:#fff;
+	display:block
+}
+.jiudian-activity ul li img{
+	width:100%;
+	height:9.7rem
+}
+.jiudian-activity ul li h4{
+	font-size:1.4rem;
+	color:#d5758c;
+	margin-top:.6rem;
+	padding:0 1.4rem
+}
+.jiudian-activity ul li p{
+	color:#afafaf;
+	font-size:1.1rem;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	padding:0 1.4rem .6rem;
+	height:2.2rem;
+}
+.jiudian-infor .sec-body{
+	margin:.5rem .6rem
+}
+.jiudian-infor .sec-body ul li{
+	width:100%;
+	padding:0;
+	background:#fff;
+	margin-bottom:.6rem
+}
+.jiudian-infor .sec-body ul li img{
+	width:100%
+}
+.jiudian-infor ul li h4{
+	font-size:1.1rem;
+	color:#d5758c;
+	margin-top:.6rem;
+	padding:0 1.4rem
+}
+.jiudian-infor ul li p{
+	color:#afafaf;
+	font-size:rem;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	padding:.2rem 1.4rem .6rem;
+}
+section.jiudian-coupon{
+	margin:.6rem
+}
+.jiudian-coupon .sec-title{
+	margin:0
+}
+.jiudian-coupon .sec-body li{
+	height:10.2rem;
+	position:relative;
+	padding:0
+}
+.jiudian-coupon .sec-body li:nth-child(1){
+	background:url(../img/jiudian_coupon_01.png) no-repeat;
+	background-size:100% 10.2rem;
+	margin-bottom:1.4rem
+}
+.jiudian-coupon .sec-body{
+	margin:0;
+	padding:1.4rem .9rem;
+	background:rgba(255,255,255,.35);
+}
+.jiudian-coupon .sec-body li:nth-child(2){
+	background:url(../img/jiudian_coupon_02.png) no-repeat;
+	background-size:100% 10.2rem;
+}
+.coupon-name{
+	padding:0 3rem;
+	height:5.7rem;
+	line-height:5.7rem;
+	color:#fff;	
+}
+.coupon-name h4{
+	font-size:3.2rem;
+	font-weight:normal;
+	position:absolute
+}
+.coupon-name span{
+	position:absolute;
+	right:3rem;
+	line-height:7rem;
+	font-size:1.6rem
+}
+.coupon-txt{
+	height:4.5rem;
+	font-size:1.1rem;
+	padding:.6rem 0
+}
+.coupon-txt p{
+	padding-left:3.9rem;
+	line-height:1.7rem;
+	color:#afafaf;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.jiudian-coupon ul li:nth-child(1) .coupon-txt p:nth-child(1){
+	color:#dc8f15
+}
+.jiudian-coupon ul li:nth-child(2) .coupon-txt p:nth-child(1){
+	color:#d5758c
+}
+.jiudian-coupon .sec-body li a i{
+	position:absolute;
+	right:4.2rem;
+	top:-.5rem;
+	background:url(../img/jiudian_coupon_03.png) no-repeat;
+	background-size:100% 2.1rem;
+	display:block;
+	font-style:normal;
+	width:5.4rem;
+	height:2.1rem;
+	line-height:2.1rem;
+	text-align:center;
+	color:#fff;
+	font-size:1.1rem
+}

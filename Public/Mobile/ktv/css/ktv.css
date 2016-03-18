@@ -1,0 +1,147 @@
+.bg-0d0d21 {
+	background: #0d0d21;
+}
+.bg-0d0d21 #pullDown {
+	background: #0d0d21;
+}
+.ktv-header {
+	color:#fff;
+	background: none;
+	border-bottom: none;
+	background-image:-webkit-linear-gradient(to bottom,rgba(0,0,0,.9) 0%, rgba(0, 0, 0, 0) 100%);
+	background-image:linear-gradient(to bottom,rgba(0,0,0,.9) 0%, rgba(0, 0, 0, 0) 100%);
+}
+#wrapper {
+	top: 0;
+}
+.ktv section {
+	margin-bottom: 0;
+}
+.ktv-page .swiper-pagination-bullet {
+    background-color: #1a126f;
+    border-color: #1a126f;
+}
+.ktv-page .swiper-pagination-bullet-active {
+    background-color: #688ed7;
+    border-color: #688ed7;
+}
+.ktv-nav {
+	background:#0d0d21
+}
+.ktv-nav li {
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.ktv-nav a {
+	display: block;
+	height: 7rem;
+}
+.ktv-nav img {
+	width: 4.4rem;
+	height: 4.4rem;
+	margin-top:0.6rem;
+}
+.ktv-nav span {
+	display: block;
+	font-size: 1.1rem;
+	color:#cccdce;
+}
+.ktv section {
+	border-top: none;
+}
+
+.ktv .sec-body {
+	border-bottom: none;
+}
+.ktv .sec-body ul li img{
+	width:100%
+}
+.ktv-news li {
+	float: left;
+	width: 50%;
+	padding: 0;
+	position: relative;
+}
+.ktv-news li a, .ktv-coupon li a {
+	display: block;
+	position: relative;
+}
+.ktv-news img {
+	width: 100%;
+	height: 8.8rem;
+}
+.ktv-news-txt {
+	width: 2.6rem;
+	height: 8rem;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background:url(../img/act_bg.png) no-repeat;
+	background-size:100%;
+	text-align: center;
+	padding: .7rem 0;
+	font-size: 1.6rem;
+	line-height: 1.6rem;
+	color: #fff;
+}
+
+.ktv-coupon li {
+	padding: 0;
+}
+.ktv-coupon img {
+	width: 100%;
+	height: 9.2rem;
+}
+.ktv-cp-mask {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,.2);
+	color:#fff;
+}
+.ktv-cp-txt {
+	background: url("../img/ktv_coupon_bg.png") no-repeat;
+	background-size: 100%;
+	width: 14.3rem;
+	height: 5.5rem;
+	overflow: hidden;
+	line-height: 5.5rem;
+	margin: 1.75rem auto;
+	color: #4ed7e5;
+	font-size: 1.2rem;
+	padding-left: 5rem;
+}
+.ktv-coupon li{
+	padding:0;
+	height:9rem;
+}
+.ktv .sec-title {
+	height: 4rem;
+	padding: 0 15px;
+	line-height: 4rem;
+	position: relative;
+	border-bottom: none;
+	background: -webkit-linear-gradient(to right, #160156 , #100e20);
+	background: linear-gradient(to right, #160156 , #100e20);
+}
+.ktv .sec-title h3{
+	font-size: 1.2rem;
+	color:#4ed7e5;
+}
+.ktv .sec-title a {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.ico-right {
+	display: block;
+	width: 4rem;
+	height: 4rem;
+	background-image: url("../img/ico_right.png");
+}

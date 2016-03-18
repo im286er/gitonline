@@ -1,0 +1,230 @@
+.bg-fff {
+	background: #fff;
+}
+.jiaju section {
+	border-top: none;
+}
+.jiaju-header {
+	background: #fff;
+}
+.jiaju-header h1 {
+	color: #1e1f1f;
+}
+.jiaju .jiaju-banner {
+	margin-bottom: 0;
+}
+.jiaju-page .swiper-pagination-bullet {
+    background-color: #a8a6a6;
+    border-color: #a8a6a6;
+}
+.jiaju-page .swiper-pagination-bullet-active {
+    background-color: #fff;
+    border-color: #fff;
+}
+
+.jiaju-nav {
+	height: 26.2rem;
+	position: relative;
+}
+.jiaju-nav ul {
+	padding-top: 1.4rem;
+	width: 14.5rem;
+}
+.jiaju-nav li {
+	width: 100%;
+}
+.jiaju-nav a {
+	display: block;
+	height: 4rem;
+	line-height: 4rem;
+	padding-left: 2rem;
+}
+.jiaju-nav img {
+	width: 3.2rem;
+	height: 3.2rem;
+	vertical-align: middle;
+	margin-right: 1.2rem;
+}
+.jiaju-nav span {
+	/*display: inline-block;*/
+	font-size: 1.2rem;
+	/*line-height: 3.6rem;*/
+	color: #5d5d5e;
+}
+.jiaju-nav-bg {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 17.4rem;
+	height: 26.2rem;
+	background-image: url("../img/jiaju_nav_bg.png");
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+}
+
+.jiaju .sec-title {
+	height: 3.6rem;
+	border-bottom: 1px solid #a5a4a5;
+	line-height: 3.6rem;
+}
+.jiaju .sec-title h3 {
+	float: none;
+	color: #5d5d5e;
+}
+.jiaju .sec-title a {
+	width: 5rem;
+	height: 3.6rem;
+	line-height: 3.6rem;
+	margin-right: 15px;
+	font-size: 1.2rem;
+	color: #5d5d5e;
+}
+.jiaju .sec-title a .ico-more {
+	width: 1.4rem;
+	height: 1.4rem;
+	vertical-align: middle;
+	background-image: url("../img/ico_more.png");
+	margin-left: 10px;
+}
+.jiaju .sec-body {
+	border-bottom: none;
+}
+.jiaju-recd ul {
+	padding: 0 .9rem;
+}
+.jiaju-recd li {
+	float: left;
+	width: 50%;
+	padding: 10px .9rem 0;
+}
+.jiaju-recd li a {
+	display: block;
+	width: 100%;
+	text-align: center;
+	border: 1px solid #a6a5a5;
+	padding: .5rem;
+}
+.jiaju-recd li img {
+	width: 100%;
+	height: 7.6rem;
+}
+.jiaju-recd li h6 {
+	height: 2.3rem;
+	font-size: 1.2rem;
+	line-height: 2.3rem;
+	color: #484949;
+	overflow: hidden;
+}
+.jiaju-coupon ul {
+	padding-top: 10px;
+}
+.jiaju-coupon li {
+	margin: 0 20px;
+	position: relative;
+	margin-bottom: 5px;
+	padding: 4px;
+	border: 1px solid #a6a5a5;
+}
+.jiaju-coupon li a {
+	width: 100%;
+	position: relative;
+}
+.jiaju-coupon li img {
+	width: 100%;
+	height: 7.6rem;
+}
+.jiaju-coupon li div {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	padding-top: 1.8rem;
+	text-align: center;
+	background: url("../img/jiaju_coupon_mask.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+.jiaju-coupon li div span {
+	display: block;
+	height: 4rem;
+	line-height: 4rem;
+	font-size: 1.4rem;
+	color: #fff;
+	overflow: hidden;
+}
+
+.jiaju-act ul {
+	padding: 1.4rem 2rem;
+}
+.jiaju-act li {
+	height: 5.5rem;
+	/*padding-bottom: 10px;*/
+	position: relative;
+}
+.jiaju-act li:first-child {
+	margin-bottom: 5.6rem;
+}
+.jiaju-act-pic {
+	display: block;
+	width: 11.7rem;
+	height: 10.2rem;
+	position: absolute;
+}
+.jiaju-act li:first-child .jiaju-act-pic {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.jiaju-act li:nth-child(2) .jiaju-act-pic {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+.jiaju-act-pic img {
+	width: 11.7rem;
+	height: 10.2rem;
+}
+.jiaju-act-mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("../img/jiaju_act_mask.png");
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+	z-index: 2;
+}
+.jiaju-act-txt {
+	width: 16.6rem;
+	border-bottom: 1px solid #a6a5a5;
+	color: #5d5d5e;
+	text-align: right;
+	float: right;
+}
+.jiaju-act-txt h5 {
+	width: 100%;
+	height: 2.7rem;
+	line-height: 2.7rem;
+	font-size: 1.4rem;
+	padding-right: 44px;
+	overflow: hidden;
+}
+.jiaju-act-txt p {
+	width: 100%;
+	height: 1.8rem;
+	line-height: 1.8rem;
+	font-size: 1.1rem;
+	overflow: hidden;
+}
+.jiaju-act li:nth-child(2) .jiaju-act-txt {
+	float: left;
+	text-align: left;
+	width: 18.7rem;
+	position: relative;
+	z-index: 3;
+}
+.jiaju-act li:nth-child(2) .jiaju-act-txt h5 {
+	padding-right: 0;
+	padding-left: 44px;
+}

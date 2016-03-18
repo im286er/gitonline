@@ -1,0 +1,503 @@
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, em, img, strong, i,
+dl, dt, dd, ol, ul, li,
+form, label,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0;}
+img { border: none; vertical-align: top;}
+a { text-decoration: none; outline: none;}
+ul { list-style: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+input,button,textarea,select,optgroup,option{ font-size: 100%; font: inherit; background: none; border: none; outline: none;}
+
+html {
+	font-size: 62.5%;
+}
+body {
+	font-family: Helvetica, "微软雅黑";
+	background-color: #f5f5f5;
+}
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
+/*图标类*/
+
+.pay-inshop{
+	background: url(../Images/pay-inshop.png) no-repeat left top;
+}
+.pay-mobile{
+	background: url(../Images/pay-mobile.png) no-repeat left top;
+}
+.payment{
+	background: url(../Images/payment.png) no-repeat left top;
+}
+.ico-call-red{
+	background: url(../Images/ico-call-red.png);
+	width: 4.2rem;
+	height: 4.2rem;
+	float: left;
+}
+.waiting-deal{
+	background: url(../Images/waiting-deal.png) no-repeat left top;
+}
+.accept-appointment{
+	background: url(../Images/accept-appointment.png) no-repeat left top;
+}
+.refused-appointment{
+	background: url(../Images/refused-appointment.png) no-repeat left top;
+}
+.ico_pu{
+	background: url(../Images/ico_pu.png) no-repeat left top;
+	width: 1.8rem;
+	height: 1.8rem;
+}
+.ico_v{
+	background: url(../Images/ico_v.png) no-repeat left top;
+	width: 1.8rem;
+	height: 1.86rem;
+}
+.ico-add{
+	background: url(../Images/ico_add.png) no-repeat left top;
+	width: 4.1rem;
+	height: 4.4rem;
+}
+.ico-editor{
+	background: url(../Images/ico-editor.png) no-repeat left top;
+	width: 2.3rem;
+	height: 4.6rem;
+}
+.ico-checked{
+	background: url(../Images/check_red.png) no-repeat left top;
+	width: 5.8rem;
+	height: 4.3rem;
+}
+.ico-size{
+	background-size: 100% 100%;
+}
+/*浮动类*/
+.fl-left{
+	float: left;
+}
+.fl-right{
+	float: right;
+}
+
+/*间距类*/
+.spacing{
+	padding: 0px 0.4rem 0px 0.4rem;
+}
+/*基本公用代码*/
+.container{
+	background: #f2f2f2;
+	padding-top: 1.4rem;
+}
+.header{
+	position: relative;
+	border-bottom: 1px solid #c8c7cc;
+	background: #fff;
+}
+.header .ico {
+  position: absolute;
+  bottom: 0;
+}
+.header h1 {
+  font-size: 1.8rem;
+  color: #000;
+  line-height: 4.4rem;
+  text-align: center;
+  font-weight: normal;
+}
+.header-back {
+  display: block;
+  width: 4.4rem;
+  height: 4.4rem;
+  left: 0;
+  background-image: url("../Images/ico_back_red.png");
+  background-size: 100% 100%;
+}
+
+
+/*我的活动*/
+.act_item {
+	padding-top: 10px;
+}
+.act_item li {
+	border-top: 1px solid #e3e3e8;
+	border-bottom: 1px solid #e3e3e8;
+	background: #fff;
+	margin-bottom: 10px;
+	position: relative;
+}
+.act_item .div-a {
+	display: block;
+	width: 100%;
+	padding: .8rem 1.5rem 1.5rem;
+}
+.act-title {
+	font-size: 1.6rem;
+	line-height: 1.9rem;
+	color: #333;
+	font-weight: normal;
+}
+.act-time {
+	font-size: 1.2rem;
+	line-height: 1.4rem;
+	color: #a2a2a6;
+	margin-bottom: .8rem;
+}
+.act-img {
+	display: block;
+	width: 100%;
+	margin-bottom: .7rem;
+}
+.act-desc {
+	font-size: 1.2rem;
+	line-height: 1.6rem;
+	color: #333;
+}
+
+
+
+
+/*我的订单*/
+
+.list_item{
+	border-radius: 10px;
+	background: #fff;
+	border: 1px solid #CCCCCC;
+	margin-bottom: 0.9rem;
+	overflow: hidden;
+}
+.ord-title{
+	position: relative;
+	height: 4.6rem;
+	border-bottom: 1px solid #ccc;
+	padding: 0.8rem 0 0.5rem 0;
+	margin-left: 1.2rem;
+}
+.ord-title h3{
+	font-size: 1.4rem;
+	color: #131313;
+	line-height: 1.4rem;
+	font-weight: normal;
+}
+.ord-time{
+	font-size: 1rem;
+	color: #131313;
+	line-height: 2rem;
+}
+.title-right{
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 8.7rem;
+	height: 4.6rem;
+	padding: 0.6rem 0rem 0.6rem 1rem;
+	margin-top: -1px;
+	margin-right: -1px;
+}
+.title-right span{
+	font-size: 1rem;
+	color: #fff;
+	line-height: 1.8rem;
+	display: block;
+}
+.ord-body{
+	border-bottom: 1px solid #CCCCCC;
+}
+.ord-body li{
+	font-size: 0.9rem;
+	line-height: 2.9rem;
+	margin-left: 1rem;
+	margin-right: 1.2rem;
+	color: #67696B;
+	overflow: hidden;
+}
+.ord-body h3{
+	float: left;
+	font-weight: normal;
+	font-size: 1rem;
+}
+.ord-body span{
+	float: right;
+}
+.last{
+	border-bottom: 1px dashed #CCCCCC;
+}
+.ord-body .total{
+	line-height: 3.3rem;
+	font-size: 1rem;
+	color: #131313;
+}
+.ord-footer{
+	height: 4.1rem;	
+	text-align: center;	
+}
+.ord-footer a{
+	display: block;
+	color: #67696B;
+	font-size: 1.4rem;
+	line-height: 4.1rem;
+}
+
+
+/*我的消费码*/
+.codeitem{
+	border-radius: 10px;
+	background: #fff;
+	border: 1px solid #CCCCCC;
+	overflow: hidden;
+}
+.codetop{
+	position: relative;
+	height: 4.6rem;
+	border-bottom: 1px solid #ccc;
+	padding: 0.8rem 0 0.5rem 0;
+	margin-left: 1.2rem;
+}
+.codetop h3{
+	font-size: 1.4rem;
+	color: #131313;
+	line-height: 1.4rem;
+	font-weight: normal;
+}
+.codebody{
+	text-align: center;
+	padding-bottom: 0.9rem;
+	padding-top: 0.9rem;
+	margin-left: 1rem;
+	margin-right: 1.2rem;
+	border-bottom: 1px dashed #CCCCCC;
+}
+.codebody img{
+	width: 15rem;
+	height: 15rem;
+}
+.codefooter p{
+	font-size: 1.1rem;
+	line-height: 1.7rem;
+	padding: 0.5rem 0.5rem 0.5rem 1rem;
+	color: #67696B;
+}
+.contact p{
+	color: #929292;
+	font-size: 1rem;
+	margin: 1.5rem 0 0.9rem 1.5rem;
+}
+.contact-call{
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	height: 4.2rem;
+	background: #fff;
+	overflow: hidden;
+}
+.contact-call p{
+	color: #000;
+	font-size: 1.4rem;
+	float: left;
+}
+
+
+/*我的预约*/
+.appointment-btn{
+	overflow: hidden;
+}
+.appointment-btn :first-child{
+	border-right: 1px solid #ccc;
+}
+.appointment-btn .btn{
+	width: 50%;
+	text-align: center;
+	float: left;
+	color: #333333;
+}
+
+
+/*我的收藏*/
+.no-padding{
+	padding-top: 0px;
+}
+.mycollection a{
+	display: block;
+}
+.mycollection ul{
+	padding-left: 0.9rem;
+	background: #fff;
+}
+.mycollection li{
+	border-bottom: 1px solid #ccc;
+	padding-top: 0.9rem;
+	padding-bottom: 0.7rem;
+	overflow: hidden;
+}
+.mycollection a{
+	overflow: hidden;
+}
+.coll-left{
+	float: left;
+	width: 7rem;
+	height: 6.1rem;
+	margin-right: 1rem;
+}
+.coll-left img{
+	width: 100%;
+}
+.coll-right{
+	height: 6.1rem;
+	padding-right: 0.8rem;
+}
+.coll-right h2{
+	font-size: 1.5rem;
+	margin-bottom: 0.7rem;
+	font-weight: normal;
+	color: #333;
+}
+.coll-right p{
+	overflow: hidden;
+}
+.coll-right span{
+	display: block;
+}
+.coll-fx span{
+	line-height: 1.8rem;
+	height: 1.8rem;
+	font-size: 1.2rem;
+	color: #67696B;
+}
+.coll-fx i{
+	width: 1.8rem;
+	height: 1.8rem;
+	display: block;
+	float: left;
+	margin-right: 0.6rem;
+}
+.coll-fx span:first-child{
+	margin-right: 0.8rem;
+}
+.coll-type{
+	color: #929292;
+	margin-top: 0.4rem;
+}
+.coll-type span{
+	font-size: 1rem;
+}
+/*收货地址列表*/
+.editor{
+	position: absolute;
+	float: right;
+	font-size: 1.8rem;
+	color: #ccc;
+	line-height: 4.4rem;
+	right: 1.4rem;
+	top: 0px;
+	display: block;
+}
+.address-list{
+	position: relative;
+}
+.address-list li{
+	height: 4.4rem;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+}
+.address-list span{
+	font-size: 1.4rem;
+	color: #333;
+	line-height: 4.4rem;
+	display: block;
+}
+.ico-add-g{
+	background: url(../Images/ico_add_g.png) no-repeat right top;
+	background-size: 100% 100%;
+	display: block;
+	float: right;
+	height: 4.4rem;
+	width: 4.4rem;
+}
+.address-list img{
+	position: absolute;
+	left: 50%;
+	margin-left: -5rem;
+	height: 10rem;
+	width: 10rem;
+	margin-top: 9.6rem;
+}
+
+
+/*新增收货地址*/
+.editor-active{
+	color: #FF6E7E;
+}
+.add-address{
+	height: 4.4rem;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+	margin-bottom: 1.4rem;
+}
+.add-address span{
+	font-size: 1.4rem;
+	color: #333;
+	line-height: 4.4rem;
+	display: block;
+}
+.address a{
+	height: 7.4rem;
+	display: block;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	background: #fff;
+	padding: 1.4rem 0px 1rem 1.5rem;
+	width: 100%;
+}
+.add-left{
+	width: 22rem;
+}
+.add-left p span{
+	padding-right: 1.4rem;
+	color: #67696B;
+	font-size: 1.4rem;
+	margin-bottom: 0.4rem;
+}
+.add-item{
+	color: #333;
+	font-size: 1.2rem;
+	line-height: 1.6rem;
+}
+.add-right{
+	display: block;
+}
+
+
+/*已开放城市*/
+.city-list li{
+	height: 4.4rem;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+}
+.city-list span{
+	font-size: 1.4rem;
+	color: #333;
+	line-height: 4.4rem;
+	display: block;
+	padding-left: 1.4rem;
+}
+.city-list img{
+	position: absolute;
+	left: 50%;
+	margin-left: -5.6rem;
+	height: 7.8rem;
+	width: 11.2rem;
+	margin-top: 12.5rem;
+}
+.ico-checked{
+	display: block;
+}

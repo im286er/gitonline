@@ -1,0 +1,117 @@
+.bg-fff {
+	background: #fff;
+}
+.clothes-header {
+	background: none;
+	background-image:-webkit-linear-gradient(to bottom,rgba(63,59,58,.8) 0%,rgba(208,207,207,.5) 100%);
+	background-image:linear-gradient(to bottom,rgba(63,59,58,.8) 0%,rgba(208,207,207,.5) 100%);
+}
+.clothes-header h1 {
+	color: #fff;
+}
+
+#wrapper {
+	top: 0;
+}
+.clothes-page .swiper-pagination-bullet {
+    background-color: #938f8f;
+    border-color: #938f8f;
+}
+.clothes-page .swiper-pagination-bullet-active {
+    background-color: #595757;
+    border-color: #595757;
+}
+.clothes section {
+	border-top: none;
+	background: none;
+	margin-bottom: 0;
+}
+.clothes .sec-title {
+	border-top: none;
+}
+.clothes .sec-body {
+	border-bottom: none;
+}
+.clothes-nav li {
+	float: left;
+	width: 33.3%;
+	text-align: center;
+	border-right: 1px solid #f4f4f4;
+	border-bottom: 1px solid #f4f4f4;
+}
+.clothes-nav li:nth-child(3n) {
+	border-right: none;
+}
+.clothes-nav li a {
+	display: block;
+	padding-top: .8rem;
+}
+.clothes-nav li img {
+	width: 2rem;
+	height: 2rem;
+}
+.clothes-nav li span {
+	display: block;
+	height: 2.2rem;
+	line-height: 2.2rem;
+	font-size: 1.1rem;
+	color: #7a7777;
+}
+.clothes .sec-title {
+	background: #4a4969;
+}
+.clothes .sec-title h3 {
+	color: #fff;
+}
+.clothes .sec-title a {
+	color: #fff;
+	text-align: right;
+	padding-right: 10px;
+	font-size: 1.4rem;
+}
+.clothes-coupon li {
+	padding: 0;
+}
+.clothes-coupon li a {
+	display: block;
+	width: 100%;
+	/*height: 10rem;*/
+	color: #332c34;
+	position: relative;
+}
+.clothes-coupon li img {
+	width: 100%;
+}
+.clothes-coupon-txt {
+	position: absolute;
+	width: 11.3rem;
+	height: 100%;
+	top: 0;
+	left: 0;
+	padding-top: 13px;
+	z-index: 2;
+	background: url("../img/clothes_coupon_mask.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+.clothes-coupon li h5 {
+	height: 4.2rem;
+	overflow: hidden;
+	font-size: 2.0rem;
+	line-height: 4.2rem;
+	text-align: center;
+}
+.clothes-coupon li p {
+	height: 1.3rem;
+	overflow: hidden;
+	font-size: 1rem;
+	line-height: 1.3rem;
+	padding-left: 17px;
+}
+.clothes-news li {
+	float: left;
+	width: 33.3%;
+	padding: 0;
+}
+.clothes-news li img {
+	width: 100%;
+}

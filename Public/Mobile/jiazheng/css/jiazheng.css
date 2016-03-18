@@ -1,0 +1,189 @@
+/* CSS Document */
+section.jiazheng-activity,section.jiazheng-coupon{
+	border-top:none
+}
+.jiazheng-activity .sec-body{
+	border-bottom:none
+}
+.jiazheng-coupon .sec-body{
+	border-bottom:none
+}
+a{
+	display:block
+}
+.sec-body{
+	background-color:#fff
+}
+.bg-f6f9fd{
+	background:#f6f9fd
+}
+.jiazheng-header {
+	background-color:#a8aaec
+}
+.jiazheng-header h1 {
+	color: #ffffff;
+}
+.jiazheng .jiazheng-banner {
+	margin-bottom: 0;
+}
+.jiazheng-page {
+	bottom: 0.5rem;
+}
+.jiazheng-page .swiper-pagination-bullet {
+    background-color: #c1c5f4;
+    border-color: #fff;
+}
+.jiazheng-page .swiper-pagination-bullet-active {
+    background-color: #848ad8;
+    border-color: #fff;
+}
+.jiazheng-nav{
+	background-color:#fff;
+	overflow:hidden;
+	text-align:center;
+	height:17.6rem
+}
+.jiazheng-nav ul li{
+	width:33.33%;
+	float:left;
+	margin-top:1.6rem
+}
+.jiazheng-nav ul li img{
+	width:4.4rem;
+	height:4.4rem;
+	background:#e8eff9;
+	border-radius:50%;
+	-moz-border-radius:50%;
+	-o-border-radius:50%;
+	-webkit-border-radius:50%;
+	padding:.3rem
+}
+.jiazheng-nav ul li span{
+	display:block;
+	font-size:1.2rem;
+	color:#333333;
+	margin-top:.4rem
+}
+.jiazheng-activity,.jiazheng-coupon{
+	padding:0 1.8rem;
+	background-color:#f6f9fc;
+	margin-bottom:1.5rem
+}
+.sec-title{
+	background:url(../img/jiazheng_titlebg.png) no-repeat;
+	background-size:100% 4.4rem;
+	border-bottom:none
+}
+.sec-title h3{
+	float:none;
+	text-align:center;
+	line-height:3.2rem;
+	border-bottom:1px solid #f9f8fd;
+}
+.jiazheng-activity ul li{
+	padding:0 .9rem;
+	border-bottom:1px solid #f9f8fd;
+	width:100%;
+	overflow:hidden
+}
+.jiazheng-activity ul li a{ 
+	display:block;
+	height:8rem;
+	margin-bottom:1.5rem; 
+	margin-top:1.5rem
+}
+.jiazheng-activity ul li:nth-child(1) a{ 
+	margin-top:0
+}
+.jiazheng-activity ul li img{
+	width:7.2rem;
+	height:8rem;
+	float:left;
+}
+.jiazheng-activity ul li div{
+	width:17.6rem;
+	font-size:1.1rem;
+	color:#7a7a7a;
+	line-height:2.6rem;
+	float:right
+}
+.jiazheng-activity ul li h4{
+	font-size:1.4rem;
+	color:#29333f;
+}
+.jiazheng-activity ul li span{
+	display:block;
+	width:17.6rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+a.jiazheng-more{
+	background:#fff url(../img/more_bg_01.png) 14rem 0  no-repeat;
+	background-size:3.4rem 3.4rem;
+	width:100%;
+	display:block;
+	line-height:3.4rem;
+	height:3.4rem;
+	font-size:1.2rem;
+	padding-left:12rem;
+	color:#7a7a7a
+}
+.jiazheng-coupon .sec-body{
+	padding:0 .9rem
+}
+.jiazheng-coupon ul li{
+	height:9.8rem;
+	background:#fff;
+	background:#fff;
+	background: url(../img/jiazheng_coupon02.png) no-repeat;
+	background-size:100% 8.8rem;
+	padding-bottom:1rem;
+}
+.jiazheng-coupon ul li a{
+	display:block;
+	height: 8.8rem;
+}
+.jiazheng-coupon ul li .fl-l{
+	display:block;
+	width:68%;
+	float:left;
+	padding:2rem
+}
+.jiazheng-coupon ul li a h4{
+	color:#7a7a7a;
+	font-size:1.4rem;
+}
+.jiazheng-coupon ul li .fl-l span{
+	font-size:1rem;
+	color:#54a3ea;
+	display:block;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.jiazheng-coupon ul li .fl-r{
+	display:block;
+	width:32%;
+	text-align:center;
+	padding-top:1.6rem;
+	float:right
+}
+.jiazheng-coupon ul li .fl-r img{
+	width:3.4rem;
+	height:3.4rem;
+}
+.jiazheng-coupon ul li .fl-r span{
+	font-size:1.4rem;
+	color:#54a3ea;
+	display:block
+}
+.jiazheng-coupon ul li:nth-child(1) .fl-r span{
+	color:#dce034
+}
+.jiazheng-coupon .sec-body{
+	border-bottom:1px solid #f9f8fc
+}
+.jiazheng-coupon .sec-body li{
+	padding:0
+}

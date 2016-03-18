@@ -1,0 +1,11 @@
+/*iOS 手机样式*/
+.ios .header {
+	height: 6.4rem;
+	padding-top: 2rem;
+}
+.ios .main {
+	margin-top: 2rem;
+}
+.ios .tab-nav {
+	top: 6.4rem;
+}

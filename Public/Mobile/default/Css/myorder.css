@@ -1,0 +1,113 @@
+/*我的订单*/
+.p-92 {
+	padding-top: 9.2rem;
+}
+.nav-myorder {
+	position: fixed;
+	top: 4.4rem;
+	left: 0;
+	width: 100%;
+	padding: 0 15px;
+	z-index: 10;
+}
+.tab-myorder a {
+	display: block;
+	height: 3.5rem;
+	text-align: center;
+	font-size: 1.3rem;
+	line-height: 3.5rem;
+	color: #333;
+}
+.tab-myorder li.active a {
+	font-size: 1.5rem;
+	color: #bf242a;
+}
+.myorder-list {
+	border-top: 1px solid #e3e3e8;
+	border-bottom: 1px solid #e3e3e8;
+	margin-bottom: 10px;
+	background: #fff;
+}
+.myorder-title {
+	height: 4.7rem;
+	padding-left: 15px;
+	position: relative;
+	border-bottom: 1px solid #e3e3e8;
+	padding-top: .6rem;
+}
+.myorder-no {
+	font-size: 1.3rem;
+	line-height: 1.8rem;
+	color: #333;
+}
+.myorder-time {
+	font-size: 1rem;
+	line-height: 1.6rem;
+	color: #a2a2a6;
+}
+.myorder-seat {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 4.3rem;
+	padding-right: 15px;
+	color: #bf242a;
+	font-size: 1.2rem;
+	line-height: 4.3rem;
+}
+.myorder-status {
+	height: 3rem;
+	border-bottom: 1px solid #e3e3e8;
+}
+.myorder-status p {
+	float: left;
+	width: 50%;
+	font-size: 1.1rem;
+	line-height: 3rem;
+	color: #333;
+}
+.myorder-body {
+	padding: 0 15px 7px;
+	background-color: #f7f9fa;
+}
+.myorder-body ul {
+	padding: 10px 0;
+}
+.myorder-body li {
+	font-size: 1.1rem;
+	line-height: 1.8rem;
+	color: #333;
+}
+.myorder-body li span, .myorder-sum span {
+	float: left;
+}
+.myorder-name {
+	width: 65.6%;
+	text-align: left;
+}
+.myorder-price {
+	width: 22.6%;
+	text-align: right;
+}
+.myorder-num {
+	width: 11.8%;
+	text-align: right;
+}
+.myorder-sum {
+	line-height: 2.5rem;
+	color: #333;
+}
+.myorder-sum strong {
+	font-size: 1.2rem;
+	color: #bf242a;
+}
+.myorder-footer {
+	border-top: 1px solid #cbcbcb;
+	text-align: right;
+	padding: .7rem 15px;
+}
+.myorder-footer a {
+	display: inline-block;
+	margin-left: 10px;
+}
+

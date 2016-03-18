@@ -1,0 +1,215 @@
+.bg-fff {
+	background: #fff;
+}
+.shouji section {
+	border-top: none;
+}
+.shouji-header {
+	background: none;
+	background-image:-webkit-linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(95,93,105,.5) 50%,rgba(0,0,0,0) 100%);
+	background-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
+}
+.shouji-header h1 {
+	color: #fff;
+}
+.shouji .shouji-banner {
+	margin-bottom: 0;
+}
+.shouji-page {
+	bottom: 2rem;
+}
+.shouji-page .swiper-pagination-bullet {
+    background-color: #f5ece3;
+    border-color: #f5ece3;
+}
+.shouji-page .swiper-pagination-bullet-active {
+    background-color: #524236;
+    border-color: #524236;
+}
+
+.shouji-nav {
+	height: 19rem;
+	position: relative;
+	padding-top: 6.6rem;
+	z-index: 5;
+	background: url("../img/shouji_nav_top_bg.png") top no-repeat;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+	margin-bottom: 0;
+}
+.shouji-nav-h {
+	position: absolute;
+	top: -1.8rem;
+	left: 0;
+	width: 100%;
+}
+.shouji-nav-h ul {
+	padding: 0 2.1rem;
+	height: 6.6rem;
+}
+.shouji-nav-h li {
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+.shouji-nav-h a {
+	display: block;
+}
+.shouji-nav-h img {
+	width: 4.2rem;
+	height: 4.2rem;
+	border: .3rem solid #fff;
+	border-radius: 2.1rem;
+	margin-bottom: .4rem;
+}
+.shouji-nav-h span {
+	display: block;
+	font-size: 1.2rem;
+	line-height: 2rem;
+	color: #484949;
+}
+.shouji-nav-v {
+	padding-bottom: 1.5rem;
+	background: url("../img/shouji_nav_bottom_bg.png") bottom no-repeat;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+}
+.shouji-nav-v ul {
+	border-top: 1px solid #eeeeed;
+}
+.shouji-nav-v li {
+	width: 100%;
+	border-bottom: 1px solid #eeeeed;
+}
+.shouji-nav-v a {
+	display: block;
+	height: 3.6rem;
+	padding-left: 3.7rem;
+	position: relative;
+}
+.shouji-nav-v img {
+	width: 2.6rem;
+	height: 2.6rem;
+	border-radius: .5rem;
+	vertical-align: middle;
+	margin-right: 7.1rem;
+}
+.shouji-nav-v span {
+	font-size: 1.2rem;
+	line-height: 3.6rem;
+	color: #484949;
+}
+.shouji-nav-v .ico-right {
+	position: absolute;
+	right: 5px;
+	top: 0;
+	width: 3.6rem;
+	height: 3.6rem;
+	background-image: url("../img/ico_right.png");
+}
+
+.shouji .sec-title {
+	height: 3.5rem;
+	border-bottom: none;
+	background-image:-webkit-linear-gradient(to right,rgba(34,23,20,1) 0%,rgba(73,68,68,1) 68%,rgba(4,0,0,1) 100%);
+	background-image:linear-gradient(to right,rgba(34,23,20,1) 0%,rgba(73,68,68,1) 68%,rgba(4,0,0,1) 100%);
+}
+.shouji .sec-title h3 {
+	float: none;
+	line-height: 3.5rem;
+	color: #fff;
+}
+.shouji .sec-title a {
+	height: 3.5rem;
+	line-height: 3.5rem;
+	text-align: right;
+	padding: 0 16px 0 0;
+	font-size: 1.2rem;
+	color: #fff;
+}
+.shouji .sec-body {
+	border-bottom: none;
+	background: #fff;
+}
+
+.shouji-act ul {
+	padding: 10px 10px 0;
+}
+.shouji-act li {
+	float: left;
+	width: 33.3%;
+	padding: 0;
+}
+.shouji-act li a {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+.shouji-act li img {
+	width: 8.4rem;
+	height: 8.5rem;
+	border: 1px solid #f8f8f8;
+}
+.shouji-act li h6 {
+	height: 2.3rem;
+	font-size: 1.2rem;
+	line-height: 2.3rem;
+	color: #484949;
+	overflow: hidden;
+}
+.shouji-coupon ul {
+	padding-top: 23px;
+}
+.shouji-coupon li {
+	margin-bottom: 20px;
+	position: relative;
+	padding: 0;
+}
+.shouji-coupon li:after {
+	content: "\20";
+	display: block;
+	width: 1px;
+	height: 17px;
+	background-color: #9b9796;
+	position: absolute;
+	left: 4.9rem;
+	bottom: -19px;
+}
+.shouji-coupon li:last-child:after {
+	display: none;
+}
+.shouji-coupon li a {
+	width: 100%;
+	height: 5rem;
+	padding: .5rem 0 0 10.5rem;
+	position: relative;
+}
+.shouji-coupon li span {
+	position: absolute;
+	left: 2.5rem;
+	top: 0;
+	display: block;
+	width: 5.2rem;
+	height: 5rem;
+	overflow: hidden;
+	font-size: 1.4rem;
+	line-height: 5rem;
+	text-align: center;
+	background: url("../img/shouji_coupon_bg.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+	color: #fff;
+}
+.shouji-coupon li h5 {
+	height: 2rem;
+	overflow: hidden;
+	font-size: 1.3rem;
+	line-height: 2rem;
+	color: #3c3c3d;
+}
+.shouji-coupon li p {
+	height: 1.4rem;
+	overflow: hidden;
+	font-size: 1rem;
+	line-height: 1.4rem;
+	color: #6b6b6b;
+}

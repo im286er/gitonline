@@ -1,0 +1,12 @@
+		.wif {margin: auto; width: 100%;}
+		.wifi {background-color: #404040; bottom: 0;height: 60px;opacity: 0.9;position: fixed; width: 100%; z-index: 101;}
+		.icon-logo {float: left; margin-left: 25px; width: 50px;}
+		.icon-logo span {color: #fff;line-height: 50px; margin-left: 5px;}
+		.icon-logo img {border-radius: 5px;height: 44px;margin-top: 8px; width: 44px;}
+		.c-fff {color: #fff;}
+		.txt-icon {float: left;margin-top: 10px;width: 150px;}
+		.btn-click {float: right;margin-right: 10px;}
+		.closed {position: absolute;z-index: 101;}
+		.closed img {width: 18px;}
+		.btn-wifi {border: 1px solid #00c405;border-radius: 6px;color: #00c405;display: block;line-height: 30px;margin-top: 12px;padding: 0 5px;text-align: center;}
+		.btn-wifi:hover {color: #00c405;}

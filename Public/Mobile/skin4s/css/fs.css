@@ -1,0 +1,117 @@
+.fs-nav {
+	background: none;
+}
+.fs-nav li {
+	width: 25%;
+	float: left;
+	text-align: center;
+}
+.fs-nav a {
+	display: block;
+	height: 10rem;
+	padding-top: 2.2rem;
+}
+.fs-nav img {
+	width: 4.4rem;
+	height: 4.4rem;
+
+	border-radius: 2.2rem;
+}
+.fs-nav span {
+	display: block;
+	font-size: 1.1rem;
+	line-height: 2.2rem;
+	color: #c03240;
+}
+.fs-nav-v {
+	height: 28.5rem;
+	position: relative;
+	border: none;
+	margin-bottom: 0;
+}
+.fs-nav-v-bg {
+	width: 19rem;
+	height: 19rem;
+	border: 1px solid #c03240;
+	border-radius: 9.5rem;
+	padding: .8rem;
+	position: absolute;
+	top: 6.4rem;
+	left: 1.8rem;
+}
+.fs-nav-v-bg img {
+	width: 17.2rem;
+	height: 17.2rem;
+	border-radius: 8.6rem;
+}
+.fs-nav-v ul {
+	padding-top: 3rem;
+}
+.fs-nav-v li {
+	width: 12.8rem;
+	height: 2.6rem;
+	border-radius: 1rem;
+	background: #c03240;
+	position: relative;
+	margin-bottom: 2.6rem;
+}
+.fs-nav-v li a {
+	display: block;
+	padding: .7rem 0 .7rem 3.3rem;
+	line-height: 1.1rem;
+	font-size: 1.1rem;
+	color: #fff;
+}
+.li-lpj {
+	left: 10rem;
+}
+.li-yyby {
+	left: 16.4rem;
+}
+.li-xxfk {
+	left: 18.4rem;
+}
+.fs-nav-v li .ico {
+	margin-right: .4rem;
+}
+.ico-parts-fs {
+	width: 1.1rem;
+	height: 1.1rem;
+	background-image: url("../img/ico_parts_fs.png");
+}
+.ico-heart-fs {
+	width: 1.3rem;
+	height: 1.1rem;
+	background-image: url("../img/ico_heart_fs.png");
+}
+.ico-info-fs {
+	width: 1.1rem;
+	height: 1.1rem;
+	background-image: url("../img/ico_info_fs.png");
+}
+.fs-act {
+	border: none;
+}
+.fs-act .sec-title {
+	background: #c03240;
+	border: none;
+}
+.fs-act .sec-title h3, .fs-act .sec-title a {
+	color: #fff;
+	text-align: center;
+}
+.fs-act li {
+	padding: 0;
+	border-bottom: 1px solid #c03240;
+}
+.fs-act li:last-child {
+	border-bottom: none;
+}
+.fs-act li a {
+	display: block;
+}
+.fs-act li img {
+	width: 100%;
+
+	
+}

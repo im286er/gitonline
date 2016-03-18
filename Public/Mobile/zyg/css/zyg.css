@@ -1,0 +1,170 @@
+/* CSS Document */
+.zyg section{
+	border-top:none;
+	margin-bottom:0
+}
+.zyg .sec-body{
+	border-bottom:none
+}
+.zyg .sec-body li{
+	padding:0
+}
+.zyg-header{
+	background:#100805;
+}
+.zyg-header h1 {
+	color: #ffffff;
+}
+.zyg .zyg-banner {
+	margin-bottom: 0;
+}
+.zyg-page {
+	bottom: 0.5rem;
+}
+.zyg-page .swiper-pagination-bullet {
+    background-color: #bfbdbd;
+    border-color: #bfbdbd;
+}
+.zyg-page .swiper-pagination-bullet-active {
+    background-color: #ca2c2b;
+    border-color: #ca2c2b;
+}
+.zyg-nav{
+	background:url(../img/zyg_bg.png) repeat;
+	overflow:hidden;
+	text-align:center;
+	height:18.5rem;
+	margin-bottom:0
+}
+.zyg-nav ul{
+	margin:.75rem 1.2rem
+}
+.zyg-nav ul li{
+	width:33.33%;
+	float:left;
+	padding:.75rem .5rem;
+}
+.zyg-nav ul li a{
+	display:block;
+	height:7rem
+}
+.zyg-nav ul li a div{
+	background: url(../img/zyg_nav_bg.png) no-repeat;
+	background-size:100% 5rem;
+	height:5rem;
+	position:relative
+}
+.zyg-nav ul li a div img{
+	width:3rem;
+	height:3rem;
+	position:absolute;
+	right:.6rem;
+	top:1rem
+}
+.zyg-nav ul li span{
+	display:block;
+	font-size:1.1rem;
+	color:#666;
+	margin-top:.8rem
+}
+.sec-title{
+	background:url(../img/zyg_title_bg.png) no-repeat;
+	background-size:100% 3.6rem;
+	border-bottom:none;
+	color:#d6d7d7;
+	line-height:3.6rem;
+	height:3.6rem;
+	font-size:1.3rem;
+	padding-left:3.3rem;
+}
+.sec-title h3{
+	font-size:1.2rem
+}
+a.zyg-more{
+	background:url(../img/zyg_more.png) 3rem 0 no-repeat;
+	background-size:.7rem 3.6rem;
+	color:#d6d7d7;
+	height:3.6rem;
+	width:4.4rem;
+	font-size:1.2rem;
+	text-align:center;
+	display:block;
+	padding-right:1rem;
+}
+.zyg-tl .sec-body{
+	background:url(../img/zyg_bg.png) repeat;
+	background-size:16rem 16rem;
+	height:35rem
+}
+.zyg-tl .sec-body ul{
+	background:url(../img/zyg_tl_bg_02.png) no-repeat;
+	background-position:bottom right;
+	background-size:12.8rem 9.5rem;
+}
+.zyg-tl ul li{
+	width:25%;
+	float:left
+}
+.zyg-tl ul li img{
+	width:100%;
+	height:17.5rem;
+	margin-bottom:.9rem;
+}
+.zyg-tl ul li a{
+	display:block;
+	overflow:hidden;
+	height:35rem
+}
+.zyg-tl ul li  p{
+	-webkit-writing-mode:vertical-rl;
+	writing-mode:tb-rl;
+	writing-mode:vertical-rl;
+	height:15.2rem;
+	font-size:.9rem;
+	color:#666767;
+	width:4.8rem;
+	float:right;
+	overflow: hidden;
+}
+.zyg-tl ul li h4{
+	font-size:1.1rem;
+	color:#70432b;
+	width:2.5rem;
+	padding-right: .3rem;
+	height:16rem;
+	-webkit-writing-mode:vertical-rl;
+	writing-mode:tb-rl;
+	writing-mode:vertical-rl;
+	float:right;
+	overflow: hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.zyg-coupon ul{
+	padding:.5rem 1.1rem;
+	background:url(../img/zyg_bg.png) no-repeat;
+	background-size:100% 21.5rem;
+	height:21.5rem;
+}
+.zyg-coupon ul li{
+	width:100%;
+	padding:.2rem
+}
+.zyg-coupon ul li a{
+	background:url(../img/zyg_coupon_bg.png) no-repeat;
+	background-size:100% 9.8rem;
+	height:9.8rem;
+	display:block;
+	padding:2rem 0 0 8rem
+}
+.zyg-coupon ul li h4{
+	color:#70432a;
+	font-size:1.5rem;
+}
+.zyg-coupon ul li p{
+	font-size:.9rem;
+	color:#666666;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}

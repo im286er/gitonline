@@ -1,0 +1,66 @@
+/*
+ Xpull - pull to refresh jQuery plugin for iOS and Android
+ by Slobodan Jovanovic
+ Initially made for Spreya app spreya.com
+*/
+.pull-indicator{
+    width: 100%;
+    height:60px;
+    text-align: center;
+    -webkit-transform: translate3d(0px,0px,0px) rotate(0deg);
+    position:relative;
+    top:-60px;
+    -webkit-transition: -webkit-transform 300ms ease;
+    padding-top: 10px;
+}
+.arrow-rotate-180{
+    -webkit-transform: rotate(-180deg) !important;
+    -webkit-transition: -webkit-transform 300ms ease !important;
+}
+.pull-arrow {
+    margin:0px auto;
+    width: 25px;
+    height: 25px;
+    background-image: url("../img/ico_pulldown.png");
+}
+.pull-indicator .pull-spinner {
+    display:none;
+    width:25px;
+    height:25px;
+    margin:0px auto;
+    -webkit-animation: rotation .6s infinite linear;
+    -moz-animation: rotation .6s infinite linear;
+    -o-animation: rotation .6s infinite linear;
+    animation: rotation .6s infinite linear;
+    border-left:4px solid rgba(202,202,202,.15);
+    border-right:4px solid rgba(202,202,202,.15);
+    border-bottom:4px solid rgba(202,202,202,.15);
+    border-top:4px solid rgba(202,202,202,.9);
+    border-radius:100%;
+}
+
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to {-webkit-transform: rotate(359deg);}
+}
+
+@-moz-keyframes rotation {
+    from {-moz-transform: rotate(0deg);}
+    to {-moz-transform: rotate(359deg);}
+}
+
+@-o-keyframes rotation {
+    from {-o-transform: rotate(0deg);}
+    to {-o-transform: rotate(359deg);}
+}
+
+@keyframes rotation {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(359deg);}
+}
+.pull-txt {
+    display: block;
+    font-size: 12px;
+    line-height: 20px;
+    color: #cacaca;
+}

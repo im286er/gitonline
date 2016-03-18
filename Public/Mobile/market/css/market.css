@@ -1,0 +1,274 @@
+/* CSS Document */
+.market section{
+	border-top:none;
+	margin-bottom:0
+}
+.bg-e9e9e9{
+	background:#fff;
+}
+.market-header{
+	background:#a2be39;
+}
+.market-header h1 {
+	color: #ffffff;
+}
+.market .coffee-banner {
+	margin-bottom: 0;
+}
+.market-page {
+	bottom: 0.5rem;
+}
+.market-page .swiper-pagination-bullet {
+    background-color: #d1d1d1;
+    border-color: #d1d1d1;
+}
+.market-page .swiper-pagination-bullet-active {
+    background-color: #d7292b;
+    border-color: #d7292b;
+}
+section.market-nav{
+	margin-bottom:.5rem;
+}
+.market-nav{
+	overflow:hidden;
+	padding:.75rem 1.25rem;
+	position:relative;
+}
+.market-nav ul li{
+	width:50%;
+	float:left;
+	padding:.25rem;
+}
+.market-nav ul li a{
+	height:5rem;
+	line-height:5rem;
+	display:block;
+	background:#f3f3f4;
+	border-radius:.8rem;
+}
+.market-nav ul li a div{
+	background:url("../img/market_nav_bg.png") no-repeat;
+	background-size:100% 3.6rem;
+	width:3.6rem;
+	height:3.6rem;
+	margin-left:1.1rem;
+	margin-top:.7rem;
+	float:left;
+}
+.market-nav ul li img{
+	width:3.4rem;
+	height:3.4rem;
+	border-radius: 50%;
+}
+.market-nav ul li span{
+	display:block;
+	font-size:1.2rem;
+	color:#666666;
+	margin-left:5.5rem;
+}
+.market-light{
+	background:url("../img/market_light.png") no-repeat;
+	background-size:100% 5.4rem;
+	height:5.4rem;
+}
+.sec-title{
+	background:url("../img/market_title_bg.png") no-repeat;
+	background-size:100% 100%;
+	border-bottom:none;
+	color:#fff;
+	height:5.2rem;
+	margin-top:-1.3rem;
+	z-index:2;
+}
+.sec-title h3{
+	float:none;
+	padding-top: 1.4rem;
+	font-size:1.2rem;
+	line-height:3.7rem;
+	text-align:center;
+}
+.sec-title a.market-more{
+	color:#fff;
+	height:5.2rem;
+	line-height:2rem;
+	width:4.3rem;
+	text-align:center;
+	display:block;
+	right:3.5rem;
+	font-size:1rem;
+	padding-top: 3.2rem;
+}
+.market .sec-body{
+	padding:0 .9rem;
+	margin-top:-0.3rem;
+	border-bottom:none;
+	position:relative;
+}
+.sec-body ul {
+	border:.3rem solid #e9e9e9
+}
+.market-activity ul li{
+	padding:.9rem 1rem;
+	border-bottom:1px solid #e9e9e9;
+	overflow:hidden;
+}
+.market-activity ul li a{
+	display:block;
+	height:7rem;
+}
+.market-activity ul li:last-child{
+	border-bottom:none;
+}
+.market-activity ul li img{
+	width:12.5rem;
+	height:7rem;
+	float:left;
+	margin-right: 1.4rem;
+}
+.sec-body::before, .sec-body::after {
+	content: "\20";
+	display: block;
+	width:1.2rem;
+	height:1.2rem;
+	background-size: 100% 100%;
+	position:absolute;
+	top:-0.2rem;
+}
+.sec-body::before {
+	background-image:url("../img/border_corner_01.png");
+	left:.7rem;
+}
+.sec-body::after {
+	background-image:url("../img/border_corner_02.png");
+	right:.7rem;
+}
+.market-activity li a div {
+	height: 7rem;
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	/*flex-flow: <flex-direction> || <flex-wrap>;*/
+	justify-content: center;
+	/*align-content: center;*/
+}
+.market-activity h5 {
+	font-size:1.2rem;
+	color:#666;
+	line-height:2rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.market-activity p{
+	font-size:1rem;
+	color:#666;
+	line-height:1.4rem;
+	height: 2.8rem;
+}
+.market-rec,.market-coupon{
+	padding-top:2.6rem;
+}
+.market-rec .sec-body li{
+	padding:0;
+}
+.market-rec ul li{
+	width:33.33%;
+	float:left;
+	border-right:1px solid #efefef;
+	border-bottom:1px solid #efefef;
+}
+.market-rec ul li a{
+	display:block;
+	padding:.5rem;
+	height: 15.6rem;
+}
+.market-rec ul li img{
+	width:100%;
+	height:10.2rem;
+}
+.market-rec ul li h5{
+	margin-top: 1.2rem;
+}
+.market-rec ul li h5, .market-rec ul li p{
+	/*padding:0 1.6rem;*/
+	font-size:1rem;
+	line-height: 1.3rem;
+	color:#666;
+	text-align: center;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.market-coupon{
+	padding-bottom:1rem;
+}
+.market-coupon ul li:nth-child(1) a{
+	background:url(../img/market_couponbg_01.png) no-repeat;
+	background-size:100% ;
+}
+.market-coupon ul li:nth-child(2) a{
+	background:url(../img/market_couponbg_02.png) no-repeat;
+	background-size:100%;
+}
+.market-coupon ul li{
+	background-size:100% ;
+	height:8.5rem;
+	border-bottom:1px solid #efefef;
+	padding:.5rem .4rem;
+}
+.market-coupon ul li:nth-child(2){
+	border-bottom:none
+}
+.market-coupon ul li a{
+	display:block;
+	height:7.5rem;
+	width:100%;
+}
+.market-coupon ul li .coupon-left{
+	width:32%;
+	float:left;
+}
+.coupon-left h4{
+	font-size:2.4rem;
+	height:4.2rem;
+	color:#fff;
+	padding:1.8rem 1.8rem 0;
+}
+.market-coupon ul li .coupon-left p{
+	display:block;
+	color:#d2c420;
+	font-size:1rem;
+	background:#fff;
+	width:70%;
+	text-align:center;
+	margin-left: .6rem;
+	line-height:1.6rem;
+	margin-top: .5rem;
+}
+.market-coupon ul li:nth-child(2) .coupon-left p{
+	color:#de7835;
+}
+.market-coupon ul li div{
+	height:7.5rem;
+}
+.market-coupon ul li .coupon-right{
+	width:68%;
+	float:left;
+	padding:2.2rem .7rem 1rem;
+}
+.coupon-right h5{
+	font-size:1.3rem;
+	color:#e5e97d;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.coupon-right p{
+	font-size:1rem;
+	color:#666666;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+

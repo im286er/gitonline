@@ -1,0 +1,423 @@
+/**************************{CSS Reset}*****************************/
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, em, img, strong, i,
+dl, dt, dd, ol, ul, li,
+form, label, input,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0;}
+img { border: none; vertical-align: top;}
+a { text-decoration: none; outline: none;}
+ul,dl { list-style: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+input,button,textarea,select,optgroup,option { font-size: 100%; font: inherit; background: none; border: none; outline: none;}
+h1,h2,h3,h4,h5,h6 { font-weight: normal;}
+
+body {
+	font-family: "helvetica neue", helvetica, STHeiTi, roboto, "droid sans", arial, \5FAE\8F6F\96C5\9ED1;
+	background-color: #f5f5f5;
+}
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.clearfix:after {
+	content: "\20";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.container {
+	max-width: 540px;
+	margin: 0 auto;
+	position: relative;
+}
+/*图标类*/
+.ico {
+	background: 0 0 no-repeat;
+	background-size: 100% 100%;
+	display: inline-block;
+}
+.ico-right {
+	width: 4.4rem;
+	height: 4.4rem;
+	background-image: url("../Images/ico_right.png");
+}
+.ico-mart {
+	background-image: url("../Images/ico_mart.png");
+}
+.ico-video {
+	background-image: url("../Images/ico_video.png");
+}
+.ico-wx {
+	background-image: url("../Images/ico_wx.png");
+}
+.ico-search {
+	background-image: url("../Images/ico_search.png");
+}
+.ico-search-b {
+	background-image: url("../Images/ico_search_b.png");
+	width: 2.7rem;
+	height: 2.7rem;
+}
+.ico-cart {
+	width: 4.9rem;
+	height: 4.9rem;
+	background-image: url("../Images/ico_cart.png");
+	position: relative;
+	float: left;
+	margin-right: .7rem;
+}
+.ico-sort-up {
+	background-image: url("../Images/ico_sort_up.png");
+	width: 1.6rem;
+	height: .8rem;
+	position: absolute;
+	left: 2.5rem;
+	top: -0.8rem;
+}
+.ico-note {
+	width: 1.6rem;
+	height: 1.6rem;
+	background-image: url("../Images/ico_note.png");
+}
+.ico-heart {
+	background-image: url("../Images/ico_heart.png");
+}
+.ico-weixin {
+	background-image: url("../Images/ico_weixin.png");
+}
+.ico-qq {
+	background-image: url("../Images/ico_qq.png");
+}
+.ico-weibo {
+	background-image: url("../Images/ico_weibo.png");
+}
+.ico-down {
+	width: 4.4rem;
+	height: 4.4rem;
+	background-image: url("../Images/ico_down.png");
+}
+.ico-note-gray {
+	background-image: url("../Images/ico_note_gray.png");
+}
+.ico-map {
+	background-image: url("../Images/ico_map.png");
+}
+.ico-pos-gray {
+	background-image: url("../Images/ico_pos_gray.png");
+}
+.ico-person {
+	background-image: url("../Images/ico_person.png");
+}
+.ico-cart-s {
+	background-image: url("../Images/ico_cart_s.png");
+}
+.ico-ticket {
+	background-image: url("../Images/ico_ticket.png");
+}
+.ico-clock {
+	background-image: url("../Images/ico_clock.png");
+}
+.ico-refresh {
+	background-image: url("../Images/ico_refresh.png");
+}
+.ico-i {
+	background-image: url("../Images/ico_i.png");
+}
+.ico-alipay {
+	background-image: url("../Images/ico_alipay.png");
+}
+.ico-card {
+	background-image: url("../Images/ico_card.png");
+}
+.bg-block {
+	background: 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+/*图标类 end*/
+/*按钮类*/
+.btn {
+	display: block;
+	width: 7.0rem;
+	height: 2.9rem;
+	border-radius: .5rem;
+	line-height: 2.9rem;
+	text-align: center;
+	color: #fff;
+	background-color: #ccc;
+	font-size: 1.3rem;
+}
+.btn-lg {
+	height: 3.4rem;
+	line-height: 3.4rem;
+	font-size: 1.3rem;
+}
+.btn-block {
+	display: block;
+	width: 100%;
+}
+.btn-red {
+	background: #ff6e7e;
+	color: #fff;
+}
+.btn-o {
+	border: 1px solid #333;
+	color: #333;
+	background: none;
+}
+/*按钮类 end*/
+/*一些padding，浮动，对齐,边框等类*/
+.fl-l {
+	float: left;
+}
+.fl-r {
+	float: right;
+}
+.ta-r {
+	text-align: right;
+}
+.pl {
+	padding-left: 2rem;
+}
+.p-tb-2 {
+	padding-top: 7.9rem;
+}
+.p-lr {
+	padding: 0 1.5rem;
+}
+.p-tb {
+	padding-top: 4.4rem;
+	padding-bottom: 5rem;
+}
+.p-t {
+	padding-top: 4.4rem;
+}
+.p-b {
+	padding-bottom: 6rem;
+}
+.bdd {
+	margin-bottom: .6rem;
+	border-bottom: 1px solid #cbcbcb;
+}
+.div-a {
+	padding: 1.6rem 1.5rem;
+}
+/*end*/
+
+/*tabnav*/
+.tab-nav {
+	position: fixed;
+	width: 100%;
+	top: 4.4rem;
+	left: 0;
+	z-index: 10;
+	height: 3.5rem;
+	border-bottom: 1px solid #cbcbcb;
+	background: #fff;
+}
+.li-2 li {
+	width: 50%;
+	float: left;
+}
+.li-3 li {
+	width: 33.3%;
+	float: left;
+}
+.li-4 li {
+	width: 25%;
+	float: left;
+}
+.li-5 li {
+	width: 20%;
+	float: left;
+}
+.tab-nav li {
+	text-align: center;
+	height: 3.5rem;
+	line-height: 3.5rem;
+	font-size: 1.3rem;
+	color: #333;
+	cursor: default;
+}
+.tab-nav li a {
+	display: block;
+	line-height: 3.4rem;
+	text-align: center;
+	font-size: 1.3rem;
+	color: #333;
+}
+.tab-nav li.active {
+	border-bottom: 2px solid #ff6d7d;
+}
+/*tabnav end*/
+/*通用modal类*/
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	display: none;
+}
+.modal-backdrop {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+}
+.modal-dialog {
+	width: 90%;
+	max-width: 486px;
+	margin: 0 auto;
+	position: relative;
+	height: 100%;
+}
+.modal-content {
+	width: 100%;
+	padding: .5rem 1.5rem;
+	background: #fff;
+	border-radius: .5rem;
+	position: absolute;
+	top: 50%;
+	margin-top: -50%;
+}
+.modal-body {
+	padding-bottom: 1.7rem;
+}
+.modal-s {
+	width: 84%;
+	max-width: 460px;
+}
+.modal-s .modal-content {
+	height: 18rem;
+}
+.modal-flex {
+	width: 84%;
+	max-width: 460px;
+}
+.modal-flex .modal-content {
+	min-height: 18rem;
+	padding-bottom: 4.4rem;
+}
+.modal-title {
+	color: #363636;
+	font-size: 1.6rem;
+	text-align: center;
+	font-weight: normal;
+	padding-top: 1.2rem;
+	line-height: 3.0rem;
+}
+.modal-title-single {
+	padding-top: 5.0rem;
+}
+.modal-p {
+	color: #7d7d80;
+	font-size: 1.4rem;
+	line-height: 1.8rem;
+	margin-top: 1.8rem;
+	text-align: center;
+}
+.modal-footer {
+	width: 100%;
+	height: 4.4rem;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	border-top: 1px solid #cbcbcb;
+}
+.modal-footer a {
+	float: left;
+	width: 50%;
+	text-align: center;
+	line-height: 4.4rem;
+	font-size: 1.6rem;
+}
+.modal-footer-single a {
+	width: 100%;
+}
+.btn-no {
+	color: #363636;
+	border-right: 1px solid #cbcbcb;
+}
+.btn-yes {
+	color: #363636;
+}
+/*modal end*/
+section {
+	background: #fff;
+	margin-bottom: .7rem;
+}
+
+.header {
+	width: 100%;
+	height: 4.4rem;
+	background: #fff;
+	border-bottom: 1px solid #b1b1b1;
+	position: fixed;
+	top: 0;
+	z-index: 10;
+}
+.header h1 {
+	color: #333;
+	line-height: 4.4rem;
+	font-size: 1.6rem;
+	font-weight: normal;
+	text-align: center;
+}
+.header .ico {
+	position: absolute;
+	bottom: 0;
+	display: block;
+}
+.header-back {
+	display: block;
+	width: 4.4rem;
+	height: 4.4rem;
+	left: 0;
+	background-image: url("../Images/ico_back.png");
+}
+.header-pos {
+	display: block;
+	width: 4.4rem;
+	height: 4.4rem;
+	right: 0;
+	background-image: url("../Images/ico_pos.png");
+}
+.header-txt {
+	color: #ff6e7e;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding-right: 15px;
+	padding-left: 15px;
+	line-height: 4.4rem;
+	font-size: 1.6rem;
+}
+
+/*.sec-title {
+	height: 4.4rem;
+	padding: 0 15px;
+	line-height: 4.4rem;
+	border-bottom: 1px solid #cbcbcb;
+	position: relative;
+}
+.sec-title h3 {
+	float: left;
+	font-size: 1.4rem;
+	font-weight: normal;
+}
+.sec-body {
+	border-bottom: 1px solid #cbcbcb;
+}*/
+
+.ios .header {
+	height: 6.4rem;
+	padding-top: 2rem;
+}
+.ios .main {
+	margin-top: 2rem;
+}
+.ios .tab-nav {
+	top: 6.4rem;
+}

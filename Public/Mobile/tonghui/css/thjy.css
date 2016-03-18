@@ -1,0 +1,147 @@
+.bg-5681f7 {
+	background-color: #5681f7;
+}
+#thjy {
+	padding-bottom: 60px;
+}
+#thjy .swiper-pagination-bullet {
+	background-color: #91908e;
+	border: 2px solid #91908e;
+}
+#thjy .swiper-pagination-bullet-active {
+    background-color: #fff;
+}
+.nav-thjy ul {
+	width: 100%;
+	background: none;
+}
+.nav-thjy li {
+	float: left;
+	padding: .5rem .5rem 0 0;
+	width: 33.3%;
+	background: #efeff4;
+}
+.nav-thjy li.li-zbkt {
+	width: 66.7%;
+}
+.nav-thjy li.li-yjsc {
+	padding-right: 0;
+	float: right;
+}
+.nav-thjy li a {
+	display: block;
+	height: 9.7rem;
+	background: #fff;
+	text-align: center;
+	color: #333;
+}
+.nav-thjy li.li-yjsc a {
+	height: 19.9rem;
+	border-bottom: .2rem solid #de3b33;
+}
+.nav-thjy li.li-spsb a {
+	background: #f6ae50;
+}
+.nav-thjy a {
+	text-align: center;
+}
+.li-zbkt a {
+	padding-top: 2.4rem;
+}
+.li-yjsc a {
+	padding-top: 7rem;
+}
+.li-spsb a {
+	padding-top: 1.7rem;
+}
+.li-jcyd a {
+	padding-top: 2rem;
+}
+.li-zbkt img {
+	width: 5rem;
+	height: 5rem;
+	margin-right: 2rem;
+}
+.li-yjsc img {
+	width: 6rem;
+	height: 6rem;
+	margin-bottom: 1rem;
+}
+.li-spsb img {
+	width: 3.8rem;
+	height: 3.8rem;
+	margin-bottom: 1rem;
+}
+.li-jcyd img {
+	width: 4.1rem;
+	height: 3.2rem;
+	margin-bottom: 1rem;
+}
+.nav-thjy span {
+	font-size: 1.2rem;
+	display: block;
+}
+.li-zbkt span {
+	line-height: 5rem;
+	display: inline-block;
+}
+.li-spsb span {
+	color: #fff;
+}
+
+.sec-title-thjy {
+	height: 4.0rem;
+	padding-top: 1.2rem;
+	border-bottom: none;
+}
+.sec-title-thjy h3 {
+	height: 1.4rem;
+	line-height: 1.4rem;
+	border-left: .2rem solid #5681f7;
+	padding-left: .2rem;
+}
+.sec-title-thjy a {
+	text-align: center;
+}
+.sec-body-thjy ul {
+	padding: 0 5px;
+}
+.sec-body-thjy li {
+	padding: 0 5px 12px;
+}
+.li-2 li {
+	width: 50%;
+	float: left;
+}
+.li-3 li {
+	width: 33.3%;
+	float: left;
+}
+.sec-body-thjy li a {
+	display: block;
+}
+.sec-body-thjy li img {
+	width: 100%;
+	margin-bottom: .5rem;
+}
+.sec-body-thjy li h6 {
+	font-size: 1.1rem;
+	color: #333;
+	font-weight: normal;
+	height: 1.3rem;
+	line-height: 1.3rem;
+	overflow: hidden;
+}
+.sec-body-thjy li p {
+	font-size: 1rem;
+	color: #929292;
+	height: 1.2rem;
+	line-height: 1.2rem;
+	overflow: hidden;
+}
+.video-list img {
+	height: 8.5rem;
+}
+.book-list img {
+	height: 14rem;
+}

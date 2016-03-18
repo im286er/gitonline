@@ -1,0 +1,163 @@
+.reward section {
+  margin: 0;
+}
+.reward-title {
+  height: 10.4rem;
+  background: 0 0 no-repeat;
+  background-size: 100% 100%;
+  text-indent: -9999px;
+}
+.reward-list li {
+  height: 7rem;
+  border-bottom: 1px solid #d9d9d9;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: nowrap;
+      -ms-flex-flow: nowrap;
+          flex-flow: nowrap;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+.reward-list li > div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column wrap;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.reward-list li.can a {
+  color: #fff;
+  background: #47ad94;
+  border: 1px solid #47ad94;
+}
+.reward-list li.got .reward-left div {
+  color: #fff;
+}
+.reward-list li.got a {
+  color: #999;
+  background: #d9d9d9;
+  border: 1px solid #d9d9d9;
+}
+.reward-list li:last-child {
+  border-bottom: none;
+}
+.reward-left {
+  width: 21.87%;
+}
+.reward-left div {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #999;
+  text-align: center;
+  position: relative;
+}
+.reward-left div span {
+  display: block;
+  width: 4.4rem;
+  height: 4.4rem;
+  background: #fff;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.reward-center {
+  width: 53.13%;
+  padding: 0 .4rem 0 .2rem;
+}
+.reward-center p {
+  color: #131313;
+}
+.reward-right {
+  width: 25%;
+}
+.reward-right span {
+  display: block;
+  width: 6rem;
+  height: 1.4rem;
+  background: #51c296;
+  text-align: center;
+  line-height: 1.4rem;
+  color: #fff;
+}
+.reward-right a {
+  display: block;
+  width: 6rem;
+  height: 2.7rem;
+  text-align: center;
+  line-height: 2.7rem;
+  color: #999;
+  background: none;
+  border: 1px solid #999;
+}
+.reward-recommend .reward-title {
+  background-color: #fad83c;
+  background-image: url("../Images/reward_01.png");
+}
+.reward-recommend .reward-list li.got .reward-left div {
+  background: #fad83c;
+}
+.reward-recommend .reward-list li.got .reward-left div span {
+  background: #fad83c;
+}
+.reward-consume .reward-title {
+  background-color: #349eeb;
+  background-image: url("../Images/reward_02.png");
+}
+.reward-consume .reward-list li.got .reward-left div {
+  background: #349eeb;
+}
+.reward-consume .reward-list li.got .reward-left div span {
+  background: #349eeb;
+}
+.reward-go {
+  height: 26.2rem;
+  background: #49494c url("../Images/reward_03.png") 0 0 no-repeat;
+  background-size: 100% 100%;
+  padding-top: 19.1rem;
+}
+.reward-go a {
+  display: block;
+  height: 4rem;
+  margin: 0 1.5rem;
+  background: url("../Images/reward_04.png") 0 0 no-repeat;
+  background-size: 100% 100%;
+  text-indent: -9999px;
+}

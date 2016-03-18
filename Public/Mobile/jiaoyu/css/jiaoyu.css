@@ -1,0 +1,201 @@
+/* CSS Document */
+.jiaoyu section{ 
+	border-top:none;
+	margin-bottom:0;
+}
+.jiaoyu .sec-body{
+	border-bottom:none
+}
+.bg-fff{
+	background:#efefef
+}
+.jiaoyu-header{
+	background:#f4f4f4
+}
+.jiaoyu-header h1 {
+	color: #666666;
+}
+.jiaoyu .thjy-banner {
+	margin-bottom: 0;
+}
+.jiaoyu-page {
+	bottom: .5rem;
+}
+.jiaoyu-page .swiper-pagination-bullet {
+    background-color: #adacac;
+    border-color: #fff;
+}
+.jiaoyu-page .swiper-pagination-bullet-active {
+    background-color: #ef7b48;
+    border-color: #fff;
+}
+section.jiaoyu-nav {
+	height:18.1rem;
+	margin:.6rem .6rem 1.3rem;
+	position:relative;
+	background:none
+}
+.jiaoyu-nav ul {
+	position:relative
+}
+.jiaoyu-nav ul li{
+	margin:.2rem;
+	float:left;
+	text-align:center;
+	
+}
+.jiaoyu-nav ul li a{
+	display:block;
+	height:100%;
+	padding-top:1.2rem
+}
+.jiaoyu-nav ul li:nth-child(1){
+	background:url(../img/jy_nav_bg01.png) no-repeat;
+	background-size:100% 100%;
+	width:44%;
+	height:5.8rem;	
+}
+.jiaoyu-nav ul li:nth-child(4){
+	background:url(../img/jy_nav_bg04.png) no-repeat;
+	background-size:100% 100%;
+	width:44%;
+	height:5.8rem;
+	position:absolute;
+	left:0;
+	top:6rem
+}
+.jiaoyu-nav ul li:nth-child(5){
+	background:url(../img/jy_nav_bg05.png) no-repeat;
+	background-size:100% 100%;
+	width:44%;
+	height:5.8rem;
+	position:absolute;
+	left:0;
+	top:12rem
+}
+.jiaoyu-nav ul li:nth-child(2){
+	background:url(../img/jy_nav_bg02.png) no-repeat;
+	background-size:100% 100%;
+	width:26%;
+	height:17.8rem;
+	padding-top:4rem
+}
+.jiaoyu-nav ul li:nth-child(2) img{
+	width:5.6rem;
+	height:5.6rem;
+}
+.jiaoyu-nav ul li:nth-child(2) span{
+	display:block
+}
+.jiaoyu-nav ul li:nth-child(3){
+	background:url(../img/jy_nav_bg03.png) no-repeat;
+	background-size:100% 100%;
+	width:26%;
+	height:17.8rem;
+	padding-top:4rem
+}
+.jiaoyu-nav ul li:nth-child(3) img{
+	width:5.6rem;
+	height:5.6rem;
+}
+.jiaoyu-nav ul li:nth-child(3) span{
+	display:block
+}
+.jiaoyu-nav ul li img{
+	width:3.4rem;
+	height:3.4rem;
+}
+.jiaoyu-nav ul li span{
+	line-height:3.4rem;
+	font-size:1.2rem;
+	color:#fff;
+	margin-left:.9rem;
+}
+.sec-title{
+	color:#333333;
+	line-height:3.6rem;
+	height:3.6rem;
+	font-size:1.2rem;
+	background-position:bottom;
+	border-bottom:none;
+	padding:0
+}
+.sec-title h3{
+	font-size:1.2rem;
+	padding-left:.9rem
+}
+a.jiaoyu-more{
+	background:url(../img/jy_more.png) no-repeat;
+	background-size:.7rem 3.6rem;
+	background-position:right;
+	margin-right:1rem;
+	color:#333333;
+	height:3.6rem;
+	width:4.4rem;
+	font-size:1.2rem;
+	text-align:center;
+	display:block;
+}
+.jiaoyu-video{
+	margin:0 .8rem;
+	background:#fff;
+}
+.jiaoyu-video  ul{
+	margin:0 .6rem
+}
+.jiaoyu-video ul li{
+	width:50%;
+	float:left;
+	padding:0 .3rem
+}
+.jiaoyu-video ul li a{
+	display:block;
+	height:12.4rem
+}
+.jiaoyu-video ul li a img{
+	width:100%;
+	height:8.2rem
+}
+.jiaoyu-video ul li a p{
+	font-size:1rem;
+	color:#666666;
+	margin:.7rem;
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	height:2.8rem
+}
+.jiaoyu-zx{
+	margin:1.1rem .8rem;
+	background:#fff;
+}
+.jiaoyu-zx  ul{
+	margin:0 .6rem
+}
+.jiaoyu-zx ul li{
+	width:50%;
+	float:left;
+	padding:0 .3rem
+}
+.jiaoyu-zx ul li a{
+	display:block;
+	height:12.4rem
+}
+.jiaoyu-zx ul li a img{
+	width:100%;
+	height:8.2rem
+}
+.jiaoyu-zx ul li a p{
+	font-size:1rem;
+	color:#666666;
+	margin:.7rem;
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	height:2.8rem
+}
+

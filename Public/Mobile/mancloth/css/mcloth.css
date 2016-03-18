@@ -1,0 +1,155 @@
+/* CSS Document */
+.mcloth section{ 
+	border-top:none;
+	margin-bottom:0;
+}
+.mcloth .sec-body{
+	border-bottom:none
+}
+.bg-fff{
+	background:#fff
+}
+.m-cloth-header{
+	background:#15100c
+}
+.m-cloth-header h1 {
+	color: #ffffff;
+}
+.m-cloth .jshs-banner {
+	margin-bottom: 0;
+}
+.m-cloth-page {
+	bottom: .5rem;
+}
+.m-cloth-page .swiper-pagination-bullet {
+    background-color: #bfbdbd;
+    border-color: #fff;
+}
+.m-cloth-page .swiper-pagination-bullet-active {
+    background-color: #15100c;
+    border-color: #fff;
+}
+.m-cloth-nav{
+	margin:.9rem;
+	height:17rem;
+}
+.m-cloth-nav ul{
+	background:url(../img/mancloth_navbg.png) no-repeat;
+	background-size:100% 15.3rem;
+	overflow:hidden;
+	height:15.3rem;	
+}
+.m-cloth-nav ul li{
+	width:33.33%;
+	float:left;
+	height:6.8rem;
+	padding-top:1.6rem 
+}
+.m-cloth-nav ul li a{
+	display:block;
+	background:url(../img/cloth_nav_bg.png);
+	background-size:100% 4.7rem;
+	height:5.2rem;
+	text-align:center;
+}
+.m-cloth-nav ul li img{
+	width:3rem;
+	height:3rem;
+}
+.m-cloth-nav ul li a span{
+	color:#15100c;
+	font-size:1.2rem;
+	margin-top:.7rem;
+	display:block
+}
+.sec-title{
+	color:#fff;
+	line-height:3.8rem;
+	height:3.8rem;
+	font-size:1.2rem;
+	background:url(../img/mancloth_tlt_bg.png) no-repeat;
+	background-size:100% 100%;
+	border-bottom:none;
+	padding:0
+}
+.sec-title h3{
+	font-size:1.2rem;
+	padding-left:2.2rem;
+	color:#15100c;
+}
+a.cloth-more{
+	margin-right:1rem;
+	color:#fff;
+	height:3.6rem;
+	width:4.4rem;
+	font-size:1.2rem;
+	text-align:center;
+	display:block;
+	color:#15100c
+}
+.m-cloth-rec{
+	margin:0 .9rem;
+}
+.m-cloth-rec .sec-body,.m-cloth-act .sec-body,.m-cloth-coupon .sec-body{
+	overflow:hidden;
+	border:1px solid #15100c;
+	border-top:none;
+	padding:1rem .9rem;
+}
+.m-cloth-rec ul li,.m-cloth-act ul li{
+	padding:.2rem;
+	width:33.33%;
+	float:left;
+}
+.m-cloth-rec ul li a,.m-cloth-act ul li a{
+	display:block;
+	height:15.6rem;
+}
+.m-cloth-rec ul li img,.m-cloth-act ul li img{
+	height:12.8rem;
+	width:100%
+}
+.m-cloth-rec ul li p,.m-cloth-act ul li p{
+	color:#15100c;
+	width:100%;
+	font-size:.9rem;
+	margin-top:.9rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.m-cloth-act,.m-cloth-coupon{
+	margin:1.4rem .9rem 0 .9rem;
+}
+.m-cloth-coupon .sec-body{
+	padding:0rem .1rem
+}
+.mcloth .m-cloth-coupon .sec-body li{
+	padding:0;
+	background:#fff;
+	margin:1rem .5rem;
+	background:url(../img/mancloth_coupon_bg.png) no-repeat;
+	background-size:100% 8.4rem;
+}
+.m-cloth-coupon ul li a{
+	font-size:2.8rem;
+	color:#15100c;
+	width:100%;
+	display:block;
+	height:8.4rem;
+	padding:.6rem 1rem 1.4rem 9.7rem;
+}
+.m-cloth-coupon ul li h4{
+	color:#15100c;
+	font-size:1.6rem;
+}
+.m-cloth-coupon ul li p{
+	font-size:.9rem;
+	color:#666666;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+
+

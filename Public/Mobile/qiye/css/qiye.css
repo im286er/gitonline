@@ -1,0 +1,186 @@
+/* CSS Document */
+.bg-fff {
+	background-color: #fff;
+}
+.qiye-header {
+	background: none;
+	background-image:-webkit-linear-gradient(to bottom,rgba(35,92,182,1) 0%,rgba(35,92,182,1) 20%,rgba(0,0,0,0) 100%);
+	background-image:-moz-linear-gradient(to bottom,rgba(35,92,182,1) 0%,rgba(35,92,182,1) 20%,rgba(0,0,0,0) 100%);
+	background-image:-o-linear-gradient(to bottom,rgba(35,92,182,1) 0%,rgba(35,92,182,1) 20%,rgba(0,0,0,0) 100%);
+	background-image:linear-gradient(to bottom,rgba(35,92,182,1) 0%,rgba(35,92,182,1) 20%,rgba(0,0,0,0) 100%);
+}
+.qiye-header h1 {
+	color: #fff;
+}
+.qiye section {
+	border-top: none;
+	margin-bottom: 10px;
+	background: none;
+}
+.qiye .qiye-banner {
+	margin-bottom: 0;
+}
+.qiye-page {
+	bottom: 0.6rem;
+}
+.qiye-page .swiper-pagination-bullet {
+    background-color: #447fb8;
+    border-color: #447fb8;
+}
+.qiye-page .swiper-pagination-bullet-active {
+    background-color: #7ca5d7;
+    border-color: #7ca5d7;
+}
+.qiye-nav {
+	padding: .5rem;
+	margin-bottom:0;
+}
+.qiye-nav li {
+	width: 50%;
+	float: left;
+	padding: .25rem;
+}
+.qiye-nav li a {
+	display:block;
+	width: 100%;
+	height: 7.1rem;
+	background: 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+.qiye-nav li:nth-child(1) a {
+	background-image: url("../img/qiye_nav_bg_01.png");
+}
+.qiye-nav li:nth-child(2) a {
+	background-image: url("../img/qiye_nav_bg_02.png");
+}
+.qiye-nav li:nth-child(3) a {
+	background-image: url("../img/qiye_nav_bg_03.png");
+}
+.qiye-nav li:nth-child(4) a {
+	background-image: url("../img/qiye_nav_bg_04.png");
+}
+.qiye-nav li a div {
+	width: 3.6rem;
+	height: 3.6rem;
+	float: left;
+	margin: 1.6rem 0 0 1rem;
+	background: url("../img/qiye_nav_img_bg.png") 0 0 no-repeat;
+	background-size:100% 100%;
+}
+.qiye-nav li img {
+	display: block;
+	width:2.9rem;
+	height:2.9rem;
+	border-radius:50%;
+	-moz-border-radius:50%;
+	-o-border-radius:50%;
+	-webkit-border-radius:50%;
+	margin: .35rem auto 0;
+}
+.qiye-nav li span {
+	float: left;
+	font-size: 1.1rem;
+	line-height: 3.6rem;
+	color: #fff;
+	padding-left: 1.1rem;
+	margin-top: 1.7rem;
+}
+
+.qiye-product, .qiye-news {
+	padding: 0 1rem;
+}
+.sec-title {
+	background: url("../img/qiye_title_bg.jpg") 0 0 no-repeat;
+	background-size:100% 100%;
+	border-bottom:none;
+	color:#fff;
+	line-height:3.5rem;
+	height:3.5rem;
+	font-size:1.2rem;
+}
+.sec-title h3{
+	font-size:1.2rem;
+}
+.sec-title a.qiye-more{
+	color:#fff;
+	height: 3.5rem;
+	width:4rem;
+	display: block;
+	padding-right: 1rem;
+}
+.qiye .sec-body {
+	background: #edf3fa;
+	padding: .2rem;
+	border-bottom:none;
+}
+.qiye .sec-body li a {
+	display:block;
+	background: #fff;
+}
+.qiye-product li {
+	float:left;
+	width: 50%;
+	padding: .2rem;
+}
+.qiye-product li a {
+	height: 12.6rem;
+	padding: .4rem;
+}
+.qiye-product li img {
+	width:100%;
+	height:8.2rem;
+}
+.qiye-product li h5 {
+	font-size: 1rem;
+	line-height: 3.9rem;
+	color: #666;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.qiye-news li {
+	padding: .2rem;
+}
+.qiye-news li a {
+	height: 9.2rem;
+	padding: .6rem;
+}
+.qiye-news li img {
+	width: 9.2rem;
+	height: 8rem;
+	float: left;
+	margin-right: 1.8rem;
+}
+.qiye-news li h5 {
+	height: 2.8rem;
+	font-size: 1.2rem;
+	line-height: 1.4rem;
+	color: #272728;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: .5rem;
+}
+.qiye-news li p {
+	color: #666;
+	font-size: .8rem;
+	line-height: 1.1rem;
+	height: 3.3rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: .3rem;
+}
+.qiye-news li span {
+	display: block;
+	color: #666;
+	font-size: .8rem;
+	line-height: 1.1rem;
+}
+.qiye-news li i.ico-clock {
+	width: 1.1rem;
+	height: 1.1rem;
+	background-image: url("../img/ico_clock.png");
+	vertical-align: middle;
+	margin-right: 5px;
+	float: left;
+}

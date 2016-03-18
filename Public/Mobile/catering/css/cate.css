@@ -1,0 +1,250 @@
+/* CSS Document */
+.cate section{ 
+	border-top:none;
+	margin-bottom:0;
+}
+.cate .sec-body{
+	border-bottom:none
+}
+.bg-fff{
+	background:#fff
+}
+.cate-header{
+	background:#b54d52
+}
+.cate-header h1 {
+	color: #ffffff;
+}
+.cate .jshs-banner {
+	margin-bottom: 0;
+}
+.cate-page {
+	bottom: .5rem;
+}
+.cate-page .swiper-pagination-bullet {
+    background-color: #bfbdbd;
+    border-color: #fff;
+}
+.cate-page .swiper-pagination-bullet-active {
+    background-color: #ca2c2b;
+    border-color: #fff;
+}
+section.cate-nav {
+	height:14.6rem;
+	margin:.7rem;
+	position:relative
+}
+.swiper-container-v{
+	position:absolute;
+	overflow:hidden;
+	z-index:1;
+	width:13.8rem;
+	height:100%;
+}
+.swiper-container-v img{
+	width:3.6rem;
+	height:3.6rem
+}
+.swiper-container-v a{
+	width:100%;
+	display:block;
+	padding:.7rem
+}
+.swiper-container-v a span{
+	line-height:3.6rem;
+	margin-left:.7rem;
+	font-size:1.1rem;
+	color:#1a1a1a
+}
+.cate-nav-r{
+	background:url(../img/cate_nav_bg.png) no-repeat;
+	background-size:100% 100%;
+	width:15.7rem;
+	margin:.7rem .3rem .8rem 1rem;
+	float:right;
+	height:13.1rem
+}
+.cate-nav .swiper-pagination-bullet {
+    background-color: #ffffff;
+    border-color: #b9b8b8;
+}
+.cate-nav .swiper-pagination-bullet-active {
+    background-color: #e2e2e2;
+    border-color: #bcbbbb;
+}
+.swiper-container-vertical>.swiper-pagination-v{
+	position:absolute;
+	z-index:2;
+	right:10px;
+	top:50%;
+	height:1.6rem;
+	-webkit-transform:translate3d(0,-50%,0);
+	-moz-transform:translate3d(0,-50%,0);
+	-o-transform:translate(0,-50%);
+	-ms-transform:translate3d(0,-50%,0);
+	transform:translate3d(0,-50%,0)
+}
+.swiper-container-vertical>.swiper-wrapper{
+	-webkit-box-orient:vertical;
+	-moz-box-orient:vertical;
+	-ms-flex-direction:column;
+	-webkit-flex-direction:column;
+	flex-direction:column
+}
+.swiper-container-vertical>.swiper-pagination-v .swiper-pagination-bullet{
+	margin:.4rem 0;
+	display:block
+}
+.sec-title{
+	color:#fff;
+	line-height:3.6rem;
+	height:3.6rem;
+	font-size:1.3rem;
+	background:#cd6667;
+	background-position:bottom;
+	border-bottom:none;
+	padding:0
+}
+.sec-title h3{
+	font-size:1.3rem;
+	padding-left:1.5rem
+}
+a.cate-more{
+	background:url(../img/cate_more.png) no-repeat;
+	background-size:.7rem 3.6rem;
+	background-position:right;
+	margin-right:1rem;
+	color:#fff;
+	height:3.6rem;
+	width:4.4rem;
+	font-size:1.2rem;
+	text-align:center;
+	display:block;
+}
+.cate-act .sec-body{
+	margin:.2rem;
+	overflow:hidden	
+}
+.cate-act ul li{
+	padding:.2rem;
+	width:50%;
+	float:left
+}
+.cate-act ul li a{
+	display:block;
+	height:12.3rem;
+	background:#ededed;
+	overflow:hidden;
+	line-height:3.6rem;
+}
+.cate-act ul li img{
+	height:8.7rem;
+	display:block
+}
+.cate-act ul li h5{
+	font-size:1.3rem;
+	color:#1a1a1a;
+	padding:0 .3rem;
+	width:70%;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.cate-act ul li  span{
+	display:block;
+	font-size:1.1rem;
+	color:#4c4c4c;
+	float:right;
+	margin-right:.3rem
+}
+.cate-rec .sec-body{
+	margin:.2rem;
+	overflow:hidden	
+}
+.cate-rec ul li{
+	
+	width:33.33%;
+	float:left;
+	padding:.2rem	
+}
+.cate-rec ul li a{
+	display:block;
+	position:relative;
+	height:12.3rem
+}
+.cate-rec ul .meun a{
+	background:#ededed;
+	padding:1.3rem .9rem;	
+}
+.cate-rec ul .meun a span:nth-child(1){
+	font-size:1.1rem;
+	color:#cd6667;
+	padding-bottom:.5rem
+}
+.cate-rec ul .meun a span{
+	display:block;
+	color:#666666;
+	font-size:.9rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	line-height:1.5rem
+}
+.cate-rec ul li img{
+	width:100%;
+	z-index:1;
+	height:100%
+}
+.cate-rec ul li p{
+	position:absolute;
+	top:0;
+	right:0;
+	z-index:2;
+	display:block;
+	color:#ffffff;
+	font-size:1.3rem;
+	background:url(../img/cate_new_bg.png) no-repeat;
+	background-size:3.5rem 3.5rem;
+	width:3.5rem;
+	height:3.5rem;
+	text-align:center;
+	text-indent:1rem;
+	line-height:2rem
+}
+.cate-coupon{
+	overflow:hidden;
+}
+.cate-coupon .sec-body{
+	margin:.2rem;
+	overflow:hidden	
+}
+.cate-coupon ul li{
+	background:#fff;
+	margin:.2rem;
+	background:url(../img/cate_coupon_bg.png) no-repeat;
+	background-size:100% 9.1rem;
+	height:9.3rem;
+}
+.cate-coupon ul li a{
+	font-size:2.8rem;
+	color:#bda17d;
+	width:100%;
+	display:block;
+	height:9.1;
+	padding:1rem 1.4rem 1.4rem 10rem;
+}
+.cate-coupon ul li h4{
+	color:#c4894e;
+	font-size:1.6rem;
+}
+.cate-coupon ul li p{
+	font-size:1rem;
+	color:#fff;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+
+

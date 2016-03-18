@@ -1,0 +1,236 @@
+/* CSS Document */
+.meifa section
+{
+	margin-bottom:0;
+	border-top:none;
+	background:none
+}
+.bg-f6f9fd{
+	background:#eaeaea
+}
+.meifa-header {
+	background-color:#e27574
+}
+.meifa-header h1 {
+	color: #ffffff;
+}
+.meifa .meifa-banner {
+	margin-bottom: 0;
+}
+.meifa-page {
+	bottom: 0.5rem;
+}
+.meifa-page .swiper-pagination-bullet {
+    background-color: #f4f4f5;
+    border-color: #f4f4f5;
+}
+.meifa-page .swiper-pagination-bullet-active {
+    background-color: #b92626;
+    border-color: #b92626;
+}
+section.meifa-nav{
+	background:#fff;
+	overflow:hidden;
+	text-align:center;
+	height:18rem
+}
+.meifa-nav ul li{
+	width:33.33%;
+	float:left;
+}
+.meifa-nav ul li a{
+	display:block;
+	height:8rem;
+	padding-top:1.9rem
+}
+.meifa-nav ul li img{
+	width:3.6rem;
+	height:3.6rem;
+	border-radius:.5rem;
+	-moz-border-radius:.5rem;
+	-o-border-radius:.5rem;
+	-webkit-border-radius:.5rem;
+}
+.meifa-nav ul li span{
+	display:block;
+	font-size:1.2rem;
+	color:#333333;
+	margin-top:1rem
+}
+.sec-title{
+	background:url(../img/meifa_titlebg.png) no-repeat;
+	background-size:100% 3.6rem;
+	border-bottom:none;
+	margin:0 1.4rem;
+	line-height:3.6rem;
+	height:3.6rem;
+	color:#fff;
+}
+a.meifa-more{
+	position:absolute;
+	right:15px;
+	top:.8rem;
+	font-size:1.2rem;
+	border:1px solid #fff;
+	padding:0.2rem;
+	height:2rem; 
+	line-height:1.5rem;
+	text-align:center;
+	color:#fff;
+	display:block;
+	width:3.4rem
+}
+.meifa-hot ul li{
+	width:33.33%;
+	float:left
+}
+.meifa-hot .sec-body{
+	margin:.8rem 1.2rem;
+	border-bottom:none
+}
+.meifa-hot .sec-body ul li{
+	padding:.2rem
+}
+.meifa-hot .sec-body ul li img{
+	width:100%;
+	height:11.8rem
+}
+.meifa-hot .sec-body ul li a{
+	display:block;
+	background:#fff
+}
+.meifa-hot .sec-body ul li span{
+	display:block; 
+	color:#7a7a7a;
+	font-size:1.1rem;
+	text-align:center;
+	line-height:3rem;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	padding:0 .4rem
+}
+.meifa-recm{
+	margin-top:1rem
+}
+.meifa-recm ul li img{
+	position:absolute;
+	top:1.1rem;
+	width:7rem;
+	height:7rem;
+	border-radius:50%;
+	-moz-border-radius:50%;
+	-ms-border-radius:50%;
+	-o-border-radius:50%;
+	-webkit-border-radius:50%;
+}
+.meifa-recm ul li{
+	position:relative;
+	margin-bottom:1rem
+}
+.meifa-recm ul li a{
+	height:8.6rem;
+	display:block
+}
+.meifa-recm .sec-body{
+	margin:.8rem 1.4rem;
+	border-bottom:none
+}
+.meifa-recm-txt{
+	position:absolute;
+	left:7.2rem;
+	background:#fff;
+	left:8rem;
+	width:21rem;
+	height:8.6rem;
+	line-height:2rem;
+	padding:.5rem
+}
+.meifa-recm-txt:before{
+	content:'';
+	position:absolute;
+	top:3.9rem;
+	left:-.6rem;
+	width: 0;
+    height: 0;
+    border-top: .4rem solid transparent;
+    border-right: .8rem solid #fff;
+    border-bottom: .4rem solid transparent;	
+}
+.meifa-recm-txt h4{
+	color:#29323e;
+	font-size:1.4rem;
+	padding-left:1.7rem;
+	line-height:3rem
+}
+.meifa-recm-txt span{
+	color:#7a7a7a;
+	font-size:1.1rem;
+	display:block;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.icon_txt{
+	background:url(../img/icon_txt.png) no-repeat;
+	background-size:1.2rem 1.2rem;
+	width:1.2rem;
+	height:1.2rem;
+	display:inline-block;
+	margin-right:.5rem
+}
+.icon-date{
+	background:url(../img/icon_date.png) no-repeat;
+	background-size:1.2rem 1.2rem;
+	width:1.2rem;
+	height:1.2rem;
+	display:inline-block;
+	margin-right:.5rem
+}
+.meifa-coupon .sec-body{
+	margin:.4rem 1.4rem;
+	border-bottom:none
+}
+.meifa-coupon ul li{
+	overflow:hidden;
+	background:#fff;
+	padding:.4rem;
+	margin-bottom:.4rem
+}
+.meifa-coupon ul li a{
+	display:block;
+	height:8.7rem;
+	overflow:hidden
+}
+.meifa-coupon ul li:nth-child(1) a{
+	background:url(../img/meifa_coupon01.png);
+	background-size:100%;
+}
+.meifa-coupon ul li:nth-child(2) a{
+	background:url(../img/meifa_coupon02.png);
+	background-size:100%;
+}
+.fl-l{
+	width:53.7%;
+	margin:1.6rem 1.4rem;
+	padding:.6rem
+}
+.fl-l h4{
+	font-size:1.4rem;
+	color:#7a7a7a
+}
+.fl-l span{
+	color:#579ad4;
+	font-size:1.1rem;
+	overflow:hidden; 
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.fl-r{
+	width:18.2%;
+	margin:1.6rem 3.4rem 1.6rem 0;
+	text-align:center;
+	font-size:1.2rem;
+	color:#fff;
+	line-height:5.2rem
+}

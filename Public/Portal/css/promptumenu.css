@@ -1,0 +1,28 @@
+.promptumenu_nav{
+	z-index: 5;
+	position: absolute;
+	bottom:5px;
+	left: 50%;
+	margin-right: -50%;
+}
+.promptumenu_window{
+	cursor: move;
+	position: relative; background:#fff; border-bottom:1px solid #e3e3e8; margin:auto; width:100%;  height:50px; 
+}
+.promptumenu_nav a{
+	cursor: pointer;
+	width: 12px;
+	height: 12px;
+	text-indent: -9999px;
+	outline: none;
+	background: url(pagination1.png) 0 0 no-repeat;
+	display: block;
+	float: left;
+	position: relative;
+	left: -50%;
+	margin: 0 2px;
+}
+ a.active{ color:#bf242a; font-size:1.6rem
+}
+ul.promptu-menu2{  height:50px; width:100%}
+ul.promptu-menu2 li{ text-align:center;  width:20%}

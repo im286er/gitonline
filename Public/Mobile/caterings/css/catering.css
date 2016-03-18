@@ -1,0 +1,164 @@
+/* CSS Document */
+.catering section{ 
+	border-top:none;
+	background:none
+}
+.bg-f6f9fd{
+	background:#fff;
+}
+.catering-header{
+	background:#c6363d;
+}
+.catering-header h1 {
+	color: #ffffff;
+}
+.catering .catering-banner {
+	margin-bottom: 0;
+}
+.catering-page {
+	bottom: 0.5rem;
+}
+.catering-page .swiper-pagination-bullet {
+    background-color: #adacac;
+    border-color: #fff;
+	border:1px solid #fff;
+}
+.catering-page .swiper-pagination-bullet-active {
+    background-color: #b90000;
+    border-color: #fff;
+	border:1px solid #fff;
+}
+.catering-nav{
+	background:none;
+	overflow:hidden;
+	text-align:center;
+	height:17.6rem;
+	margin-bottom:0
+}
+.catering-nav ul li{
+	width:33.33%;
+	float:left;
+	margin-top:1.5rem
+}
+.catering-nav ul li a{
+	height:6.5rem;
+	display:block;
+	padding-top:0rem
+}
+.catering-nav ul li img{
+	width:3.9rem;
+	height:3.9rem;
+	background:#fff;
+}
+.catering-nav ul li span{
+	display:block;
+	font-size:1.2rem;
+	color:#666666;
+	margin-top:0.6rem
+}
+.sec-title{
+	background:#c6363d;
+	border-bottom:none;
+	color:#fff;
+	line-height:3.6rem;
+	height:3.6rem;
+	font-size:1.2rem;
+}
+.sec-title h3{
+	font-size:1.2rem
+}
+a.catering-more{
+	color:#fff;
+	height:3.3rem;
+	width:4rem;
+	text-align:center;
+	display:block;
+	padding-right:15px
+}
+.public{ 
+	 overflow:hidden;
+	 padding:0 0 1rem; 
+	 border-top:none;
+}
+.public ul li{
+	float:left; 
+	padding:.6rem 0.3rem 0
+}
+.public ul li a{
+	display:block
+}
+.public ul li img{ 
+	width:100%;
+	height:8.2rem
+}
+.public ul{
+	background:#FFF; 
+	padding:0rem 0.3rem
+}
+.public ul li p{ 
+	font-size:1.1rem; 
+	color:#666;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	padding-top:0.5rem;
+}
+.public ul li p span{ 
+	display:block; 
+	color:#666; 
+	font-size:1.1rem; 
+	line-height:2.4rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.catering-rec ul li{ 
+	width:33.33%;
+	box-sizing:border-box
+}
+.catering-mp ul li{
+	width:50%; 
+	box-sizing:border-box
+}
+.catering-mp ul li p{
+	line-height:2.4rem;
+	}
+.catering-mp ul li p span{ 
+	display:inline-block; 
+	color:#666; 
+	font-size:1.1rem; 
+	line-height:2.4rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	float:right
+}
+
+.catering-coupon ul{
+}
+.catering-coupon ul li{
+	width:100%;
+	background:url(../img/coffee_coupon_bg.png) no-repeat;
+	background-size:100% 100%;
+	height:9.1rem;
+	padding:0rem;
+	margin-top:0.3rem
+}
+.catering-coupon ul li a{
+	display:block;
+}
+.catering-coupon ul li h4{
+	color:#ac6621;
+	font-size:1.8rem;
+	margin-left:10rem;
+	padding:1rem 0 0.4rem
+}
+.catering-coupon ul li p{
+	font-size:1rem;
+	color:#fff;
+	margin-left:10rem;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	padding-top:0px;
+}

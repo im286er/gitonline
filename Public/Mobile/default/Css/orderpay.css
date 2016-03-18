@@ -1,0 +1,171 @@
+/*提交订单*/
+.consumeway form {
+	display: none;
+	padding-left: 15px;
+	/*border-top: 1px solid #e3e3e8;*/
+}
+.consumeway form.active {
+	display: block;
+}
+.consumeway form > div {
+	height: 4.4rem;
+	line-height: 4.4rem;
+	font-size: 1.4rem;
+	border-bottom: 1px solid #e3e3e8;
+}
+.consumeway form > div:last-child {
+	border-bottom: none;
+}
+.consumeway form label {
+
+}
+.consumeway form select {
+	height: 4.2rem;
+	line-height: 4.2rem;
+}
+.consumeway form input {
+	width: 80%;
+}
+
+/*20150825*/
+.addr-info {
+	display: block;
+	height: 7.2rem;
+	padding: 1.2rem 0;
+	position: relative;
+}
+.addr-name {
+	height: 2rem;
+	overflow: hidden;
+	color: #67696b;
+	font-size: 1.1rem;
+	line-height: 1.6rem;
+}
+.addr-name span {
+	display: inline-block;
+	max-width: 10rem;
+	margin-right: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.addr-explain {
+	color: #bf242a;
+}
+.addr-detail {
+	width: 25rem;
+	height: 3rem;
+	overflow: hidden;
+	color: #333;
+	font-size: 1.2rem;
+	line-height: 1.6rem;
+}
+.addr-info i.ico-right {
+	position: absolute;
+	top: 50%;
+	margin-top: -2.2rem;
+	right: 0;
+}
+/*201501008*/
+.consumeway .sec-title li {
+	float: left;
+	width: 50%;
+	text-align: center;
+	font-size: 1.2rem;
+	border-right: 1px solid #e3e3e8;
+}
+.consumeway .sec-title li:last-child {
+	border: none;
+}
+.ico-toggle {
+	display: inline-block;
+	width: 1.1rem;
+	height: 1.1rem;
+	background: url("../img/ico_toggle.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+	margin-right: 1rem;
+	vertical-align: middle;
+}
+li.checked .ico-toggle {
+	background-image: url("../img/ico_toggle_active.png");
+}
+.consumeway .sec-title li span {
+	display: inline-block;
+}
+.seat-info {
+	display: block;
+	width: 100%;
+	height: 4.4rem;
+	position: relative;
+}
+.seat-info i.ico-right {
+	position: absolute;
+	top: 50%;
+	margin-top: -2.2rem;
+	right: 0;
+}
+.modal-seat .modal-content {
+  padding: 1rem 1.5rem;
+}
+.modal-seat .modal-body {
+  width: 100%;
+  height: 15rem;
+  position: relative;
+  padding: 0;
+  margin-bottom: 4.4rem;
+}
+.modal-seat .swiper-container {
+  width: 100%;
+}
+.modal-seat .swiper-slide {
+  text-align: center;
+}
+.swiper-container {
+  float: left;
+  height: 15rem;
+}
+.swiper-slide {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-flex-flow: column wrap;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  width: 100%;
+  height: 5rem;
+  font-size: 1.3rem;
+  line-height: 1.8rem;
+  color: #000;
+}
+.modal-line-1,
+.modal-line-2 {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0;
+  z-index: 10;
+  background: none;
+}
+.modal-line-1 {
+  top: 33.33%;
+  border-bottom: 1px solid #b2b2b2;
+}
+.modal-line-2 {
+  bottom: 33.33%;
+  border-top: 1px solid #b2b2b2;
+}
+.swiper-slide {
+  color: #cdcdcd;
+}
+.swiper-slide-active {
+  color: #000;
+}
+.swiper-slide-prev,
+.swiper-slide-next {
+  color: #cdcdcd;
+}

@@ -1,0 +1,153 @@
+/* CSS Document */
+.jshs section{ 
+	border-top:none;
+	margin-bottom:0;
+}
+.jshs .sec-body{
+	border-bottom:none
+}
+.bg-1a1a1a{
+	background:#1a1a1a
+}
+.jshs{
+	background:url(../img/jshs_bg_01.jpg) no-repeat, url(../img/jshs_bg_02.png) no-repeat;
+	background-size:100% 26rem,100% 10.6rem;
+	background-position:0 30rem,0 93rem
+}
+.jshs-header{
+	background:#000000
+}
+.jshs-header h1 {
+	color: #ffffff;
+}
+.jshs .jshs-banner {
+	margin-bottom: 0;
+}
+.jshs-page {
+	bottom: .5rem;
+}
+.jshs-page .swiper-pagination-bullet {
+    background-color: #1a1a1a;
+    border-color: #fff;
+}
+.jshs-page .swiper-pagination-bullet-active {
+    background-color: #db6266;
+    border-color: #fff;
+}
+.jshs-nav{
+	overflow:hidden;
+	height:18rem;
+	margin-bottom:0;
+	background:none ;
+}
+.jshs-nav ul{
+	margin:.75rem .7rem
+}
+.jshs-nav ul li{
+	width:50%;
+	float:left;
+	padding:.75rem 2rem .75rem 2rem;
+	height:5rem
+}
+.jshs-nav ul li a{
+	display:block;
+}
+.jshs-nav ul li a img{
+	width:3.6rem;
+	height:3.6rem;
+	border-radius:50%
+}
+.jshs-nav ul li span{
+	font-size:1.2rem;
+	color:#fff;
+	line-height:3.6rem;
+	margin-left:.6rem
+}
+.sec-title{
+	color:#fff;
+	line-height:3.6rem;
+	height:3.6rem;
+	font-size:1.3rem;
+	margin:0 1.1rem;
+	background:url(../img/jshs_line.png) no-repeat;
+	background-position:bottom;
+	border-bottom:none;
+	padding:0
+}
+.sec-title h3{
+	font-size:1.3rem
+}
+a.jshs-more{
+	color:#fff;
+	height:3.6rem;
+	width:4.4rem;
+	font-size:1.2rem;
+	text-align:center;
+	display:block;
+	padding-right:1rem;
+}
+.jshs-rec,.jshs-video{
+	background:rgba(89,89,89,.28);
+	margin:1.4rem;
+	overflow:hidden	
+}
+.jshs-rec .sec-body ul,.jshs-video .sec-body ul{
+	padding:.4rem .7rem;	
+}
+.jshs-rec ul li,.jshs-video ul li{ 
+	width:50%; 
+	float:left;
+	padding:.4rem;	
+}
+.jshs-rec ul li img,.jshs-video ul li img{
+	height:7.6rem;
+}
+.jshs-rec ul li a,.jshs-video ul li a{
+	height:9.8rem;
+	display:block;
+	overflow:hidden;
+}
+.jshs-rec ul li a span,.jshs-video ul li a span{
+	color:#EAF4F6;
+	font-size:1.2rem;
+	text-align:center;
+	line-height:2.2rem;
+	display:block;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.jshs-coupon{
+	background:rgba(89,89,89,.28);
+	margin:1.4rem ;
+	overflow:hidden;
+}
+.jshs-coupon ul{
+	margin:.6rem
+}
+.jshs-coupon ul li{
+	background:#fff;
+	margin:.5rem;
+	background:url(../img/jshs_coupon_bg.png) no-repeat;
+	background-size:100% 7.6rem;
+	height:8rem;
+}
+.jshs-coupon ul li a{
+	font-size:2.8rem;
+	color:#bda17d;
+	width:100%;
+	display:block;
+	height:7.6;
+	padding:1rem 1rem 1rem 8.5rem;
+}
+.jshs-coupon ul li h4{
+	color:#666666;
+	font-size:1.4rem;
+}
+.jshs-coupon ul li p{
+	font-size:.9rem;
+	color:#666666;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}

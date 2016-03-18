@@ -1,0 +1,35 @@
+.header-transparent {
+  background: transparent;
+}
+.detail-container {
+  background-color: #fff;
+}
+.detail-body {
+  padding: 0 2rem 1.6rem;
+  border-bottom: 1px solid #e3e3e8;
+  margin-bottom: 5rem;
+}
+.detail-abstract {
+  font-size: 1.3rem;
+  color: #1a1a1a;
+  margin-bottom: 1.2rem;
+}
+.detail-content {
+  border-top: 1px solid #e3e3e8;
+  padding-top: .7rem;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  color: #1a1a1a;
+}
+.detail-content-title {
+  font-size: 1.1rem;
+  line-height: 1.2rem;
+  color: #7d7d80;
+  margin-bottom: .6rem;
+  padding-left: 2rem;
+  background: url("../img/ico_book.png") 0 0 no-repeat;
+  background-size: 1.6rem 1.2rem;
+}
+.detail-content img {
+  width: 100%;
+}
