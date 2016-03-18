@@ -1,0 +1,137 @@
+﻿/* CSS Document */
+
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, em, img, strong, i,
+dl, dt, dd, ol, ul, li,
+form, label,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0;}
+img { border: none; vertical-align: top;}
+a { text-decoration: none; outline: none;}
+ul { list-style: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+input,button,textarea,select,optgroup,option{ font-size: 100%; font: inherit; background: none; border: none; outline: none;}
+
+body {
+	font-family: Helvetica, "微软雅黑";
+	font-size: 12px;
+}
+
+ .head-logo{ height:54px; line-height:54px; overflow:hidden;_zoom:1; padding:10px 0}
+ .logo{ width:215px; height:54px; position:absolute; left:50px}
+/*head-logo .logo img{ margin-top:5px}*/
+.tel00{ width:170px; float:right;  font-size:24px; color:#fff; font-weight:400; background:url(../images/tel.png) 0 11px no-repeat; padding-left:50px; position:absolute; right:50px; top:10px;font-family:"微软雅黑"; }
+.menu{ width:770px; margin:auto; color:#fff; font-size:16px; font-family:"微软雅黑"; overflow:hidden;_zoom:1}
+.menu a{ float:left;  width:110px; text-align:center}
+.menu a{ color:#fff}
+
+
+
+
+/*新闻动态*/
+.head-logo{ background:#1ec2ea}
+.content{ width:1000px; margin:auto; padding:20px; background:#fff}
+.content ul li{ overflow:hidden;_zoom:1; border-bottom:1px solid #cacaca; margin:10px 0; padding-bottom:10px}
+.news-pic{ width:230px; height:150px; float:left;border:1px solid #cacaca; padding:2px; overflow:hidden}
+.news-pic img{ width:100%; height:100%}
+.news-txt{ font-size:14px; color:#747474; line-height:24px; width:640px; float:left; margin-left:20px; height:156px}
+.news-txt span{ font-size:16px; font-weight:bold; color:#000; display:block; margin-bottom:10px}
+.new-date{ width:150opx; float:right;color:#747474; font-size:14px}
+.title{font-size:16px; font-weight:bold; color:#000; text-align:center; margin:30px 0}
+.detail{ font-size:14px; line-height:24px; text-indent:2em}
+.bold{ font-weight:600}
+.pic450{ width:450px; margin:10px auto}
+.pic450 img{ width:100%; }
+.c-hight{ height:70px}
+.pic300{ width:300px; margin:10px auto}
+.pic300 img{ width:100%; }
+.pic600{ width:600px; margin:10px auto}
+.pic600 img{ width:100%; }
+.tt{ font-size:14px; text-align:center; font-weight:bold; margin-bottom:30px}
+.center{ text-align:center}
+.h-10{ height:10px}
+.content ul a{ display:block; width:100%}
+
+
+
+.clearfix {
+	zoom: 1;
+}
+.clearfix:after {
+	content: "\20";
+	display: block;
+	clear: both;
+	height: 0;
+}
+/*招商加盟*/
+.container {width: 1000px;margin: 0 auto;position: relative;overflow: hidden;}
+.section {padding: 40px 0;}
+.section:after {content: "\20";display: block;clear: both;height: 0;}
+.left {float: left;}
+.right {float: right;}
+.sec-1 .left {width: 240px;padding: 30px 70px 0;}
+.sec-1 .left div {width: 240px;height: 147px;text-align: center;vertical-align: middle;background: url("../images/bg_circle_lg.png") 0 0 no-repeat;padding-top: 93px;border-radius: 120px;}
+.sec-1 .left img {width: 215px;}
+.sec-1 .right {width: 580px;padding-right: 40px;}
+.sec-1 .right p {text-indent: 2em;font-size: 18px;line-height: 30px;}
+.sec-title {text-align: center;margin-bottom: 40px;color: #2b2b2b;}
+.sec-title h2 {display: inline-block;font-size: 30px;line-height: 50px;border-bottom: 4px solid #27a7ca;}
+.list-zhunze {width: 1008px;}
+.list-zhunze li {float: left;width: 160px;height: 132px;background: #27a7ca;margin-right: 8px;font-size: 16px;line-height: 28px;text-align: center;color: #fff;padding-top: 28px;}
+.sec-3 .sec-content>div {height: 200px;}
+.sec-3 .left {padding: 0 80px;width: 160px;padding-top: 20px;}
+.sec-3 .left h3 {width: 160px;height: 160px;line-height: 160px;font-size: 24px;color: #fff;background: url("../images/bg_circle_md.png") 0 0 no-repeat;text-align: center;border-radius: 80px;}
+.sec-3 .right {width: 680px;padding-top: 5px;}
+.sec-3 .right li {line-height: 32px;font-size: 18px;}
+.p-t-40 {padding-top: 40px;}
+.sec-4 li {float: left;width: 265px;height: 240px;}
+.sec-4 li.li-last {width: 205px;}
+.sec-4 li img {width: 145px;height: 145px;margin-bottom: 20px;}
+.sec-4 li p {font-size: 15px;line-height: 24px;}
+.sec-4 .left {width: 145px;padding: 0 30px;}
+.sec-4 .right {width: 60px;height: 145px;background: url("../images/liucheng_arrow.jpg") 0 0 no-repeat;}
+.sec-5 .left {width: 500px;}
+.sec-5 .right {width: 500px;}
+.sec-5 .right h3 {font-size: 20px;line-height: 32px;margin-bottom: 10px;}
+.sec-5 .right li {font-size: 18px;line-height: 32px;}
+.form-box {width: 400px;margin: 0 auto;padding: 20px 20px 10px 0;background: #27A7CA;}
+.form-title {line-height: 50px;font-size: 40px;color: #fff;border-bottom: 1px solid #fff;margin-bottom: 50px;}
+.form-group:after {content: "\20";display: block;clear: both;height: 0;}
+.form-group {line-height: 30px;margin-bottom: 10px;}
+.form-group label {display: block;float: left;width: 90px;margin-right: 10px;	/*color: #6a4201;*/color: #fff;text-align: right;}
+.form-control {display: block;float: left;width: 286px;height: 30px;border-radius: 2px;background: #fff;color: #6a4201;padding-left: 4px;}
+.select-block {width: 290px;}
+.select-prov {width: 142px;margin-right: 6px;margin-bottom: 10px;}
+.select-city {width: 142px;margin-bottom: 10px;}
+.input-addrdetail {margin-left: 100px;margin-bottom: 10px;}
+.submitBtn {display: block;width: 290px;height: 60px;line-height: 60px;background: #ff6633;border-radius: 10px;text-align: center;font-size: 28px;color: #fff;font-weight: bold;margin-left: 100px;}
+
+
+.join-tel{
+	font-size:16px;
+	color:#fff;
+	background:#f00;
+	font-weight:bold;
+	width:170px;
+	padding:5px
+}
+.c-blue{
+	border-left: #27a7ca 4px solid;
+	line-height: 32px;
+	font-size: 18px;
+	color: #27a7ca;
+	padding-left:10px;
+	margin-left:2rem
+}
+.c-27a7ca{
+	color:#27a7ca
+}
+.double{
+	border: 1px double #27a7ca;
+	-o-border: 1px double #27a7ca;
+	-webkit-border: 1px double #27a7ca;
+	padding: 5px;
+}
+.bg-f{
+	background: #f3f3f3;
+}
+.w-600{ width:600px; margin:auto}

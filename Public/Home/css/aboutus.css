@@ -1,0 +1,87 @@
+.container {
+	width: 1200px;
+}
+.aboutus {
+	margin-top: 10px;
+}
+.sidenav {
+	width: 200px;
+	float: left;
+	margin-bottom: -9999px;
+	padding-bottom: 9999px;
+	background: #1ec2ea;
+}
+.sidenav li {
+	height: 60px;
+	border-bottom: 1px solid #1db7de;
+}
+.sidenav li a {
+	display: block;
+	color: #fff;
+	font-size: 16px;
+	line-height: 60px;
+	padding-left: 20px;
+}
+.sidenav li.active a {
+	/*padding-left: 27px;*/
+	border-left: 3px solid #ebebeb;
+}
+.wrapper {
+	width: 960px;
+	float: right;
+	background: #ebebeb;
+	padding: 20px;
+	color: #333;
+}
+.about-content {
+	background: #fff;
+	padding: 20px;
+	display: none;
+}
+.about-content.active {
+	display: block;
+}
+.about-content h2 {
+	font-size: 28px;
+	line-height: 48px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+.about-content p {
+	font-size: 16px;
+	line-height: 30px;
+	text-indent: 2em;
+}
+.aboutus-logo {
+	float: left;
+	margin-top: 10px;
+	margin-right: 20px;
+}
+.about-content ul {
+	width: 100%;
+	overflow:hidden;
+	_zoom:1
+}
+.us li {
+	width: 296px;
+	float: left;
+	padding: 5px;
+}
+.us li img {
+	width: 100%;
+}
+.zzq li {
+	padding: 3px;
+	float: left;
+}
+.zzq li img {
+	width: 300px;
+}
+.hd li {
+	padding: 10px 0;
+	text-align: center;
+}
+.hd li img {
+	width: 920px;
+}
+.hd-pic{ width:200px; float:left; margin-right:20px; margin-left:34px}

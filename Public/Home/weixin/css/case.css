@@ -1,0 +1,169 @@
+/* CSS Document */
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, em, img, strong, i,
+dl, dt, dd, ol, ul, li,
+form, label,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0;}
+img { border: none; vertical-align: top;}
+a { text-decoration: none; outline: none;}
+ul { list-style: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+input,button,textarea,select,optgroup,option{ font-size: 100%; font: inherit; background: none; border: none; outline: none;}
+
+html {
+	background:#f2f2f2;
+}
+body {
+	font-family: Helvetica, "微软雅黑";
+}
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.clearfix:after {
+	content: "\20";
+	display: block;
+	clear: both;
+	height: 0;
+}
+
+.nav-bar .mid a.first{
+	color:#00bae7;
+	height:100%;
+	background:url(../images/border.jpg) no-repeat;
+	background-position:bottom;
+}
+.nav-bar{
+	line-height:44px;
+	background:#e6e6e6;
+	overflow:hidden;
+	_zoom:1;
+	border-bottom:1px solid #dadada;
+	width:100%;
+	z-index:999;
+	padding-top:20px
+}
+.nav-bar a{
+	display:block;
+}
+.nav-bar .mid{
+	margin:0 auto;
+	width:940px;
+	
+}
+.nav-bar .mid a{
+	color:#4a4a4a;
+	display:inline-block;
+	width:117px;
+	font-size:16px;
+	text-align:center
+}
+.centent{
+	padding:20px 0 10px;
+}
+.centent ul{
+	overflow:hidden;
+	_zoom:1;
+	display:none;
+	margin-bottom:1rem
+}
+.centent ul li{
+	width:220px;
+	height:262px;
+	float:left;
+	text-align:center;
+	background:#fff;
+	box-shadow:#CCC 1px 2px 2px;
+	-moz-box-shadow:#CCC 1px 2px 2px;
+	-o-box-shadow:#CCC 1px 2px 2px;
+	-webkit-box-shadow:#CCC 1px 2px 2px;
+	margin-bottom:20px;
+	margin-right:20px
+}
+.centent ul li img{ 
+	width:180px; 
+	margin:20px auto
+}
+.centent ul li span{
+	display:block;
+	background:#fff;
+	color:#535353;
+	line-height:2.6rem;
+	font-size:14px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding:0 0.4rem
+}
+
+
+
+
+/*PC*/
+.container-pc {
+	width: 950px;
+	margin:auto;
+	
+}
+.centent ul li.no-margin{
+	margin-right:0
+}
+.hideCode{
+	background:rgba(58, 49, 46, 0.2);
+	height:220px;
+	line-height:220px; 
+	text-align:center;
+	width:220px;
+	position:absolute;
+	top: 220px;
+	left:0;
+}
+.pic{
+	height:220px;
+	overflow: hidden;
+    position: relative;
+}
+
+.head-logo {
+    line-height: 54px;
+    overflow: hidden;
+    padding: 10px 0;
+}
+.logo {
+    height: 54px;
+    left: 50px;
+    position: absolute;
+    width: 215px;
+}
+.tel00 {
+    background: rgba(0, 0, 0, 0) url("../images/tel.png") no-repeat scroll 0 11px;
+    color: #fff;
+    float: right;
+    font-family: "微软雅黑";
+    font-size: 24px;
+    font-weight: 400;
+    padding-left: 50px;
+    position: absolute;
+    right: 50px;
+    top: 10px;
+}
+.menu {
+    color: #fff;
+    font-family: "微软雅黑";
+    font-size: 16px;
+    margin: auto;
+    overflow: hidden;
+    width: 770px;
+}
+.menu a {
+    float: left;
+    text-align: center;
+    width: 110px;
+}
+.menu a {
+    color: #fff;
+}
+.head-logo {
+    background: #1ec2ea none repeat scroll 0 0;
+}
