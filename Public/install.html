@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>商户APP安装</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="http://www.dishuos.com/Public/Css/download.css" />
+</head>
+
+<body>
+
+<div class="row-fluid breadcrumbs margin-bottom-20">
+    <div class="container">
+        <h1 class="pull-left">商户APP</h1>
+        <ul class="pull-right breadcrumb">
+            <li>版本：1.0 (build 7)</li>
+            <li>大小：430K</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container content">
+    <div id="" class="view row">
+        <div class="span12" style="text-align:center;"> 
+            <a href="javascript:void(0);" onclick="javascript:install();"><img src="http://www.dishuos.com/Public/ShanghuApp.png" class="appicon" /></a>
+        </div>
+    </div>
+    <div id="" class="view row" style="margin-top:30px;">
+        <div class="span12 margin-bottom-20" style="text-align:center;"> <a id="BtnWfii" href="http://yd.dishuos.com/Public/ShanghuApp.apk" class="btn-u btn-u-lg"><i class="fa fa-download"></i> 点击安装</a> </div>
+    </div>
+    <hr class="devider devider-dotted">
+
+
+    <script type="text/javascript">
+    var pHref = "itms-services://?action=download-manifest&url=https://www.dishuos.com/Public/ShanghuApp.plist";
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        document.getElementById("BtnWfii").href=pHref;
+    }
+    </script>
+</div>
+
+</body>
+</html>
