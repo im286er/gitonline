@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>设备列表</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>设备列表</h1>
+        <notempty name="shop_count">
+        	<a href="{:U('/Device/index')}" class="ico header-back"></a>
+        <else/>
+			<a href="{:U('/Index/index')}" class="ico header-back"></a>
+        </notempty>
+	</header>
+	<div class="tab-nav tab-nav-h nav-member">
+		<div class="container">
+			<ul class="li-3 tab-member">
+				<li class="hy <eq name='type' value='1'>active</eq>"><a href="{:U('/Device/devicelist', array('type'=>1, 'sid'=>$sid))}"><div><span>{$count_a}</span><p>设备总数</p></div></a></li>
+				<li class="hy <eq name='type' value='2'>active</eq>"><a href="{:U('/Device/devicelist', array('type'=>2, 'sid'=>$sid))}"><div><span>{$count_w}</span><p>在线数</p></div></a></li>
+				<li class="hy <eq name='type' value='3'>active</eq>"><a href="{:U('/Device/devicelist', array('type'=>3, 'sid'=>$sid))}"><div><span>{$count_x}</span><p>离线数</p></div></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-136">
+		<div class="tab-content active">
+        
+        	<volist name="deviceList" id='d'>
+			<section class="device-list <eq name='d.rstatus' value='1'>status-online<else/>status-offline</eq>">
+				<div class="device-title">
+					<p class="device-no">设备编号：{$d.rcode}</p>
+					<p class="device-version">版本号：{$d.rsysver}</p>
+					<div class="device-status"><eq name='d.rstatus' value='1'>在线<else/>离线</eq></div>
+				</div>
+				<div class="device-body">
+					<ul class="clearfix">
+						<li>
+							<span class="fl-l">设备名称</span>
+							<span class="fl-r">{$d.rname}</span>
+						</li>
+						<li>
+							<span class="fl-l">所在门店</span>
+							<span class="fl-r">{$d.sname}</span>
+						</li>
+					</ul>
+				</div>
+				<div class="device-footer">
+					<a class="js_restart" data-value="{$d.rcode}" href="javascript:;">重启设备</a>
+				</div>
+			</section>
+            </volist>
+		</div>
+
+	</div>
+
+	<div class="modal" id="restartModal" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-restart"></i>
+					<p>重启设备吗？</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-yes" href="javascript:;">确定</a>
+					<a class="btn-no" href="javascript:;">取消</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="restartingModal" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-restart restarting"></i>
+					<p>重启中<span class="js_countdown">60秒</span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" value="" id="rid">
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+	<script>
+		var oCountdown = $(".js_countdown");
+		$(".js_restart").click(function(ev) {
+			document.getElementById('rid').value = $(this).attr('data-value');
+			$("#restartModal").show();
+		});
+		$(".btn-yes").click(function(ev) {
+			$.get("/Device/restart", {rid:$("#rid").val()});
+			$(".modal").hide();
+			$("#restartingModal").show();
+			var timer;
+			var s = parseInt(oCountdown.html());
+			timer = setInterval(function() {
+				s = s - 1;
+				if(s == 0) {
+					$(".modal").show(); clearInterval(timer);
+				}
+				oCountdown.html(s+'秒');
+			}, 1000);
+
+		});
+		$(".btn-no").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".modal-content").click(function(ev) {
+			ev.stopPropagation();
+		});
+	</script>
+</body>
+</html>

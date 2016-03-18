@@ -1,0 +1,40 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Mobile/default/Css/video.css">
+	<div class="main container p-tb" id="videoDetail">
+		<div class="video-detail">
+			<div class="video-box">
+				<if condition="$info['gfile']">
+				    <video id="myVideo" class="video-js vjs-ds-skin" controls preload="none" width="100%" height="100%" poster="{$info.gimg}" data-setup="{}">
+                        <!-- 如果本地有视频，则调用本地的视频，如果本地没有视频，则调用服务器上的视频 -->
+                        <source id="VideoSrc" src="{$info.gfile}" type='video/mp4' />
+                        <source src="{$info.gfile}" type='video/mp4' /> <!-- 保证视频可以正常打开 -->
+						<script type="text/javascript">
+							var isdownload = "{$info.isdown}"
+							if( parseInt(isdownload)==1 ) {
+								var ImageObj = new Image();
+								ImageObj.src = "http://ds.dishuos.com/img/_wayos_ver3_logo.jpg";
+								ImageObj.onload = function() {
+									document.getElementById('VideoSrc').src="http://yd.dishuos.com{$info.gfile}";
+								}
+							}
+						</script>
+                        <p class="vjs-no-js">要查看该视频，请启用JavaScript，并考虑升级到一个Web浏览器<a href="http://videojs.com/html5-video-support/" target="_blank">支持HTML5视频</a></p>
+                    </video>
+                <elseif condition="stristr($info['glink'],'iframe')"/> 
+                    {$info.glink}
+                <elseif condition="substr(strtolower($info['glink']),0,4)=='http'"/>
+					<iframe style='display:;' id="myVideo"  height="100%" width="100%" src="{$info.glink}" frameborder=0 allowfullscreen></iframe>
+						<script src="__PUBLIC__/Mobile/default/Js/videoparser.js"></script>
+						<script>
+							var video = videoparser('{$info.glink}');
+							document.getElementById('myVideo').src = video;
+						</script>
+                </if>
+			</div>
+			<h6 class="video-title">视频简介：</h6>
+			<p class="video-desc">{$info.gdescription}</p>
+		</div>
+	</div>
+	<script src="__PUBLIC__/Mobile/default/Js/video.js"></script>
+</block>

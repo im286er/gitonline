@@ -1,0 +1,11 @@
+<volist name="result_list" id="va" empty="暂时没有数据">
+<li>
+	<div>
+		<a class="sale-link" href="{:U('Mobile/Choose/detail', array('gid'=>$va['gid'], 'sid'=>$sid))}"><img src="<empty name='va[gimg]'>__PUBLIC__/Images/mobile/ttt.png<else />{$va.gimg}</empty>" alt="{$va.gname}" data-echo="<empty name='va[gimg]'>__PUBLIC__/Images/mobile/ttt.png<else />{$va.gimg}</empty>"></a>
+		<h6 class="sale-title">{$va.gname}</h6>
+		<span class="old-price">￥{$va.goprice}</span>
+		<span class="sale-price">￥{$va['gdprice']>0?$va['gdprice']:$va['goprice']}</span>
+		<a class="btn-buy" href="{:U('Mobile/Choose/detail', array('gid'=>$va['gid'], 'sid'=>$sid))}">立刻抢购</a>
+	</div>
+</li>
+</volist>

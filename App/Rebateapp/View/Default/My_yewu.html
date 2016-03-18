@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>兼职业务员</title>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/vip.css">
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+
+<body class="bg-f7f7f7">
+    <header class="header vip-header">
+         <h1>兼职业务员 商家收益你得利</h1>
+         <a href="javascript:;" class="ico ico-back" onclick="sendRedirect('my')"></a>
+    </header>
+    <div class="container vip">
+        <section class="vip-banner">
+           <img src="__PUBLIC__/Rebateapp/Images/vip_banner_04.jpg" alt=""/>
+        </section>
+        <section class="vip-salesman">
+            <img src="__PUBLIC__/Rebateapp/Images/vip_salesman_01.jpg" alt="" />
+            <img src="__PUBLIC__/Rebateapp/Images/vip_salesman_02.jpg" alt="" />
+            <img src="__PUBLIC__/Rebateapp/Images/vip_salesman_03.jpg" alt="" />
+            <img src="__PUBLIC__/Rebateapp/Images/vip_salesman_04.jpg" alt="" />
+        </section>
+        <div class="vip-btn">
+           <a class="disable" href="javascript:;">申请成为业务员</a>
+        </div>
+    </div>
+
+    <script>
+        var oHeader = $(".header");
+        var opacity;
+        var scrollTop;
+        $(window).scroll(function(event) {
+            if($(window).scrollTop() >= 100) {
+                scrollTop = 100;
+            } else {
+                scrollTop = $(window).scrollTop();
+            }
+            opacity = parseInt(scrollTop)/100;
+            console.log(opacity);
+            oHeader.css('background-color', 'rgba(71,148,236,'+opacity+')');
+        });
+    </script>
+</body>
+</html>

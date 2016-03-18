@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telphone=no, email=no"/>
+<title>我的奖品</title>
+<link rel="stylesheet" href="/Public/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/lottery.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<style type="text/css">
+.sec-2,.sec-3 {display:none}
+</style>
+</head>
+<body>
+<header class="header">
+  <h1>我的奖品</h1>
+  <a href="{$back_url}" class="ico header-back"></a>
+</header>
+<div class="tab-nav tab-fixed">
+    <div class="container">
+        <ul class="clearfix li-3">
+            <li class="active" onclick="s(1,this);">未使用</li>
+            <li onclick="s(2,this);">已使用</li>
+            <li onclick="s(3,this);">已过期</li>
+        </ul>
+    </div>
+</div>
+<div class="main container p-tb-2">
+  <section class="coupon">
+    <div class="sec-body sec-1">
+    <ul>
+      <foreach name="list1" item="vo" >
+      	<li>
+          <a class="bg-block coupon-red" <if condition="$vo['type'] eq 1"> href="{:U('DZP/myQrcode',array('jid'=>$jid,'id'=>$vo['id'],'utoken'=>I('get.utoken')))}" <else/> href="javascript:void(0)" </if> >
+            <div class="coupon-left">
+              <h5>{$vo.name}</h5>
+              <p><if condition="$vo['type'] eq 1">仅限用户到线下实体店消费使用<else/>代金券不与其他优惠叠加使用</if></p>
+              <p>有效期至{$vo.dt}</p>
+            </div>
+            <div class="coupon-right fn-center">
+              <if condition="$vo['type'] eq 1"><h5><img src="/Public/Mobile/default/img/ewm_s.png" width="70%"><br>兑换码</h5><else/><h5>未使用</h5></if>
+          </div>
+          </a>
+        </li>
+      </foreach>
+      </ul>
+    </div>
+    <div class="sec-body sec-2">
+    <ul>
+      <foreach name="list2" item="vo" >
+      	<li>
+          <a class="bg-block coupon-yellow"  href="javascript:void(0)"  >
+            <div class="coupon-left">
+              <h5>{$vo.name}</h5>
+              <p><if condition="$vo['type'] eq 1">仅限用户到线下实体店消费使用<else/>代金券不与其他优惠叠加使用</if></p>
+            </div>
+            <div class="coupon-right fn-center">
+              <h5>已使用</h5>
+          </div>
+          </a>
+        </li>
+      </foreach>
+      </ul>
+    </div>
+    <div class="sec-body sec-3">
+    <ul>
+      <foreach name="list3" item="vo" >
+      	<li>
+          <a class="bg-block coupon-gray" href="javascript:void(0)"  >
+            <div class="coupon-left">
+              <h5>{$vo.name}</h5>
+              <p><if condition="$vo['type'] eq 1">仅限用户到线下实体店消费使用<else/>代金券不与其他优惠叠加使用</if></p>
+              <p>有效期至{$vo.dt}</p>
+            </div>
+            <div class="coupon-right fn-center">
+             <h5>已过期</h5>
+          </div>
+          </a>
+        </li>
+      </foreach>
+      </ul>
+    </div>
+  </section>
+</div>
+<script src="/Public/Mobile/default/Js/jquery-2.1.3.min.js"></script> 
+<script>
+function s(id,a){
+	$('.sec-body').hide();
+	$('.sec-'+id).show();
+	$(".clearfix li").removeClass("active");
+	$(a).addClass("active");
+}
+</script>
+</body>
+</html>

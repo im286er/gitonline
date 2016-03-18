@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.table-list td img { display:block; margin:auto; }</style>
+</head>
+
+<body>
+
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addNotice()">发送消息</span> <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;" id="SearchOpen">消息列表</span>
+	</div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="10%"><input name="" type="checkbox" id="checkbox" onclick="selectAll('nid[]')" /></th>
+                        <th width="15%">发送人</th>
+                        <th width="15%">接收人员</th>
+                        <th width="30%">消息标题</th>
+                        <th width="15%">发送时间</th>
+                        <th width="15%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="noticelist" id="vo">
+                    <tr id="TP_NOCE_{$vo.nid}_t">
+                    	<if condition="$vo['fmid']==$mid">
+                        	<td><input type="checkbox" name="nid[]" value="{$vo.nid}"></td>
+                        <else/>
+                        	<td><input type="checkbox" disabled="disabled"></td>
+                        </if>
+                        <td>{$vo.fname}</td>
+                        <td>{$vo.tname}</td>
+                        <td>{$vo.ntis}</td>
+                        <td>{$vo.addtime}</td>
+                        <td>
+                        	<if condition="$vo['cid'] == ''">
+                            <a href="javascript:void(0)" data-value="1" onclick="SetHsTr(this, '{$vo.nid}')" style="color:red;">查看内容</a> |
+                            <else/>
+                            <a href="javascript:void(0)" data-value="0" onclick="SetHsTr(this, '{$vo.nid}')">查看内容</a> |
+                            </if>
+                            
+                            <if condition="$vo['fmid']==$mid"> 
+                            	<a href="javascript:void(0);" onclick="delNotice('{$vo.nid}', 'get')">删除</a>
+                            <else/>
+                            	<a href="javascript:void(0);" style="color:#ccc;cursor:default;">删除</a>
+                            </if>
+                        </td>
+                    </tr>
+                    <tr id="TP_NOCE_{$vo.nid}_c" style="display:none;height:0px;">
+                    	<td>&nbsp;</td>
+                    	<td colspan="5" style="text-align:left;">{$vo.ncon}</td>
+                    </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delNotice('0', 'post')" value=" 删除 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+
+function SetHsTr(obj, trid) {
+	var status = $(obj).attr("data-value");
+	$(obj).css("color", "#000");
+	if( $("#TP_NOCE_"+trid+"_c").is(":hidden") ) {
+		$("#TP_NOCE_"+trid+"_c").css("display", "");
+	} else { $("#TP_NOCE_"+trid+"_c").css("display", "none"); }
+		if( status == '1' ) { $(obj).attr("data-value", "0"); $.get("/Notice/noticeSet", {nid:trid}, function(data){
+	
+		if(data==1) {
+	    		var obj = window.parent.document.getElementById("ParentMsg");
+				var html = parseInt($(obj).html())
+				if( --html <= 0 ) html = 0; $(obj).html( html );
+	 　
+
+				}
+	
+	
+	})
+}
+}
+
+//添加消息
+function addNotice() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 600,
+		height: 360,
+		title : '添加消息',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Notice/noticeAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//删除消息
+function delNotice( nid, type ) {
+	if( type=='post' ) {
+		$("input[name='nid[]']").each(function(index, element) {  if($(this).is(":checked")) nid = nid+','+$(this).val(); });	
+	}
+	if( !nid ) { alert('参数出现错误'); return false; }
+	if( !confirm('确实要删除所有消息记录吗') ) return false;
+	$.get("{:U('/Notice/noticeDel', '', true)}", {nid:nid}, function( data ) {
+		if( parseInt(data)==1 ) $.each(nid.split(','), function(key, value) { $("#TP_NOCE_"+value+"_t").hide(600); $("#TP_NOCE_"+value+"_c").hide(600); })
+	})		
+}
+
+function selectAll(name) {
+	if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

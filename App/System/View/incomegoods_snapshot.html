@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:10px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,232,231); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; text-align:left; }
+table.wlist .ilist { width:100%; border-top:none; border-left:none; }
+table.wlist .ilist td { padding:10px 0px; } table.wlist .ilist tr.last td { border-bottom:none; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+	<div class="main-body">
+        <table class="wlist">
+            <tr>
+                <th colspan="4">
+                    <span>下单时间：{$order.o_dstime}</span>
+                    <span>交易号：{$order.o_id}</span>
+                </th>
+            </tr>
+            <tr>
+                <td width="50%">
+                    <table class="ilist">
+                        <volist name="goods" id="g">
+                        <tr class="<if condition='count($goods)==$i'>last</if>">
+                            <td width="60%" style="text-align:left; padding-left:15px;"><img src="{$g.sp_img|default='/Public/Images/i04.png'}" width="60" height="60" /> {$g.sp_name}</td>
+                            <td width="20%"><s>{$g.sp_goprice}</s><br />{$g.sp_gdprice}</td>
+                            <td width="20%" style="border-right:none;">{$g.sp_number|default='0'}</td>
+                        </tr>
+                        </volist>
+                    </table>
+                </td>
+                <td width="10%">{$order.o_price}</td>
+                <td width="20%">订单备注：{$order.o_remarks|default='无'}</td>
+                <td width="20%"><if condition="$order['o_pstatus'] == 0"><font color="red">尚未付款</font><else/>已支付</if></td>
+            </tr>
+        </table>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>收货地址</title>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css">
+	<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body>
+	<header class="header">
+		<h1>收货地址</h1>
+		<a href="javascript:;" class="ico header-back"></a>
+		<a href="javascript:;" class="ico header-txt">编辑</a>
+	</header>
+	<div class="container p-58">
+		<section class="sec-single">
+			<a href="{:U('my/addressAdd',array('id'=>$myId))}">
+				<i class="ico ico-plus"></i>
+				<span>添加</span>
+				<i class="ico ico-right"></i>
+			</a>
+		</section>
+		<if condition="empty($addressList)">
+		<div class="bg-div">
+			<div class="bg_addr"></div>
+			<p>还没有收货地址</p>
+		</div>
+		<else />
+		<volist name="addressList" id="v">
+		<section class="addr-list">
+			<a href="{:U('my/addressEdit',array('id'=>$myId))}">
+				<p class="addr-userinfo">
+					<span>{$v.flr_name}</span>
+					<!-- <span>小姐</span> -->
+					<span>{$v.flr_phone}</span>
+				</p>
+				<p>{$v.flr_address}{$v.flr_maddress}</p>
+				<i class="ico ico-edit"></i>
+			</a>
+		</section>
+		</volist>
+		</if>
+	</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/agent/style.css" /> 
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+
+
+</head>
+
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">运营管理</a></li>
+    <li><a href="#">历史公告</a></li>
+    </ul>
+    </div>
+    
+    <div class="rightinfo">
+    
+    <div class="tools">
+    
+    	<ul class="toolbar">
+        <li class="click"><span><img src="__PUBLIC__/Images/t01.png" /></span><a href="{:U('Agent/Advert/add')}" target="rFrame">添加</a></li>
+        <li class="click"><span><img src="__PUBLIC__/Images/t02.png" /></span>修改</li>
+        <li><span><img src="__PUBLIC__/Images/t03.png" /></span>删除</li>
+        <li><span><img src="__PUBLIC__/Images/t04.png" /></span>统计</li>
+        </ul>
+    </div>
+    
+    
+    <table class="tablelist">
+    	<thead>
+    	<tr>
+        <th><input name="" type="checkbox" value="" checked="checked"/></th>
+        <th>序号<i class="sort"><img src="__PUBLIC__/Images/px.gif" /></i></th>
+        <th>会员账户</th>
+      	<th>头像</th>
+        <th>内容</th>
+        <th>商户名称</th>
+        <th>创建时间</th>
+        <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+    	<foreach name="dataresult" item="vo">
+        <tr>
+        <td><input name="" type="checkbox" value="" /></td>
+        <td>{$vo.op_id}</td>
+        <td><a href={$vo.nurl}>{$vo.mname}</a></td>
+         <td><img src="{$vo.avatar}" width="60" height="50"/></td>
+        <td>{$vo.op_content}</td>
+        <td>{$vo.sname}</td>
+        <td>{$vo.op_addtime}</td>
+       	<td><a href="{:U('Agent/Message/delete',array('opid'=>$vo['op_id']))}" class="tablelink">删除</a></td>
+        </tr> 
+      </foreach>
+        </tbody>
+    </table>
+    <div class="pagin">
+    	<div class="message">共<i class="blue">{$count}</i>条记录</div>
+        <ul class="paginList">
+        <li class="paginItem">{$page}</li>
+        </ul>
+    </div>
+    </div>
+    <script type="text/javascript">
+
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+
+</body>
+
+</html>

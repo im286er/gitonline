@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telphone=no, email=no"/>
+<title>幸运大转盘</title>
+<script src="__PUBLIC__/Rebateapp/Js/interactive.js?v=1"></script>
+<link rel="stylesheet" href="/Public/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/lottery.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<script>
+var prize_list = {$prize_list};
+var opentype = "{$opentype}";
+var linkurl = "{$linkurl}";
+var linkurl2 = "{$linkurl2}";
+var msystem = "{$msystem}";
+var mid = "{$mid}";
+var loginurl = "{$loginurl}";
+var loginurl2 = "{$loginurl2}";
+var jid = "{$jid}";
+</script>
+</head>
+<body>
+<header class="header">
+  <h1>幸运大转盘</h1>
+  <a href="{$back_url}" class="ico header-back"></a> <a href="javascript:void(0)" class="header-right" >我的奖品</a> </header>
+<div class="main container p-tb" id="lottery">
+  <div class="lottery">
+    <div class="lty_wrap">
+      <div class="turnplate" >
+        <canvas class="item" id="wheelcanvas" width="422px" height="422px"></canvas>
+        <if condition="$status eq 0">
+        <img class="pointer" src="/Public/Mobile/default/img/turnplate-pointer_ed.png"/>
+        <else />
+           <img id="pointer" class="pointer" src="/Public/Mobile/default/img/turnplate-pointer.png"/> 
+        </if>
+     </div>
+    </div>
+    <div class="lty_intr"><span id="last_num"><if condition="$mid eq 0">赶紧试试自己的手气吧~<else />今日您还有{$last_num}次抽奖机会</if></span><br>分享给好友，立即增加1次抽奖机会<br>本店消费每满<span>{$prize.minmoney}</span>元送1次抽奖,以此类推</div>
+    <div class="lty_btn"><span class="btn_share">立即分享</span></div>
+    <div class="lty_rule">
+    	<h3>游戏规则</h3>
+        <p>1.每个人每天有{$prize.freetime}次免费抽奖机会</p>
+        <p>2.每人每天首次分享到一个第三方平台即可获得一次抽奖机会。例如：每天分享至朋友圈首次可获得一次，同时每天首次分享至QQ空间又可以获得一次哟！</p>
+        <p>3.绑定手机号或者用手机号注册，中奖概率更高哦</p>
+        <p>4.获得奖品为优惠券时，直接放入“我的优惠券”</p>
+    </div>
+  </div>
+</div>
+
+<div class="results" id="ShowPrizeResults">
+  <div class="results-content succeed"><!--抽奖失败时样式"succeed"改为"fail"-->
+	<h2 class="results-title">中奖啦</h2>
+    <p class="results-txt fn-center">抽中了50元代金券<br>逆天了有没有！</p>
+    <div class="results-btn"><span class="btn_share">分享分享</span><span class="btn_again">再抽一次</span></div>
+    <div class="btn_close"><span class="j-close-results">关闭</span></div>
+  </div>
+</div>
+<script src="/Public/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="/Public/Mobile/default/Js/awardRotate.js"></script>
+<script type="text/javascript" src="/Public/Mobile/default/Js/lottery.js?v=5"></script>
+<script>
+function myprize(response){
+	if(response){
+		if(response != 1){
+			location.href = "{:U('DZP/myPrize',array('jid'=>$jid))}"+"?utoken="+response;
+		}else{
+			location.href = "{:U('DZP/myPrize',array('jid'=>$jid))}";
+		}
+	}
+}
+</script>
+</body>
+</html>

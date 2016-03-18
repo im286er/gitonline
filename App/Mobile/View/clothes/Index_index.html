@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>{$merchant.mabbreviation}</title>
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/clothes/css/clothes.css">
+<script>
+var msystem = "{$msystem}";
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+
+<body class="bg-fff <eq name="runmode" value="macapp">ios</eq>">
+
+    <header class="header clothes-header">
+        <h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+    </header>
+	<div class="container clothes" id="container">
+        <section class="slide swiper-container" id="banner">
+        	<empty name="banner_list">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" > <img src="{$banner_list[0]['bimg']}" src="__PUBLIC__/Mobile/clothes/img/demo/clothes_banner_01.jpg" class="lazy"/> </div>
+                </div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slider"> <a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" class="lazy" style="width:100%;height:auto;"/></a> </div>
+                    </div>
+                <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" src="{$vo.bimg}" alt="" class="lazy"></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination clothes-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+    	</section>
+
+        <section class="clothes-nav">
+        	<ul class="clearfix">
+                <li> <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}"> <img class="lazy" src="{$module1icon|default='/Public/Mobile/clothes/img/demo/clothes_nav_01.png'}" alt=""> <span>{$module1name}</span> </a> </li>
+                <li> <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}"> <img class="lazy" src="{$module2icon|default='/Public/Mobile/clothes/img/demo/demo/clothes_nav_02.png'}" alt=""> <span>{$module2name}</span> </a> </li>
+                <li> <a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}"> <img class="lazy" src="{$ShopMenuIcon|default='/Public/Mobile/clothes/img/demo/clothes_nav_03.png'}" alt=""> <span>{$ShopMenuName}</span> </a> </li>
+                <li> <a href="{$WshopModuleLink}"> <img class="lazy" src="{$WshopModuleIcon|default='/Public/Mobile/clothes/img/demo/clothes_nav_04.png'}" alt=""> <span>{$WshopModuleName}</span> </a> </li>
+                <li> <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}"> <img class="lazy" src="{$InfoMenu3Icon|default='/Public/Mobile/clothes/img/demo/clothes_nav_05.png'}" alt=""> <span>{$InfoMenu3Name}</span> </a> </li>
+               <!--  <li> <a href="{:U('Mobile/App/index', array('jid'=>$jid))}"> <img class="lazy" src="{$InfoMenuAppDownIcon|default='/Public/Mobile/clothes/img/demo/clothes_nav_06.png'}" alt=""> <span>{$InfoMenuAppDownName}</span> </a> </li>-->
+           </ul>
+    	</section>
+        <!-- ad area -->
+        <?php  A('Advert')->loadtemp($jid, 'clothes', '1'); ?>
+        <!-- ad area end -->
+
+        <section class="clothes-coupon">
+        	<div class="sec-title"><h3>{$VoucherModuleName}</h3><a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多</a> </div>
+        	<div class="sec-body">
+                <ul>
+                	<li>
+                        <if condition="$coupon_list[0]['vu_name']">
+                        <a class="" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[0][vu_id],'from_index'=>1))}">
+                        <else />
+                        <a class="" href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                        </if>
+                        <img class="lazy" src="{$coupon_list.0.vu_img|default='/Public/Mobile/clothes/img/demo/clothes_coupon_01.jpg'}" alt="">
+                        <if condition="$coupon_list[0]['vu_name']">
+                            <div class="clothes-coupon-txt">
+                                <h5>{$coupon_list.0.vu_name}</h5>
+                                <p>满{$coupon_list.0.vu_money}元可使用</p>
+                                <p>每单限用一张</p>
+                            </div>
+                        </if>
+                        </a>
+                    </li>
+                    <li>
+                        <if condition="$coupon_list[1]['vu_name']">
+                        <a class="" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[1][vu_id],'from_index'=>1))}">
+                        <else />
+                        <a class="" href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                        </if>
+                        <img class="lazy" src="{$coupon_list.1.vu_img|default='/Public/Mobile/clothes/img/demo/clothes_coupon_02.jpg'}" alt="">
+                        <if condition="$coupon_list[1]['vu_name']">
+                            <div class="clothes-coupon-txt">
+                                <h5>{$coupon_list.1.vu_name}</h5>
+                                <p>满{$coupon_list.1.vu_money}元可使用</p>
+                                <p>每单限用一张</p>
+                            </div>
+                        </if>
+                        </a>
+                    </li>
+            	</ul>
+            </div>
+    	</section>
+
+        <section class="clothes-news">
+        	<div class="sec-title"> <h3>{$NewModulename}</h3> <a href="{:U('Mobile/News/index', array('jid'=>$jid))}">更多</a> </div>
+        	<div class="sec-body">
+                <ul class="clearfix">
+                	<volist name="news_list" id="vo"  offset="0" length="6"  key="k">
+                    <li> <a href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id],'from_index'=>1))}"> <img class="lazy" src="{$vo.new_img}" alt=""> <p></p> </a> </li>
+                    </volist>
+            	</ul>
+            </div>
+    	</section>
+    </div>
+<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+<script>
+    $(function() {
+        //下拉刷新
+        $('#container').xpull({
+            'pullThreshold':150,
+            'maxPullThreshold':0,
+            'onPullEndFunc':function(){
+                window.location.reload();
+            },
+            'spinnerTimeout':2000
+        });
+
+        //banner
+        var mySlide = new Swiper('#banner', {
+            speed: 400,
+            pagination: '#banner-page',
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            preloadImages: false,
+            lazyLoading: true
+        });
+    });
+</script>
+
+<!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+
+</body>
+</html>

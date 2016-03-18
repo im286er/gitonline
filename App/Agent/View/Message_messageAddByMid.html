@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>推送消息为会员</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+td ul.user li { float:left; margin:3px 10px 3px 0px; padding-right:20px; cursor:pointer; position:relative; }
+td ul.user li a { position:absolute; top:3px; right:3px; background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
+td ul.user li a:hover { background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:427px; }
+textarea#Pcontent { width:436px; height:65px; resize:none; }
+td label input { position:relative; top:2px; }
+td ul.list li { display:block; clear:both; overflow:hidden; padding:0px; margin:3px 0px; }
+td ul.list li span { width:80px; text-align:center; display:inline-block; }
+td ul.list li input.user_input, 
+td ul.list li input.user_input_hover, 
+td ul.list li input.user_input_focus, 
+td ul.list li input.user_input_error { width:341px; float:none; }
+td ul.list li textarea.textarea { width:350px; height:65px; resize:none; }
+</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                    	<tr style="height:0px;overflow:hidden;">
+                        	<td width="80" style="padding:0px;margin:0px;border:none;"></td>
+                            <td width="140" style="padding:0px;margin:0px;border:none;"></td>
+                            <td width="80" style="padding:0px;margin:0px;border:none;"></td>
+                            <td style="padding:0px;margin:0px;border:none;"></td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th width="100">接收会员</th>
+                            <td colspan="3">
+                            	<ul class="user">
+                                	<volist name="userName" id="m">
+                            		<li id="LI_MEM_{$m.u_id}">{$m.u_name}<input type="hidden" value="{$m.u_clientid}" name="mid[]" /><a href="javascript:void(0);" onclick="CloseMid('LI_MEM_{$m.u_id}')"></a></li> 
+                                    </volist>                                
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr id="MsgTitle">
+                            <th width="100">通知标题</th>
+                            <td colspan="3"><input type="text" placeholder="通知标题" autocomplete="off" id="Ptitle" name="ptitle" value="" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>通知内容</th>
+                            <td colspan="3"><textarea placeholder="通知内容" class="textarea" id="Pcontent" name="pcontent"></textarea></td>
+                        </tr>
+                        <tr>
+                        	<th>有效时长</th>
+                        	<td colspan="3">
+                            	<input type="text" value="2" name="c_s1_v" class="user_input" style="float:none;height:20px;width:30px;" />&#12288; 小时
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="buttonDiv" align="center">
+                        <button type="submit" class="submit_btn">推送</button>&#12288; <button type="reset" class="reset_btn">重写</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript">
+function CloseMid( LiId ) { $("#"+LiId).remove(); }
+</script>
+</body>
+</html>

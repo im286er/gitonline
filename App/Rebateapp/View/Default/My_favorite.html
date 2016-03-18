@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>我的收藏</title>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css">
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+	<empty name="userid">checkLogin("{:url_param_encrypt(U('My/favorite@flapp'),'E')}");</empty>
+    </script>
+</head>
+<body>
+	<header class="header">
+		<h1>我的收藏</h1>
+		<a href="javascript:void(0);" class="ico header-back" onclick="sendRedirect('my');"></a>
+	</header>
+	<empty name="shops">
+	<div class="nocontent" style="display:block">
+		<div class="ico nofavorite"></div>
+		<p>您还没有收藏记录哦！</p>
+	</div>
+	<else />
+	<div class="container p-t">
+		<ul class="shop-list">
+			<volist name="shops" id="v">
+			<li>
+				<a href="{:U('Shop/shopInfo',array('sid'=>$v['flc_shopid'],'superiorsource'=>'favorite'))}">
+					<div class="shop-img"><img src="{$v.flc_shopimg}" alt=""></div>
+					<div class="shop-info">
+						<h3 class="shop-title">{$v.flc_shopname}</h3>
+						<div class="item-fx">
+							<p><i class="ico ico-pu"></i><span>最高返现{$v.p_fl}元</span></p>
+							<p><i class="ico ico-vip"></i><span>最高返现{$v.v_fl}元</span></p>
+						</div>
+						<div class="shop-pos">
+							<p class="fl-l"><span>{$v.flc_shopaddress}</span><span>{$v.flc_merchantname}</span></p>
+							<p class="fl-r">{$v.distance}</p>
+
+						</div>
+					</div>
+				</a>
+			</li>
+			</volist>
+		</ul>
+	</div>
+	</empty>
+</body>
+</html>

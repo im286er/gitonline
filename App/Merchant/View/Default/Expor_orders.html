@@ -1,0 +1,81 @@
+<extend name="Public:partial"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<form action="__ACTION__" method="post">
+    <div class="reveal-modal" style="border:none;margin-left:-233px;">
+        <h3>提示 <span class="close" id="DialogClose">×</span></h3>
+        <div class="modal-content" style="padding-bottom:0">
+        	<div class="set" style="text-align:center; ">
+        		<p style="color:#666666; ">请选择导出日期</p>
+        	</div>
+            <div class="set select-date">
+                <select name=""><option>选择开始日期</option></select><input name="" type="text" />：<input name="" type="text" />：<input name="" type="text" />
+            </div>
+            <div class="set select-date">
+                <select name=""><option>选择结束日期</option></select><input name="" type="text" />：<input name="" type="text" />：<input name="" type="text" />
+            </div>
+            <div class="set download">
+                <label></label> <input type="button" value="下载" class="btn btn-pwd " style="margin-left:70px" >
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#DialogClose,#DialogCancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	});
+	var money = '{$member.money}';
+	var bmention = '';
+	$("#bmention").blur(function(){
+		bmention = $('#bmention').val();
+		if(parseFloat(bmention) > parseFloat(money)){ 
+			alert("提现金额不能大于实际账户金额");
+			$('#bmention').focus();
+			return false;
+		}
+		$.get('__ACTION__', {action:'calculate',bmention:bmention},function(result) {
+			if( parseInt(result.status) == 1 ) {
+				$("#bjy").html(result.data.bjy);$("#bjs").html(result.data.bjs);$("#bsj").html(result.data.bsj);
+			}
+		});
+	});
+
+
+
+	
+	function CheckFrom() {
+		bmention = $('#bmention').val();
+		if( !bmention) { alert("请输入提现金额"); $('#bmention').focus(); return false; }
+		if(parseFloat(bmention) > parseFloat(money)){ 
+			alert("提现金额不能大于实际账户金额");
+			$('#bmention').focus();
+			return false;
+		}
+		return true;
+	}
+	
+	//提交信息
+	$("#DialogSave").click(function() {
+
+		if( CheckFrom() == false) return false;
+		 var bsj = $("#bsj").html();
+		// if(bsj!=0){
+			 var result = confirm('确定要提现'+bmention+'元？');
+			 if(!result)return false;
+			 $.post('__ACTION__', {bmention:bmention},function(result) {
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				alert(result.msg);
+				location.reload();
+			 });
+
+		// }
+		
+	});
+});
+</script>
+</block> 

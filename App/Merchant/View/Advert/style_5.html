@@ -1,0 +1,77 @@
+<style>
+.jiaju-ad { padding: 15px 17px; border-top: 1px solid #a6a5a5; }
+.jiaju-ad > a { display: block;	padding: 4px; border: 1px solid #a6a5a5; }
+.jiaju-ad img { width: 100%; height: 7.6rem; }
+.jiaju-ad p { height: 2rem; line-height: 2rem; border-bottom: 1px solid #a6a5a5; margin-top: 5px; }
+.jiaju-ad .ico-speaker { width: 1.4rem;	height: 1.4rem;	background-image: url("__PUBLIC__/Mobile/jiaju/img/ico_speaker.png"); }
+
+
+</style>
+
+<!--START-->
+<style type="text/css">
+.jiaju-ad { display:block; overflow:hidden; width:460px;float:left;margin-left:50px; }
+</style>
+<!--END-->
+
+<!--START-->
+<div class="style-one">
+<eq name="adtype" value="style_5">
+  <h3><a href="#">样式5<img src="/Public/Images/merchant/choose.png" id="change-one"/></a></h3>
+<else/>
+  <h3><a href="#">样式5<img src="/Public/Images/merchant/not_choose.png" id="change-one" onclick="AjaxSetAdvertStyle('{$Think.get.pos}', '{$Think.get.tid}', 'style_5', 1)"/></a></h3>
+</eq>
+
+<!--END-->
+
+<section class="jiaju-ad">
+    <a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(5,1)"<else/>href="{$advert.1.ad_imglink}"</if>>
+        <img id="IMAGEO_STYLEI_SRC" src="{$advert.1.ad_imgsrc|default='/Public/Mobile/jiaju/img/demo/jiaju_ad_01.jpg'}" alt="">
+    </a>
+    <p>
+        <i class="ico ico-speaker"></i>
+        <a href="{$advert.1.ad_imglink}"><span>{$advert.1.ad_title}</span></a>
+    </p>
+</section>		
+
+
+<!--START-->
+<div class="style-one-click style-click" id="style-5-click-1">
+                              <h2>1<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul style="margin-top:-40px">
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEI_IMAGEO_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-5-1-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(5,1,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-5-1-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEI_IMAGEO_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(5,1,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-5-1-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_title}" readonly="readonly" id="UPLOAD_STYLEI_IMAGEO_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_5', 1, 'UPLOAD_STYLEI_IMAGEO_VALUE', 'IMAGEO_STYLEI_SRC', 'UPLOAD_STYLEI_IMAGEO_LINK', 'UPLOAD_STYLEI_IMAGEO_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+</div>
+<div style="clear:both;"></div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var H=$(".jiaju-ad").height();
+	$("#style-5-click-1").css({"height":H+20,"left":"90px","width":"500px"});
+});
+</script>    
+<!--END-->  

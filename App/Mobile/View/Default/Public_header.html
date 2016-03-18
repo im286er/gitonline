@@ -1,0 +1,33 @@
+<block name="header">
+<eq name="isApp" value="1"><script src="__PUBLIC__/Js/Mobile/interactive.js"></script></eq>
+<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<!-- 有些页面是不要 header 的，比如，消息的内容页 -->
+<empty name="isheader">
+    <header class="header" <notempty name="head_style">style="{$head_style}"</notempty>>
+        <empty name="page_name">
+            <h1>{$merchant.mabbreviation}</h1>
+        <else />
+            <h1>{$page_name}</h1>
+        </empty>
+    <if condition="(CONTROLLER_NAME eq 'Index') OR (CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index') ">
+		<include file="Index:top"/>
+    <else/>
+        <notequal name="page_url" value="banreturn">
+			<if condition="$page_url eq 'userindex'">
+				<a href="javascript:void(0);" class="ico header-back" onclick="sendRedirect('userindex');"></a>
+			<elseif condition="$page_url"/>
+               <a href="{$page_url}" class="ico header-back"></a>
+			<else />
+			   <a href="javascript:history.back(-1);" class="ico header-back"></a>
+			</if>	
+        </notequal>
+    </if>
+    </header>
+
+</empty>
+
+</block>

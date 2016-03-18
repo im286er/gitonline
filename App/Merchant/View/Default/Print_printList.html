@@ -1,0 +1,102 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<js href="__PUBLIC__/Js/layer/layer.js" />
+<style type="text/css">
+.modal-content .set > input[type="text"] { width:420px; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 100%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#e7e7eb;padding:10px;color:#ffffff;}
+</style>
+<script type="text/javascript">
+var DeleteInfoUrlPath	= '{:U("/Print/delPrint@sj", "", true, true)}';
+</script>
+<div class="wrapper">
+    <h2 class="title"><php>echo $shops[$sid]?$shops[$sid]:'';</php></h2> 
+    
+    <div class="border-b"></div>
+	<eq name="type" value="1">
+        <h2 class="shops">选择门店：
+            <volist name="shops" id="vo"><span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="{:U('print/printList',array('sid'=>$key))}">{$vo}</a></span></volist>
+        </h2>
+	</eq>
+    <div class="mian padding">
+        <div class="border">
+            <div class="clearfix border-b">
+                <div class="manage-right" id="getTable" style="width:100%;">
+                    <h2 class="manage">
+                        <span class="pull-left show manage-margin">
+                            <input type="checkbox" id="checkbox">全选/反选
+                            <input type="button" value="删除" class="btn btn-red" id="btn-delete">
+                        </span>
+                        <span class="pull-right" id="addorders">
+                            <i class="addicon" id="addshopp" onClick="DialogFrameFun(650, 500, '{:U('Print/addPrint', array('sid'=>$sid))}')"></i>
+                        </span>
+                    </h2>
+                    
+                    <table class="tables" id="gtableslist" style="display:block;">
+                    	<tbody>
+                    	<tr>
+                    <th width="30px"></th>
+                    <th width="10%">名称</th>
+                    <th width="10%">添加时间</th>
+                    <th width="20%">打印时机</th>
+                    <th width="10%">是否打印合计</th>
+                    <th width="10%">是否支持分单</th>
+                    <th width="10%">后台默认</th>
+                    <th width="30%">操作</th>
+                </tr>
+                        <foreach name="printlist" item="v"> 
+                            <tr data-id="{$v.print_id}">
+                                <td class="vertical"><input value="{$v.print_id}" name="printid[]" type="checkbox"></td>
+                                <td>{$v.print_name}</td>
+                                <td>{$v.print_addtime|strtotime|date='Y-m-d',###}</td>
+                                <td>
+                                <ul>
+                                <php>
+                                if(strstr($v['print_time'],'1')){
+                                	echo '<li style="line-height:15px">用户下单</li>';
+                                }
+                                if(strstr($v['print_time'],'2')){
+                                	echo '<li style="line-height:15px">接受订单 </li>';
+                                }
+                                if(strstr($v['print_time'],'3')){
+                                	echo '<li style="line-height:15px">订单完成 </li>';
+                                }
+                                </php>
+                                </ul>
+                                </td>
+                                <td><if condition="$v.is_count eq 1">是<else />否</if></td>
+                                <td><if condition="$v.is_balance eq 1">是<else />否</if></td>
+                                <td><if condition="$v.is_pay eq 1">是<else />否</if></td>
+                                <td class="vertical">
+                                    <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 500, '/Print/editPrint/sid/{$v.print_sid}/pid/{$v.print_id}.html')">
+                                    <input type="button" value="删除" class="btndelete" onClick="DeletePrintById('{$v.print_id}')">
+                                </td>
+                            </tr>
+                        </foreach>	
+                        </tbody>						
+                    </table>
+				
+                </div>
+            </div>
+            <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U('Print/printList',array('sid'=>$sid))}?page='+this.value">{$pages}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+</block>

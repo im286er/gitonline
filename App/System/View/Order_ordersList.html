@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:20px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,232,231); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; text-align:left; }
+table.wlist th span b { color:rgb(62,125,254); }
+table.wlist .ilist { width:100%; border-top:none; border-left:none; }
+table.wlist .ilist tr.last td { border-bottom:none; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+    	<a href="{:U('/Order/ordersList')}" style="margin-left:15px;" class="on">帝鼠OS订单</a>
+        <a href="{:U('/Order/vordersList')}" style="margin-left:15px;">全民返利订单</a>
+        <a href="javascript:downorder()" style="margin-left:15px; float:right;font-size:12px;line-height:38px;">导出OS订单</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">下单时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.endtime}" id="endtime" name="endtime">
+            	&#12288;&#12288;<label>模糊查询：</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="所属商家/交易号" style="width:240px;" value="{$Think.get.keyword}" name="keyword" />
+                &#12288;&#12288;<label>支付状态：</label>
+                <select name="pstatus" class="fl">
+                    <option value="" <if condition="!isset($_GET['pstatus']) || $_GET['pstatus']==''">selected="selected"</if>>支付状态</option>
+                    <option value="1" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='1'">selected="selected"</if>>已支付</option>
+                    <option value="0" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='0'">selected="selected"</if>>未支付</option>
+                    <option value="2" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='2'">selected="selected"</if>>已退款</option>
+                    <option value="3" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='3'">selected="selected"</if>>待退款</option>
+                </select>
+                &#12288;&#12288;<label>订单状态：</label>
+                <select name="dstatus" class="fl">
+                    <option value="" <if condition="!isset($_GET['dstatus']) || $_GET['dstatus']==''">selected="selected"</if>>订单状态</option>
+                    <option value="1" <if condition="isset($_GET['dstatus']) && $_GET['dstatus']=='1'">selected="selected"</if>>待处理</option>
+                    <option value="3" <if condition="isset($_GET['dstatus']) && $_GET['dstatus']=='3'">selected="selected"</if>>待完成</option>
+                    <option value="4" <if condition="isset($_GET['dstatus']) && $_GET['dstatus']=='4'">selected="selected"</if>>已完成</option>
+                    <option value="5" <if condition="isset($_GET['dstatus']) && $_GET['dstatus']=='5'">selected="selected"</if>>已关闭</option>
+                </select>
+
+
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+    	<table class="table-list">
+        	<thead>
+                <tr>
+                    <th width="11%">交易号</th>
+                    <th width="12%">所属商家</th>
+                    <th width="11%">收货人姓名</th>
+                    <th width="11%">收货人手机</th>
+                    <th width="12%">下单时间</th>
+                    <th width="11%">订单总价</th>
+                    <th width="11%">订单状态</th>
+                    <th width="11%">支付状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="orderlist" id="o">
+                <tr <eq name="o.o_pstatus" value="3">style="color:red;font-weight:bold;background:#FFFFE1;"</eq>>
+                    <td>{$o.o_id}</td>
+                    <td>{$o.j_name}</td>
+                    <td>{$o.o_name}</td>
+                    <td>{$o.o_phone}</td>
+                    <td>{$o.o_dstime}</td>
+                    <td>{$o.o_price}</td>
+                    <td>
+                    	<if condition="$o['o_close']==1">
+                        	取消中 / {$dstatus[$o['o_dstatus']]}
+                        <elseif condition="$o['o_close']==2"/>
+                        	已取消 / {$dstatus[$o['o_dstatus']]}
+                       	<else/>
+                        	{$dstatus[$o['o_dstatus']]}
+                    	</if>
+                    </td>
+                    <td>
+                    	<if condition="$o['o_pstatus'] eq 0">
+                        	未支付
+                        <elseif condition="$o['o_pstatus'] eq 1"/>
+                        	已支付
+                        <elseif condition="$o['o_pstatus'] eq 2"/>
+                        	已退款
+                        <elseif condition="$o['o_pstatus'] eq 3"/>
+                        	待退款
+                        </if>
+                    </td>
+                    <td>
+                    	<?php if( $o['o_dstatus']==5 && $o['o_type']==2 && $o['o_pstatus']==3 ): ?>
+                            <a href="{:U('/Order/agreeCancelOrder', array('oid'=>$o['o_id']))}">退款</a>
+                    	<?php else:?>
+                        	-
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+</script>
+
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+function downorder() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 400,
+		title : '导出数据',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Order/downorder", array("type"=>1), true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+var FirstTimeOuter = true;
+</script>
+</body>
+</html>

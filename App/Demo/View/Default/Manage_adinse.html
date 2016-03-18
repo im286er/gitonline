@@ -1,0 +1,43 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<form action="__ACTION__" method="post">
+<div class="wrapper">
+    <h2 class="title add_child">添加首页轮播图</h2>
+    <div class="mian padding">
+        <ul class="adImg">
+            <li class="clearfix" data-bid="1">
+                <div class="adImgLeft">
+                    <div id="divPreview">
+                        <img id="ImageAd_0" src="__PUBLIC__/Images/mobile/banner.jpg " style="width: 320px; height: 166px;" alt="" onClick="uploadImageFun('ImageAd_0', 'ImageAdVal_0')" />
+                        <input type="hidden" value="" name="info[bimg]" id="ImageAdVal_0">
+                        <input type="hidden" value="3" name="info[btype]">
+                    </div>
+                </div>
+                <div class="adImgRight">
+                    <p class="c-a2a2a6">建议尺寸：1280*652  大小控制在200K以内  支持JPG、PNG</p>
+                    <span class="file"><input onClick="uploadImageFun('ImageAd_0', 'ImageAdVal_0')" type="button" value="上传" class="btn btn-blue"></span>
+                    <!--<p>自定义标题 <input type="text" name="info[btitle]"></p>--><p>&nbsp;</p>
+                    <p>自定义链接 <input type="text" name="info[burl]"></p>
+                    <input type="submit" value="确定" class="btn btn-blue">
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</form>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+function uploadImageFun(imageSrc, imageVal) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#'+imageSrc).attr("src", url); $('#'+imageVal).val(url); editor.hideDialog();
+			}
+		});
+	});	
+}
+</script>
+</block>

@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商户列表</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="AdAdd()">添加应用</span><span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">应用列表</span>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+            	<label>模糊搜索：</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：应用名称/应用来源/简介" style="width:180px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="40"><input type="checkbox" id="checkbox" onclick="selectAll('id[]');"></th>
+                        <th width="10%">应用名称</th>
+                        <th width="15%">应用分类</th>
+                        <th>ico</th>
+                        <th width="10%">Android/iPhone</th>
+                        <th width="10%">下载量(安卓/ios)</th>
+						<th width="10%">来源</th>
+						<th width="10%">版本</th>
+						<th width="10%">当前状态</th>
+                        <th width="10%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="applist" id="vo">
+                        <tr id="TR_AD_{$vo.id}">
+                            <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+                            <td>{$vo.name}</td>
+                            <td><php>if($appCategoryList[$vo['categoryid']]['pid'])echo $appCategoryList[$appCategoryList[$vo['categoryid']]['pid']]['title'].'-';echo $appCategoryList[$vo['categoryid']]['title'];</php></td>
+                            <td><img src="{$vo.ico}" style="width:50px;height:50px;"></td>
+							<td><empty name="vo.androidurl"><span style="color:red;">--</span><else /><span style="color:#008000;">{$vo.androidsize}</span></empty> / <empty name="vo.iosurl"><span style="color:red;">--</span><else /><span style="color:#008000;">{$vo.iossize}</span></empty></td>
+                            <td>{$vo.androiddownloads}/{$vo.iosdownloads}</td>
+                            <td>{$vo.source}</td>
+							<td>{$vo.versions}</td>
+							<td><eq name="vo.status" value="1"><span style="color:#008000;font-weight:bold;cursor:pointer;" title="点击停用" onclick="AdDel({$vo.id}, 'post',2)">启用</span><else/><span style="color:red;font-weight:bold;cursor:pointer;" title="点击启用" onclick="AdDel({$vo.id}, 'post', 1)">停用</span></eq></td>
+                            <td>
+								<eq name="vo.sync" value="0"><eq name="vo.status" value="1"><a href="javascript:void(0);" onclick="sync('{$vo.id}',1);" style="color:red;">同步到商家</a> | </eq></eq>
+                                <a href="javascript:void(0);" onclick="AdEdit('{$vo.id}')">修改</a> |
+                                <a href="javascript:void(0);" onclick="AdDel('{$vo.id}', 'get', 0)">删除</a>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		         <input type="button" onclick="AdDel(0, 'post', 1)" value=" 启用  " name="dosubmit" class="button" /> <input type="button" onclick="AdDel(0, 'post', 2)" value=" 停用 " name="dosubmit" class="button" /><input type="button" onclick="AdDel(0, 'post',0)" value=" 删除 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//添加应用
+function AdAdd() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 600,
+		title : '添加应用',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/App/appAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//删除商户
+function AdDel( id, type ,status) {
+	if( type=='post') {
+		if(id==0)$("input[name='id[]']").each(function(index, element) { if($(this).is(":checked")) id = id+','+$(this).val(); });
+	}
+    if( !id ) { alert('参数出现错误'); return false; }
+	if(status == 0)if( !confirm('删除后，商家管理APP记录将一并删除，确实要删除吗？') ) return false;
+    $.post("{:U('/App/appDel', '', true)}", {id:id,'status':status}, function( data ) {
+		// if( parseInt(data)==1 ) $.each(id.split(','), function(key, value) { $("#TR_AD_"+value).hide(600); })
+		if( parseInt(data)==1 )window.location.reload();else alert('操作失败');
+		return false;
+    })  
+}
+
+
+function sync(id,sync){
+	 $.post("{:U('/App/appSync', '', true)}", {id:id,'sync':sync}, function( data ) {
+		if( parseInt(data)==1 )window.location.reload();else alert('操作失败');
+		return false;
+    });
+}
+
+//修改应用
+function AdEdit( id ) {
+	if( !id ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 600,
+		title : '修改应用',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/App/appEdit/id/'+id+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

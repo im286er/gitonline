@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>我的钱包</title>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css">
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="">
+	<header class="header">
+		<h1>常见问题详情</h1>
+		<a href="javascript:void(0);" onclick="sendRedirect('wallet');" class="ico header-back"></a>
+	</header>
+	<div class="main container p-58">
+		<section class="faq-detail">
+			<h3 class="faq-title">提现需要手续费吗？</h3>
+			<p class="faq-content">
+				目前全民返利提现不需要任何手续费。
+			</p>
+		</section>
+		<section class="faq-list">
+			<ul class="sec-list">
+				<li>
+					<a href="{:U('My/faq',array('id'=>6))}">
+						<span>什么是返现？</span>
+						<i class="ico ico-right"></i>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('My/faq',array('id'=>7))}">
+						<span>钱包里的资金如何提现？</span>
+						<i class="ico ico-right"></i>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('My/faq',array('id'=>9))}">
+						<span>提现什么时候到账？</span>
+						<i class="ico ico-right"></i>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('My/faq',array('id'=>10))}">
+						<span>我的账户安全性？</span>
+						<i class="ico ico-right"></i>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section class="faq-kefu">
+			<ul class="sec-list">
+				<li>
+					<a href="tel:4008792388">
+						<i class="ico ico-call-gray"></i>
+						<span>客服电话：400-879-2388</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+	</div>
+</body>
+</html>

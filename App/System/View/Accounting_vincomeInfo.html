@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>收支明细</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+div.count { width:100%; height:80px; background:#f5f5f5; overflow:hidden; display:block; clear:both; margin-bottom:10px; }
+div.count li { float:left; text-align:center; min-width:120px; line-height:24px; margin-top:15px; font-size:14px; }
+tr.notice { color:red; background:#f6f6f6; }
+tr.notice td a { color:red; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+    	<a href="{:U('/Accounting/incomeInfo')}" style="margin-left:15px;">帝鼠OS收入明细</a>
+        <a href="{:U('/Accounting/vincomeInfo')}" style="margin-left:15px;" class="on">返利收入明细</a>
+        <a href="javascript:downorder()" style="margin-left:15px; float:right;font-size:12px;line-height:38px;">导出返利收入明细</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">起止时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                &#12288;&#12288;<label>模糊查询：</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="所属商家/交易号" style="width:240px;" value="{$Think.get.keyword}" name="keyword" />
+                &nbsp;
+                &#12288;&#12288;<label>支付状态：</label>
+                <select name="pstatus" class="fl">
+                    <option value="" <if condition="!isset($_GET['pstatus']) || $_GET['pstatus']==''">selected="selected"</if>>支付状态</option>
+                    <option value="1" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='1'">selected="selected"</if>>已支付</option>
+                    <option value="0" <if condition="isset($_GET['pstatus']) && $_GET['pstatus']=='0'">selected="selected"</if>>未支付</option>
+                </select>
+                &#12288;&#12288;<label>简便查询：</label>
+
+                <a href="{:U('', array('statime'=>$c_d))}">今日明细</a>&nbsp; |&nbsp;
+                <a href="{:U('', array('statime'=>$c_w))}">本周明细</a>&nbsp; |
+                <a href="{:U('', array('statime'=>$c_m))}">本月明细</a>
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <div class="btn" align="right" style="margin:0px;">
+            <span>今日总收入（包含待退款）</span>
+            <span><font color="red"><b>{$cpriced|number_format=###,2}</b></font> 元，</span>
+            &#12288;&#12288;
+            <span>本周总收入（包含待退款）</span>
+            <span><font color="red"><b>{$cpricew|number_format=###,2}</b></font> 元，</span>
+            &#12288;&#12288;
+            <span>本月总收入（包含待退款）</span>
+            <span><font color="red"><b>{$cpricem|number_format=###,2}</b></font> 元</span>
+        </div>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="15%">创建日期</th>
+                    <th width="15%">流水号</th>
+                    <th width="15%">收入（元）</th>
+                    <th width="15%">所属商家</th>
+                    <th width="15%">返利金额</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <php>$_COUNTY=$_COUNTS=$_COUNTTY=$_COUNTTS=$COUNTY=$COUNTS=$COUNTTY=$COUNTTS=0;</php>
+                <volist name="accountlist" id="vo">
+                    <?php
+                        //预计总收入
+                        if( $vo['flo_pstatus'] != 2 ) $_COUNTY += $vo['flo_price'];
+                        
+                        //实际总收入
+                        if( $vo['flo_pstatus']==1 || $vo['flo_pstatus']==3 ) $_COUNTS += $vo['flo_price'];
+                        
+                        //预计退款数(含已退款)
+                        if( $vo['flo_pstatus']==2 || $vo['flo_pstatus']==3 ) $_COUNTTY += $vo['flo_price'];
+
+                        //实际退款数
+                        if( $vo['flo_pstatus']==2 ) $_COUNTTS += $vo['flo_price'];
+                    ?>     
+                    <tr>
+                        <td>{$vo.flo_dstime}</td>
+                        <td>{$vo.flo_id}</td>
+                        <td>{$vo.flo_price} （<font color="red"><eq name="vo.flo_pstatus" value="1">已支付<else/>未支付</eq></font>）</td>
+                        <if condition="$vo['flo_gtype']==4">
+                            <td>话费充值</td>
+                        <elseif condition="$vo['flo_gtype']==5"/>
+                            <td>流量充值</td>
+                        <else/>
+                            <td>{$vo.mnickname|default='-'}</td>
+                        </if>
+                        <td>{$vo.flo_backprice|default='-'}</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="LookInfoList('{$vo.flo_id}')">查看明细</a>
+                        </td>
+                    </tr>
+                </volist>
+                    <tr style="background:#ffffe1">
+                        <td>-</td>
+                        <td>-</td>
+                        <td>￥ {$account_price}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+            </tbody>
+        </table>
+        <div class="btn" align="right">
+            <table style="float:right;">
+                <tr>
+                    <td style="width:170px;">本页预计收入(不包含已退款) </td>
+                    <td style="width:100px;"><font color="red"><b>{$_COUNTY|number_format=###,2}</b></font> 元，</td>
+                
+                    <td style="width:135px;">实际收入（包含待退款）</td>
+                    <td style="width:100px;"><font color="red"><b>{$_COUNTS|number_format=###,2}</b></font> 元，</td>
+
+                    <td style="width:135px;">预计退款数(包含已退款) </td>
+                    <td style="width:100px;"><font color="red"><b>{$_COUNTTY|number_format=###,2}</b></font> 元，</td>
+
+                    <td style="width:50px;">已退款数</td>
+                    <td style="width:50px;"><font color="red"><b>{$_COUNTTS|number_format=###,2}</b></font> 元</td>
+                </tr>
+            </table>
+        </div>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+
+//查看明细
+function LookInfoList( bls ) {
+    if( !bls ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 540,
+		title : '查看明细',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Accounting/accountingInfo/type/3/bls/'+bls+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+function downorder() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 400,
+		title : '导出数据',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Accounting/downorder", array("type"=>2), true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+</script>
+</body>
+</html>

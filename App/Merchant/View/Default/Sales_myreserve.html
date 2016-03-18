@@ -1,0 +1,127 @@
+<extend name="Public:common"/>
+<block name="body">
+	<style type="text/css">
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; vertical-align:middle; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+
+.category_order { height:50px; display:block; line-height:50px; }
+.category_order li { float:left; text-align:center; width:20%; }
+.category_order li a { display:block; width:100%; height:100%; font-size:14px; }
+.category_order li.on { border-bottom:2px solid #0099ff; }
+</style>
+<div class="wrapper">
+    <h2 class="title">预约管理 | <a href="{:U('Sales/rebateReserve')}" style="text-decoration:underline;">返利预约管理</a></h2>
+    <div class="mian padding">
+		<div class="content_c">
+            <form action="__ACTION__" method="get">
+            	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" placeholder="结束时间" readonly="readonly" size="6" value="{$Think.get.endtime}" id="endtime" name="endtime">&nbsp;&nbsp;
+                
+                <input type="text" autocomplete="off" placeholder="订单号"  value="{$Think.get.o_id}" name="o_id" />&nbsp;
+                <select name="o_dstatus" class="fl">
+                    <option value="" <if condition="$_GET['o_dstatus']==''">selected="selected"</if>>全部</option>
+                    <volist name="odstatus" id="vo">
+                        <option value="{$key}" <if condition="$_GET['o_dstatus'] == $key && $_GET['o_dstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+                    </volist>
+                </select>
+
+                <select name="o_pstatus" class="fl">
+                    <option value="" <if condition="$_GET['o_pstatus']==''">selected="selected"</if>>全部</option>
+                    <volist name="oostatus" id="vo">
+                        <option value="{$key}" <if condition="$_GET['o_pstatus'] == $key && $_GET['o_pstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+                    </volist>
+                </select>
+                <input type="submit" value="开始搜索" class="button">
+            </form>
+        </div>
+        <div style="width:100%;height:15px;"></div>
+
+    	<volist name="datalist" id="v" empty="暂无预约信息">
+        <div class="content_a" <neq name="i" value="1">top</neq>>
+            <h3 class="font-12">
+            	<span><php>echo $shops[$v['o_sid']];</php></span> <span>订单号：{$v.o_id}</span><span>下单人：<if condition="$v['o_name']">{$v.o_name}<elseif condition="$users[$v['o_uid']]['u_ename']"/><php>echo $users[$v['o_uid']]['u_ename'];</php><else /><php>echo $users[$v['o_uid']]['u_name'];</php></if></span><span>电话：{$v.o_phone}</span>
+            </h3>
+			<if condition="$v['o_remarks']">
+            <h3 class="font-12">
+					<span>订单留言：<strong style="color:red;">{$v.o_remarks}</strong></span>
+            </h3>
+			</if>
+			<table class="table">
+				<tr>
+                    <th width="20%">包厢名称</th>
+                    
+                    <th width="20%">下单时间</th>
+                    <th width="20%">到店时间</th>
+                    <th width="8%">最低消费</th>
+                    <th width="8%">人数</th>
+					<th width="9%">当前状态</th>
+					<th width="15%">操作</th>
+                </tr>
+                <tr>
+                    <td>{$v.goodsname}</td>
+                    <td>{$v.o_dstime}</td>
+                    <td>{$v.sp_date}</td>
+                    <td>{$v.o_price}元</td>
+                    <td>{$v.sp_number}</td>
+					<td><php>echo $odstatus[$v['o_dstatus']];</php></td>
+					<td>
+					<if condition="$v['o_dstatus'] eq 1 ">
+						<input type="button" onclick="Operation('3','{$v.o_id}',this.value)" value="接受预约">
+						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="拒绝预约">
+					<elseif condition="$v['o_dstatus']  eq 3"/>
+						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
+					<elseif condition="$v['o_dstatus']  eq 4"/>
+						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
+					<elseif condition="$v['o_dstatus']  eq 5"/>
+						-
+					</if>
+					<input type="button" onclick="dayin('{$v.o_id}')" value="打印订单">
+					</td>
+                </tr>
+		  </table>
+        </div>
+		</volist>
+    </div>
+	<!-- 分页 -->
+	       <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                    <input type="text" onBlur="document.getElementById('btnpre').href='<php>$get=I('get.');unset($get['page']);echo U().'?'.http_build_query($get);</php>&page='+this.value">{$pages}
+                </div>
+            </if>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+function dayin(oid){
+	if (confirm("确认要打印这个预约订单吗?")) {
+		$.post("{:U('/Sales/printOrder', '', true)}", {oid:oid}, function( data ) {
+			if(data == 1){
+				alert('操作成功');
+			}else{
+				alert('操作失败');
+			}
+		})
+	}
+}
+function Operation(status,o_id,buttons){
+	if(!status && !o_id){
+		alert('参数错误');return false;
+	}
+
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('operation')}",{'type':'o_dstatus','status':status,'o_id':o_id},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+</script>
+</block>

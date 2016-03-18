@@ -1,0 +1,78 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<js href="__PUBLIC__/Js/layer/layer.js" />
+<js href="__PUBLIC__/Js/laydate/laydate.js" />
+<script>
+laydate.skin('dahong')
+</script>
+<style type="text/css">
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 150px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+</style>
+	<div class="wrapper">
+    <h2 class="title">
+        <p class="returnMenu">
+            <a href="{:U('/Manage/device')}">设备管理</a>
+            <a href="{:U('/Manage/devicelinks', array('rid'=>I('get.rid')))}" class="curr">设备连接详情</a>
+        </p>
+    </h2>
+		<div class="mian padding">
+			<div class="content_c">
+				<form action="__ACTION__" method="get">
+					<label class="fl">查询条件：</label>
+					<input type="text" onclick="laydate()" autocomplete="off" placeholder="开始时间" class="user_input fl" value="{$Think.get.statime}" name="statime" />&nbsp;
+					<input type="text" onclick="laydate()" autocomplete="off" placeholder="结束时间" class="user_input fl" value="{$Think.get.endtime}" name="endtime" />&nbsp;
+					<input type="text" name="mac" value="{$Think.get.mac}" placeholder="MAC地址"/>
+					<input type="hidden" name="rid" value="{$Think.get.rid}" />
+
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+			<div class="content_a top">
+				<table class="table border-b">
+		        <thead>
+		            <tr>
+                        <th width="8%">序号</th>
+                        <th width="10%">授权号</th>
+                        <th width="10%">用户IP</th>
+                        <th width="10%">用户MAC</th>
+                        <th width="10%">连接时间</th>
+                        <th width="8%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                	<volist name="userList" id="v">
+                        <tr>
+                            <td>{$v.rinfo}</td>
+                            <td>{$v.rcode}</td>
+                            <td>{$v.ruserip}</td>
+                            <td><span onclick="getinfo('{$v.rinfo}','{$v.ruinfo}');" id="info{$v.rinfo}" title="点击查看详情" style="cursor:pointer;">{$v.rusermac}</span></td>
+                            <td>{$v.rlast}</td>
+                            <td><a href="{:U(null, array('rid'=>$v['rcode'],'mac'=>$v['rusermac']))}">登录记录</a></td>
+                        </tr>
+                    </volist>
+		        </tbody>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='?page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+//重启设备
+function getinfo(infoid,text ) {
+	//alert(text);
+	layer.tips(text, '#info'+infoid, {
+		 tips: [1, '#000000'], //还可配置颜色
+	});
+}
+</script>
+</block>

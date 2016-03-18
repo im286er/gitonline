@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" href="__PUBLIC__/Css/login.css" rel="stylesheet"/>
+<title>后台登入-商户</title>
+<style type="text/css">.h48 img { cursor: pointer; }</style>
+
+</head>
+
+<body id="bodybgone">
+
+<div class="hand"><img src="__PUBLIC__/Images/login/hand.png"/></div>
+
+<div class="rig">
+    <div class="rig_con">
+        <p class="width375"><img src="__PUBLIC__/Images/login/logo.png"/></p>
+        <div class="alert font12 width_sh" style="display:">
+            <p class="not" id="MsgError">请先输入您的登录账号</p>
+            <p class="jt"><img src="__PUBLIC__/Images/login/jt.png"/></p>
+        </div>
+        <div class="load width375">
+            <div class="fromgroup_1 top1">
+                <div class="combine fff">
+                    <input name="username" id="username" autofocus="autofocus" autocomplete="off" type="text" class="inputwidth line48 fontsize vbottom" placeholder="请输入账号"/>
+                    <p class="linelist"></p>
+                    <input name="password" id="password" autocomplete="off" type="password" class="inputwidth line48 fontsize border0 " placeholder="请输入密码" autocomplete="off"  />
+                </div>
+                <div class="code1">
+                    <input name="verify" id="verify" maxlength="4" autocomplete="off" type="text" class="codetxt1 line48 fontsize combine" placeholder="请输入右侧验证码"/>
+                    <p class="codepic h48"><img src="{:U('Public/verify@sj', array('fontSize'=>18, 'height'=>48, 'width'=>120), true, true)}" onclick="this.src=this.src+'?'+Math.random()" /></p>
+                </div>
+                <button type="submit" class="ridus heightline  fontsize vbottom btn_1 " onclick="SublimeLoginForm();">登入</button>
+            </div>
+        </div>
+        <p class="txt"><img src="__PUBLIC__/Images/login/txt.png"/></p>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script>
+function CheckLoginForm() {
+	var username = document.getElementById("username").value;
+	if( !username ) { document.getElementById("MsgError").innerHTML="请先输入您的登录账号"; document.getElementById("username").focus(); return false; }
+	
+	var password = document.getElementById("password").value;
+	if( !password ) { document.getElementById("MsgError").innerHTML="请先输入您的登录密码"; document.getElementById("password").focus(); return false; }
+	
+	var verify = document.getElementById("verify").value;
+	if( !verify || !/\d{4}/.test(verify) ) { 
+		document.getElementById("MsgError").innerHTML="验证证格式不正确"; document.getElementById("verify").focus(); return false;
+	}
+	return true;	
+}
+function SublimeLoginForm(){
+  var username=$("#username").val(); 
+	 var password=$("#password").val(); 
+	var verify=$("#verify").val();
+	if(CheckLoginForm()==true){
+		$.post("/Public/checklogin", {username:username,password:password,verify:verify}, function(data) {
+
+					if(data==4) {location.href="/Index/index";} 
+					if(data==5) {$("#MsgError").text("此商户已被管理员禁用")}    
+					if(data==3) {$("#MsgError").text("账号被禁用");}if(data==6) {$("#MsgError").text("账号不存在");}  
+					if(data==2) {$("#MsgError").text("账号密码错误");}if(data==1) {$("#MsgError").text("验证码错误");}    
+				})
+			 
+	}
+}
+window.onkeydown = function( event ) {
+	var keyCode=event.keyCode ? event.keyCode:event.which?event.which:event.charCode;
+	if(keyCode==13) { SublimeLoginForm(); } 
+}
+</script>
+</body>
+</html>

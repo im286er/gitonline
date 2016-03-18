@@ -1,0 +1,60 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<style type="text/css">
+.modal-content .set > input[type="text"] { width:260px; }
+.tem-list li{float: left;height: 180px;margin:0 25px;width: 130px;border: 0;padding:10px 10px 10px 10px;}
+.temImg{margin-bottom: 3px;}
+.tem-list li img{border: 1px solid #e7e7e7;padding:5px;width:120px;height:160px;}
+</style>
+<script type="text/javascript">
+var module_sign='{$moduleinfo.module_sign}';
+function presentEdit(txt){
+	if( !module_sign || !txt ) { alert("参数出现错误"); return false; }
+	$.post('__ACTION__', {'module_sign':module_sign, 'txt':txt}, function(data) {
+		if( parseInt(data) != 0 ) {
+			alert('选择成功');
+			var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+			$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		} else { alert("选择失败"); }
+	})
+}
+	
+$(function() {
+	//取消或关闭
+	$("#AddMenu_close").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	//提交信息
+})
+</script>
+<div class="reveal-modal reveal-modals" style="display:block; border:none;">
+    <h3>模块模版选择 <span class="close" id="AddMenu_close">×</span></h3>
+    <div class="modal-content">
+        <div class="text-center Sort">
+		<div class="mian padding">
+			<ul class="tem-list clearfix">
+				<volist name="templates" id="vo" empty="暂无此模块模版">
+				<li>
+					<div class="temImg clearfix">
+						<div class="pull-left">
+							<img src="{$vo.img}" alt="" >
+						</div>
+					</div>
+					<if condition="empty($vo['txt']) OR $vo['txt'] == 'default'">
+						<a href="javascript:void(0);" style="color:#ff0000;">默认使用中</a>
+					<elseif condition="$vo['txt'] eq $module_filed"/>
+						<a href="javascript:void(0);" style="color:red;">使用中</a>
+					<else />
+						<a href="javascript:void(0);" onclick="presentEdit('{$vo.txt}')" style="color:#339900;">立即使用</a>
+					</if>
+				</li>
+				</volist>
+			</ul>
+		</div>
+
+        </div>
+    </div>
+</div>
+</block>

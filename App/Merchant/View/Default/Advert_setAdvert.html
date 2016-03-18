@@ -1,0 +1,98 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<script type="text/javascript" src="__PUBLIC__/Js/ZeroClipboard/ZeroClipboard.min.js"></script>
+<style type="text/css">
+.modal-content .set > input[type="text"] { width:420px; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 100%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#e7e7eb;padding:10px;color:#ffffff;}
+input[type="text"] { width:200px; }
+</style>
+<div class="wrapper">
+    <h2 class="title"><php>echo $shops[$sid]?$shops[$sid]:'';</php></h2> 
+    
+    <div class="border-b"></div>
+	<eq name="type" value="1">
+       
+        
+        <h2 class="title">选择广告位
+        <p class="returnMenu">
+        <for start="1" comparison="elt" end="$adnumber">
+        <a href="{:U('Advert/setAdvert',array('pos'=>$i, 'tid'=>I('get.tid', '')))}" <eq name="Think.get.pos" value="$i">class="curr"</eq>>广告位{$i}</a>
+        
+    
+    		</for>
+    		</p>
+                        
+                    </h2>
+                    
+	</eq>
+	<div class="prompt-div"><i class="prompticon"></i>温馨提示：先应用广告模板，再上传图片！再次应用模板时，会把上次的模板图片删除！</div>
+    <div class="mian padding">
+       
+                
+                <volist name="advertList" id="a">
+                {$a}<br /><br />
+                </volist>
+
+            
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+var tid = '{$Think.get.tid}';
+var pos = '{$Think.get.pos}';
+
+function uploadImageFun(IMAGE_STYLE, IMAGE_POS, IMAGE_VALUE, IMAGE_SRC, IMAGE_LINK, IMAGE_TEXT)
+{
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, allowImageLink:true, allowImageText:true, 
+			clickFn:function(url, title, width, height, border, align, imglink, imgtext) {
+				$("#"+IMAGE_VALUE).val( url ); $("#"+IMAGE_SRC).attr("src", url);  $("#"+IMAGE_LINK).val( imglink ); $("#"+IMAGE_TEXT).val(imgtext); editor.hideDialog();
+				$.post('/Advert/ajaxSetImage', {t:tid, s:IMAGE_STYLE, p:pos, i:IMAGE_POS, v:url, l:imglink, b:imgtext});
+				$(".style-click").hide();
+			}
+		});
+	});
+}
+
+function AjaxSetAdvertStyle(pos, tid, style, imgnum)
+{
+	$.post('/Advert/ajaxSetStyle', {p:pos, t:tid, s:style, n:imgnum}, function( data ) {
+		if( parseInt(data)==1 ) {
+			window.location.reload();
+		}				
+	});
+}
+$(".close").click(function(){
+	$(".style-click").hide();
+});
+function show_1(a,b){
+	for(i=0;i<10;i++)for(j=0;j<10;j++)$("#style-"+i+"-click-"+j).hide();
+	$(".popover-top").hide();
+	$("#style-"+a+"-click-"+b).show();
+}
+function show_2(i,j,k){
+	$(".popover-bottom").hide();
+	$("#style-"+i+"-"+j+"-"+k).show();
+}
+
+var doms = $(".copy");
+var clip = new ZeroClipboard( doms, {
+	  moviePath: "/Public/Js/ZeroClipboard/ZeroClipboard.swf"
+} );
+clip.on( 'complete', function(client, args) {
+	 $(".popover-top").show();
+} );
+</script>
+</block>
+
+
+
+

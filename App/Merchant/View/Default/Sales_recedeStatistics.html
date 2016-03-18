@@ -1,0 +1,161 @@
+<extend name="Public:common"/>
+<block name="body">
+
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"> </script>
+<script type="text/javascript" src="__PUBLIC__/Js/ECharts/echarts.js"></script>
+<style type="text/css">
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; vertical-align:middle; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+.category_order { height:50px; display:block; line-height:50px; }
+.category_order li { float:left; text-align:center; width:20%; }
+.category_order li a { display:block; width:100%; height:100%; font-size:14px; }
+.category_order li.on { border-bottom:2px solid #0099ff; }
+.modal-content .set > input[type="text"] { width:420px; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
+.table input[type="button"], .tables input[type="button"] {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;border: 1px solid #e7e7eb;color: #5da3ea;margin-right: 3px;padding: 2px 5px;}
+</style>
+<div class="wrapper">
+    <h2 class="title">退货商品查看</h2>
+    <div class="category_order">
+    	<ul>
+    		<li><a href="{:U(null)}">全部退货商品</a></li>
+        	<li <eq name="Think.get.type" value="tab1">class="on"</eq>><a href="{:U(null,array('type'=>'tab1'))}">退货分析</a></li>
+        </ul>
+    </div>
+    <div class="mian padding">
+		<div style="width:100%;height:30px;"></div>
+        <div class="content_c">
+            <form action="__ACTION__" method="get">
+            	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5" style="float:left;padding:0px 10px 0px 10px;">-</label>
+                <input type="text" class="user_input" placeholder="结束时间" readonly="readonly" size="6" value="{$Think.get.endtime}" id="endtime" name="endtime">&nbsp;&nbsp;
+                
+                <input type="text" autocomplete="off" placeholder="订单号"  value="{$Think.get.o_id}" name="o_id" />&nbsp;
+                <select name="sp_reason" class="fl">
+                    <option value="" <if condition="$_GET['sp_reason']==''">selected="selected"</if>>退货原因</option>
+                    <volist name="reasons" id="vo">
+                        <option value="{$key}" <if condition="$_GET['sp_reason'] == $key && $_GET['sp_reason']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+                    </volist>
+                </select>
+
+                <select name="sp_otype" class="fl">
+                    <option value="" <if condition="$_GET['sp_otype']==''">selected="selected"</if>>支付方式</option>
+                    <volist name="otypes" id="vo">
+                        <option value="{$key}" <if condition="$_GET['sp_otype'] == $key && $_GET['sp_otype']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+                    </volist>
+                </select>
+				<input type="hidden" name="type" value="tab1"> 
+                <input type="submit" value="开始搜索" class="button" style="top:2px;">
+            </form>
+        </div>
+        <div style="width:100%;height:30px;"></div>
+		<div class="content_a" style="width:100%;">
+            <h3>
+                退货款统计<span class="c_a2a2a6">退货分为线上支付和线下支付，线上支付分为支付到平台和商家</span>
+            </h3>
+            <ul class="clearfix ul-cell">
+                <li><p><php>echo $otypeprice?array_sum($otypeprice):'0.00';</php></p>总退商品款</li>
+                <li><p>{$otypeprice.0|default="0.00"}</p>线下退货款（商）</li>
+                <li><p style="color:red;">{$otypeprice.2|default="0.00"}</p>线上退货款（平）</li>
+                <li class="last"><p>{$otypeprice['1']|default="0.00"}</p>线上退货款（家）</li>
+            </ul>
+        </div>
+
+
+<h2 class="shops">选择日期：
+
+	<?php for($i=1;$i<=12;$i++){ ?>
+		<span <eq name="datetype" value="$i">class="curr"</eq>><a href="{:U(null,array('type'=>'tab1','datetype'=>$i))}">{$i}月</a></span>
+	<?php } ?>
+</h2>
+
+
+
+		<div id="CreateMap" style="height:350px;width:100%;"></div>
+        <script type="text/javascript">
+            require.config({
+				paths: { echarts: '__PUBLIC__/Js/ECharts' }
+			});
+			require(
+				[
+                    'echarts', 
+                    'echarts/chart/line',
+                    'echarts/chart/bar',
+                ], 
+				function (ec) {
+					var myChart = ec.init(document.getElementById('CreateMap')); 
+					var option = {
+							title : {
+								'text':'',
+								'subtext':'{$datetype}月退货数据：X(日期)，Y(次数)'
+							},
+						   tooltip: {
+							    trigger: 'axis'
+						   },
+						   legend: {
+							   x: 'left',
+							   data: ["全部总和","<?php echo implode('","',$reasons);?>"]
+						   },
+						   xAxis: [
+							   {
+								   type: "category",
+								   name: "x",
+								   splitLine: {show: false},
+								   data: ["<?php echo implode('","',array_keys($datas));?>"]
+							   }
+						   ],
+						   yAxis: [
+							   {
+								   type: "log",
+								   name: "y"
+							   }
+						   ],
+							toolbox: {
+							 show : true,
+								feature : {
+									mark : {show: true},
+									dataView : {show: true, readOnly: false},
+									magicType : {show: true, type: ['line', 'bar']},
+									restore : {show: true},
+									saveAsImage : {show: true}
+								}
+						   },
+						   calculable: true,
+						   series: [
+							<?php 
+							$reasons = array('100'=>'全部总和')+$reasons;
+							foreach($reasons as $key => $value){ 
+							?>
+							   {
+								   name: "<?php echo $value;?>",
+								   type: "line",
+								   data: [<?php foreach($datas as $k => $val)echo $val[$key].',';?>]
+
+							   },
+							<?php } ?>
+
+
+						   ]
+						};
+                
+					myChart.setOption(option); 
+				}
+			);
+             
+        </script>
+    </div>
+    <script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+	<script type="text/javascript">
+	Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+	Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+	</script>
+</div>
+
+</block>

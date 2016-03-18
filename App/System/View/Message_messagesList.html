@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>消息列表</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:10px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,242,254); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; min-width:220px; text-align:left; }
+table.wlist td.txt { text-align:left; padding-left:50px; }
+table.wlist td.txt h3 { font-size:14px; line-height:28px; }
+table.wlist td p { line-height:24px; color:#666; }
+table.wlist td p font { color:#ff9933; }
+.subnav span { float:none; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="SendMsg2()">发送推送</span>
+		<span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">所有推送的消息</span>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+        	<thead>
+                <tr>
+                    <th width="11%">发送时间</th>
+                    <th width="10%">发送者</th>
+                    <th width="10%">发送者账号</th>
+                    <th width="10%" style="text-align:left;">发送标题</th>
+                    <th width="10%" style="text-align:left;">发送内容</th>
+                    <th width="17%" style="text-align:left;">目录用户</th>
+                    <th width="10%">后续动作</th>
+                    <th width="5%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<volist name="msglist" id="m">
+            	<tr>
+                	<td>{$m.ptime}</td>
+                    <td>{$user_nickname[$m['pmid']]|default='系统平台'}</td>
+                   	<td >{$m.mname}</td>
+                    <td style="text-align:left;">{$m.ptitle|mb_substr=0,10,'utf-8'}</td>
+                    <td style="text-align:left;">{$m.pcontent|mb_substr=0,10,'utf-8'}.......</td>
+                    <td style="text-align:left;">{$m.ptuser}</td>
+                    <td><if condition="$m['psucc'] eq 1">启动应用<elseif condition="$m['psucc'] eq 2"/>打开链接<else/>下载应用</if></td>
+                    <td><a href="javascript:void(0);" onclick="LookMessage('{$m.pid}')">查看</a></td> 
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+
+function SendMsg2() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 575,
+		height: 600,
+		title : '推送消息',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Message/messageAddtc", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+function LookMessage(pid) {
+	if( !pid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 575,
+		height: 400,
+		title : '查看信息',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Message/messageInfo/pid/'+pid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">tr { height:40px; } #ConfirmMsg b { color:#00F; }</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <div id="ScrollForm">
+            <div class="divSetting">
+                <table class="table-form" border="0">
+                    <tr><td id="ConfirmMsg" style="font-size:12px;font-weight:bold;color:red;" colspan="4"></td></tr>
+                    <tr>
+                        <th>流水号</th>
+                        <td>{$account.bls}</td>
+                        <th>用户昵称</th>
+                        <td>{$account.flu_nickname}</td>
+                    </tr>
+                    <tr>
+                        <th>申请日期</th>
+                        <td>{$account.bstime}</td>
+                        <th>申请法人（真实姓名）</th>
+                        <td>{$account.flu_username}</td>
+                    </tr>
+                    <tr>
+                        <th>提现金额</th>
+                        <td>¥ {$account.bmention}</td>
+                        <th>提现账户</th>
+                        <td>{$account.bdzh}</td>
+                    </tr>
+                    <tr style="height:20px;">
+                        <td colspan="4">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>技术服务费</th>
+                        <td>¥ {$account.bjs}</td>
+                        <th>交易手续费</th>
+                        <td>{$account.bjy}</td>
+                    </tr>
+                    <tr>
+                        <th>实际提现金额</th>
+                        <td colspan="3" style="color:red; font-weight:bold;">¥ {$account.bsj}</td>
+                    </tr>
+                    <tr style="height:20px;">
+                        <td colspan="4">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>处理状态</th>
+                        <td colspan="3">
+                            <eq name="account.btype" value="0">未打款<else/>已打款</eq>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>提现备注</th> 
+                        <td colspan="3">
+                            <textarea name="bmarker" style="width:100%;" ><if condition="$account['bmarker']==''">申请提现审核通过后1-2个工作日内到账，非工作日顺延。<else />{$account.bmarker}</if></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="buttonDiv" align="center">
+                    <button type="reset" onclick="window.parent.KindeditorDialog.remove();" class="reset_btn">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

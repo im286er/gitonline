@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/jiaju/css/jiaju.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="bg-fff <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header jiaju-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="main container p-t jiaju" id="container">
+		<section class="slide swiper-container jiaju-banner" id="banner">
+        	<empty name="banner_list">
+				<div class="swiper-wrapper">
+                    <div class="swiper-slide" > <img src="{$banner_list[0]['bimg']}" data-src="__PUBLIC__/Mobile/fruit/img/demo/fruit_banner_01.jpg" class="swiper-lazy"/> </div>
+             	</div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                                <div  class="swiper-slider"> <a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" data-src="{$banner_list[0]['bimg']}" class="swiper-lazy" style="width:100%;height:auto;"/></a> </div>
+                    </div>
+                 <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" data-src="{$vo.bimg}" alt="" class="swiper-lazy"></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination jiaju-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+		</section>
+		<section class="jiaju-nav">
+			<ul class="clearfix">
+            	<li>
+					<a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+						<img class="lazy" src="{$module1icon}" alt="">
+						<span>{$module1name}</span>
+					</a>
+				</li>
+				<li>
+      				<a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+						<img class="lazy" src="{$module2icon}" alt="">
+						<span>{$module2name}</span>
+					</a>
+				</li>
+				<li>
+    				<a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+						<img class="lazy" src="{$ShopMenuIcon}" alt="">
+						<span>{$ShopMenuName}</span>
+					</a>
+				</li>
+				<li>
+    				<a href="{$WshopModuleLink}">
+						<img class="lazy" src="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}" alt="">
+						<span>{$WshopModuleName}</span>
+					</a>
+				</li>
+				<li>
+		 			<a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+						<img class="lazy" src="{$InfoMenu3Icon}" alt="">
+						<span>{$InfoMenu3Name}</span>
+					</a>
+				</li>
+				<li>
+		     		<!-- <a href="{:U('Mobile/App/index', array('jid'=>$jid))}">
+						<img class="lazy" src="{$InfoMenuAppDownIcon}" alt="">
+						<span>{$InfoMenuAppDownName}</span>
+					</a>-->
+				</li>
+			</ul>
+			<div class="jiaju-nav-bg"></div>
+		</section>
+		<section class="jiaju-coupon">
+			<div class="sec-title">
+				<h3>{$VoucherModuleName}</h3>
+				<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多<i class="ico ico-more"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul>
+                	<li>
+                		<if condition="$coupon_list[0]['vu_name']">
+                		<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[0][vu_id],'from_index'=>1))}">
+                		<else />
+                		<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                		</if>
+							<img src="{$coupon_list.0.vu_img|default='/Public/Mobile/skincy/upload/coupon_01.jpg'}" alt="">
+							<div><span>{$coupon_list.0.vu_price}</span></div>
+						</a>
+					</li>
+					<li>
+						<if condition="$coupon_list[1]['vu_name']">
+                		<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[1][vu_id],'from_index'=>1))}">
+                		<else />
+                		<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                		</if>
+							<img src="{$coupon_list.1.vu_img|default='/Public/Mobile/skincy/upload/coupon_02.jpg'}" alt="">
+							<div><span>{$coupon_list.1.vu_price|default=''}</span></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<section class="jiaju-act">
+			<div class="sec-title">
+				<h3>{$HdModuleName}</h3>
+				<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多<i class="ico ico-more"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul>
+                	<empty name="active_list">
+                        <li>
+                        	<a class="jiaju-act-pic" href="{:U('Mobile/Active/index', array('jid'=>$jid))}">
+                                 <img src="/Public/Mobile/skincy/upload/slide_01.jpg" alt=""/>
+                            </a>
+                        </li>
+					<else />
+                        <volist name="active_list" id="vo"  offset="0" length="6"  key="k">
+                            <li>
+                            	<a class="jiaju-act-pic" href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}">
+                                    <img src="{$vo.av_img}" alt="">
+                                    <div class="jiaju-act-mask"></div>
+                                </a>
+                                <a class="jiaju-act-txt" href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}">
+                                    <h5>优惠</h5>
+                                    <p>{$vo.av_title}</p>
+                                </a>
+                            </li>
+                        </volist>
+					</empty>
+				</ul>
+			</div>
+		</section>
+
+
+
+
+
+		<!-- ad -->
+        <?php  A('Advert')->loadtemp($jid, 'jiaju', '1'); ?>
+		<!-- ad end -->
+	</div>
+
+	<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	$(function() {
+		$('#container').xpull({
+			'pullThreshold':150,
+		    'maxPullThreshold':0,
+		    'onPullEndFunc':function(){
+		    	window.location.reload();
+		    },
+		    'spinnerTimeout':2000
+		});
+
+		var mySlide = new Swiper('#banner', {
+			speed: 400,
+			pagination: '#banner-page',
+			autoplay: 5000,
+			autoplayDisableOnInteraction: false,
+			loop: true,
+			preloadImages: false,
+			lazyLoading: true
+		});
+	});
+    </script>
+    <!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<import type="css" file="Css.agent.style,Css.agent.select" /> 
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/agent/jquery.idTabs.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/agent/select-ui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/agent/kindeditor.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/agent/switch_city.js"></script>
+<script type="text/javascript">
+    KE.show({
+        id : 'content7',
+        cssPath : './index.css'
+    });
+    function show(type,typep){
+    	var nocn=document.getElementById("putag"+type);
+    	var nocnt=document.getElementById("tag"+typep);
+    	if(type=='2'){
+    		var type1=type+1;
+    		var nocn1=document.getElementById("putag"+type1);
+    		nocn1.style.display = "none";
+    		nocn.style.display = "block";
+    	}else if(type=='4'){
+    		if(typep=='2'){
+    			var type1=typep+1;
+    			nocnt.style.display = "block";
+    		}else{
+    			var type1=typep-1;
+    			nocnt.style.display = "block";
+    		}
+    		var nocng1=document.getElementById("tag"+type1);
+    		nocng1.style.display = "none";
+    	}else{
+    		var type1=type-1;
+    		var nocn1=document.getElementById("putag"+type1);
+    		nocn1.style.display = "none";
+    		nocn.style.display = "block";
+    	}
+    	
+    }
+    function hide(type){
+    	document.getElementById(type+'2').style.display = "none";
+    	document.getElementById(type+'3').style.display = "none";
+
+    }
+    
+  </script>
+</head>
+
+<body>
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">代理商管理</a></li>
+    <li><a href="#">新增代理商</a></li>
+    </ul>
+    </div>
+    <div class="formbody">
+    <div id="usual1" class="usual"> 
+  	<div id="tab1" class="tabson">
+  	<form name="add" action="{:U('/Group/insert')}" method="post" enctype="multipart/form-data">
+    <ul class="forminfo">
+    <li><label>目标用户<b>*</b></label><input  type="radio"  checked="true" name="putype" value="1" Onclick="hide('putag')"/>全部用户
+    <input type="radio" name="putype" value="2" Onclick="show(2)"/>按区域推送 
+    <input type="radio" name="putype" value="3" Onclick="show(3)"/>按昵称推送 
+    <div id="putag2" style="display:none;">
+    <input name="putag" type="text" class="dfinput" value="" placeholder="输入省如:上海,北京" />&nbsp&nbsp<input name="putagtag" type="text" class="dfinput" value="" placeholder="点击输入用户标签,多个值用','分隔" />
+    </div>
+    <div id="putag3" style="display:none;">
+    <input type="radio" name="pucidtype" value="1" />CID
+    <input type="radio" name="pucidtype" value="2"/>别名 <input name="pucid" type="text" class="dfinput" value="" placeholder="输入CID或别名，多个值用,分隔" />
+    </div> </li>
+  	<li><label>后续动作<b>*</b></label>
+  	<input  type="radio"  checked="true" name="psucc" value="1" Onclick="hide('tag')"/>启动应用
+  	<input type="radio" name="psucc" value="2" Onclick="show(4,2)"/>打开链接
+  	<input type="radio" name="psucc" value="3" Onclick="show(4,3)"/>下载应用 
+  	<div id="tag2" style="display:none;">
+    <input name="plink" type="text" class="dfinput" value="" placeholder="必需以http://或https://开关的有效地址"/>
+    </div>
+    <div id="tag3" style="display:none;"><br />
+   	弹出框的标题:&nbsp&nbsp<input name="poptitle" type="text" class="dfinput" value=""/><br />
+   	弹出框的内容:&nbsp&nbsp<input name="popcontent" type="text" class="dfinput" value="" /><br />
+	应 用      名 称:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input name="loadtitle" type="text" class="dfinput" value=""  /><br />
+	应用下载地址:&nbsp&nbsp<input name="loadurl" type="text" class="dfinput" value="" placeholder="必需以http://或https://开关的有效地址" />
+    </div>
+  	</li>
+  	<li><label>透传消息<b>*</b></label><input  type="radio"  checked="true" name="pmsge" value="1" />开启<input type="radio" name="pmsge" value="" />关闭</li>
+  	<li><label>联网方式<b>*</b></label><input  type="radio"  checked="true" name="pwebs" value="1" />WIFI<input type="radio" name="pwebs" value="0" />不限</li>
+  	<li><label>提醒方式<b>*</b></label><input  type="checkbox"  checked="true" name="ptzes" value="1" />通知响铃<input type="checkbox" name="ptzes" value="2" />通知震动</li>
+  	<li><label>清除通知<b>*</b></label><input  type="radio"  checked="true" name="pclea" value="1" />可以<input type="radio" name="pclea" value="2" />不可以</li>
+  	<li><label>通知图标<b>*</b></label><input name="plogo" type="text" class="dfinput" value=""  style="width:518px;"/></li>
+    <li><label>标题<b>*</b></label><input name="ptitle" type="text" class="dfinput" value=""  style="width:518px;"/></li>
+ 	
+    <li><label>通知内容<b>*</b></label><textarea name="pcontent" cols="" rows="" class="textinput"></textarea></li>
+    <li><label>有效时长<b>*</b></label><input name="pline" type="text" class="dfinput" value=""  style="width:518px;"/></li>
+    <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="马上发布"/>&nbsp;&nbsp;<input type="reset" class="btn" value="取消" /></li>	
+    </ul>
+    </form>
+    </div> 		
+	</div> 
+	  
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $(".select1").uedSelect({
+		width : 345			  
+	});
+	$(".select2").uedSelect({
+		width : 167  
+	});
+	$(".select3").uedSelect({
+		width : 100
+	});
+	
+	$("select[name='province']").bind("change",function(){
+
+	load_city();
+});
+	$("select[name='city']").bind("change",function(){
+		load_area();;
+		
+	});
+	
+
+});
+
+
+</script>
+	<script type="text/javascript"> 
+      $("#usual1 ul").idTabs(); 
+    </script>
+    <script type="text/javascript">
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+    </div>
+</body>
+</html>

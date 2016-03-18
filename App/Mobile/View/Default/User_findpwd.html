@@ -1,0 +1,79 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/login.css">
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+
+});
+</script>
+<div class="main container p-tb">
+  <div class="login-body">
+    <ul class="form-wrap">
+      <li class="form-mod">
+        <label class="mod-tit">账号</label>
+        <div class="mod-wrap">
+          <input type="tel" name="username" class="input-wrap j-input-phone" id="username" placeholder="11位手机号" maxlength="11" required>
+        </div>
+      </li>
+      <li class="form-mod">
+        <label class="mod-tit">验证码</label>
+        <div class="mod-wrap">
+          <input type="tel"name="smscode" id="sendcode"class="input-wrap" placeholder="验证码" maxlength="4" required>
+          <span class="getCode" id="j-dypwd" data-url="{:U('sendsms')}" data-type="mobile_findpwd">发送</span>
+        </div>
+      </li>      
+      <li class="form-mod">
+        <label class="mod-tit">输入新密码</label>
+        <div class="mod-wrap">
+          <input type="password" name="password" id="password" class="input-wrap" placeholder="6-16位字母和数字" maxlength="16" required>
+        </div>
+      </li>
+      <li class="form-mod">
+        <label class="mod-tit">确认新密码</label>
+        <div class="mod-wrap">
+          <input type="password" name="newpassword" id="newpassword" class="input-wrap" placeholder="6-16位字母和数字" maxlength="16" required>
+        </div>
+      </li>      
+    </ul>
+  </div>
+  <div class="login-btn"> <span id="J_login_btn" onclick="submits();">立即找回</span> </div>
+</div>
+<script src="__PUBLIC__/Mobile/default/Js/zepto.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/login.js"></script>
+<script type="text/javascript">
+runlink = "{:U('login')}"; 
+function submits(){
+	var username = $('#username').val();
+	var sendcode = $('#sendcode').val();
+	var password = $('#password').val();
+	var newpassword = $('#newpassword').val();
+	if(!password){
+		layer.open({content: '请输入您的密码',time: 2});
+		return false;	
+	}
+	if(password!=newpassword){
+		layer.open({content: '两次输入的密码不一致',time: 2});
+		return false;
+	}
+	$.post("",{'mobile':username, 'password':password,'sendcode':sendcode}, function(result){
+			layer.closeAll();
+			var dataObj=eval("("+result+")");
+			if(dataObj.errcode > 0){
+				layer.open({content: dataObj.errmsg,time: 2});
+				return false;
+			}else if(dataObj.errcode == 'ok'){
+				layer.open({
+					content: '密码找回成功，请使用新密码！',
+					btn: ['确认'],
+					shadeClose: false,
+					yes: function(){
+						window.location = runlink;
+					}
+				});
+			}
+			
+	});
+}
+</script>
+</block>

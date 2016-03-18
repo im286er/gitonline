@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addTheme()">添加模板</span> <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;" id="SearchOpen">模板列表</span>
+	</div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">上线时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                <input type="text" class="user_input" placeholder="搜索：如 模板名称/模板标题/模板描述" name="keywords" value="{$Think.get.keywords}" style="width:300px;" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="10%"><input type="checkbox" id="checkbox" onclick="selectAll('tid[]');"></th>
+                        <th width="10%">主题名称</th>
+                        <th width="15%">主题标题</th>
+                        <th width="20%" style="text-align:left">主题描述</th>
+                        <th width="15%">添加时间</th>
+                        <th width="10%">在线状态</th>
+                        <th width="10%">价格</th>
+                        <th width="10%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="themelist" id="v">
+                        <tr>
+                            <td><input type="checkbox" name="tid[]" value="{$v.t_id}"></td>
+                            <td>{$v.t_sign}</td>
+                            <td>{$v.t_name}</td>
+                            <td style="text-align:left">{$v.t_desc}</td>
+                            <td>{$v.t_time}</td>
+			 <if condition="$gid gt 0 ">
+	      <td><img src="__PUBLIC__/Images/status_{$v.t_status}.gif" /></td>
+		  <else />
+	      <td style="cursor:pointer;" onclick="hosThemeDel(this)" id="TD_MER_STATUS_{$v.t_id}" data-value='{$v.t_status}' data-id='{$v.t_id}' title="点击上线或下线模板">
+		  <img src="__PUBLIC__/Images/status_{$v.t_status}.gif" /></td>	  
+		  </if>
+		  <td><if condition="$v.t_price gt 0 ">{$v.t_price}<else />免费</if></td>
+                            <td>
+
+                              	<a href="javascript:void(0);" onclick="ThemeEdit('{$v.t_id}')">修改</a> 
+
+								
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="ThemeDel('')" value=" 下线 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+
+//添加模板
+function addTheme( ) {
+	KindeditorDialog = KindEditor.dialog({
+		width : 450,
+		height: 550,
+		title : '添加模板',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Theme/themeAdd/", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//下线模板
+function ThemeDel (tid) {
+	$("input[name='tid[]']").each(function(index, element) { if($(this).is(":checked")) tid = $(this).val()+','+tid; });
+    tid = tid.substring(0, tid.length-1); 
+	if( !tid ) { alert('参数出现错误'); return false; }
+	if( !confirm('确实要下线所选主题吗？') ) return false;
+	$.get("{:U('/Theme/themeDel', '', true)}", {tid:tid,status:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(tid.split(','), function(key, value) { 
+			document.getElementById("TD_MER_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+        	$("#TD_MER_STATUS_"+value).attr("data-value", "0");
+		})
+		$("input[type='checkbox']").each(function() { this.checked=false; });
+	})		
+}
+//单个上线或下线模板
+function hosThemeDel( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id'); 
+	if( !dataId ) return false;
+	if( confirm(dataValue=='1' ? '确实要下线吗' : '确实要上线吗') ) { 
+		$.get("{:U('/Theme/themeDel', '', true)}", {tid:dataId, status:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}
+}
+//修改模板
+function ThemeEdit( tid ) {
+	if( !tid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 440,
+		height: 550,
+		title : '修改模板',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Theme/themeEdit/tid/'+tid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

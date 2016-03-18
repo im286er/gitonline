@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>团购详情</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+		<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+    <script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <style>
+    .head-back,.head-share{ width:3.5rem; height:3.5rem; display: inline-block; position:absolute; top:2.5rem;}
+	.head-back{ left:0.5rem}
+	.head-share{ right:0.5rem}
+    </style>
+    </head>
+    <body class="">
+    <div style="position:relative">
+    	<img src="__PUBLIC__/Mobile/default/img/demo/group_detail.png" width="100%">
+		<a href="{:U('Plugin/groupon',array('superiorsource'=>I('get.superiorsource'),'jid'=>$jid))}" class="head-back"></a>
+		<a href="javascript:void(0);" onclick="sendShareStr('193');"></a>
+    </div>
+</body>
+</html>

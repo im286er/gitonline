@@ -1,0 +1,30 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<script type="text/javascript">
+$(document).ready(function(e) {
+	if(window.CIDJavaScript != undefined){
+		var clientid = window.CIDJavaScript.getClientId();
+		if( clientid ) { 
+			$("a").each(function(index, element) { $(this).attr("href", $(this).attr("href")+"/cid/"+clientid); });
+		}
+	}
+});
+</script>
+<div class="main container p-tb" id="signin">
+		<section>
+			<div class="sec-title"><h3>第三方平台登录</h3></div>
+			<div class="sec-body">
+				<ul class="">
+					<!--<li>
+						<a class="" href="#">
+							<i class="ico ico-weixin"></i>
+							<span>微信登录</span>
+						</a>
+					</li>-->
+					<li><a class="" href="{:U('gologin', array('jid'=>I('get.jid'), 'type'=>'qq'), false)}"><i class="ico ico-qq"></i><span>QQ登录</span></a></li>
+					<li><a class="" href="{:U('gologin',array('jid'=>I('get.jid'),'type'=>'sina'), false)}"><i class="ico ico-weibo"></i><span>微博登录</span></a></li>
+				</ul>
+			</div>
+		</section>
+	</div>
+</block>

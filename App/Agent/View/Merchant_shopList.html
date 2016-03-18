@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<import type="css" file="Css.agent.style" />
+
+
+<import type="css" file="Css.agent.merchant" />
+<import type="js" file="Js.jquery" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style>
+td  a{
+
+margin-left:2%;
+
+
+}
+
+
+
+</style>
+</head>
+
+
+<body>
+
+
+    <div class="rightinfo">
+    
+   <div class="subnav">
+    
+    
+      <span onclick="addShop('{$merchantData['jid']}')">新增门店</span>
+    <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">门店列表</span>
+            </div>
+			
+           <div class="search_list" id="SearchForm">
+        <form method="get" action="" name="searchform"> 
+            <div class="explain-col">
+        <div style="float:left;margin-left:100px;">模糊查询：<input class="dfinput" type="text" name="mname" value="" placeholder="门店名称/门店联系电话" style="width:300px;height:20px;"/></div>
+
+                  <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+      </div>
+      
+    
+
+    
+ 
+    <table class="tablelist">
+    	<thead>
+    	<tr>
+        <th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('sid[]');"></th>
+
+        <th>序号<i class="sort"><img src="__PUBLIC__/Images/px.gif" /></i></th>
+        <th>门店名称</th>
+	
+		<th>联系人</th>
+        <th>联系电话</th>
+     
+        <th>添加时间</th>
+    	<th>门店账户</th> 
+        <th>账户状态</th>
+		<th>操作</th>
+		
+        </tr>
+        </thead>
+        <tbody>
+    	<foreach name="shopListData" item="vo" key="k"> 
+		
+        <tr>
+        <td><input name="sid[]" type="checkbox" value="{$vo.sid}"/></td>
+        <td>{$k+1}</td>
+        <td>{$vo.sname}</td>
+        <td>{$vo.scontactsname}</td>
+        <td>{$vo.scontactstel}</td>
+		
+		<td>{$vo.addtime}</td>
+		<td>{$vo.mname}</td>  
+
+       
+       <td style="cursor:pointer;" onclick="hosShop(this)" id="TD_SP_STATUS_{$vo.sid}" data-value='{$vo.status}' data-id='{$vo.sid}' title="点击禁用或解禁分店"><img src="__PUBLIC__/Images/status_{$vo.status}.gif" /></td>
+	   <td>
+                            	<!--<a href="javascript:void(0)" onclick="delShop('{$vo.sid}', 'get')">查看</a> |-->
+                                <a href="javascript:void(0)" onclick="editShop('{$vo.sid}')">修改</a>
+                            </td>
+        </tr> 
+        </foreach>
+        </tbody>
+    </table>
+	</form>
+ <div class="btn" style="width:100%;">
+		    	<label style="float:left;color:#000;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delShop('')" value=" 禁用 " name="dosubmit" class="button" />
+		    </div>
+   
+<div id="pages"> {$page} </div>
+
+
+    
+    
+    
+    
+    </div>
+  <script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });  
+
+//添加分店
+function addShop(jid) {
+    KindeditorDialog = KindEditor.dialog({
+        width : 700,
+        height: 470,
+        title : '添加分店',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/shopAdd/jid/'+jid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });
+}
+
+	$('.tablelist tbody tr:odd').addClass('odd');
+	//批量禁用分店
+function delShop( sid ) {
+	$("input[name='sid[]']").each(function(index, element) { if($(this).is(":checked")) sid = $(this).val()+','+sid; });
+    if( !sid ) { alert('参数出现错误'); return false; } sid = sid.substring(0, sid.length-1);
+	if( !confirm('删除数据有一定风险，确实要删除吗？') ) return false;
+    $.get("{:U('/Merchant/shopDel', '', true)}", {sid:sid, status:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(sid.split(','), function(key, value) { 
+			document.getElementById("TD_SP_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+        	$("#TD_SP_STATUS_"+value).attr("data-value", "0");
+		})
+		$("input[type='checkbox']").each(function() { this.checked=false; });
+    })  
+}
+
+//单个禁用或解禁分店
+function hosShop( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	
+	if( confirm(dataValue=='1' ? '确实要禁用此分店吗' : '确实要解禁此分店吗') ) {
+		$.get("{:U('/Merchant/shopDel', '', true)}", {sid:dataId, status:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}	
+}
+
+//修改分店
+function editShop( sid ) {
+	if( !sid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 590,
+		height: 470,
+		title : '修改分店',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/updateShop/sid/'+sid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+	   function selectAll( name ) {
+
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+	 
+
+	</script>
+
+</body>
+
+</html>

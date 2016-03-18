@@ -1,0 +1,41 @@
+
+<extend name="Public:partial"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<style>
+.modal-content .set > input[type="text"] { width:145px; }
+</style>
+<form action="__ACTION__" method="post" id="postfrom">
+    <div class="reveal-modal" style="border:none;margin-left:-275px;width:100%;">
+        <h3>导出收入明细 <span class="close" id="DialogClose">×</span></h3>
+        <input type="hidden" name="type" value="{$Think.get.type}">
+        <div class="modal-content">
+            <div class="set">
+                &#12288;&#12288;选择时间
+                <input type="text" name="stime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm',fixed: true})" readonly>
+                -
+                <input type="text" name="etime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm',fixed: true,min: '2015-11-03 11:47'})" readonly>
+
+				<select name="sid" style="width:100px;"><option value="">全部分店</option></volist><volist name="shops" id="vo"><option value="{$key}">{$vo}</option></volist></select>
+            </div>
+            <div class="set">
+                <label></label> <input type="submit" value="确认" class="btn btn-pwd" id="DialogSave">
+                <input type="button" value="取消" class="btn btn-hui" id="DialogCancl">
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="/Public/Js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/Public/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+$(function() 
+{
+	$("#DialogClose,#DialogCancl").click(function() 
+	{
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	});
+});
+</script>
+</block>

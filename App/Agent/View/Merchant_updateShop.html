@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } .buttonDiv .reset_btn { margin:0 15px; }
+td ul li { float:left; margin:3px 12px 3px 0px; cursor:pointer; }  td select { width:108px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:160px; }
+div.main-body { width:570px; overflow:hidden; }
+div.main-body #ScrollForm { position:relative; top:0px; left:0px; width:1140px; overflow:hidden; }
+div.main-body .divSetting { width:570px; float:left; } div#Baidu_Map { width:100%; height:230px; }
+</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" name="shop[sid]" value="{$shop.sid}" />
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr>
+                            <th width="80">门店名称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="shopsname" name="shop[sname]" value="{$shop.sname}" class="user_input" /></td>
+                        	<th width="80">所属商家</th>
+                            <td>
+                            	<select disabled="disabled" style="width:179px;">
+                                	<option value="">{$shop.mnickname}</option>
+                                </select>
+                                <input type="hidden" value="{$shop.jid}" name="shop[jid]" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>店铺简介<b style="color:red">*</b></th>
+                            <td colspan="3"><input type="text" autocomplete="off" name="shop[mexplain]" value="{$shop.mexplain}" class="user_input" style="width:445px;" /></td>
+                        </tr>
+                        
+                        <tr>
+                            <th>所在区域<b style="color:red">*</b></th>
+                            <td colspan="3">
+                                <select name="shop[province]" id="SelectScity">
+                                	<option value="0">选择省市</option>
+                                    <foreach name="address" key="key" item="a">
+                                	<option value="{$key}" <if condition="$key==$shop['province']">selected="selected"</if>>{$a}</option>
+                                	</foreach>
+                                </select>
+                                
+                                <if condition="isset($addresst)">
+                                    <select name="shop[city]" id="SelectHcity" style="width:163px;">
+                                        <option value="0">选择市区</option>
+                                        <foreach name="addresst" key="key" item="a">
+                                		<option value="{$key}" <if condition="$key==$shop['city']">selected="selected"</if>>{$a}</option>
+                                		</foreach>
+                                    </select>
+                                <else/>
+                                	<select name="shop[city]" id="SelectHcity" style="width:164px;display:none;">
+                                		<option value="">选择市区</option>
+                                	</select>
+                                </if>
+                                
+                                <if condition="isset($addresst)">
+                                    <select name="shop[district]" id="SelectQcity" style="width:164px;">
+                                        <option value="0">选择县级</option>
+                                        <foreach name="addressq" key="key" item="a">
+                                		<option value="{$key}" <if condition="$key==$shop['district']">selected="selected"</if>>{$a}</option>
+                                		</foreach>
+                                    </select>
+                                <else/>
+                                	<select name="shop[district]" id="SelectQcity" style="width:164px;display:none;">
+                                		<option value="">选择县级</option>
+                                	</select>
+                                </if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>分店门景<b style="color:red">*</b></th>
+                            <td colspan="3">
+                            	<input type="text" readonly="readonly" placeholder="请上传门景图" id="SHOP_EXTERIOR_VALUE" name="shop[exterior]" value="{$shop.exterior}" class="user_input" style="width:365px;margin-right:5px;" />
+                            	<button type="button" onclick="KindeditorUpload('SHOP_EXTERIOR_VALUE')" style="position:relative;top:3px;" class="submit_btn">上传</button>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>联系人名称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="shopscontactsname" name="shop[scontactsname]" value="{$shop.scontactsname}" class="user_input" /></td>
+                            <th>联系人电话<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="shopscontactstel" name="shop[scontactstel]" value="{$shop.scontactstel}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>服务电话<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="shopmservetel" name="shop[mservetel]" value="{$shop.mservetel}" class="user_input" /></td>
+                            <th>销售电话<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="shopmsaletel" name="shop[msaletel]" value="{$shop.msaletel}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>详细地址<b style="color:red">*</b></th>
+                            <td colspan="3"><input type="text" autocomplete="off" name="shop[saddress]" value="{$shop.saddress}" class="user_input" style="width:445px;" /></td>
+                        </tr>
+                    </table>
+                
+                    <div class="buttonDiv" align="center">
+                        <button type="button" id="nextbtn" class="submit_btn">地图</button>&#12288;
+                    </div>
+                </div>
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr>
+                        	<td>
+                            	<div id="Baidu_Map"></div>
+                                <input type="hidden" name="shop[lng]" value="{$shop.lng}" id="ShopLng" />
+                                <input type="hidden" name="shop[lat]" value="{$shop.lat}" id="ShopLat" />
+                            </td>
+                        </tr>
+                    </table>
+                
+                    <div class="buttonDiv" align="center">
+                        <button type="button" id="prevbtn" class="submit_btn">上一步</button>&#12288;
+                        <button type="submit" class="submit_btn">提交</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=0Fafcd0a5385f509b005594a4de38114"></script>
+<if condition="$shop['lng'] && $shop['lat']">
+<script type="text/javascript">
+var lng = '{$shop.lng}';
+var lat = '{$shop.lat}';
+var map = new BMap.Map("Baidu_Map");
+map.centerAndZoom(new BMap.Point(lng, lat), 12);
+map.enableScrollWheelZoom(); //开启滚动缩放
+map.disableDoubleClickZoom();//禁用双击放大
+map.addControl(new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT}));
+var marker = new BMap.Marker(new BMap.Point(lng, lat));
+marker.enableDragging();//可拖拽
+marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+marker.setTitle('拖拽标注移动位置');
+marker.addEventListener("dragend", function(e) {
+	document.getElementById("ShopLng").value = e.point.lng;
+	document.getElementById("ShopLat").value = e.point.lat;
+});
+map.addOverlay(marker);
+</script>
+<else/>
+<script type="text/javascript">
+var map = new BMap.Map("Baidu_Map");            
+map.centerAndZoom("杭州", 12); //默认杭州
+new BMap.LocalCity().get(function(result) { setTimeout(function() { map.setCenter(result.name); }, 10) }) //根据IP定位当前的城市
+map.enableScrollWheelZoom(); //开启滚动缩放
+map.disableDoubleClickZoom();//禁用双击放大
+map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}));
+var MarkerBool = false;   
+map.addEventListener("click",function(e) {
+	if( !MarkerBool ) {
+		var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat));
+		document.getElementById("ShopLng").value = e.point.lng;
+		document.getElementById("ShopLat").value = e.point.lat;
+		marker.enableDragging();//可拖拽
+		marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+		marker.setTitle('拖拽标注移动位置');
+		marker.addEventListener("dragend", function(e) {
+			document.getElementById("ShopLng").value = e.point.lng;
+			document.getElementById("ShopLat").value = e.point.lat;
+		});
+		map.addOverlay(marker);
+		MarkerBool = true;
+	}
+});
+</script>
+</if>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+//上传证件
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:50, });
+function KindeditorUpload( InputVal ) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#'+InputVal).val(url); editor.hideDialog();
+			}
+		});
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格大小：640*379， 图片格式为 jpg,jpeg,png</div>');
+	});
+}
+
+$(document).ready(function(e) {
+    $("#nextbtn").click(function() { $("#ScrollForm").animate({left:-570}, 500); })
+    $("#prevbtn").click(function() { $("#ScrollForm").animate({left:0}, 500); })
+	
+	$("#SelectScity").change(function() {
+		var value = $(this).val();
+		if( value ) { 
+			$("#SelectQcity,#SelectHcity").hide(); 
+			$.get("{:U('/Agent/publicGetaddress', '', true)}", {pid:value}, function( data ) { 
+				if(data) $("#SelectHcity").show(); else $("#SelectHcity").hide(); $("#SelectHcity").html( data ); 
+				$.get("{:U('/Agent/publicGetaddress', '', true)}", {pid:$("#SelectHcity").val()}, function( data ) { 
+					if(data) $("#SelectQcity").show(); else $("#SelectQcity").hide(); $("#SelectQcity").html( data ); 
+				})
+			})
+		} else {
+			$("#SelectQcity,#SelectHcity").val('').hide(); 	
+		}
+	})
+	$("#SelectHcity").change(function() {
+		var value = $(this).val();
+		if( value ) { $.get("{:U('/Agent/publicGetaddress', '', true)}", {pid:value,dval:''}, function( data ) { 
+			if(data) $("#SelectQcity").show(); else $("#SelectQcity").hide(); $("#SelectQcity").html( data );
+		})}
+	})
+	
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+	$("#shopsname").formValidator({onFocus:"请输入店铺名称"}).inputValidator({min:1, onError:"店铺名称不能为空"});
+	$("#shopscontactsname").formValidator({onFocus:"请输入联系人名称"}).inputValidator({min:1, onError:"联系人名称不能为空"});
+    $("#shopscontactstel").formValidator({onFocus:"请输入联系人电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"}).inputValidator({min:1, onError:"联系人电话不能为空"});
+	$("#shopmservetel").formValidator({onFocus:"请输入服务电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"}).inputValidator({min:1, onError:"服务电话不能为空"});
+    $("#shopmsaletel").formValidator({onFocus:"请输入销售电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"}).inputValidator({min:1, onError:"销售电话不能为空"});
+
+	$("#SelectScity").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请选择所在地区"});
+	$("#SHOP_EXTERIOR_VALUE").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请上传门景图"});
+})
+</script>
+</body>
+</html>

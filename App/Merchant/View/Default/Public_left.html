@@ -1,0 +1,16 @@
+    <div class="left-nav">
+        <div class="sideBar_a">
+             
+            <div class="sideBar_nav">
+                <ul>
+				 	<foreach name="nextmenu" item="vo" >
+          <if condition="$type == 1 || $vo['type'] == 0">  	<li <if condition="$vo[id] eq $CurrentUrl">class="curr"</if>><a href="{$vo.url}" target="_self">{$vo.name}</a></li> </if>
+            </foreach>
+            
+	
+                </ul>
+            </div>
+            
+        </div>
+	</div>
+<!--left over--> 	

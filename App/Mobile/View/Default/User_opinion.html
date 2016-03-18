@@ -1,0 +1,61 @@
+<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+<div class="main container p-tb" id="">
+		<div class="formbox">
+			<div class="inputbox">
+				<textarea name="op_content" id="op_content" placeholder="您如果有什么好的建议或意见，欢迎反馈给我们。"></textarea>
+				<input type="op_telphone" id="op_telphone" placeholder="联系电话（选填）">
+			</div>
+			<div class="div-a">
+				<a class="btn btn-block btn-lg btn-primary" href="javascript:;" onclick="submits()">提交</a>
+			</div>
+		</div>
+		<section class="feedback-list">
+			<div class="sec-title"><h3>历史信息</h3></div>
+			<div class="sec-body">
+				<ul class="">
+				<volist name="opinion" id="vo" empty="您还没有反馈过意见">
+					<li>
+						<div class="fb-time"><span>{$vo.op_addtime|date='Y-m-d H:i:s',###}</span></div>
+						<div class="fb-kehu">
+							<if condition="$member['u_avatar']"><img src="{$member.u_avatar}"/><else /><img src="__PUBLIC__/Mobile/default/img/avatar_kehu.png"/></if>
+							<span>{$vo.op_content}</span>
+						</div>
+						<div class="fb-kefu">
+							<span><empty name="vo.op_replytxt">{$AutoReply}<else />{$vo.op_replytxt}</empty></span>
+							<img src="{$merchantapp.applogo}" alt="">
+						</div>
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+   </div>
+<script>
+var AutoReply = "{$AutoReply?$AutoReply:'意见反馈成功！'}"; 
+var runlink =  "<?php echo isset($page_url) ? $page_url : U('/User/aboutus'); ?>"; 
+<eq name="isApp" value="1">
+	baichuanIM('{$mid}','{$jid}');
+</eq>
+function submits(){
+	var op_content = $('#op_content').val();
+	var op_telphone = $('#op_telphone').val();
+	var op_sid = $('#op_sid').val();
+	if(!op_content){
+		layer.open({content: '亲！有您的意见我们会做的更好哦！',time: 2});
+		$('#op_content').focus();
+		return false;
+	}
+	$.post("{:U()}",{'op_telphone':op_telphone, 'op_content':op_content, 'op_sid':op_sid}, function(result){
+		layer.open({
+			content: AutoReply,
+			btn: ['确定'],
+			yes: function(){
+				window.location = runlink;
+			}
+		});
+	});
+}
+</script>
+</block>

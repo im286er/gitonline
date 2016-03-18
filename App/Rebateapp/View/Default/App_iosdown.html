@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{$appinfo.appname}</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="__PUBLIC__/Css/download.css" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+
+<body>
+
+<div class="row-fluid breadcrumbs margin-bottom-20">
+    <div class="container">
+        <h1 class="pull-left">{$appinfo.name}</h1>
+        <ul class="pull-right breadcrumb">
+            <li>版本：{$appinfo.versions}</li>
+            <li>大小：{$appinfo.iossize}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container content">
+    <div id="" class="view row">
+        <div class="span12" style="text-align:center;"> <a href="javascript:void(0);" onclick="javascript:install();"><img src="{$appinfo.ico}" class="appicon" /></a>
+            <div> </div>
+        </div>
+    </div>
+    <div id="" class="view row" style="margin-top:30px;">
+    	<eq name="apptype" value="1">
+            <div class="span12 margin-bottom-20" style="text-align:center;"> <a href="http://yd.dishuos.com{$appinfo.androidurl}" class="btn-u btn-u-lg"><i class="fa fa-download"></i> 点击安装</a> </div>
+        <else/>
+            <div class="span12 margin-bottom-20" style="text-align:center;"> <a href="itms-services://?action=download-manifest&url=https://www.dishuos.com{$appinfo.iosurl}" class="btn-u btn-u-lg"><i class="fa fa-download"></i> 点击安装</a> </div>
+        </eq>
+        <div class="span12" style="text-align:center;"> <span class="label label-info">适用于iOS设备</span> <span class="label label-danger">企业版</span> </div>
+    </div>
+    <hr class="devider devider-dotted">
+</div>
+
+</body>
+</html>

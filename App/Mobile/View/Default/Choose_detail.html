@@ -1,0 +1,122 @@
+<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Js/Mobile/flow2.js?v=127"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/productdetails.css?v=20151013">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script>
+var reqUrl = "{:U('Mobile/Choose/search',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl = "{:U('Mobile/Flow/confirm',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl2 = "{:U('Mobile/Flow/confirm',array('utoken'=>'xxx','jid'=>$jid,'sid'=>$sid))}";
+var mid = "{$mid}";
+var isApp = "{$isApp}";
+$(document).ready(function(){
+	getProductContent({$rcid},'');
+});
+</script>
+
+	<div class=" main container <eq name='color_opacity' value='0'> p-t </eq> pb-50 detail-container" id="">
+		<!-- <div class="detail-img"><img src="{$goods_info.gimg}" alt=""></div> -->
+
+		<?php
+			$pictureset = unserialize( $goods_info['pictureset'] );
+			if( empty($pictureset) ) $pictureset[] = $goods_info['gimg'];
+		?>
+		<section class="slide swiper-container">
+			<div class="swiper-wrapper">
+				<?php foreach( $pictureset as $p ) { if($p) { ?>
+				<div class="swiper-slide"><a href="#"><img src="{$p}" alt=""></a></div>
+				<?php } } ?>
+			</div>
+			<div class="swiper-pagination">
+				<span class="swiper-pagination-bullet"></span>
+			</div>
+		</section>
+
+
+
+		<div class="detail-body">
+			<div class="item-pricebox-m clearfix">
+				<div class="item-price-m">￥{$goods_info['gdprice']>0 ? $goods_info['gdprice'] : $goods_info['goprice'] }</div>
+				<div class="item-price-m" style="color:#ccc;margin-left:15px;"><s>￥{$goods_info['goprice']}</s></div>
+				<div class="item-option-m">
+					<a href="javascript:;" class="ico ico-decrease btn_left" gid="{$goods_info.gid}"></a>
+					<span class="gnum_{$goods_info.gid}" id="number_{$goods_info.gid}">0</span>
+					<a href="javascript:;" class="ico ico-increase btn_right" gid="{$goods_info.gid}"></a>
+				</div>
+			</div>
+			<div class="detail-abstract">{$goods_info.gdescription|default='商品暂无简短描述'}</div>
+			<div class="detail-content">
+				<h6 class="detail-content-title">详情</h6>
+				<div>{$goods_info.gcontent|default='商品暂无详情'}</div>
+			</div>
+		</div>
+	</div>
+	<footer class="bottomBar clearfix">
+		<div class="container">
+		<div class="cart clearfix">
+			<div class="ico ico-cart" id="cartBtn"><span class="cartNumber">0</span></div>
+			<div class="cart-price">共<span class="cartPrice">0</span></div>
+		</div>
+		<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了</a>
+		<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		</div>
+	</footer>
+	<div class="cart-modal" id="cartModal" style='display:none;'>
+		<div class="cart-dialog">
+			<div class="order-cart" id="cart_table">
+
+			</div>
+		</div>
+	</div>
+	<script src="__PUBLIC__/Js/Mobile/jquery.lazyload.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+		var mySlide = new Swiper('.swiper-container', {
+			speed: 400,
+			pagination: '.swiper-pagination',
+			autoplay: 5000,
+			autoplayDisableOnInteraction: false,
+			loop: true
+		});
+
+		$('img').lazyload({
+	        threshold: 0,
+	        effect: 'fadeIn',
+	        skip_invisible: false
+	    });
+
+		// 购物车弹出框
+		// 购物车弹出框
+		var cartModal = $("#cartModal");
+		$("#cartBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#okBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+
+		});
+
+		$("#okBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#cartBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+		});
+
+		$(".cart-dialog").click(function(ev) {
+			$(".cart-modal").hide();
+			$("#cartBtn").show();
+			$("#subBtn").hide();
+			$("#okBtn").show();
+		});
+
+		$(".order-cart").click(function(ev) {
+			ev.stopPropagation();
+		});
+
+	</script>
+</block>

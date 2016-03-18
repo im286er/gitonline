@@ -1,0 +1,71 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+</style>
+	<div class="wrapper">
+		<h2 class="title">消息列表</h2>
+		<div class="mian padding">
+			<div class="content_c">
+				<form action="__ACTION__" method="post">
+                    <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.post.keywords}" placeholder="搜索：标题/内容">
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+			<div class="content_a top">
+				<table class="table border-b">
+					<tr>
+						<th>发送人</th>
+						<th>标题</th>
+						<th>内容</th>
+						<th>添加时间</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+					<foreach name="notice" item="v" empty="暂无消息">
+					<tr>
+						<td><php>echo $memberids[$v[fmid]];</php></td>
+						<td>{$v.ntis}</td>
+						<td>{$v.ncon|msubstr=0,15,'utf-8'}</td>
+						<td>{$v.addtime}</td>
+						<td><span id="view{$v.nid}">{$ids[$v['nid']]?'已查看':'未查看'}<span></td>
+						<td><input type="button" onclick="ViewShow({$v.nid},'{$v.ntis}','{$v.ncon}')" value="查看"></td>
+					</tr> 
+					</foreach>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+function ViewShow(nid,title,content){
+	if(!nid){alert('参数错误！');return false;}
+	$('#view'+nid).html('已查看');
+	$.post("{:U()}",{'nid':nid,'action':'view'},function(result){
+		content = result;
+	});
+	var d = dialog({
+		id:'viewshow',
+		title: '查看消息',
+		opacity: 0.87,
+		lock: true,
+		background: '#600', // 背景色
+		content: '<div><p style="padding-top:10px;">'+title+'</p></div><p style="padding-top:10px;">内容：'+content+'</textarea></p>'
+	});
+	d.addEventListener('close', function () {
+		
+	});
+	d.show();
+	
+}
+</script>
+</block>

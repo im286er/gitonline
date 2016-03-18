@@ -1,0 +1,21 @@
+				<volist name="shop_list" id="vo" empty="暂时没有数据">
+				<!--<li><a href="{$vo.url}">
+						<h6 class="shop-title">{$vo.sname}</h6>
+						<p class="shop-addr">{$vo.saddress}</p>
+						<if condition="$vo['dis']"><div class="shop-distance"><i class="ico ico-pos"></i><span><php>echo distance_convert($vo['dis']);</php></span><if condition="$key eq 0"><span class="shop-zjj">最接近</span></if></div></if>
+						</a>
+					</li>-->
+
+				<li <eq name="key" value="0">class="nearest"</eq>>
+					<notempty name="vo.exterior">
+						<img src="{$vo.exterior}" data-echo="{$vo.exterior}" alt="{$vo.sname}">
+					</notempty>
+					<a href="{$vo.url}">
+						<h6 class="branch-title">{$vo.sname}</h6>
+						<p class="branch-addr">{$vo.saddress}</p>
+						<notempty name="vo.dis">
+						<div class="branch-distance"><i class="ico ico-pos"></i><span><php>echo distance_convert($vo['dis']);</php></span><if condition="$key eq 0"><span class="shop-zjj">最接近</span></if></div>
+						</notempty>
+					</a>
+				</li>
+				</volist>

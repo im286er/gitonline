@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/catering1/css/catering1.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="bg-f6f9fd <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header catering-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="container catering p-t main" id="container">
+		<section class="slide swiper-container cate-banner" id="banner">
+			<empty name="banner_list">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><a href="javascript:;"><img class="swiper-lazy" src="" data-src="__PUBLIC__/Mobile/catering/img/demo/shouji_banner_01.jpg" alt=""></a></div>
+                </div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><a href="{$banner_list[0]['burl']}"><img class="swiper-lazy" src="{$banner_list[0]['bimg']}" data-src="{$banner_list[0]['bimg']}" alt=""></a></div>
+                    </div>
+                <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img class="swiper-lazy" src="{$vo.bimg}" data-src="{$vo.bimg}" alt=""></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination shouji-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+		</section>
+        <section class="catering-nav">
+            <ul class="clearfix">
+                <li>
+                    <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}" alt="{$module1name}">
+                    <img src="{$module1icon|default='/Public/Mobile/catering1/img/demo/catering_nav_01.png'}"/>
+                    <span>{$module1name}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}" alt="{$module2name}">
+                    <img src="{$module2icon|default='/Public/Mobile/catering1/img/demo/catering_nav_02.png'}"/>
+                    <span>{$module2name}</span>
+                    </a>
+                </li>
+            <!--  <li>
+                    <a href="{:U('Mobile/Boutique/index', array('jid'=>$jid))}">
+                    <img src="/Public/Mobile/catering1/img/demo/catering_nav_03.png"/>
+                    <span>{$BoutiqueModuleName}</span>
+                    </a>
+                </li>-->
+             <!--    <li>
+                    <a href="{:U('Mobile/Plugin/bargain', array('jid'=>$jid))}">
+                    <img src="/Public/Mobile/catering1/img/demo/catering_nav_04.png"/>
+                    <span>天天特价</span>
+                    </a>
+                </li>-->
+                <li>
+                    <a href="{:U('Mobile/Plugin/groupon', array('jid'=>$jid))}">
+                    <img src="/Public/Mobile/catering1/img/demo/catering_nav_05.png"/>
+                    <span>促销团购</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('Mobile/DZP/index', array('jid'=>$jid))}">
+                    <img src="/Public/Mobile/catering1/img/demo/catering_nav_06.png"/>
+                    <span>大转盘</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+		<php>$goods_list = D('Goods')->getGoods($jid,array(),'0,6');</php>
+        <section class="catering-rec public">
+            <div class="sec-title">
+            <h3>新品推荐</h3>
+            <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}" class="catering-more">更多&gt;</a>
+            </div>
+            <ul class="clearfix">
+			<volist name="goods_list" id="vo">
+                <li>
+					<eq name="Think.cookie.opentype" value="flapp">
+					   <a href="{:U('Flow/order@flapp', array('sid'=>$vo['sid'],'jid'=>$jid))}">
+					<else/>
+						<a href="{:U('Mobile/Choose/detail', array('gid'=>$vo['gid'],'sid'=>$vo['sid'],'jid'=>$jid))}">
+					</eq>
+                    <img src="{$vo.gimg}"/>
+                     <p>{$vo.gname|msubstr=###,0,5,'utf-8',false}<span><php>echo rtrim(format_money($vo['gdprice']>0?$vo['gdprice']:$vo['goprice']),'.');</php>元</span></p>
+                    </a>
+                </li>
+			</volist>
+            </ul>
+        </section>
+		<php>$goods_list = D('Goods')->getGoods($jid,array(),'6,12');</php>
+        <section class="catering-mp public">
+            <div class="sec-title">
+            <h3>活动特价</h3>
+            <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}" class="catering-more">更多&gt;</a>
+            </div>
+            <ul class="clearfix">
+				<volist name="goods_list" id="vo">
+                <li>
+                    <eq name="Think.cookie.opentype" value="flapp">
+					   <a href="{:U('Flow/order@flapp', array('sid'=>$vo['sid'],'jid'=>$jid))}">
+					<else/>
+						<a href="{:U('Mobile/Choose/detail', array('gid'=>$vo['gid'],'sid'=>$vo['sid'],'jid'=>$jid))}">
+					</eq>
+                       <img src="{$vo.gimg}"/>
+                     <p>{$vo.gname|msubstr=###,0,5,'utf-8',false}<span><php>echo rtrim(format_money($vo['gdprice']>0?$vo['gdprice']:$vo['goprice']),'.');</php>元</span></p>
+                    </a>
+                </li>
+				</volist>
+            </ul>
+        </section>
+		<php>
+		$voucherlist = D('Voucher')->getVoucher($jid);
+		$VoucherModule = D('Voucher')->getModule($jid);
+		</php>
+        <section class="catering-coupon public">
+            <div class="sec-title">
+                <h3>{$VoucherModule.Name}</h3>
+                <a href="{$VoucherModule.Link}" class="catering-more">更多</a>
+            </div>
+            <ul class="clearfix">
+			<volist name="voucherlist" id="vo" >
+                <li><a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}"><h4>{$vo.vu_name}</h4><p>消费即可领取优惠券</p>
+                   <p>{$vo.vu_description|msubstr=###,0,30}</p><p>有效日期： <php>echo date('Y年m月d日',strtotime($vo[vu_stime]))</php>-<php>echo date('Y年m月d日',strtotime($vo[vu_etime]))</php></p></a>
+                </li>
+			</volist>
+            </ul>
+        </section>
+    </div>
+	<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/jquery.lazyload.min.js"></script>
+	<script>
+	$('#container').xpull({
+		'pullThreshold':60,
+	    'maxPullThreshold':60,
+	    'onPullEndFunc':function(){
+	    	window.location.reload();
+	    },
+	    'spinnerTimeout':2000
+	});
+
+	var mySlide = new Swiper('#banner', {
+		speed: 400,
+		pagination: '#banner-page',
+		autoplay: 5000,
+		autoplayDisableOnInteraction: false,
+		loop: true,
+		preloadImages: false,
+		lazyLoading: true
+	});
+    </script>
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

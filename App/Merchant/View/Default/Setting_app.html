@@ -1,0 +1,114 @@
+<extend name="Public:common"/>
+<block name="body">
+<js href="__PUBLIC__/Js/layer/layer.js" />
+<style type="text/css">
+#form1 .set > label { width:150px; text-align: left; }
+#form1 .set > label.f { width:60px; }
+.modal-content .set > input[type="text"] { width:420px; }
+span.paytype { margin:0 20px 0 0; line-height: 36px; height: 36px; display: inline-block; }
+span.paytype input[type="text"] { width:150px; }
+</style>
+<div class="wrapper">
+    <h2 class="title add_child">APP页面配置</h2>
+    <div class="mian padding">                   
+        <div class="modal-content">
+			<form id="form1">
+				<div class="set">
+					<label class="f">消费方式</label>
+					<label>
+						<input type="checkbox" name="consume_type[]" value="1" <if condition="$setting['consume_type']==1 || $setting['consume_type']==3">checked</if> > <span class="paytype" id="consume_title_1">{$setting.consume_title_1|default='店内消费'}</span>
+					</label>
+					<label>
+						<input type="checkbox" name="consume_type[]" value="2" <if condition="$setting['consume_type']==2 || $setting['consume_type']==3">checked</if> > <span class="paytype" id="consume_title_2">{$setting.consume_title_2|default='外送上门'}</span>
+					</label>
+					<label id="payedit" style="font-size:12px; cursor:pointer;" data-status="1">修改</label>
+				</div>
+				<div class="set">
+					<label class="f">支付方式</label>
+					<label>
+						<input type="checkbox" name="pay_type[]" value="1" <if condition="$setting['pay_type']==1 || $setting['pay_type']==3">checked</if> > <span class="paytype">{$setting.pay_title_1|default='支付宝'}</span>
+					</label>
+					<label>
+						<input type="checkbox" name="pay_type[]" value="2" <if condition="$setting['pay_type']==2 || $setting['pay_type']==3">checked</if> > <span class="paytype">{$setting.pay_title_1|default='到店支付'}</span>
+					</label>
+				</div>
+				<div class="set">
+					<label class="f">首页导航</label>
+					<volist name="array_icon" id="i">
+					<label>
+						<input type="checkbox" name="modules[]" value="{$i.value}" <if condition="in_array($i['value'], $setting['modules'])">checked</if> > <span class="paytype">{$i.name}</span>
+					</label>&nbsp;
+					<if condition="$key!==0 && $key%3==0"><br><label class="f">&nbsp;&nbsp;</label>&nbsp;</if>
+					</volist>
+				</div>
+				<div class="set">
+					<label></label>
+					<input id="ModuleUpdate" type="button" class="btn btn-pwd" value="保存">
+				</div>
+				<div class="border-b top"></div>
+			</form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$("#payedit").click(function() {
+	var datastatus = $(this).attr("data-status");
+	if( datastatus==1 ) {
+		$(this).attr("data-status", '2').html('保存');
+		var string_1 = '<input type="text" name="consume_title_1" maxlength="6" value="'+$("#consume_title_1").html()+'" />'
+		var string_2 = '<input type="text" name="consume_title_2" maxlength="6" value="'+$("#consume_title_2").html()+'" />'
+		$("#consume_title_1").html( string_1 );
+		$("#consume_title_2").html( string_2 );
+	} else {
+		var consume_title_1 = $("input[name='consume_title_1']").val();
+		var consume_title_2 = $("input[name='consume_title_2']").val();
+		var $this = $(this);
+		$.post("{:U('Setting/settitle@sj', '', true, true)}", {title1:consume_title_1, title2:consume_title_2}, function( data ) {
+			if( parseInt(data)==1 )
+			{
+				$this.attr("data-status", '1').html('修改');
+				$("#consume_title_1").html( consume_title_1 );
+				$("#consume_title_2").html( consume_title_2 );
+			}
+		})
+	}
+})
+
+$("#ModuleUpdate").click(function() {
+	var consume_status = false;
+	$("input[name='consume_type[]']").each(function() {
+		if( $(this).is(":checked") ) { consume_status=true; }
+	})
+	if( !consume_status ) {
+		alert("必须要选择一种消费方式！"); return false;
+	}
+
+	var pay_status = false;
+	$("input[name='pay_type[]']").each(function() {
+		if( $(this).is(":checked") ) { pay_status=true; }
+	})
+	if( !pay_status ) {
+		alert("必须要选择一种支付方式！"); return false;
+	}
+
+	var module_length = 0;
+	$("input[name='modules[]']").each(function(){
+		if( $(this).is(":checked") ) module_length ++;
+	})
+	if( module_length != 6 )
+	{
+		alert("首页导航暂时只能选择6个"); return false;
+	}
+
+	$.post("__ACTION__", $("#form1").serialize(), function(data) {
+		if( parseInt(data)==1 )
+			alert('设置成功');
+		else
+			alert('设置失败');
+	})
+})
+
+
+
+</script>
+</block>

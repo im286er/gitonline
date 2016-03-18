@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>全国布局</title>
+<script type="text/javascript" src="/Public/Mobile/default/Js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="/Public/Mobile/default/Css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="/Public/Mobile/default/Css/main.css" />
+
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<!-- 头部 -->
+	
+<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+
+<!-- 有些页面是不要 header 的，比如，消息的内容页 -->
+
+<header class="header"  >
+        <h1 >全国布局</h1>
+            
+            <a href="{:U('/Index/index@yd',array('jid'=>$jid))}" class="ico header-back" ></a>
+                </header>
+
+	<!-- /头部 -->
+	
+	<!-- 主体 -->
+	
+
+<style type="text/css">
+.act-detail img { width:100%; }
+</style>
+<script>
+	//10px 1rem;
+	!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+	<div class="container p-tb" id="actDetail">
+		<div class="act-detail">
+			<img class="act-img" src="/Public/Mobile/jiuhao/img/qiuhao.jpg" alt="">
+		</div>
+	</div>
+	
+
+	<!-- /主体 -->
+	<!-- 底部 -->
+	<script type="text/javascript">
+ $(document).ready(function(){
+  			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$.post("/User/location.html",{'longitude':position.coords.longitude,'latitude':position.coords.latitude},function(data){ });
+				},function(errorObject){
+					
+				},{
+					enableHighAccuracy : true,
+					timeout    : 3000,
+					maximumAge : 60000
+				}
+			);
+});
+</script>	<!-- /底部 -->
+</body>
+</html>

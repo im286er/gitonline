@@ -1,0 +1,167 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<eq name="type" value="1">
+<script type="text/javascript">
+//设置主题信息
+function SetInfoZt() {
+	if( $("#EditZt").attr("data-true") == "0" ) {
+		var data=$("#ZtInfoVal").val(); $("#EditZt").attr("data-true", "1"); $("#ZtInfo").html( data );
+		$.post('/Index/editFie', {sfie:'appzt', data:data, table:'merchantApp', wfie:'jid'});
+	}
+}
+
+function setContent(str) {
+	str = str.replace(/<\/?[^>]*>/g,'');
+	str.value = str.replace(/[ | ]*\n/g,'\n');
+	str = str.replace(/\n[\s| | ]*\r/g,'\n');
+	return str;
+}
+
+//设置介绍信息
+function SetInfoJs() {
+	if( $("#EditJs").attr("data-true") == "0" ) {
+		var show_data = setContent( JSINFO_editor.text() ); 
+		var post_data = encodeURIComponent( JSINFO_editor.html() );
+		
+		$("#EditJs").attr("data-true", "1");
+		$.post('/Index/editFie', {sfie:'appjs', data:post_data, table:'merchantApp', wfie:'jid'});
+	
+		$(".content_b .ke-container.ke-container-default").hide();
+		$("#JsInfo").html( show_data.substring(0,80)+'..' ).show();
+	}
+}
+
+//设置地址信息
+function SetInfoDz() {
+	if( $("#EditDz").attr("data-true") == "0" ) {
+		var data=$("#DzInfoVal").val(); $("#EditDz").attr("data-true", "1"); $("#DzInfo").html( data );
+		$.post('/Index/editFie', {sfie:'saddress', data:data, table:'shop', wfie:'sid'});
+	}
+}
+</script>
+</eq>
+<div class="wrapper">
+    <h2 class="title">我的店铺 / 账户设置 <input type="button" value="<返回" onClick="window.history.go(-1)"></h2>
+    <div class="mian">
+        <div class="content_b">
+            <label>企业名称</label> <div class="width">{$data.mnickname}</div>
+        </div>
+        <div class="content_b">
+            <label>头像</label>
+            <div class="width"><img src="{$data.applogo}" id="DefaultLogo" alt=""></div>
+            <!--<eq name="type" value="1"><a href="javascript:void(0);" id="EditLogo" class="c-5da3ea">修改头像</a></eq>-->
+        </div>
+        <div class="content_b">
+            <label>所在行业</label> <div class="width">{$data.v_title}</div>
+        </div>
+        <!--<div class="content_b">
+            <label>主题信息</label>
+            <div class="width" id="ZtInfo">{$data.appzt}</div>
+            <eq name="type" value="1"><a href="javascript:void(0);" data-true="1" id="EditZt" class="c-5da3ea">修改</a></eq>
+        </div>-->
+        <div class="content_b">
+            <label style="float:left;">企业介绍</label>
+            <div class="width" id="JsInfo">{$data.appjs|strip_tags|msubstr=0,80,'utf-8'} </div>
+            <textarea id="Tailor" style="display:none;width:0px;height:0px;">{$data.appjs}</textarea>
+            
+            
+            <eq name="type" value="1"><a href="javascript:void(0);" data-true="1" id="EditJs" class="c-5da3ea">修改</a></eq>
+        </div>
+        <div class="content_b">
+            <label>所在地址</label>
+            <div class="width" id="DzInfo">{$data.mcity}</div>
+            <if condition="isset($address) && $address==1"><a href="javascript:void(0);" data-true="1" id="EditDz" class="c-5da3ea">修改</a></if>
+        </div>
+        <div class="content_b">
+            <label>客户端资料</label>
+            <if condition="!$data['iosurl'] && !$data['appurl']">
+            	<div class="width">系统生成中……</div>
+            <else/>
+            	<div class="width">最后生成时间：{$data.endmakedate}</div>
+            </if>
+        </div>
+        
+        <eq name="type" value="1">
+            <div class="content_b">
+                <label>提现账户</label>
+                <div class="width">{$member.mbdzh|default='暂无绑定账户'}</div>
+            </div>
+        </eq>
+        
+        <div class="content_b">
+            <label>登陆账户</label>
+            <div class="width">{$member.mname}</div>
+            <a href="{:U('/Index/editpwd', '', true)}" class="c-5da3ea">修改密码</a>
+        </div>
+    </div>
+</div>
+<eq name="type" value="1">
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var JSINFO_editor;
+
+KindEditor.ready(function(K) {
+	JSINFO_editor = K.create('textarea#Tailor', {
+		width: 530,
+		height: 150,
+		uploadJson:"{:U('/Public/kindeditorUpload', '', true)}",
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		items : ['fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline','removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist','insertunorderedlist', '|', 'emoticons', 'image', 'link']
+	});
+	$(".content_b .ke-container.ke-container-default").hide();
+});
+	
+$(function() {
+	//修改头像
+	$("#EditLogo").click(function() {
+		var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$.get('/Index/editFie', {sfie:'applogo', data:url, table:'merchantApp', wfie:'jid'});
+					$('#DefaultLogo').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//修改主题
+	$("#EditZt").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$("#EditZt").html('保存');
+			$(this).attr("data-true", "0"); $("#ZtInfo").html("<textarea autofocus='autofocus' id='ZtInfoVal'>"+$("#ZtInfo").html()+"</textarea>");
+		}else{
+			SetInfoZt();$("#EditZt").html('修改');
+		}
+	})
+	
+	//修改介绍
+	$("#EditJs").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$(this).attr("data-true", "0");
+			$("#EditJs").html('保存');
+			//$("#JsInfo").html("<textarea autofocus='autofocus' cols='50'  rows='5' id='JsInfoVal'>"+$("#Tailor").html()+"</textarea>");
+			$(".content_b .ke-container.ke-container-default").show();
+			$("#JsInfo").hide();
+		}else{
+			SetInfoJs();
+		}
+	})
+	
+	//修改地址
+	$("#EditDz").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$("#EditDz").html('保存');
+			$(this).attr("data-true", "0"); $("#DzInfo").html("<textarea autofocus='autofocus' id='DzInfoVal'>"+$("#DzInfo").html()+"</textarea>");
+		}else{
+			SetInfoDz();$("#EditDz").html('修改');
+		}
+	})
+	
+})
+</script>
+</eq>
+</block>

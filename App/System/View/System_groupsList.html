@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addGroup()">添加权限组</span> <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">权限组列表</span>
+	</div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">权限组状态：</label>
+                <select name="status" class="fl">
+                    <option value="" <if condition="isset($_GET['status']) && $_GET['status']==''"> selected="selected"</if>>状态</option>
+                    <option value="1" <if condition="isset($_GET['status']) && $_GET['status']=='1'"> selected="selected"</if>>有效</option>
+                    <option value="0" <if condition="isset($_GET['status']) && $_GET['status']=='0'"> selected="selected"</if>>无效</option>
+                </select>
+                <input type="text" autocomplete="off" placeholder="搜索：权限组名称" class="user_input fl" value="{$Think.get.keywords}" name="keywords" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="80"><input name="" type="checkbox" id="checkbox" onclick="selectAll('gid[]')" /></th>
+                    <th width="80">编号</th>
+                    <th width="15%" style="text-align:left;">权限组名称</th>
+                    <th style="text-align:left;">权限组描述</th>
+                    <th width="10%">权限组状态</th>
+                    <th width="15%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="grouplist" id="vo">
+                    <tr id="TP_RULE_{$vo.id}">
+                        <td><input type="checkbox" name="gid[]" value="{$vo.id}"></td>
+                        <td>{$vo.id}</td>
+                        <td style="text-align:left;">{$vo.title}</td>
+                        <td style="text-align:left;">{$vo.description}</td>
+                        <td style="cursor:pointer;" onclick="hosGroup(this)" title="点击更改状态" id="TD_STATUS_{$vo.id}" data-id="{$vo.id}" data-value="{$vo.status}"><img src="__PUBLIC__/Images/status_{$vo.status}.gif" /></td>
+                        <td>
+                        	<a href="javascript:privGroup('{$vo.id}');">权限设置</a> |
+                            <a href="javascript:editGroup('{$vo.id}');">修改</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="btn">
+            <label style="float:left;" for="checkbox">全选/取消</label>
+            <input type="button" onclick="SetStatus('')" value=" 禁用 " name="dosubmit" class="button" />
+        </div>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//添加权限组
+function addGroup() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 440,
+		height: 220,
+		title : '添加权限组',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/groupAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//修改权限组
+function editGroup( gid ) {
+	if( !gid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 440,
+		height: 220,
+		title : '修改权限组',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/groupEdit/gid/'+gid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//设置权限组
+function privGroup( gid ) {
+	if( !gid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 650,
+		height: 500,
+		title : '设置权限组权限',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/groupPriv/gid/'+gid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+function selectAll(name) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+
+//批量禁用权限组
+function SetStatus(gid) {
+    $("input[name='gid[]']").each(function() {
+        if($(this).is(":checked")) gid = gid+','+$(this).val();
+    })
+    if( !gid ) { alert("请选择要禁用的权限组"); return false; }
+    if( confirm('确实要禁用此权限组吗？') ) {
+        gid = gid.substring(1);
+        $.get("{:U('/System/groupDel', '', true)}", {gid:gid, status:"1"}, function( data ) {
+            if( parseInt(data)==1 ) $.each(gid.split(','), function(key, value) { 
+                document.getElementById("TD_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+            	$("#TD_STATUS_"+value).attr("data-value", "0");
+			})
+            $("input[type='checkbox']").each(function() { this.checked=false; });
+        })  
+    }
+}
+
+//单个禁用或解禁权限组
+function hosGroup(obj) {
+    var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+    if( !dataId ) return false;
+    if( confirm(dataValue=='1' ? '确实要禁用此权限组吗？' : '确实要解禁此权限组吗') ) {
+        $.get("{:U('/System/groupDel', '', true)}", {gid:dataId, status:dataValue}, function(data) {
+            if(parseInt(data)==0) return false;
+            if(dataValue=='1') {
+                $(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+            } else {
+                $(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+            }
+        })
+    }
+}
+</script>
+</body>
+</html>

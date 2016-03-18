@@ -1,0 +1,112 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<form action="{:U('/Manage/setbdzh')}" method="post">
+    <div class="reveal-modal" style="border:none;margin-left:-233px;">
+        <h3>操作提示 <span class="close" id="DialogClose">×</span></h3>
+        <div class="modal-content">
+            <div class="set">
+                <label>支付宝账户</label> <input type="text" id="MbdzhInfoY" value="">
+            </div>
+            <div class="set">
+                <label>确 认 账 户</label> <input type="text" id="MbdzhInfoQ" value="" onpaste="return false;">
+            </div>
+            <div class="set">
+                <label>支付宝姓名</label> <input type="text" id="MzhxmInfo" value="">
+            </div>
+            <div class="set">
+                <label>绑定手机号</label>
+                <if condition="isset($member['mphone']) && !empty($member['mphone'])">
+                	{$member.mphone|substr=###,0,3}***{$member.mphone|substr=###, -4}&#12288;&#12288;
+                    <input type="hidden" value="{$member.mphone}" id="MbdsjInfo">
+                <else/>
+                	<input type="text" id="MbdsjInfo" value="">
+                </if>
+                <input type="button" value="发送验证" id="MbdsjSend" class="btn btn-blue" style="width:135px;">
+            </div>
+            <div class="set">
+                <label>验证码</label> <input type="text" value="" id="SendCode">
+            </div>
+            <div class="set">
+                <label></label> <input type="button" value="确认" class="btn btn-pwd" id="DialogSave">
+                <input type="button" value="取消" class="btn btn-hui" id="DialogCancl">
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#DialogClose,#DialogCancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	
+	function CheckFrom() {
+		var MbdzhInfoY = document.getElementById("MbdzhInfoY").value;
+		if( !MbdzhInfoY ) { alert("请输入支付宝账号"); document.getElementById("MbdzhInfoY").focus(); return false; }	
+		
+		var MbdzhInfoQ = document.getElementById("MbdzhInfoQ").value;
+		if( !MbdzhInfoQ ) { alert("请确认支付宝账号"); document.getElementById("MbdzhInfoQ").focus(); return false; }	
+		
+		if( MbdzhInfoY != MbdzhInfoQ ) { alert("两次账号输入不一致"); document.getElementById("MbdzhInfoQ").focus(); return false; }
+		
+		var MzhxmInfo = document.getElementById("MzhxmInfo").value;
+		if( !MzhxmInfo ) { alert("请输入支付宝姓名"); document.getElementById("MzhxmInfo").focus(); return false; }	
+		
+		var MbdsjInfo = document.getElementById("MbdsjInfo").value;
+		if( !MbdsjInfo || !(/^1[3|4|5|8]\d{9}$/.test(MbdsjInfo)) ) { alert("请输入绑定手机号"); document.getElementById("MbdsjInfo").focus(); return false; }	
+
+		var SendCode = document.getElementById("SendCode").value;
+		if( !SendCode || !/^\d{4}$/.test(SendCode) ) { alert("验证码格式输入错误"); document.getElementById("SendCode").focus(); return false; }	
+		
+		return true;
+	}
+	
+	//发送验证码
+	$("#MbdsjSend").click(function() {
+		var MbdsjInfo = document.getElementById("MbdsjInfo").value;
+		if( !MbdsjInfo || !(/^1[3|4|5|8]\d{9}$/.test(MbdsjInfo)) ) { alert("请输入绑定手机号"); document.getElementById("MbdsjInfo").focus(); return false; }	
+		
+		$.get('/Manage/sendsms', {val:MbdsjInfo}, function(data) {
+			if( parseInt( data ) == 1 ) {
+				$("#MbdsjSend").attr("disabled", true).val("30 s后重新发送");
+				var timeInterval = setInterval(function() { 
+					var time = parseInt(document.getElementById('MbdsjSend').value); time --;
+					document.getElementById('MbdsjSend').value = time + ' s后重新发送';
+					if(parseInt(time) <= 0) { $("#MbdsjSend").attr("disabled", false); clearInterval(timeInterval); $("#MbdsjSend").val("发送验证"); }; 
+				}, 1000);
+			} else {
+				alert("发送失败，请重新发送");	
+			}
+		})
+	})
+	
+	//提交信息
+	$("#DialogSave").click(function() {
+		if( !CheckFrom() ) return false;
+		
+		var MbdzhInfoY = document.getElementById("MbdzhInfoY").value;
+		var MbdzhInfoQ = document.getElementById("MbdzhInfoQ").value;
+		var MzhxmInfo = document.getElementById("MzhxmInfo").value;
+		var MbdsjInfo = document.getElementById("MbdsjInfo").value;
+		var SendCode = document.getElementById("SendCode").value;
+
+		$.post('__ACTION__', {ac:MbdzhInfoY, bc:MbdzhInfoQ, cc:MzhxmInfo, dc:MbdsjInfo, ec:SendCode}, function(data) {
+			if( parseInt(data) == 1 ) {
+				var PwindowObj = window.parent.document.getElementById('MyBdzhInfo');
+				$(PwindowObj).html( MbdzhInfoY );
+				
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+			} else if( parseInt(data) == 2 ) { 
+				alert("验证码输入失败!"); 
+			} else {
+				alert("修改失败，请重新尝试!");
+			}
+		})
+	})
+});
+</script>
+</block>

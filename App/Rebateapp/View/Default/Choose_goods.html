@@ -1,0 +1,34 @@
+﻿<volist name="result_list" id="va" empty="暂时没有数据">
+
+<div class="item-list">
+						<h5 class="list-title">{$va.cname}</h5>
+						<ul>
+							<volist name="va.list" id="vo">
+							
+							<li <if condition="($vo.p_fl eq 0) OR ($vo.v_fl eq 0) "> style="height: 8rem;"</if>>		
+								<div class="dish-item">
+								    <a href="javascript:;" class="pro_box" gid="{$vo.gid}"><img src="<empty name='vo[gimg]'>__PUBLIC__/Images/mobile/ttt.png<else />{$vo.gimg}</empty>" alt="{$vo.gname}"></a>
+								    <div>
+									  <h6 class="item-title">{$vo.gname}</h6>
+									  <p class="item-description">{$vo['gdescription'] ? msubstr($vo['gdescription'],0,30) : '商品暂无描述' }</p>	
+									  <p class="item-price">￥{$vo['gdprice']>0?$vo['gdprice']:$vo['goprice']}</p>
+									</div>
+								</div>
+								<div class="item-option active" <if condition="($vo.p_fl eq 0) OR ($vo.v_fl eq 0) "> style=" bottom: 1rem;"</if>>
+									<a class="ico ico-decrease btn_left" gid="{$vo.gid}"></a>
+									<span class="gnum_{$vo.gid}" id="number_{$vo.gid}">0</span>
+									<a class="ico ico-increase btn_right" gid="{$vo.gid}"></a>
+								</div>
+								<if condition="($vo.p_fl gt 0) OR ($vo.v_fl gt 0) ">
+								<div class="item-fx">
+									<p><i class="ico ico-pu"></i><span>返现{$vo.p_fl}元</span></p>
+									<p><i class="ico ico-vip"></i><span>返现{$vo.v_fl}元</span></p>
+								</div>
+								</if>
+							</li>
+							</volist>
+							
+							
+						</ul>
+					</div>
+	</volist>				

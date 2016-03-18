@@ -1,0 +1,107 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+</style>
+</head>
+<body>
+	<div class="wrapper">
+		<h2 class="title">会员反馈</h2>
+		<div class="mian padding">
+			<div class="content_c">
+				<form action="__ACTION__" method="post">
+                    <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.post.keywords}" placeholder="搜索：内容/会员账号">
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+			<div class="content_a top">
+				<table class="table border-b">
+					<tr>
+						<th>会员图像</th>
+						<th>会员名/号码</th>
+						<th>门店/时间</th>
+						<th>意见留言</th>
+						<th>回复内容</th>
+						<th>操作</th>
+					</tr>
+					<php>$op_status = array('0'=>'<span style="color:#ff0000">已删除</span>','1'=>'<span style="color:#336600;">正常</span>','2'=>'<span style="color:#ff9900;">关闭</span>');</php>
+					<foreach name="datalist" item="v" empty="暂无意见反馈">
+					<tr>
+						<td><img src="{$v.flu_avatar}" style="width:40;height:40px;"></td>
+						<td>{$v.flu_nickname}<br/>{$v[flu_phone]?$v[flu_phone]:'--'}</td>
+						<td><php>echo $shops[$v['op_sid']];</php><br/>{$v.op_addtime|date="m-d H:i",###}</td>
+						<td><span title="{$v.op_content}">{$v.op_content|msubstr=0,10,'utf-8'}</span></td>
+						<td><span title="{$v.op_replytxt}">{$v.op_replytxt|msubstr=0,10,'utf-8'}</span></td>
+						<td>
+						<if condition="$v['op_status'] eq 1 and !$v['op_replytxt']">
+							<input type="button" onClick="reply('{$v.op_id}', '{$v.op_content|trim|str_replace="'","",###}', '{$v.flu_nickname|trim}')" value="回复">
+							<input type="button" onClick="Operation('0','{$v.op_id}',this.value)" value="删除">
+						<elseif condition="$v['op_replytxt']"/>
+							<span style="color:#336600;">已回复</span>
+						</if></td>
+					</tr> 
+					</foreach>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+function reply(op_id,op_content,nickname,op_replytxt){
+	var replytxt;
+	if(op_replytxt)replytxt = op_replytxt;else replytxt = '';
+	if(!op_id && !op_content){alert('参数错误！');return false;}
+	var d = dialog({
+		id:'replymsg',
+		title: '回复意见反馈',
+		opacity: 0.87,
+		lock: true,
+		background: '#600', // 背景色
+		content: '<div><p style="padding-top:10px;">'+nickname+'：'+op_content+'</p></div><p style="padding-top:10px;">回复：<textarea rows="3" cols="50" id="op_replytxt" >'+replytxt+'</textarea></p>',
+		okValue: '立即回复',
+		cancel: true,
+		cancelValue: '取消回复',
+		ok: function () {
+			this.title('正在回复..');
+			var op_replytxt = $('#op_replytxt').val();
+			if(!op_replytxt){
+				alert('请输入回复内容！');
+				return false;
+			}
+			 $.post("{:U('opreply')}",{'op_id':op_id,'op_replytxt':op_replytxt,'action':'reply'},function(result){
+				if(result == 1){alert('回复成功');this.close(value);this.remove();}else{alert('回复失败');}
+					reloadpage();
+			 });
+		}
+	});
+	d.addEventListener('close', function () {
+		
+	});
+	d.show();
+	
+}
+
+function Operation(status,op_id,buttons){
+	if(!status && !op_id){
+		alert('参数错误');return false;
+	}
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('opreply')}",{'op_status':status,'op_id':op_id,'action':'operation'},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+</script>
+</block>

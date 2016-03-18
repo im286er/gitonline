@@ -1,0 +1,216 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Js/Mobile/flow2.js?v=127"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<style>
+.hys li{text-align:center;font-size:14px;font-weight:590;color:#666;line-height:32px;}
+.hys{overflow:auto;height:500px;cursor:pointer;}#cc{color:#666;}
+/*
+.item-description-m{width:100%; max-height:80px;height:auto; overflow-x:hidden;overflow-y:auto;line-height:135%;}
+*/
+</style>
+<script>
+var reqUrl = "{:U('Mobile/Choose/search',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl = "{:U('Mobile/Flow/confirm',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl2 = "{:U('Mobile/Flow/confirm',array('utoken'=>'xxx','jid'=>$jid,'sid'=>$sid))}";
+var mid = "{$mid}";
+var isApp = "{$isApp}";
+
+$(document).ready(function(){
+	getProductContent({$default_cid},'');
+});
+</script>
+
+	<div class="main-wrapper">
+		<div class="main-container">
+			<div class="searchBox" id="searchBox">
+				<input class="search-input" id="search_key" type="text" placeholder="搜索">
+				<i class="ico ico-search"></i>
+			</div>
+			<div class="slide-nav" id="slideNav">
+				<div class="searchBtn" id="searchBtn">
+					<a href="javascript:;"><i class="ico ico-search-b"></i></a>
+				</div>
+				<ul>
+					<volist name="category_list" id="vo" >
+    				    <li cid="{$vo.cid}" <if condition="$key eq 0">class="active"</if>><a href="javascript:void(0)">{$vo.cname}</a></li>
+    				</volist>
+				</ul>
+			</div>
+			<div class="main-content">
+				<div class="items" id="productContent">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="bottomBar clearfix">
+		<div class="container">
+		<div class="cart clearfix">
+			<div class="ico ico-cart" id="cartBtn"><span class="cartNumber">0</span></div>
+			<div class="cart-price">共<span class="cartPrice">￥0</span></div>
+		</div>
+		<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了!</a>
+		<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		</div>
+	</footer>
+	<div class="cart-modal" id="cartModal" style='display:none;'>
+		<div class="cart-dialog">
+			<div class="order-cart" id="cart_table">
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="modal-goodbox">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="item-title-m" id="pro_title"></h6>
+					<img class="item-pic-m" src="__PUBLIC__/Images/mobile/ttt.png" alt="" id="pro_img">
+					<div class="item-pricebox-m clearfix">
+						<div class="item-price-m" id="pro_price"></div>
+						<div class="item-option-m">
+							<a class="ico ico-decrease btn_left btn_all" gid=""></a>
+							<span id="pro_number">0</span>
+							<a class="ico ico-increase btn_right btn_all" gid=""></a>
+						</div>
+					</div>
+					<p class="item-description-m" id="pro_des"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="position:fixed; top:0;background-color: rgba(227, 227, 232, 0.95);height: 100%;position: fixed;top: 0%; width: 100%;z-index: 99998; display:none" id="history">
+        <input name="" type="text" class="search-input" id="cc" style="margin-top:40px;">   
+        <ul class="hys" >
+            <li style="color:red;" onclick="back()" id="1" onmouseover="fs(1)" onmouseout="lk(1)">点击返回</li>
+        </ul>
+    </div>
+
+	<script>
+		function soc() {
+			var cid={$default_cid};   
+			$.get("{:U('Mobile/Choose/searchText',array('jid'=>$jid,'sid'=>$sid))}", {cid:cid,key:$("#cc").val()}, function(data) { 
+				if(data) {
+					var dataObj = eval("("+data+")")
+					$('.hys li').each(function(){ 
+						$(this).remove();
+					});
+					
+					if(dataObj) {
+						$.each(dataObj,function(idx,item) { 
+							if(item.msg) {
+								var  temp='<li >'+item.msg+'</li>';
+								temp +=	'<li style="color:red;" onclick="back()" id="1" onmouseover="fs(1)" onmouseout="lk(1)">点击返回</li>'; 				   
+							} else {
+								var  temp='<li id='+item.gid+' onclick="hd('+item.gid+')" onmouseover="fs('+item.gid+')" onmouseout="lk('+item.gid+')">'+item.gname+'</a></li>'; 
+							}
+							$(".hys").append(temp);
+						});
+					}					
+				}
+				
+			});
+		}
+		$('#cc').on('input',function(e){ 
+			soc();
+		});
+		
+		function hd(id){
+			var keyword=$("#"+id).html();    
+			$("#search_key").val(""+ keyword);
+			getProductContent(0,keyword);
+			$("#history").hide();    
+		}  
+		$("#search_key").click(function(){ 
+			if($("#search_key").val()!==""){
+				$("#cc").val(""+ $("#search_key").val()); 
+			}
+			$("#search_key").blur();
+			$("#history").show(); 
+		})  
+		
+		function fs(id){
+			$("#"+id).css("font-size","20px");    
+			$("#"+id).css("color","red");    
+		}
+		function lk(id){
+			$("#"+id).css("font-size","14px");     
+			$("#"+id).css("color","#666"); 
+		}
+		function back(){
+			$("#search_key").val(""+ $("#cc").val());  
+			$("#history").hide();
+		
+		}
+
+		// 搜索框
+		$("#searchBtn").click(function(ev) {
+			ev.stopPropagation();
+			soc();
+			$("#searchBox").addClass('active');
+		});
+
+		$(document).click(function() {
+			if($("#searchBox").hasClass('active')) {
+				$("#searchBox").removeClass('active');
+			}
+		});
+
+		$("#searchBox").click(function(ev) {
+			ev.stopPropagation();
+		});
+
+		var aSlideNavLi  = $("#slideNav li");
+		var aSlideNavLiA = $("#slideNav li a");
+		aSlideNavLiA.click(function() {
+			aSlideNavLi.removeClass('active');
+			$(this).parent("li").addClass('active');
+			var cid = $(this).parent("li").attr('cid');
+			getProductContent(cid,'');
+		});
+
+		$(".modal-backdrop").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".modal-dialog").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".modal-content").click(function(ev) {
+			ev.stopPropagation();
+		});
+
+		// 购物车弹出框
+		var cartModal = $("#cartModal");
+		$("#cartBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#okBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+			
+		});
+		
+		$("#okBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#cartBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+		});
+		
+		$(".cart-dialog").click(function(ev) {
+			$(".cart-modal").hide();
+			$("#cartBtn").show();
+			$("#subBtn").hide();
+			$("#okBtn").show();
+		});
+		
+		$(".order-cart").click(function(ev) {
+			ev.stopPropagation();
+		});
+	</script>
+</block>

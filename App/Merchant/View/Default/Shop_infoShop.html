@@ -1,0 +1,71 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title">分店管理/门店详情<input type="button" value="<返回" onClick="window.location.href='{:U('/Shop/index', '', true)}'"></h2>
+    <div class="mian padding">
+	    <div class="set">
+            <label>登录名</label><input disabled type="text" value="{$member.mname}" style="width:215px;">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="resetpass('{$shop.sid}','{$member.mid}');" class="btn btn-pwd" type="button" value="密码重置">
+        </div>
+        <div class="set">
+            <label>门店名称</label><input disabled type="text" value="{$shop.sname}" placeholder="请输入门店名称">
+        </div>
+        <div class="set">
+            <label>联系姓名</label><input disabled type="text" value="{$shop.scontactsname}" placeholder="请输入联系人姓名">
+        </div>
+        <div class="set">
+            <label>联系电话</label><input disabled type="text" value="{$shop.scontactstel}" placeholder="请输入联系人电话">
+        </div>
+        <div class="set">
+            <label>销售电话</label><input disabled type="text" value="{$shop.msaletel}" placeholder="请输入销售电话">
+        </div>
+        <div class="set">
+            <label>客服电话</label><input disabled type="text" value="{$shop.mservetel}" placeholder="请输入客服电话">
+        </div>
+        
+        <div class="set">
+            <label>门店地址</label><input disabled type="text" value="{$shop.saddress}" placeholder="请输入门店地址">
+        </div>
+        
+        <div class="set">
+			<label>门店座位号</label><input disabled type="text" value="{$shop.seatlist}" placeholder="请输入门店座位号"><br />
+        </div>
+        
+        <div class="set">
+            <label>门店简介</label><textarea disabled name="info[mexplain]" placeholder="请输入门店简介" style="width:320px; height:70px; resize:none;">{$shop.mexplain}</textarea>
+        </div>
+        <div class="map top"><div id="map">
+        <script type="text/javascript">
+		function resetpass(sid,mid){
+			if(confirm("确定要重置密码吗？")==false){
+				return false;
+			}
+			if(!sid && !mid){alert('参数错误');return false;} 
+			$.post("{:U('/Shop/resetPass', '', true)}", {'sid':sid, 'mid':mid}, function( data ) {
+				alert("重置密码成功,密码为：111111");	
+			})
+		}
+		</script>
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=0Fafcd0a5385f509b005594a4de38114"></script>
+<script type="text/javascript">
+var lng = '{$shop.lng}';
+var lat = '{$shop.lat}';
+var map = new BMap.Map("map");
+map.centerAndZoom(new BMap.Point(lng, lat), 12);
+map.enableScrollWheelZoom(); //开启滚动缩放
+map.disableDoubleClickZoom();//禁用双击放大
+map.addControl(new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT}));
+var marker = new BMap.Marker(new BMap.Point(lng, lat));
+marker.enableDragging();//可拖拽
+marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+marker.setTitle('拖拽标注移动位置');
+marker.addEventListener("dragend", function(e) {
+	document.getElementById("ShopLng").value = e.point.lng;
+	document.getElementById("ShopLat").value = e.point.lat;
+});
+map.addOverlay(marker);
+</script>
+        
+        </div></div>
+    </div>
+</div>	
+</block>

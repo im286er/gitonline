@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商户APP上传</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__" onsubmit="return upappsubmit();">
+        	<input type="hidden" value="{$Think.get.jid}" name="jid" />
+            <div class="divSetting">
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="130">客户端应用（安卓版）</th>
+                        <td colspan="3">
+                            <input type="text" readonly="readonly" autocomplete="off" id="appurl" name="appurl" style="width:200px;" value="{$appLoad.appurl}" class="user_input" />
+                            <input type="button" onclick="KindeditorUpload1()" class="button" value="上传应用" style="border-radius:3px;" />
+                        </td>
+                    </tr>
+					<tr>
+                        <th width="130">版本（安卓版）</th>
+                        <td colspan="3">
+                            <input type="text" autocomplete="off" id="appversions" name="appversions" style="width:60px;" value="{$appLoad.appversions}" class="user_input" /> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">客户端应用（苹果版）</th>
+                        <td colspan="3">
+                            <input type="text" readonly="readonly" autocomplete="off" id="iosurl" name="iosurl" style="width:200px;" value="{$appLoad.iosurl}" class="user_input" /> 
+                            <input type="button" onclick="KindeditorUpload2()" class="button" value="上传应用" style="border-radius:3px;" />
+                        </td>
+                    </tr>
+					<tr>
+                        <th width="130">版本（苹果版）</th>
+                        <td colspan="3">
+                            <input type="text" autocomplete="off" id="iosversions" name="iosversions" style="width:60px;" value="{$appLoad.iosversions}" class="user_input" /> 
+                        </td>
+                    </tr>
+					<tr>
+                        <th>版本更新说明</th>
+                       <td><textarea rows="3" cols="30" id="up_explain" name="up_explain" class="user_input" placeholder="请输入250字以内，只需输入出：1、2、...（需换行）"/>{$appLoad.up_explain}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="divSetting">
+                <div class="buttonDiv" align="center">
+                    <button type="reset" class="submit_btn">重设</button>&#12288; <button type="submit" class="submit_btn">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+//上传
+var editor = KindEditor.editor({ uploadJson:"{:U('/Merchant/kindeditorUpload@xt', array('jid'=>$_GET['jid']), true, true)}", imageUploadLimit:50, });
+function KindeditorUpload1() {
+	editor.loadPlugin('insertfile', function() {
+		editor.plugin.fileDialog({
+			fileUrl : $('#appurl').val(),
+			clickFn : function(url, title) {
+				$('#appurl').val(url); $('#appversions').val('');editor.hideDialog();
+			}
+		});
+	});
+}
+
+function KindeditorUpload2() {
+	editor.loadPlugin('insertfile', function() {
+		editor.plugin.fileDialog({
+			fileUrl : $('#iosurl').val(),
+			clickFn : function(url, title) { $('#iosurl').val(url);$('#iosversions').val(''); editor.hideDialog(); }
+		});
+	});
+}
+
+function upappsubmit(){
+	var	appurl = $('#appurl').val();
+	var	iosurl = $('#iosurl').val();
+	var	appversions = $('#appversions').val();
+	var	iosversions = $('#iosversions').val();
+	if(appurl && !appversions){
+		alert('请输入安卓app版本号！');
+		$('#appversions').focus();
+		return false;
+	}
+	if(iosurl && !iosversions){
+		alert('请输入苹果（ios）app版本号！');
+		$('#iosversions').focus();
+		return false;
+	}
+	return true;
+}
+
+</script>
+</body>
+</html>

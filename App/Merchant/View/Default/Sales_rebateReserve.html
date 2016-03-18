@@ -1,0 +1,78 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title"><a href="{:U('Sales/myreserve')}" style="text-decoration:underline;">预约管理</a> | 返利预约管理</h2>
+		
+    <div class="mian padding">
+    	<volist name="datalist" id="v" empty="暂无预约信息">
+        <div class="content_a" <neq name="i" value="1">top</neq>>
+            <h3 class="font-12">
+            	<span></span><span>{$v.sp_date|strtotime|date='m-d H:i',###}</span> <span>订单号：{$v.flo_id}</span><span>下单人：<php>echo $users[$v['flo_uid']]['flu_nickname'];</php></span><span>电话：</span>
+            </h3>
+			<table class="table">
+				<tr>
+                    <th>包厢名称</th>
+                    <th>下单时间</th>
+                    <th>到店时间</th>
+					<th>当前状态</th>
+					<th>操作</th>
+                </tr>
+                <tr>
+                    <td>{$v.goodsname}</td>
+                    <td>{$v.flo_dstime|strtotime|date='H:i:s',###}</td>
+                    <td>{$v.sp_date}</td>
+					<td><php>echo $odstatus[$v['flo_dstatus']];</php></td>
+					<td>
+					<if condition="$v['flo_dstatus'] eq 1 ">
+					<p><input type="button" onclick="Operation('3','{$v.flo_id}',this.value)" value="接受预约"></p>
+					<p><input type="button" onclick="Operation('5','{$v.flo_id}',this.value)" value="拒绝预约"></p>
+					<elseif condition="$v['flo_dstatus']  eq 3"/>
+					<p><input type="button" onclick="Operation('5','{$v.flo_id}',this.value)" value="关闭预约"></p>
+					<elseif condition="$v['flo_dstatus']  eq 4"/>
+					<p><input type="button" onclick="Operation('5','{$v.flo_id}',this.value)" value="关闭预约"></p>
+					<elseif condition="$v['flo_dstatus']  eq 5"/>
+					<p><input type="button" onclick="Operation('3','{$v.flo_id}',this.value)" value="再次接受"></p>
+					</if>
+					<p><input type="button" onclick="dayin('{$v.flo_id}')" value="打印订单"></p>
+					</td>
+                </tr>
+		  </table>
+        </div>
+		</volist>
+    </div>
+	<!-- 分页 -->
+	       <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                </div>
+            </if>
+</div>
+<script type="text/javascript">
+function dayin(oid){
+	if (confirm("确认要打印这个预约订单吗?")) {
+		$.post("{:U('/Sales/printFlOrder', '', true)}", {oid:oid}, function( data ) {
+			if(data == 1){
+				alert('操作成功');
+			}else{
+				alert('操作失败');
+			}
+		})
+	}
+}
+function Operation(status,o_id,buttons){
+	if(!status && !o_id){
+		alert('参数错误');return false;
+	}
+
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('rebateOperation')}",{'type':'flo_dstatus','status':status,'o_id':o_id},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+</script>
+</block>

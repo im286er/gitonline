@@ -1,0 +1,101 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<form action="post" id="addMenuForm">
+    <div class="reveal-modal reveal-modals" style="display:block;border:none;">
+        <h3>修改活动 <span class="close" id="AddGoods_close">×</span></h3>
+        <div class="modal-content modal-contents clearfix">
+            <div class="modal-a">
+                <div id="divPreview"><img id="AV_IMG" src="{$avinfo.av_img}" style="width: 240px; height: 240px;" alt="" /></div>
+                <p class="c-a2a2a6">活动封面建议尺寸1160*320，JPG,PNG ，大小200 KB</p>
+                <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+            </div>
+            <div class="modal-b">
+                <div class="set">
+                    <label>活动名称：</label> <input type="text" value="{$avinfo.av_title}" id="AV_TITLE">
+                </div>
+                <div class="set">
+                    <label>活动内容：</label> <textarea style="width:170px;height:70px;" id="AV_DESO">{$avinfo.av_con}</textarea>
+                </div>
+                <div class="set">
+                    <label>开始时间：</label> <input type="text" value="{$avinfo.av_stime}" name="goprice" id="AV_STIME" readonly>
+                </div>
+                <div class="set">
+                    <label>结束时间：</label> <input type="text" value="{$avinfo.av_etime}" name="gdprice" id="AV_ETIME" readonly>
+                </div>
+                <eq name="type" value="1">
+                <div class="set">
+                    <label>所属分店：</label>
+                    <php>$sid = array_filter(explode(',', $avinfo['av_sid'])); </php>
+                    <select multiple id="AV_SID" style="width:182px;">
+                    <volist name="splist" id="s"><option value="{$s.sid}" <if condition="in_array($s['sid'], $sid)">selected</if>>{$s.sname}</option></volist>
+                    </select>
+                </div>
+                </eq>
+                <div class="set top">
+                    <label></label>
+                    <input type="button" value="确认" class="btn btn-pwd" id="AddGoods_Save">
+                    <input type="button" value="取消" class="btn btn-hui" id="AddGoods_Cancl">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"AV_STIME", trigger:"AV_STIME", dateFormat:"%Y-%m-%d %H:%M:%S", showTime:true, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"AV_ETIME", trigger:"AV_ETIME", dateFormat:"%Y-%m-%d %H:%M:%S", showTime:true, minuteStep:1, onSelect:function() { this.hide(); } });
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+$(function() {
+	var avid = '{$avinfo.av_id}';
+	
+	//取消或关闭
+	$("#AddGoods_close,#AddGoods_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	
+	//上传图片
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#AV_IMG').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//检查表单
+	function CheckFrom() {
+		var title = $("#AV_TITLE").val();
+		if( !title ) { alert('活动标题不能为空'); return false; }
+		var avimg = $("#AV_IMG").attr("src");
+		if( !avimg ) { alert('活动封面图不能为空'); return false; }
+		<eq name="type" value="1">
+		var sid=$("#AV_SID").val();
+		if( !sid ) { alert("请选择要添加的分店"); return false; }
+		</eq>
+		return true;	
+	}
+	
+	
+	//提交信息
+	$("#AddGoods_Save").click(function() {
+		if( !CheckFrom() ) return false;
+		var sid=$("#AV_SID").val(), title=$.trim($("#AV_TITLE").val()), img=$("#AV_IMG").attr("src"), con=$("#AV_DESO").val(), stime=$("#AV_STIME").val(), etime=$("#AV_ETIME").val();
+		$.post('__ACTION__', {t:title,i:img,c:con,s:stime,e:etime,d:sid,id:avid}, function(data) {
+			if( parseInt(data)==1 ) {
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				setTimeout(function() { window.parent.location.href="{:U('/Message/hdlist', '', true)}"; }, 500); 
+			} else { alert( '添加失败' ); }
+		})
+	})
+});
+</script>
+</block>

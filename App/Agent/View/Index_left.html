@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Document</title>
+<style type="text/css">
+html { font-family: '宋体'; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100% }
+body { font-size: 12px; }
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; background: transparent }
+img { border: 0; max-width: 100%; }
+li { list-style: none; }
+a { background: transparent; text-decoration: none; color: #333; }
+a:hover, a:active, a:focus { outline: 0 }
+a:hover, a:focus { color: #6dafbb; text-decoration: none; }
+a:focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
+button, input, select, textarea { font-family: inherit; margin: 0 }
+button, input { line-height: normal; outline: none; }
+button, select { text-transform: none }
+button, html input[type="button"], input[type="reset"], input[type="submit"] { -webkit-appearance: button; cursor: pointer; }
+button[disabled], html input[disabled] { cursor: default }
+input[type="checkbox"], input[type="radio"] { box-sizing: border-box; padding: 0 }
+ button::-moz-focus-inner, input::-moz-focus-inner {
+border:0;
+padding:0
+}
+.sideBar_a { float: left; width: 187px; border-right: 1px solid #e7e7eb; font-size: 14px; }
+.sideBar_a .title { width: 100%; height: 34px; line-height: 34px; color: #fff; text-align: center; background: #ff9503 }
+.sideBar_a .title>a { text-align: center; color: #fff; }
+.sideBar_nav { border-bottom: 1px solid #e7e7eb; padding: 10px 0px; }
+.new-sideBar_nav { border: 0px; padding: 0px; }
+.sideBar_nav>h3 { font-size: 14px; color: #909397; font-weight: normal; padding: 0px 0px 0px 52px; margin: 5px 0px; }
+.sideBar_nav>h3>i { display: inline-block; }
+.sideBar_nav>ul>li { line-height: 30px; height: 30px; width: 135px; padding-left: 52px; display: block }
+.sideBar_nav>ul>li>a { font-size: 14px; display: block; color: #000 }
+.sideBar_a .sideBar_nav ul li:hover { background: #f1fafc; display: block; color: #000 }
+.sideBar_a .sideBar_nav ul .curr:hover { color: #000; background: url("__PUBLIC__/Images/limg/libg.png") no-repeat; }
+.sideBar_nav>ul>li.curr { height: 30px; line-height: 30px; background: url("__PUBLIC__/Images/limg/libg.png") no-repeat; color: #fff }
+.sideBar_nav>ul>li.curr>a { color: #fff; }
+.funicon_2 { background: url("__PUBLIC__/Images/limg/leftico01.png") 30px center no-repeat; }
+.funicon_3 { background: url("__PUBLIC__/Images/limg/leftico02.png") 30px center no-repeat; }
+.funicon_4 { background: url("__PUBLIC__/Images/limg/leftico03.png") 30px center no-repeat; }
+.funicon_128 { background: url("__PUBLIC__/Images/limg/leftico04.png") 30px center no-repeat; }
+.funicon_133 { background: url("__PUBLIC__/Images/limg/leftico05.png") 30px center no-repeat; }
+.funicon_20 { background: url("__PUBLIC__/Images/limg/leftico06.png") 30px center no-repeat; }
+.funicon_29 { background: url("__PUBLIC__/Images/limg/leftico07.png") 30px center no-repeat; }
+.funicon_44 { background: url("__PUBLIC__/Images/limg/leftico08.png") 30px center no-repeat; }
+.funicon_48 { background: url("__PUBLIC__/Images/limg/leftico09.png") 30px center no-repeat; }
+.funicon_49 { background: url("__PUBLIC__/Images/limg/leftico10.png") 30px center no-repeat; }
+.funicon_50 { background: url("__PUBLIC__/Images/limg/leftico11.png") 30px center no-repeat; }
+.funicon_64 { background: url("__PUBLIC__/Images/limg/leftico12.png") 30px center no-repeat; }
+.funicon_67 { background: url("__PUBLIC__/Images/limg/leftico13.png") 30px center no-repeat; }
+.funicon_177 { background: url("__PUBLIC__/Images/limg/leftico14.png") 30px center no-repeat; }
+</style>
+</head>
+
+<body>
+<div style="overflow:hidden;_zoom:1; border-right:1px solid #e7e7eb; padding-bottom:20px">
+    <div class="sideBar_a">
+        <volist name="authRuleList" id="vo">
+            <div class="sideBar_nav">
+                <h3 class="funicon_{$vo.icon}">{$vo.name}</h3>
+                <ul class="menuson">
+                    <volist name="vo.list" id="voo">
+                        <php>$vlist = explode('|', $voo);</php>
+                        <li><cite></cite><a href="{:U($vlist[1].'@bddl', '', true, true)}" target="rFrame">{$vlist[0]}</a><i></i></li>
+                    </volist>
+                </ul>
+            </div>
+        </volist>
+    </div>
+</div>
+<script language="JavaScript" src="__PUBLIC__/Js/jquery.js"></script> 
+<script type="text/javascript">
+
+$(function(){   
+
+    $(".menuson li").click(function() { $(".menuson li.active").removeClass("active"); $(this).addClass("active"); });
+
+    $('.title').click(function() {
+
+        $('dd').find('ul').slideUp();if($(this).next('ul').is(':visible')) { $(this).next('ul').slideUp(); } else { $(this).next('ul').slideDown(); }
+
+    });
+
+})  
+
+</script>
+</body>
+</html>

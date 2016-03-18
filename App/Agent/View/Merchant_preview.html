@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<import type="css" file="Css.agent.style" />
+<import type="css" file="Css.agent.merchant" />
+ <import type="js" file="Js.jquery" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript" src="__PUBLIC__/Js/agent/effect.js"></script>
+	
+
+</head>
+
+<body>
+   <div style="position:relative;">
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+	
+    <li><a href="#">商户管理</a></li>
+    <li><a href="#">查看商户详细资料</a></li>
+    </ul>
+    </div>
+
+   <div style="margin-top:1%;">
+   <img src="__PUBLIC__/Images/shpreview.png" width="250"  height="200"/>
+   </div>
+    <div class="formbody">
+    <div id="usual1" class="usual"> 
+  	<div id="tab1" class="tabson">
+
+    <ul class="forminfo" id="preul">
+
+    <li><label>所属行业<b>*</b></label><span >{$previewData.title}</span></li>
+    <li><label>商户名称<b>*</b></label><span>{$previewData.mnickname}</span></li>
+   	<li><label>商户简称<b>*</b></label><span>{$previewData.mabbreviation}</span></li>
+    <li><label>所在城市<b>*</b></label><span>{$previewData.aname}</span></li>
+   	<li><label>法人名称<b>*</b></label><span>{$previewData.mlpname}</span></li>
+	<li><label>法人电话<b>*</b></label><span>{$previewData.mlptel}</span></li>
+	<li><label>身份证<b>*</b></label><span>{$previewData.idcard}</span></li>
+  
+  
+	
+    <li><label>账户<b>*</b></label><span>{$previewData.mname}</span></li>
+   	<li><label>密码<b>*</b></label><span><input type="password"value="{$previewData.mpwd}"/></span></li>
+	<li><label>状态<b>*</b></label>
+	<if condition='$previewData.mstatus ==1'>
+	<input  checked="true" type="radio" name="state" value="0" style="width:50px;" />正常<input type="radio" name="state" value="1" style="width:50px;" disabled/>禁用</li>
+<else/>	
+	<input  type="radio" name="state" value="0" style="width:50px;"  disabled />正常<input type="radio" name="state" value="1" style="width:50px;" checked="true" />禁用</li>
+</if> 
+	<li><label>绑定账户<b>*</b></label><span>您无权限查看</span></li>
+    </ul>
+ <ul class="zimg">
+ 
+   <li><label class="czi">营业执照<b>*</b></label>
+  </br>
+	<div id="imgPreview" style='width:150px; height:150px;border:1px solid #eee;'>
+	
+	 
+	<div class="kuang"><img id="img1" src="__ROOT__/{$previewData.yimg}" width="120" height="100"  /><a style="cursor:pointer;" onclick="yimgda(1)">点击查看大图</a></div>
+	</div>
+	</li>
+	 <li><label class="czi">身份证正面<b>*</b></label>
+    </br>
+	<div id="imgPreview" style='width:150px; height:150px;border:1px solid #eee;'>
+	
+	 
+	<div class="kuang"><img id="img2" src="__ROOT__/{$previewData.simg}" width="120" height="100"/><a style="cursor:pointer;" onclick="yimgda(2)">点击查看大图</a></div>
+	</div>
+	</li>
+    <li><label class="czi">身份证反面<b>*</b></label>
+     </br>
+	<div id="imgPreview" style='width:150px; height:150px;border:1px solid #eee;'>
+	
+	 
+	<div class="kuang"><img id="img3" src="__ROOT__/{$previewData.fimg}" width="120" height="100"  /><a style="cursor:pointer;" onclick="yimgda(3)">点击查看大图</a></div>
+	</div>
+	</li>
+</ul>
+</div> 		
+	</div> 
+
+<div class="bigimg" style="display:none;" id="bigimg" onmouseout="uimgout()">
+
+<div style="width:700px;height:560px;margin:70px auto;"><img src="" width="700" height="560" id="daimg" /></div>
+
+
+</div>
+
+</div>
+
+
+
+ 
+</body>
+</html>

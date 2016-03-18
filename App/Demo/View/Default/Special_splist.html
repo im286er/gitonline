@@ -1,0 +1,108 @@
+<extend name="Public:common"/>
+<block name="body">
+
+<div class="sideBar_b">
+    <div class="wrapper">
+        <h2 class="title">
+			<p class="returnMenu">
+                <a class="curr" href="{:U('/Special/splist')}">我的专题</a>
+            </p>
+        </h2>
+        <div class="mian padding" id="SpecialMain">
+			
+			<script>
+            var PREFIX_URL = "http://"+window.location.host+"/json/";
+            var JSON_URL = "http://"+window.location.host+"/index.php";
+            var PREFIX_S1_URL = "http://"+window.location.host+"/";
+            var PREFIX_S2_URL = "http://"+window.location.host+"/";
+            var PREFIX_HOST = "http://"+window.location.host+"/";
+            var PREFIX_FILE_HOST = "http://"+window.location.host+'/Public/Yqx/'; 
+            var SYS_FILE_HOST = "http://"+window.location.host+"/Public/Yqx/";
+            var CLIENT_CDN = "http://"+window.location.host+"/";
+            var INTERVAL_OBJ = {};
+            function gt_custom_ajax(result, selector) {
+                selectorA = selector;
+                if (result) {
+                    challenge = selector(".geetest_challenge").value;
+                    validate = selector(".geetest_validate").value;
+                    seccode = selector(".geetest_seccode").value;
+                    submit = true;
+                }
+            }
+            </script>
+            
+            <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.0.3/jquery.min.js"></script>
+            <!--script type="text/javascript" src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script-->
+            <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+            
+            <script type="text/javascript" src="/Public/Yqx/static/js/jquery.Jcrop.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/angular.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/angular-route.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/angular-animate.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/angular-sanitize.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/ui-bootstrap-tpls.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/select.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/sortable.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/Chart.min.js"></script>
+            <script type="text/javascript" src="/Public/Yqx/static/js/ZeroClipboard.min.js"></script>
+            
+            <!--
+            <link rel="stylesheet" href="/Public/Yqx/static/css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/jquery-ui.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/jquery.Jcrop.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/select.min.css"/>
+            -->
+
+            <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"/>
+            <link rel="stylesheet" href="//cdn.bootcss.com/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
+            <link rel="stylesheet" href="//cdn.bootcss.com/angular-ui-select/0.8.3/select.min.css"/>
+
+            <link rel="stylesheet" href="/Public/Yqx/static/css/eqShow-common-2.9.1.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/ui-grid.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/hint.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/bootstrap.vertical-tabs.min.css"/>
+            <link rel="stylesheet" href="/Public/Yqx/static/css/eqShow-2.9.1.css"/>
+            
+            
+            <script src="/Public/Yqx/static/js/ui-grid.min.js"></script>
+            <script src="/Public/Yqx/static/js/bootstrap-wysiwyg.min.js"></script>
+            <script src="/Public/Yqx/static/js/jquery.hotkeys.min.js"></script>
+            <script src="/Public/Yqx/static/js/angular-file-upload.min.js"></script>
+            <script src="/Public/Yqx/static/js/angular-file-upload-directives.min.js"></script>
+            <script src="/Public/Yqx/static/js/angular-locale_zh-cn.min.js"></script>
+            <script src="/Public/Yqx/static/js/hammer.min.js"></script>
+            <script src="/Public/Yqx/static/js/eqShow-2.9.1.js"></script>
+            <style>
+			body { background:#ebebeb; font-size:14px; font-family:"宋体"; }
+			.container { width:1050px; }
+			.sideBar_b { width:800px; }
+			#SpecialMain { padding:20px 0px; }
+			a{background: transparent;text-decoration: none;color:#333;}
+			a:hover,a:active,a:focus {outline: 0; text-decoration:none; }
+			a:hover,a:focus {color: #6dafbb; text-decoration:none; }
+			a:focus {outline: thin dotted;outline: 5px auto -webkit-focus-ring-color;outline-offset: -2px;}
+			.yes-btn-pwd { background: none repeat scroll 0 0 #959595; }
+			.tem-list > li { width: auto; }
+			.main .main { margin:auto; border:none; }
+            .myGrid { width: 998px; height: 550px; }
+            .myGrid1 { width: 650px; height: 550px; }
+            .choose_template .main .content .mask ul li .roll :hover .cc { display: block; }
+			.wrapper { width:auto; }
+			#main .main .content { width:auto; }
+			#main .info ul { padding:0px; }
+			#main .info ul li { margin-right:0px; }
+            </style>
+            
+            <div id="eq_main" ng-view></div>
+           
+			
+			
+			
+        </div>
+    </div>
+</div>
+</block>

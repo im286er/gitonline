@@ -1,0 +1,51 @@
+<notin name="Think.cookie.opentype" value="app,flapp">
+<empty name="localExamine">
+<script type="text/javascript">
+ $(document).ready(function(){
+  			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$.post("{:U('User/location')}",{'longitude':position.coords.longitude,'latitude':position.coords.latitude},function(data){ });
+				},function(errorObject){
+
+				},{
+					enableHighAccuracy : true,
+					timeout    : 3000,
+					maximumAge : 60000
+				}
+			);
+});
+</script>
+</empty>
+	<script src="__PUBLIC__/Mobile/default/Js/fastclick.js"></script>
+	<script>
+		$(function() {
+			//fastclick,使移动端点击没有延迟
+			FastClick.attach(document.body);
+		});
+	</script>
+</notin>
+<eq name="Think.cookie.opentype" value="app">
+<if condition="(CONTROLLER_NAME eq 'Index') OR (CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index') ">
+<script src="__PUBLIC__/Js/Mobile/interactive.js"></script>
+	<footer>
+    	<ul class="footer-menu">
+            <li <if condition="CONTROLLER_NAME eq 'Index'">class="current"</if>>
+            	<a href="{:U('Index/index')}"><span class="icon-menu home"></span><p>首页</p></a>
+            </li>
+            <li>
+			<if condition="$mid">
+            	<a href="javascript:void(0);"  onclick="baichuanIM('{$jid}','{$mid}');"><span class="icon-menu msg"></span><p>客服</p></a>
+			<else/>
+				<a href="{:U('User/login')}?returnurl=<php>echo urlencode(U());</php>"><span class="icon-menu msg"></span><p>客服</p></a>
+			</if>
+            </li>
+            <li>
+            	<a href="javascript:void(0);"  onclick="sendStr('nearby');"><span class="icon-menu find"></span><p>附近</p></a>
+            </li>
+            <li <if condition="CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index' ">class="current"</if>>
+            	<a href="{:U('User/index')}"><span class="icon-menu my"></span><p>我的</p></a>
+            </li>
+        </ul>
+    </footer>
+</if>
+</eq>

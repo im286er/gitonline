@@ -1,0 +1,163 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+<div class="main container p-tb" id="mine">
+		<div class="avatar" style="background-image: url('__PUBLIC__/Mobile/default/img/avatar_bg.jpg');">
+			<div class="avatar-mask"></div>
+			<empty name="member">
+			<div class="notlogged" style="display:block;"><p>您还没有登录噢~</p><a class="btn" href="{:U('login')}">登录</a></div>
+			<else />
+			<div class="logged">
+				<div class="avatar-img"><empty name="member.u_avatar"><img src="__PUBLIC__/Mobile/default/img/avatar.png" alt=""><else /><img src="{$member.flu_avatar}"/></empty></div>
+				<p>{$member['flu_nickname']?$member['flu_nickname']:$member['flu_username']}</p>
+			</div>
+			</empty>
+		</div>
+		<section class="sec-list">
+			<div class="sec-body">
+				<ul class="">
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myaccount'),'E')))}<else />{:U('myaccount')}</empty>">
+							<i class="ico ico-person"></i>
+							<span>我的资料</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>">
+							<i class="ico ico-cart-s"></i>
+							<span>我的订单</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('mycoupon'),'E')))}<else />{:U('mycoupon')}</empty>">
+							<i class="ico ico-ticket"></i>
+							<span>我的优惠券</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve')}</empty>">
+							<i class="ico ico-clock"></i>
+							<span>我的预定</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<section class="sec-list">
+			<div class="sec-body">
+				<ul class="">
+				<eq name="Think.cookie.opentype" value="app">
+					<li>
+						<a class="" href="javascript:void(0);" onclick="is_versions();">
+							<i class="ico ico-refresh"></i>
+							<span>更新检测</span><span id="Versionid" style="float:right;padding-right:3rem;color:#c0c0c0;display:none;"></span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</eq>
+					<li>
+						<a class="" href="{:U('aboutus')}">
+							<i class="ico ico-i"></i>
+							<span>关于我们</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		 <notempty name="member"><div class="div-a"><a class="btn btn-block btn-primary btn-lg" href="{:U('logout')}">退出当前账号</a></div></notempty>
+	</div>
+<eq name="Think.cookie.opentype" value="app">
+<a id="iosVersions" href="{:U('Index/appdown@yd',array('jid'=>$jid),false)}?iosversions={$merchantapp.iosversions}" target="IFRAME" style="display:none;"></a>
+<a id="iosNowVersions" href="{:U('Index/appdown@yd',array('jid'=>$jid),false)}?uid={$member.u_id}" target="IFRAME" style="display:none;"></a>
+<iframe id="IFRAME" src="" style="display:none;">{$member.u_id}</iframe>
+<script type="text/javascript">
+	var Versions;//当前版本类型
+	var Msystem;//系统类型
+	function connectWebViewJavascriptBridge(callback) {
+		if (window.WebViewJavascriptBridge) {
+			callback(WebViewJavascriptBridge)
+		} else {
+			document.addEventListener('WebViewJavascriptBridgeReady', function() {
+				callback(WebViewJavascriptBridge)
+			}, false)
+		}
+	}
+	connectWebViewJavascriptBridge(function(bridge) {
+		bridge.init(function(message, responseCallback) {
+		});
+		var data = 'get version number';
+		bridge.send(data, function(responseData) {
+			$('#Versionid').html('v'+responseData).show();
+			Versions = responseData;
+			Msystem = 'ios';
+		});
+	});
+
+
+	$(document).ready(function(){
+		if(window._WebView_JS_Info != undefined){
+			$('#Versionid').html('v'+window._WebView_JS_Info.VersionName()).show();
+			Versions = window._WebView_JS_Info.VersionName();
+			Msystem = 'android';
+		}
+	});
+
+	function is_versions() {
+			checkVersions();
+	}
+	function checkVersions(){
+		layer.open({type: 2,shade: true,time: 10,content: '检测更新中…'});
+		$.post("{:U('User/is_update')}",{'appversions':Versions,'msystem':Msystem},function(result){
+			layer.closeAll();
+			if(result.status==0 && result.msg)
+				layer.open({content:result.msg, time: 1});
+			else if(result.status==1 && result.msg){
+				layer.open({
+					content: result.msg,
+					style: 'width:100%; ',
+					btn: ['立即下载', '取消下载'],
+					shadeClose: false,
+					yes: function(){
+						if (Msystem=='ios') {
+							document.getElementById("iosVersions").click();
+							layer.closeAll();
+						}else if(Msystem=='android') {
+							window.location.href=result.url;
+						}else{
+							layer.closeAll();
+						}
+					}, no: function(){
+						layer.closeAll();	
+					}
+				});
+			}
+		});
+	}
+
+</script>
+<empty name="member">
+<script type="text/javascript">
+$(document).ready(function(){
+	$.post("{:U('is_login')}",{},function(result){
+		if(result.u_ename){
+			var uhtml = '';
+			uhtml +='<div class="avatar-mask"></div>';
+			uhtml +='<div class="logged">';
+			uhtml +='<div class="avatar-img"><img src="'+result.u_avatar+'"></div>';
+			uhtml +='<p>'+result.u_ename+'</p>';
+			uhtml +='</div>';
+			$('.avatar').html(uhtml);
+		}
+	});
+});
+</script>
+<else />
+
+</empty>
+</eq>
+</block>

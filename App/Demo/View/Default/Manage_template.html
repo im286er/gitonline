@@ -1,0 +1,94 @@
+<extend name="Public:common"/>
+<block name="body">
+<style>
+.btn-prv{background: #00bae7;}
+.ta-c {text-align: center;}
+.ta-c .btn {margin: 0 10px;}
+.applied {color: #a2a2a6;}
+.applied .btn {background: #ccc;}
+.ss-modal {width: 100%;height: 100%;position: fixed;left: 0;top: 0; display: none;}
+.ss-modal-drop {width: 100%;height:100%;position: absolute;left: 0;top: 0;background:#000;opacity:.5;filter:alpha(opacity=50);z-index: 100;}
+.ss-modal-dialog {width: 350px;height: 624px;position: absolute;left: 50%;top: 50%;margin-left: -175px;margin-top: -312px;z-index: 101;}
+.ss-modal-dialog div {width: 350px;height: 624px;overflow: hidden;}
+.ss-modal-dialog div img {width: 100%;}
+.ss-modal-close {display: block;width: 72px; height: 72px; background: url("__PUBLIC__/Images/modal_close.png") 0 0 no-repeat; position: absolute; left: 50%; top: 50px; margin-left: 277px;z-index: 101;}
+</style>
+<script type="text/javascript">
+function lookinfo( srcing ) {
+	if( !srcing ) { alert('信息出错'); return false; }
+	document.getElementById("DialogImage").src = srcing;
+	$("#previewModal").show();
+}
+
+$(document).ready(function(e) {
+	$("#CloseMenuImage").click(function() {
+		$("#DialogFrameImage").children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	$(".ss-modal-close,.ss-modal-drop").click(function() {
+		$("#previewModal").hide();
+	});
+});
+
+function Operation(t_sign,t_name){
+	if(!t_sign){ alert('参数错误');return false; }
+	if(confirm("确定要更改模版更改“"+t_name+"”吗？")==false){
+		return false;
+	}
+	$.post("{:U()}",{'t_sign':t_sign},function(result){
+		var data = eval(result);
+		if(data.status==1)window.location.reload();
+		alert(data.msg);
+	});
+}
+</script>
+	<div class="sideBar_b">
+                <div class="wrapper">
+                    <h2 class="title add_child">店铺装修</h2>
+                    <div class="mian padding">
+                        <ul class="tem-list clearfix">
+                        	<volist name="themes" id="vo">
+                            <li class="applied">
+                                <div class="temImg clearfix">
+                                    <div class="pull-left">
+                                        <img src="{$vo.t_img}" alt="" width="146" height="251">
+                                    </div>
+                                    <div class="temImg-right">
+                                        <p><strong>{$vo.t_name}</strong></p>
+                                        <p><strong>适用行业：</strong>通用各行业</p>
+                                        <p><strong>到期时间：</strong>永久免费</p>
+                                        <p><strong>简介：</strong>{$vo.t_desc}</p>
+                                    </div>
+                                </div>
+                                <div class="ta-c">
+                                    <input type="button" value="预览"  style="background:#00bae7;"  class="btn btn-pwd" onclick="javascript:lookinfo('{$vo.t_img}');">
+                                    <eq name="vo.t_sign" value="$merchant[theme]">
+                                    <input style="margin-left:50px;background:#00bae7;" type="button" value="使用中" class="btn yes-btn-pwd" >
+                                    <else/>
+                                    <input style="margin-left:50px;" type="button" value="应用" class="btn btn-pwd" onclick="Operation('{$vo.t_sign}','{$vo.t_name}');">
+                                    </eq>
+                                </div>
+                            </li>
+                            </volist>
+                        </ul>
+                        <if condition="$pages">
+                            <div class="page clearfix">
+                                <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                                <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                            </div>
+                        </if>
+                    </div>
+                </div>
+        
+		</div>
+	</div>
+   
+   	<div class="ss-modal" id="previewModal">
+        <div class="ss-modal-drop"></div>
+        <div class="ss-modal-dialog">
+            <div>
+                <img src="__PUBLIC__/Images/temp_01.jpg" id="DialogImage" alt="">
+            </div>
+        </div>
+        <a class="ss-modal-close" href="javascript:void(0);"></a>
+    </div>
+</block>

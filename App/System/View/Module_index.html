@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.subnav a { font-size:12px; line-height:38px; }</style>
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="addModule(0)">添加模块</span>
+        <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">模块列表</span> 
+    </div>
+	<div class="main-body"> 
+        <table class="table-list">
+            <thead>
+                <tr>
+                <th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('mdid[]');"></th>
+                    <th width="9%">模块编号</th>
+                    <th width="48%">模块名称</th>
+                    <th width="10%">模块地址</th>
+                    <th width="9%">模块状态</th>
+                    <th width="14%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            <volist name="moduleList" id="vo">
+                <tr id='TP_RULE_{$vo.module_id}'>
+                    <td><input type="checkbox" disabled="disabled"></td>
+                    <td>{$vo.module_id}</td>
+                    <td style="text-align:left;">{$vo.module_name}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="addModule('{$vo.module_id}')">添加模块</a> |
+                        <a href="javascript:void(0);" onclick="editModule('{$vo.module_id}')">修改</a>
+                    </td>
+                </tr>
+                <volist name="vo.module_list" id="voo">
+                <tr id='TP_RULE_{$voo.module_id}'>
+                    <td><input type="checkbox" name="mdid[]" value="{$voo.module_id}"></td>
+                    <td>{$voo.module_id}</td>
+                    <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|____{$voo.module_name}</td>
+                    <td>{$voo.module_link}</td>
+                    <td style='cursor:pointer;' title='点击显示或隐藏菜单'  id="TD_MER_STATUS_{$voo.module_id}" onclick='hosModule(this)' data-id='{$voo.module_id}' data-value='{$voo.module_status}'><img src='/Public/Images/status_{$voo.module_status}.gif' id="simg" /></td>
+                    <td>
+                    	<a href="javascript:void(0);" onclick="addModuleTpl('{$voo.module_id}')">添加模板</a> |
+                    	<a href="javascript:void(0);" onclick="editModule('{$voo.module_id}')">修改</a>
+                    </td>
+                </tr>
+                </volist>
+            </volist>
+            
+            
+            </tbody>
+        </table>
+        <div class="btn">
+            <label style="float:left;" for="checkbox">全选/取消</label>
+            <input type="button" onclick="delModule('')" value=" 禁用 " name="dosubmit" class="button" />
+        </div>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//添加模块
+function addModule( pid ) {
+	KindeditorDialog = KindEditor.dialog({
+		width : 740,
+		height: 550,
+		title : '添加模块',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Module/moduleAdd/pid/'+pid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//添加模板
+function addModuleTpl( id ) {
+	KindeditorDialog = KindEditor.dialog({
+		width : 740,
+		height: 550,
+		title : '添加模块',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Module/moduleAddTpl/id/'+id+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//批量禁用模块
+function delModule( mdid ) {
+	$("input[name='mdid[]']").each(function(index, element) { if($(this).is(":checked")) mdid = $(this).val()+','+mdid; });
+    if( !mdid ) { alert('参数出现错误'); return false; } mdid = mdid.substring(0, mdid.length-1);
+	if( !confirm('确实要禁用所选模板？') ) return false;
+    $.get("{:U('/Module/moduleDelte', '', true)}", {mdid:mdid, status:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(mdid.split(','), function(key, value) { 
+			
+			document.getElementById("TD_MER_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+        	$("#TD_MER_STATUS_"+value).attr("data-value", "0");
+	 
+		})
+		$("input[type='checkbox']").each(function() { this.checked=false; });
+    
+    })  
+}
+
+//单个禁用或解禁模块
+function hosModule( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	if( confirm(dataValue=='1' ? '确实要禁用此模板' : '确实要解禁此模板吗') ) {
+		$.get("{:U('/Module/moduleDelte', '', true)}", {mdid:dataId, status:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}
+}
+
+//修改模块
+function editModule( rid ) {
+	if( !rid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 740,
+		height: 550,
+		title : '修改节点',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Module/moduleEdit/rid/'+rid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

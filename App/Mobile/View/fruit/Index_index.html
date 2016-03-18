@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/fruit/css/fruit.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <style>
+
+.wif {
+
+    margin: auto;
+
+    width: 100%;
+
+}
+
+.wifi {
+
+    background-color: #404040;
+
+    bottom: 0;
+
+    height: 60px;
+
+    opacity: 0.9;
+
+    position: fixed;
+
+    width: 100%;
+
+	  z-index: 101;
+
+}
+
+.icon-logo {
+
+    float: left;
+
+    margin-left: 25px;
+
+    width: 50px;
+
+}
+
+.icon-logo span {
+
+    color: #fff;
+
+    line-height: 50px;
+
+    margin-left: 5px;
+
+}
+
+.icon-logo img {
+
+    border-radius: 5px;
+
+    height: 44px;
+
+    margin-top: 8px;
+
+    width: 44px;
+
+}
+
+.c-fff {
+
+    color: #fff;
+
+}
+
+.txt-icon {
+
+    float: left;
+
+    margin-top: 10px;
+
+    width: 150px;
+
+}
+
+.btn-click {
+
+    float: right;
+
+    margin-right: 10px;
+
+}
+
+.closed {
+
+    position: absolute;
+
+    z-index: 101;
+
+}
+
+.closed img {
+
+    width: 18px;
+
+}
+
+.btn-wifi {
+
+    border: 1px solid #00c405;
+
+    border-radius: 6px;
+
+    color: #00c405;
+
+    display: block;
+
+    line-height: 30px;
+
+    margin-top: 12px;
+
+    padding: 0 5px;
+
+    text-align: center;
+
+}
+
+.btn-wifi:hover {
+
+    color: #00c405;
+
+}
+
+#1{display:block;}
+
+#3{display:block;}
+
+#4{display:block;}
+.homeindex{position:absolute;  right:10px;}
+.homeindex a{ color:#fff; width:22px; height:22px;}
+
+
+
+
+</style>
+</head>
+<body class="bg-f7f7f7 <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header fruit-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="container fruit" id="container">
+		<section class="slide swiper-container fruit-banner" id="banner">
+		<empty name="banner_list">
+			<div class="swiper-wrapper">
+                    <div class="swiper-slide" > <img src="{$banner_list[0]['bimg']}" data-original="__PUBLIC__/Mobile/fruit/img/demo/fruit_banner_01.jpg" class="lazy"/> </div>
+             </div>
+                <else />
+                <if condition="count($banner_list) eq 1">
+			<div class="swiper-wrapper">
+                        <div class="swiper-slider"> <a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" data-original="{$banner_list[0]['bimg']}" class="lazy" style="width:100%;height:auto;"/></a> </div>
+            </div>
+                    <else />
+
+			   <div class="swiper-wrapper">
+                            <volist name="banner_list" id="vo" >
+                                <div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" data-original="{$vo.bimg}" alt="" class="lazy"></a></div>
+                            </volist>
+                        </div>
+                        <div class="swiper-pagination fruit-page" id="banner-page">
+                            <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                        </div>
+
+                </if>
+            </empty>
+
+		</section>
+		<section class="fruit-nav">
+			<ul class="clearfix">
+				<li>
+					  <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+						<img class="lazy" data-original="{$module1icon}" src="{$module1icon}" alt="">
+						<span>{$module1name}</span>
+					</a>
+				</li>
+				<li>
+      <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+						<img class="lazy" data-original="{$module2icon}" src="{$module2icon}" alt="">
+						<span>{$module2name}</span>
+					</a>
+				</li>
+				<li>
+    <a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+						<img class="lazy" data-original="{$ShopMenuIcon}" src="{$ShopMenuIcon}" alt="">
+						<span>{$ShopMenuName}</span>
+					</a>
+				</li>
+				<li>
+    <a href="{$WshopModuleLink}">
+						<img class="lazy" data-original="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}" src="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}" alt="">
+						<span>{$WshopModuleName}</span>
+					</a>
+				</li>
+				<li>
+		 <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+						<img class="lazy" data-original="{$InfoMenu3Icon}" src="{$InfoMenu3Icon}" alt="">
+						<span>{$InfoMenu3Name}</span>
+					</a>
+				</li>
+				<li>
+		  <!--    <a href="{:U('Mobile/App/index', array('jid'=>$jid))}">
+						<img class="lazy" data-original="{$InfoMenuAppDownIcon}" src="{$InfoMenuAppDownIcon}" alt="">
+						<span>{$InfoMenuAppDownName}</span>
+					</a> -->
+				</li>
+			</ul>
+		</section>
+		<section class="fruit-fresh">
+			<div class="sec-title">
+				<h3>{$NewModulename}</h3>
+				<a href="{:U('Mobile/News/index', array('jid'=>$jid))}" class="ico ico-more">更多</a>
+				<div class="fruit-title-shadow"></div>
+			</div>
+			<div class="sec-body">
+				<div class="fruit-body-top"></div>
+				<ul class="clearfix">
+				<volist name="news_list" id="vo"  offset="0" length="6"  key="k">
+					<li>
+						<a href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id],'from_index'=>1))}">
+							<img class="lazy" data-original="{$vo.new_img}" src="{$vo.new_img}" alt="">
+							<p>{$vo.new_title|msubstr=###,0,5,'utf-8',false}</p>
+						</a>
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="fruit-act">
+			<div class="sec-title">
+				<h3>{$HdModuleName}</h3>
+				<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}" class="ico ico-more">更多</a>
+				<div class="fruit-title-shadow"></div>
+			</div>
+			<div class="sec-body">
+				<div class="fruit-body-top"></div>
+				<ul class="clearfix">
+				<php>$activelist = D('Active')->getActive($jid,array(),3);</php>
+				<volist name="activelist" id="vo"  offset="0" length="6"  key="k">
+					<li>
+					<a href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}">
+
+			                 <img class="lazy" data-original="{$vo.av_img}" src="{$vo.av_img}" alt=""/>
+							<h6>{$vo.av_title|msubstr=###,0,5,'utf-8',false}</h6>
+						</a>
+					</li>
+			        </volist>
+
+				</ul>
+			</div>
+		</section>
+		<section class="fruit-coupon">
+			<div class="sec-title">
+				<h3>{$VoucherModuleName}</h3>
+				<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}" class="ico ico-more">更多</a>
+				<div class="fruit-title-shadow"></div>
+			</div>
+			<div class="sec-body">
+				<div class="fruit-body-top"></div>
+				<ul>
+				<li>
+					<if condition="$coupon_list[0]['vu_name']">
+					<a class="" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[0][vu_id],'from_index'=>1))}">
+					<else />
+					<a class="" href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+					</if>
+							<if condition="$coupon_list[0]['vu_name']">
+							<div class="clothes-coupon-txt">
+								<h5>{$coupon_list.0.vu_name}</h5>
+								<p><php>echo date('Y-m-d',strtotime($coupon_list[0][vu_etime]))</php>日截止</p>
+								<p>满{$coupon_list.0.vu_money}元可使用 每单限用一张</p>
+							</div>
+							</if>
+						</a>
+					</li>
+					<li>
+						<if condition="$coupon_list[1]['vu_name']">
+						<a class="" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[1][vu_id],'from_index'=>1))}">
+						<else />
+						<a class="" href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+						</if>
+							<if condition="$coupon_list[1]['vu_name']">
+							<div class="clothes-coupon-txt">
+								<h5>{$coupon_list.1.vu_name}</h5>
+								<p><php>echo date('Y-m-d',strtotime($coupon_list[1][vu_etime]))</php>日截止</p>
+								<p>满{$coupon_list.1.vu_money}元可使用 每单限用一张</p>
+							</div>
+							</if>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+		</section>
+	</div>
+
+
+	<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	$(function() {
+        $('#container').xpull({
+			'pullThreshold':150,
+		    'maxPullThreshold':0,
+		    'onPullEndFunc':function(){
+		    	window.location.reload();
+		    },
+		    'spinnerTimeout':2000
+		});
+
+		var mySlide = new Swiper('#banner', {
+			speed: 400,
+			pagination: '#banner-page',
+			autoplay: 5000,
+			autoplayDisableOnInteraction: false,
+			loop: true,
+			preloadImages: false,
+			lazyLoading: true
+		});
+    });
+    </script>
+
+    <!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

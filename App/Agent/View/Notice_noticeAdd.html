@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:427px; }
+textarea#InfoContent { width:436px; height:160px; resize:none; }
+.ac_results { width:343px; height:100px; overflow:hidden; background:#FFF; border:1px solid #ddd; border-top:none; }
+.ac_results li { padding-left:10px; height:26px; line-height:26px; }
+.ac_results li.ac_over { background:#ddd; }
+</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr style="height:42px;">
+                            <th width="100">接收人员</th>
+                            <td>
+                            	<select name="p_type" onchange="SelectType(this.value)">
+                                    <if condition="$pid eq 0">
+									<option value="-2" >所有子代理商</option>   
+									<else />
+									</if>
+                                    
+                                    <option value="-1">所有商家</option>
+                                    <option value="5">指定人员</option>
+                                </select>
+                                <span id="p_type_5" style="display:none">
+								   <if condition="$pid eq 0">
+                                	<input type="text" id="muserid" placeholder="请输入代理商账号/商户账号" name="muserid" class="user_input" style="width:327px;height:22px;position:relative;top:1px;float:none;"  />
+									<else />
+										<input type="text" id="muserid" placeholder="请输入商户账号" name="muserid" class="user_input" style="width:327px;height:22px;position:relative;top:1px;float:none;"  /> 
+									</if>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr id="MsgTitle">
+                            <th>消息标题</th>
+                            <td><input type="text" autocomplete="off" id="InfoTitle" name="ptitle" value="" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>消息内容</th>
+                            <td><textarea class="textarea" id="InfoContent" name="pcontent"></textarea></td>
+                        </tr>
+                    </table>
+                    <div class="buttonDiv" align="center">
+                        <button type="submit" class="submit_btn">发送</button>&#12288; <button type="reset" class="reset_btn">重写</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+function SelectType( type ) {
+	$("span[id^='p_type_']").hide(); if(document.getElementById("p_type_"+type)) $("#p_type_"+type).show();
+}
+
+$("#muserid").blur(function(){
+	var mname=$("#muserid").val();
+	if(mname==""){alert("您指定的代理商或账户还未填写哦！")}
+	$.get("{:U('/Notice/keyMname', '', true)}", {mname:mname}, function(data) {  
+		if(data==0) {alert("抱歉！你指定的代理商或商户不存在！");$("#muserid").val("");}
+	})      
+})
+
+$(document).ready(function(e) {
+	$("#muserid").focus().autocomplete("{:U('/Notice/publicGetName', '', true)}", {
+		minChars: 0,
+		width	: 343,
+		matchContains	: "word",
+		autoFill	: false,
+		formatItem	: function(row, i, max) {
+			var type = row[1]=='1' ? '代理商' : (row[1]==='2' ? '商家' : (row[1]=='3' ? '会员' : '系统'))
+			return row[0]+" (" + type + ") ";
+		},
+		formatMatch	: function(row, i, max) { return row[0]; },
+	});
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+    $("#InfoTitle").formValidator({onFocus:" "}).inputValidator({min:1, onError:"消息标题不能为空"});
+    $("#InfoContent").formValidator({onFocus:" "}).inputValidator({min:1, onError:"消息内容不能为空"});
+})
+</script>
+</body>
+</html>

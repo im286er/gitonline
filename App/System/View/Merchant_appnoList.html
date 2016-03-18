@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>分店列表</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span style="margin-left:15px;" id="SearchOpen"><a href="{:U('/Merchant/appsList' )}" >已生成客户端列表</a></span>
+        <span style="margin-left:15px;" id="SearchOpen"><a style="color:red;" href="{:U('/Merchant/appnoList' )}">未生成客户端列表</a></span>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">开通时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                <input type="text" class="user_input" placeholder="搜索：如 商家名称" name="jid" value="{$Think.get.jid}" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="40">序号</th>
+                    <th>所在商户</th>
+                    <th style="text-align:left;">所在地区</th>
+					<th>安卓下载数</th>
+                    <th>苹果下载数</th>
+                    <th>开通时间</th>
+                    <th>最后生成时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="appsList" id="vo">
+                    <tr id="TP_SP_{$vo.sid}">
+                        <td>{$vo.jid}</td>
+                        <td>{$vo.mnickname}</td>
+                        <td style="text-align:left;">{$vo.mcity|get_address_byid}</td>
+                        <td>{$vo.android_downloads|}</td>
+                        <td>{$vo.ios_downloads}</td>
+                        <td>{$vo.mregdate}</td>
+                        <td>{$vo.endmakedate}</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="SetAppKey('{$vo.jid}')">设置APPKEY</a>&nbsp; |&nbsp;
+                        	<a href="javascript:void(0);" onclick="UpdateApp('{$vo.jid}')">上传客户端</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+//上传客户端
+function UpdateApp( jid ) {
+	if( !jid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 500,
+		title : '上传客户端',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/appUpload/jid/'+jid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+function SetAppKey( jid ) {
+    if( !jid ) { alert('参数出现错误'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 500,
+        height: 500,
+        title : '上传客户端',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/setAppkey/jid/'+jid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });
+}
+
+</script>
+</body>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>
+</html>

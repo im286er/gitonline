@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.subnav a { font-size:12px; line-height:38px; } .table-list tbody td { line-height: 28px; }</style>
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="addRule(0)">添加节点</span>
+        <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">节点列表</span>
+        <neq name="pid" value="0">
+            <a style="margin-left:15px;font-size:12px;line-height:38px;" href="javascript:window.history.go(-1);">返回列表</a>
+        </neq>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form action="__ACTION__" class="search">
+            <label>节点标题：</label>
+            <input autocomplete="off" placeholder="搜索：节点标题" class="user_input" value="" id="SearchTitle" type="text">　&nbsp;
+            <label>节点类型：</label>
+            <select id="SearchType" class="user_input">
+                <option value="">节点类型</option>
+                <option value="一级节点">一级节点</option>
+                <option value="二级节点">二级节点</option>
+                <option value="三级节点">三级节点</option>
+                <option value="普通节点">普通节点</option>
+            </select>
+            <button type="submit" class="btn btn-info">搜索</button>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="8%">节点编号</th>
+                    <th width="20%" style="text-align:left;padding-left:15px;">节点标题</th>
+                    <th width="20%">节点地址</th>
+                    <th width="10%">节点类型</th>
+                    <th width="10%">节点状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="rulelist" id="r">
+                    <tr id="TP_RULE_{$r['id']}">
+                        <td>{$r.id}</td>
+                        <td style="text-align:left;padding-left:15px;">{$r.title}</td>
+                        <td>
+                            <if condition="$r['pid']==0 || $r['type']==2">
+                                -
+                            <else/>
+                                <a href="http://xt.dishuos.com/{$r.name|default='Index/index'}.html">查看</a>
+                            </if>
+                        </td>
+                        <td>{$rulename[$r['type']]}</td>
+                        <td>
+                            <eq name="r.status" value="1"><i style="color:#00F">正常</i><else/><i style="color:#F00">禁用</i></eq>
+                        </td>
+                        <td>
+                            <if condition="$r['count'] elt 0 || $r['type']==4">
+                                <a href="javascript:void(0);" style="cursor:default; color:#ccc;">查看子节点</a> | 
+                            <else/>
+                                <a href="{:U('System/rulesList@xt', array('pid'=>$r['id']), true, true)}">查看子节点</a> | 
+                            </if>
+                            <if condition="$r['type']==4">
+                                <a href="javascript:void(0);" style="cursor:default; color:#ccc;">添加子节点</a> | 
+                            <else/>
+                                <a href="javascript:addRule('{$r.id}');">添加子节点</a> | 
+                            </if>
+                            <a href="javascript:editRule('{$r.id}');">修改</a> | 
+                            <a href="javascript:delRule('{$r.id}')" onclick=" return confirm('确认要删除 『 {$r.title} 』 吗');">删除</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+
+//添加节点
+function addRule( pid ) {
+	KindeditorDialog = KindEditor.dialog({
+		width : 440,
+		height: 310,
+		title : '添加节点',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/ruleAdd/pid/'+pid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//删除节点
+function delRule( id ) {
+	if( !id ) { alert('参数出现错误'); return false; }
+	$.get("{:U('/System/ruleDel', '', true)}", {id:id}, function( data ) {
+		$.each(data.split(','), function(key, value) { $("#TP_RULE_"+value).hide(600); })
+	})	
+}
+
+//修改节点
+function editRule( rid ) {
+	if( !rid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 440,
+		height: 310,
+		title : '修改节点',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/ruleEdit/rid/'+rid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+</script>
+</body>
+</html>

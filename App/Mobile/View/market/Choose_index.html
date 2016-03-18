@@ -1,0 +1,175 @@
+<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Js/Mobile/flow2.js?v=126"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/productlist.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script>
+var reqUrl = "{:U('Mobile/Choose/search',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl = "{:U('Mobile/Flow/confirm',array('jid'=>$jid,'sid'=>$sid))}";
+var flowUrl2 = "{:U('Mobile/Flow/confirm',array('utoken'=>'xxx','jid'=>$jid,'sid'=>$sid))}";
+var mid = "{$mid}";
+var isApp = "{$isApp}";
+
+$(document).ready(function(){
+	getProductContent({$default_cid},'');
+});
+</script>
+	 <div class="tab-nav tab-product jstab-nav">
+		<div class="container">
+			<div class="product-catg">
+			<ul>
+            	<volist name="category_list" id="vo" >            		
+                    <li cid="{$vo.cid}" <if condition="$key eq 0">class="active"</if>><a href="javascript:void(0)">{$vo.cname}</a></li>
+                </volist>
+			</ul>
+			</div>
+			<a href="javascript:;" class="ico ico-catg-down" id="catgDownBtn"></a>
+		</div>
+	</div>
+	<div class="main container pt-90 pb-50" id="productContent">
+		
+	</div>
+	<footer class="bottomBar clearfix">
+		<div class="container">
+		<div class="cart clearfix">
+			<div class="ico ico-cart" id="cartBtn"><span class="cartNumber">0</span></div>
+			<div class="cart-price">共<span class="cartPrice">0</span></div>
+		</div>
+		<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了</a>
+		<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		</div>
+	</footer>
+    <div class="cart-modal" id="cartModal" style='display:none;'>
+		<div class="cart-dialog">
+			<div class="order-cart" id="cart_table">
+			</div>
+		</div>
+	</div>
+	<div class="cart-modal" id="cartModal" style='display:none;'>
+		<div class="cart-dialog">
+			<div class="order-cart" id="cart_table">
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="catg-modal" id="catgModal" style="display:none;">
+		<div class="catg-dialog">
+			<div class="catg-modal-sort clearfix jstab-nav-two">
+				<div class="catg-modal-head">切换分类<a href="javascript:;" class="ico ico-catg-up" id="catgUpBtn"></a></div>
+				<ul class="clearfix">
+                	<volist name="category_list" id="vo" >
+                        <li cid="{$vo.cid}" <if condition="$key eq 0">class="active"</if>><a href="javascript:void(0)">{$vo.cname}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+    <script src="__PUBLIC__/Js/Mobile/jquery.lazyload.min.js"></script>
+	<script>
+		var rcid = "{$rcid}";
+		if(rcid > 0){
+			$(".jstab-nav ul li").each(function() {    
+                $(this).removeClass();  
+            });  
+			$(".jstab-nav ul").find('li').attr("cid",function(n,v){
+		      if(v == rcid){
+		      	$(this).addClass('active');
+		      }
+		    });			
+		}
+		var oTabNavUl = $(".jstab-nav ul");
+		var aTabNavLi = $(".jstab-nav li");
+		var aTabNavLiA = $(".jstab-nav li a");
+		var len = aTabNavLi.length;
+		var catgDownBtnWidth = $("#catgDownBtn").outerWidth();
+		var ulWidth = catgDownBtnWidth;
+		
+		for (var i = 0; i < len; i++) {
+			ulWidth = ulWidth + aTabNavLi.eq(i).outerWidth()+1;
+		}
+		oTabNavUl.css('width', ulWidth);
+
+		aTabNavLiA.click(function() {
+			aTabNavLi.removeClass('active');
+			$(this).parent('li').addClass('active');
+			var cid = $(this).parent("li").attr('cid');
+			getProductContent(cid,'');
+		});
+		
+		var aTabNavLiTwo = $(".jstab-nav-two li");
+		var aTabNavLiATwo = $(".jstab-nav-two li a");
+		aTabNavLiATwo.click(function() {
+			aTabNavLiTwo.removeClass('active');
+			$(this).parent('li').addClass('active');
+			var cid = $(this).parent("li").attr('cid');	
+			getProductContent(cid,'');
+			$(".jstab-nav ul li").each(function() {    
+                $(this).removeClass();  
+            });  
+			$(".jstab-nav ul").find('li').attr("cid",function(n,v){
+		      if(v == cid){
+		      	$(this).addClass('active');
+		      }
+		    });		
+		});
+		
+		
+		$('img').lazyload({
+	        threshold: 0,
+	        effect: 'fadeIn',
+	        skip_invisible: false
+	    });
+
+		// 购物车弹出框
+		// 购物车弹出框
+		var cartModal = $("#cartModal");
+		$("#cartBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#okBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+			
+		});
+		
+		$("#okBtn").click(function(ev) {
+			showCart();
+			cartModal.show();
+			$("#cartBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+		});
+		
+		$(".cart-dialog").click(function(ev) {
+			$(".cart-modal").hide();
+			$("#cartBtn").show();
+			$("#subBtn").hide();
+			$("#okBtn").show();
+		});
+		
+		$(".order-cart").click(function(ev) {
+			ev.stopPropagation();
+		});
+		
+		//切换分类
+		var oCatgDownBtn = $("#catgDownBtn");
+		var oCatgModal = $("#catgModal");
+		var oCatgUpBtn = $("#catgUpBtn");
+
+		oCatgDownBtn.click(function() {
+			var _this = $(this);
+			oCatgModal.show();
+		});
+		oCatgUpBtn.click(function() {
+			var _this = $(this);
+			oCatgModal.hide();
+		});
+		$(".catg-dialog").click(function(ev) {
+			$(".catg-modal").hide();
+			ev.stopPropagation();
+		});
+	</script>
+</block>

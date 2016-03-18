@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+tr.brd { font-weight:bold; background:#f6f6f6; color:red; } tr.brd td a { color:red; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+    	<a href="javascript:;" style="margin-left:15px;" class="on">代理商信息统计</a>
+    </div>
+    <div class="search_list" id="SearchForm" style="margin-bottom:0px;">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">起止时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.endtime}" id="endtime" name="endtime">&#12288;&#12288;
+                &#12288;&#12288;<label>模糊查询：</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="代理商名称" style="width:280px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+
+    <div style="height:10px;display:block;clear:both;"></div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="14.4%" style="text-align:left;padding-left:1%;">代理名称</th>
+                    <th width="4.8%">总收入</th>
+                    <th width="4.8%">总支出</th>
+                    <th width="4.8%">剩余额</th>
+                    <th width="4.8%">市代数</th>
+                    <th width="4.8%">区代数</th>
+                    <th width="4.8%">个代数</th>
+                    <th width="4.8%">商户数</th>
+                    <th width="4.8%">会员数</th>
+                    <th width="4.8%">商总收入</th>
+                    <th width="4.8%">商预收入</th>
+                    <th width="4.8%">商实收入</th>
+                    <th width="4.8%">商预支出</th>
+                    <th width="4.8%">商实支出</th>
+                    <th width="4.8%">商剩余额</th>
+                    <th width="4.8%">会员收入</th>
+                    <th width="4.8%">会员支出</th>
+                    <th width="4.8%">会剩余额</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="agentsList" id="a">
+                    <tr>
+                        <td style="text-align:left;padding-left:1%;">({$aranksList[$a['arank']]}) {$a.anickname}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        
+                        <if condition="$a['arank']=='p'">
+                            <td>{$a.c|default='0'}</td>
+                            <td>{$a.q|default='0'}</td>
+                            <td>{$a.g|default='0'}</td>
+                        <elseif condition="$a['arank']=='c'" />
+                            <td>-</td>
+                            <td>{$a.q|default='0'}</td>
+                            <td>{$a.g|default='0'}</td>
+                        <elseif condition="$a['arank']=='q'" />
+                            <td>-</td>
+                            <td>-</td>
+                            <td>{$a.g|default='0'}</td>
+                        <else/>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </if>
+                        
+                        <td>{$a.s|default='0'}</td>
+                        <td>{$a.u|default='0'}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                        <td>{$a.}</td>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", minuteStep:1, onSelect:function() { this.hide(); } });
+</script>
+</body>
+</html>

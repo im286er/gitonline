@@ -1,0 +1,41 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<div class="main container p-tb" id="aboutus">
+		<div class="aboutus">
+			<div><img src="{$m_app.applogo}" alt=""></div>
+			<p>{$m_app.appjs|nl2br}</p>
+			<!--<a href="javascript:;"><i class="ico ico-down"></i></a>-->
+		</div>
+		<section class="sec-list">
+			<div class="sec-body">
+				<ul class="">
+					<li>
+						<a class="" href="{:U('opinion')}">
+							<i class="ico ico-note-gray"></i>
+							<span>欢迎对我们的服务，提供宝贵的意见！</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<neq name="Think.cookie.opentype" value="app">
+					<!--<li>
+						<a class="" href="{:U('Shop/index', array('jid'=>$jid,'from_user'=>1))}">
+							<i class="ico ico-map"></i>
+							<span>品牌分店</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>-->
+					</neq>
+                    
+                    <volist name="shop_tel" id='tel'>
+					<li>
+						<a class="" href="tel:{$tel.mservetel}">
+							<i class="ico ico-phone"></i>
+							<span>{$tel.mservetel} ( <b style="font-size:1.0rem; font-weight:normal;">{$tel.sname}</b> )</span>
+						</a>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+       </section>
+</div>
+</block>

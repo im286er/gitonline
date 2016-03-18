@@ -1,0 +1,49 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title add_child">财务管理>提现记录<input type="button" value="<返回" onclick="window.location.href='{:U('Manage/finance@sj', array('type'=>1), true, true)}'"></h2>
+    <div class="main padding" style="padding-top:0">                      
+        <div class="content_a top" style="border-top:none">
+            <table class="table border-b">
+                <tr>
+                    <th width="150px">创建时间</th>
+                    <th width="90px">结算收益</th>
+                    <th width="90px">技术服务费</th>
+                    <th width="90px">交易手续费</th>
+                    <th width="100px">实际提现金额</th>
+                    <th width="110px">提现账户</th>
+                    <th width="100px">真实姓名</th>
+                    <th width="80px">状态</th>
+                </tr>
+                <volist name="resource" id="f">
+                <tr>
+                    <td>{$f.bstime}</td>
+                    <td>{$f.bmention}</td>
+                    <td>{$f.bjs}</td>
+                    <td>{$f.bjy}</td>
+                    <td>{$f.bsj}</td>
+                    <td>{$f.bdzh}</td>
+                    <td>{$f.bname}</td>
+                    <td>
+                      <if condition="$f['btype'] eq 1">
+                          <a href="javascript:void(0);" style="color:#006600;" <notempty name="f.bmarker">onclick="alert({$f.bmarker});"</notempty>>已处理</a>
+                        <elseif condition="$f['btype'] eq 2"/>
+                          <a href="javascript:void(0);" style="color:red;" <notempty name="f.bmarker">onclick="alert({$f.bmarker});"</notempty>>无效</a>
+                        <elseif condition="$f['btype'] eq 0"/>
+                          <a href="javascript:void(0);" style="color:#ff9900;" <notempty name="f.bmarker">onclick="alert({$f.bmarker});"</notempty>>待处理</a>
+                        </if>
+                    </td>
+                </tr>
+                </volist>
+            </table>
+            <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='?page='+this.value">{$pages}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+
+</block>

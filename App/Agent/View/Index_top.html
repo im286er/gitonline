@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>&nbsp;</title>
+
+<style type="text/css">
+
+html,body,div,a,ul,li,span,i,img,h2 { margin:0px; padding:0px; border:0px; font-size:14px; }
+
+ul,li,dl,dd,dt { display:block; list-style:none; }
+
+body { background:url("__PUBLIC__/Images/timg/topbg.gif") repeat-x 0px 0px; margin:8px 8px 0px; padding:0px; }
+
+div.topLeft { float:left; width:274px; height:71px; } div.topLeft a { display:block; width:100%; height:100%; }
+
+div.topNav, div.topNav ul { float:left; overflow:hidden; } div.topNav ul { margin-left:45px; }
+
+div.topNav li { float:left; width:87px; height:88px; text-align:center; }
+
+div.topNav li a { display:block; width:87px; height:88px; transition:background-color 0.3s linear; text-decoration:none; }
+
+div.topNav li a.selected { background:url("__PUBLIC__/Images/timg/navbg.png") no-repeat; }
+
+div.topNav li a:hover { display:block; color:#fff; background:none repeat scroll 0% 0% rgb(43, 127, 181); }
+
+div.topNav li a img { margin-top:7px; }
+
+div.topNav li a h2 { font-size:14px; color:#fff; margin-top:4px; }
+
+div.topRight { display:block; overflow:hidden; }
+
+div.topRight ul { padding-top:15px; float:right; padding-right:12px; }
+
+div.topRight ul li { float:left; padding-left:9px; padding-right:9px; background:url("__PUBLIC__/Images/line.gif") no-repeat right; }
+
+div.topRight ul li.last { background:none; }
+
+div.topRight ul li a { font-size:13px; color:#e9f2f7; text-decoration:none; }
+
+div.topRight ul li a:hover { color:#fff; }
+
+div.topRight ul li span { margin-top:2px; float:left; padding-right:3px; }
+
+div.topRight .user { height:30px; background:url("__PUBLIC__/Images/timg/ub1.png") repeat-x; clear:both; margin-top:10px; float:right; margin-right:12px; border-radius:30px; white-space:nowrap; position:relative; }
+
+div.topRight .user span { display:inline-block; padding-right:10px; background:url("__PUBLIC__/Images/timg/user.png") no-repeat 15px 10px; line-height:30px; font-size:14px;color:#b8ceda; padding-left:20px; padding-left:35px; }
+
+div.topRight .user b { display:inline-block; width:20px; height:18px; background:url("__PUBLIC__/Images/timg/msg.png"); text-align:center; font-weight:normal; color:#fff; font-size:14px; margin-right:13px; margin-top:7px; line-height:18px; }
+
+div.topRight .user i { display:inline-block; margin-right:5px; font-style:normal; line-height:30px; font-size:14px; color:#b8ceda; }
+
+</style>
+
+
+
+
+
+</head>
+
+<import type="js" file="Js.jquery" />
+
+<body>
+
+
+
+<div class="topLeft">
+
+    <a href="{:U('Index/main@dl', '', true, true)}" target="rFrame"><p style="font-size:28px;padding-right:20px;padding-left:20px;font-family: 'Microsoft YaHei' ! important; color: #fff; ">帝鼠代理商后台</p></a>
+
+</div>
+
+<div class="topNav">
+
+    <ul id="TopUl">
+
+	<if condition="$pid eq 0 ">
+
+	     <volist name="Think.config.admin_menu_list" id="nav" key="nk">
+
+            <li>
+
+                <a onclick="ResetClassNameForA('{$nk}')" href="{:U('Index/left@dl', array('pid'=>$nk), true, true)}" <eq name="nk" value="1">class="selected"</eq> target="lFrame">
+
+                    <img src="__PUBLIC__/Images/timg/icon{$nav.icon}.png" width="45" height="45" /> <h2>{$nav.name}</h2>
+
+                </a>
+
+            </li>  
+
+        </volist>
+
+    <else />
+
+
+
+
+
+        <volist name="Think.config.admin_menu_list" id="nav" key="nk">
+
+            <li  <eq name="nk" value="3">style="display:none;"</eq>>
+
+                <a onclick="ResetClassNameForA('{$nk}')" href="{:U('Index/left@dl', array('pid'=>$nk), true, true)}" <eq name="nk" value="1">class="selected"</eq> target="lFrame">
+
+			
+
+                    <img src="__PUBLIC__/Images/timg/icon{$nav.icon}.png" width="45" height="45"  />
+
+					<h2>{$nav.name}</h2>
+
+                </a>
+
+            </li>  
+
+        </volist>
+
+		</if>
+
+    </ul>
+
+</div>       
+
+<div class="topRight">    
+
+    <ul>
+
+        <li><span><img src="__PUBLIC__/Images/help.png" class="helpimg"/></span><a href="javascript:void(0);">帮助</a></li>
+
+        <li><a href="javascript:void(0);">关于</a></li>
+
+        <li class="last"><a href="{:U('Public/logout@dl', '', true, true)}" target="_parent">退出</a></li>
+
+    </ul>
+
+    <div class="user">
+
+    	<a href="{:U('System/publicEditInfo@dl', '', true, true)}" target="rFrame" title="点击修改个人信息"><span>{$Think.cookie.mname|base64_decode|unserialize}</span></a>
+
+    	<a href="{:U('Notice/noticesList@dl', '', true, true)}" target="rFrame" id="msg" title="点击查看通知"><i>通知</i><b>{$msg}</b></a>
+
+    </div>    
+
+</div>
+
+<script type="text/javascript">
+
+	//alert($("#msg").text());
+
+
+
+function ResetClassNameForA(j) {
+
+	var UList = document.getElementById("TopUl");
+
+	var lList = UList.getElementsByTagName("li");
+
+	for(var i=0; i<lList.length; i++) {
+
+		lList.item(i).getElementsByTagName("a").item(0).className = i==(j-1) ? "selected" : '';
+
+	}
+
+}
+
+(function() { document.getElementById("TopUl").getElementsByTagName("li").item(0).getElementsByTagName("a").item(0).click(); })()
+
+</script>
+
+</body>
+
+</html>
+

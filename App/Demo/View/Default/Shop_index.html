@@ -1,0 +1,104 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.modal-content .set > input[type="text"] { width:420px; }
+</style>
+<div class="wrapper">
+    <h2 class="title add_child">分店管理</h2>
+    <div class="mian padding">                   
+        <div class="modal-content">
+            <div class="set">
+                <label>模块名称</label> <input type="text" id="ModuleName" value="{$modulename}"> <span>不多于6个汉字</span>
+            </div>
+            <div class="set">
+                <label>模块地址</label> <input type="text" readonly value="{$modulelink}"> <span>该地址可用于微信及网页访问</span>
+            </div>
+            <div class="set">
+                <label class="vertical">ICON</label>
+                <div class="content_b_width">
+                    <div class="pull-left">
+                        <img id="ModuleIcon" src="{$moduleicon|default='/Public/Images/merchant/noperson_1.gif'}" style="width:80px; height:80px;" />
+                    </div>
+                    <p>建议尺寸：132 * 132 &#12288;格式：jpg、png</p>
+                    <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+                </div>
+            </div>
+            <div class="border-b top"></div>
+            <div class="set top">
+                <label></label> <input type="button" id="ModuleUpdate" class="btn btn-pwd" value="保存">
+            </div>
+        </div>
+    </div>
+    <div class="border-b"></div>
+    <div class="mian padding"> 
+        <div class="content_a" style="border-bottom:0">
+            <h3>您品牌下的门店列表<input type="button" value="新增门店" onClick="window.location.href='{:U('/Shop/addShop', '', true)}'"></h3>
+            <table class="table border-b">
+                <tr>
+                    <th width="100px">门店名称</th>
+                    <th width="120px">地址</th>
+                    <th width="100px">联系人</th>
+                    <th width="80px">设备数</th>
+                    <th width="350px">操作</th>
+                </tr>
+                <volist name="shopsList" id="v">
+                <tr>
+                    <td>{$v.sname}</td>
+                    <td>{$v.saddress}</td>
+                    <td>{$v.scontactsname}</td>
+                    <td>暂无</td>
+                    <td>
+
+                    	<!--
+						<a href="{:U('/Info/index', array('ctype'=>1, 'sid'=>$v['sid']), true)}">消费</a>
+                        <a href="{:U('/Info/index', array('ctype'=>2, 'sid'=>$v['sid']), true)}">预订</a>
+                       -->
+                        
+                        <a href="{:U('/Shop/infoShop', array('sid'=>$v['sid']), true)}">详情</a>
+                        <a href="{:U('/Shop/editShop', array('sid'=>$v['sid']), true)}">修改</a>
+                        <a href="{:U('/Shop/delShop', array('sid'=>$v['sid']), true)}" onClick="return confirm('确实要删除此分店吗？') ? true : false">删除</a>
+                    </td>
+                </tr>
+                </volist>
+            </table>
+            <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='/Shop/index/page/'+this.value">{$pages}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+<eq name="type" value="1">
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+$(function() {
+	//上传图片
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#ModuleIcon').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//在线消费 最顶部 模块名称和ICON设置
+	$("#ModuleUpdate").click(function() {
+		var ModuleName = $.trim($("#ModuleName").val());
+		var ModuleIcon = $("#ModuleIcon").attr('src');
+		if( !ModuleName || !ModuleIcon ) { alert("模块名称和ICON图标不能为空"); return false; }
+		$.post("{:U('/Shop/resetModuleInfo', '', true)}", {ModuleName:ModuleName, ModuleIcon:ModuleIcon}, function( data ) {
+			alert( parseInt(data) == 1 ? "设置成功" : "设置失败" );	
+		})
+	})
+});
+</script>
+</eq>
+</block>

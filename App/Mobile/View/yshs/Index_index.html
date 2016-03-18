@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/yshs/Css/yshs.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <style>
+
+.wif {
+
+    margin: auto;
+
+    width: 100%;
+
+}
+
+.wifi {
+
+    background-color: #404040;
+
+    bottom: 0;
+
+    height: 60px;
+
+    opacity: 0.9;
+
+    position: fixed;
+
+    width: 100%;
+
+	  z-index: 101;
+
+}
+
+.icon-logo {
+
+    float: left;
+
+    margin-left: 25px;
+
+    width: 50px;
+
+}
+
+.icon-logo span {
+
+    color: #fff;
+
+    line-height: 50px;
+
+    margin-left: 5px;
+
+}
+
+.icon-logo img {
+
+    border-radius: 5px;
+
+    height: 44px;
+
+    margin-top: 8px;
+
+    width: 44px;
+
+}
+
+.c-fff {
+
+    color: #fff;
+
+}
+
+.txt-icon {
+
+    float: left;
+
+    margin-top: 10px;
+
+    width: 150px;
+
+}
+
+.btn-click {
+
+    float: right;
+
+    margin-right: 10px;
+
+}
+
+.closed {
+
+    position: absolute;
+
+    z-index: 101;
+
+}
+
+.closed img {
+
+    width: 18px;
+
+}
+
+.btn-wifi {
+
+    border: 1px solid #00c405;
+
+    border-radius: 6px;
+
+    color: #00c405;
+
+    display: block;
+
+    line-height: 30px;
+
+    margin-top: 12px;
+
+    padding: 0 5px;
+
+    text-align: center;
+
+}
+
+.btn-wifi:hover {
+
+    color: #00c405;
+
+}
+
+#1{display:block;}
+
+#3{display:block;}
+
+#4{display:block;}
+.homeindex{position:absolute;  right:10px;}
+.homeindex a{ color:#fff; width:22px; height:22px}
+
+.ico-right {
+    background-image: url("__PUBLIC__/Mobile/yshs/img/ico_right.png");
+}
+
+
+</style>
+</head>
+<body class="bg-fff <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header yshs-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="main container p-t yshs" id="container">
+		<section class="slide swiper-container" id="banner">
+
+		<empty name="banner_list">
+			<div class="swiper-wrapper">
+                    <div class="swiper-slide" > <img src="__PUBLIC__/Mobile/yshs/upload/slide_01.png" class="img_2_one"/> </div>
+             </div>
+                <else />
+                <if condition="count($banner_list) eq 1">
+			<div class="swiper-wrapper">
+                        <div  class="swiper-slider"> <a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" class="img_2_one" style="width:100%;height:auto;"/></a> </div>
+            </div>
+                    <else />
+
+			   <div class="swiper-wrapper">
+                            <volist name="banner_list" id="vo" >
+                                <div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" alt=""></a></div>
+                            </volist>
+                        </div>
+                        <div class="swiper-pagination" id="banner-page">
+                            <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                        </div>
+
+                </if>
+            </empty>
+
+		</section>
+		<section class="yshs-nav sec-m">
+			<ul class="clearfix">
+				<li>
+					  <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+						<img src="{$module1icon}" alt="">
+						<span>{$module1name}</span>
+					</a>
+				</li>
+				<li>
+      <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+						<img src="{$module2icon}" alt="">
+						<span>{$module2name}</span>
+					</a>
+				</li>
+				<li>
+    <a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+						<img src="{$ShopMenuIcon}" alt="">
+						<span>{$ShopMenuName}</span>
+					</a>
+				</li>
+				<li class="margin-b">
+	  <a href="{$WshopModuleLink}">
+						<img src="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}" alt="">
+						<span>{$WshopModuleName}</span>
+					</a>
+				</li>
+				<li class="margin-b">
+		 <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+						<img src="{$InfoMenu3Icon}" alt="">
+						<span>{$InfoMenu3Name}</span>
+					</a>
+				</li>
+				<li class="margin-b">
+		    <!-- <a href="{:U('Mobile/App/index', array('jid'=>$jid))}">
+						<img src="{$InfoMenuAppDownIcon}" alt="">
+						<span>{$InfoMenuAppDownName}</span>
+					</a>-->
+				</li>
+			</ul>
+		</section>
+
+        <?php  A('Advert')->loadtemp($jid, 'yshs', '1'); ?>
+        <!--
+        <section class="slide swiper-container" id="banner-two">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/Mobile/yshs/upload/slide_02.png" alt=""></a></div>
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/Mobile/yshs/upload/slide_02.png" alt=""></a></div>
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/Mobile/yshs/upload/slide_02.png" alt=""></a></div>
+			</div>
+			<div class="swiper-pagination" id="banner-two-page">
+				<span class="swiper-pagination-bullet"></span>
+				<span class="swiper-pagination-bullet"></span>
+				<span class="swiper-pagination-bullet"></span>
+			</div>
+		</section>
+        -->
+		<section class="yshs-act  sec-m">
+			<div class="sec-title">
+				<h3>{$NewModulename}</h3>
+				<a href="{:U('Mobile/News/index', array('jid'=>$jid))}" class="more"><span>更多</span><i class="ico ico-right fl_right"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul class="clearfix">
+				<volist name="news_list" id="vo"  offset="0" length="6"  key="k">
+					<li>
+					<a href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id],'from_index'=>1))}">
+
+			                 <img src="{$vo.new_img}" alt=""/>
+							<div class="yshs-act-txt"><span>{$vo.new_title|msubstr=###,0,5,'utf-8',false}</span><i class="ico ico-down-arrow"></i></div>
+						</a>
+					</li>
+			        </volist>
+
+				</ul>
+			</div>
+		</section>
+        <section class="yshs-advisory  sec-m">
+			<div class="sec-title">
+				<h3>{$HdModuleName}</h3>
+				<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}" class="more"><span>更多</span><i class="ico ico-right fl_right"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul class="clearfix">
+				<php>$activelist = D('Active')->getActive($jid,array(),3);</php>
+				<volist name="activelist" id="vo"  offset="0" length="6"  key="k">
+					<li>
+					<a href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}">
+
+			                 <img src="{$vo.av_img}" alt=""/>
+							<div class="yshs-act-txt01">{$vo.av_title|msubstr=###,0,5,'utf-8',false}</div>
+						</a>
+					</li>
+			        </volist>
+
+				</ul>
+			</div>
+		</section>
+		<section class="yshs-coupon  sec-m">
+			<div class="sec-title">
+				<h3>{$VoucherModuleName}</h3>
+				<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}" class="more"><span>更多</span><i class="ico ico-right fl_right"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul>
+					<li>
+						<if condition="$coupon_list[0]['vu_name']">
+                		<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[0][vu_id],'from_index'=>1))}">
+                		<else />
+                		<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                		</if>
+							<img src="{$coupon_list.0.vu_img|default='/Public/Mobile/yshs/upload/coupon_01.png'}" alt="">
+							<if condition="$coupon_list[0]['vu_name']">
+							<div class="yshs-cp-mask">
+                                <p><span>每人限领{$coupon_list[0][vu_num] == -1 ? '无限制' : $coupon_list[0][vu_num]}张</span></p>
+                                <p>{$coupon_list.0.vu_description|msubstr=###,0,20}</p>
+                                <p class="yshs-cp-txt">{$coupon_list.0.vu_name}</p>
+                                <i class="ico ico-hot"></i>
+							</div>
+                                </if>
+						</a>
+					</li>
+					<li>
+						<if condition="$coupon_list[1]['vu_name']">
+                		<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[1][vu_id],'from_index'=>1))}">
+                		<else />
+                		<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                		</if>
+							<img src="{$coupon_list.1.vu_img|default='/Public/Mobile/yshs/upload/coupon_02.png'}" alt="">
+							<if condition="$coupon_list[1]['vu_name']">
+							<div class="yshs-cp-mask">
+                                <p><span>每人限领{$coupon_list[1][vu_num] == -1 ? '无限制' : $coupon_list[1][vu_num]}张</span></p>
+                                <p>{$coupon_list.1.vu_description|msubstr=###,0,30}</p>
+                                <p class="yshs-cp-txt">{$coupon_list.1.vu_name}</p>
+                                <i class="ico ico-hot"></i>
+							</div>
+							</if>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+			<div class="sec-footer"><a href="javascript:;"><img src="__PUBLIC__/Mobile/yshs/img/hear.png"/>亲~快点下单哟！</a></div>
+		</section>
+	</div>
+
+	<script src="__PUBLIC__/Mobile/default/Js/jquery.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	$(function() {
+		$('#container').xpull({
+			'pullThreshold':60,
+		    'maxPullThreshold':60,
+		    'onPullEndFunc':function(){
+		    	window.location.reload();
+		    },
+		    'spinnerTimeout':2000
+		});
+
+		var mySlide = new Swiper('#banner', {
+			speed: 400,
+			pagination: '#banner-page',
+			autoplay: 5000,
+			autoplayDisableOnInteraction: false,
+			loop: true,
+			preloadImages: false,
+			lazyLoading: true
+		});
+
+		var adSlide = new Swiper('#banner-two', {
+			speed: 400,
+			pagination: '#banner-two-page',
+			autoplay: 4000,
+			autoplayDisableOnInteraction: false,
+			loop: true
+		});
+	});
+    </script>
+
+<!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<eq name="type" value="1">
+<script type="text/javascript">
+//设置主题信息
+function SetInfoZt() {
+	if( $("#EditZt").attr("data-true") == "0" ) {
+		var data=$("#ZtInfoVal").val(); $("#EditZt").attr("data-true", "1"); $("#ZtInfo").html( data );
+		$.post('/Index/editFie', {sfie:'appzt', data:data, table:'merchantApp', wfie:'jid'});
+	}
+}
+
+//设置介绍信息
+function SetInfoJs() {
+	if( $("#EditJs").attr("data-true") == "0" ) {
+		var data=$("#JsInfoVal").val(); 
+		$("#EditJs").attr("data-true", "1");
+		$("#JsInfo").html( data.substring(0,80)+'..' );
+		$("#Tailor").html( data );
+		$.post('/Index/editFie', {sfie:'appjs', data:data, table:'merchantApp', wfie:'jid'});
+	}
+}
+
+//设置地址信息
+function SetInfoDz() {
+	if( $("#EditDz").attr("data-true") == "0" ) {
+		var data=$("#DzInfoVal").val(); $("#EditDz").attr("data-true", "1"); $("#DzInfo").html( data );
+		$.post('/Index/editFie', {sfie:'saddress', data:data, table:'shop', wfie:'sid'});
+	}
+}
+</script>
+</eq>
+<div class="wrapper">
+    <h2 class="title">我的分店 / 账户设置 <input type="button" value="<返回" onClick="window.history.go(-1)"></h2>
+    <div class="mian">
+        <div class="content_b">
+            <label>企业名称</label> <div class="width">{$data.mnickname}</div>
+        </div>
+        <div class="content_b">
+            <label>头像</label>
+            <div class="width"><img src="{$data.applogo}" id="DefaultLogo" alt=""></div>
+            <!--<eq name="type" value="1"><a href="javascript:void(0);" id="EditLogo" class="c-5da3ea">修改头像</a></eq>-->
+        </div>
+        <div class="content_b">
+            <label>所在行业</label> <div class="width">{$data.title}</div>
+        </div>
+        <!--<div class="content_b">
+            <label>主题信息</label>
+            <div class="width" id="ZtInfo">{$data.appzt}</div>
+            <eq name="type" value="1"><a href="javascript:void(0);" data-true="1" id="EditZt" class="c-5da3ea">修改</a></eq>
+        </div>-->
+        <div class="content_b">
+            <label>企业介绍</label>
+            <div class="width" id="JsInfo">{$data.appjs|msubstr=0,80,'utf-8'} </div>
+			<div style="display:none;" id="Tailor">{$data.appjs} </div>
+            <eq name="type" value="1"><a href="javascript:void(0);" data-true="1" id="EditJs" class="c-5da3ea">修改</a></eq>
+        </div>
+        <div class="content_b">
+            <label>所在地址</label>
+            <div class="width" id="DzInfo">{$data.mcity}</div>
+            <if condition="isset($address) && $address==1"><a href="javascript:void(0);" data-true="1" id="EditDz" class="c-5da3ea">修改</a></if>
+        </div>
+        <div class="content_b">
+            <label>客户端资料</label>
+            <div class="width">最生生成时间：{$data.endmakedate}</div>
+            <eq name="type" value="1"><a href="javascript:void(0);" id="MakeApp" class="c-5da3ea">生成</a></eq>
+        </div>
+        
+        <eq name="type" value="1">
+            <div class="content_b">
+                <label>提现账户</label>
+                <div class="width">{$member.mbdzh|default='暂无绑定账户'}</div>
+            </div>
+        </eq>
+        
+        <div class="content_b">
+            <label>登陆账户</label>
+            <div class="width">{$member.mname}</div>
+            <a href="{:U('/Index/editpwd', '', true)}" class="c-5da3ea">修改密码</a>
+        </div>
+    </div>
+</div>
+<eq name="type" value="1">
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+$(function() {
+	
+	//修改头像
+	$("#EditLogo").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$.get('/Index/editFie', {sfie:'applogo', data:url, table:'merchantApp', wfie:'jid'});
+					$('#DefaultLogo').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//修改主题
+	$("#EditZt").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$("#EditZt").html('保存');
+			$(this).attr("data-true", "0"); $("#ZtInfo").html("<textarea autofocus='autofocus' id='ZtInfoVal'>"+$("#ZtInfo").html()+"</textarea>");
+		}else{
+			SetInfoZt();$("#EditZt").html('修改');
+		}
+	})
+	
+	//修改介绍
+	$("#EditJs").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$(this).attr("data-true", "0");
+			$("#EditJs").html('保存');
+			$("#JsInfo").html("<textarea autofocus='autofocus' cols='50'  rows='5' id='JsInfoVal'>"+$("#Tailor").html()+"</textarea>");
+		}else{
+			SetInfoJs();$("#EditJs").html('修改');
+		}
+	})
+	
+	//修改地址
+	$("#EditDz").click(function() {
+		if( $(this).attr("data-true") == "1" ) {
+			$("#EditDz").html('保存');
+			$(this).attr("data-true", "0"); $("#DzInfo").html("<textarea autofocus='autofocus' id='DzInfoVal'>"+$("#DzInfo").html()+"</textarea>");
+		}else{
+			SetInfoDz();$("#EditDz").html('修改');
+		}
+	})
+	
+})
+</script>
+</eq>
+</block>

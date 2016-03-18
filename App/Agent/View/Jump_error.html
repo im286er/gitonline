@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>跳转提示</title>
+<style type="text/css">
+html,body,div,p,b { margin:0px; padding:0px; word-wrap:break-word; font:14px/1.8 Tahoma,"Microsoft Yahei","Simsun"; color:#444; }
+.DivJump { margin:0px 10px; border:3px solid #F2F2F2; background: none repeat scroll 0% 0% #FFF; }
+.DivJump div.info { background: url('/Public/Images/error.png')no-repeat scroll left center transparent; }
+.DivJump div.info p { margin-left:140px; height:128px; line-height:128px; font-size:20px; font-weight:bold; }
+.DivJump div.info p b { color:red; font-size:24px; font-style:italic; font-family:"黑体"; }
+</style>
+</head>
+<body>
+
+<div id="DivJump" class="DivJump">
+    <div class="info"><p>{$msg|default='操作失败'}，正在返回……<b id="wait">1</b></p></div>
+</div>
+<script type="text/javascript">
+(function(){
+	var height=parseInt((window.innerHeight-128)/2)-24;document.getElementById("DivJump").style.marginTop=height+"px";
+	setInterval(function() { var time = --document.getElementById('wait').innerHTML; if(parseInt(time) <= 0) { window.history.back(-1); }; }, 1000);
+})();
+</script>
+</body>
+</html>
+<?php exit; ?>

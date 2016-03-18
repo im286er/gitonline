@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:20px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,232,231); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; text-align:left; }
+table.wlist th span b { color:rgb(62,125,254); }
+table.wlist .ilist { width:100%; border-top:none; border-left:none; }
+table.wlist .ilist tr.last td { border-bottom:none; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+   
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+               <!--  <label class="fl">时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.endtime}" id="endtime" name="endtime">-->
+                &#12288;&#12288;<label>代理商：</label>
+                <select name="agent" class="fl">
+               <option value="">选择代理商</option> {$agentList}
+                </select>
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+    	<table class="table-list">
+        	<thead>
+                <tr>
+                    <th width="20%">商户名称</th>
+                    <th width="30%">代理商</th>
+                    <th width="20%">商户余额收入(平台支付宝)</th>
+                    <th width="20%">已提现</th>
+                    <th width="10%">余额</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="orderlist" id="o">
+                <tr>
+                <td>{$o.mnickname}</td>
+                <td>{$o.agname}</td>
+                <td>{$o.to_price}</td>
+                <td>{$o.tixian}</td>
+                <td>{$o.yue}</td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+
+
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+var FirstTimeOuter = true;
+</script>
+</body>
+</html>

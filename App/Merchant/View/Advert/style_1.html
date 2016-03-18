@@ -1,0 +1,171 @@
+<!--START-->
+<style type="text/css">
+.ktv-ad-1 { width:460px;float:left;margin-left:50px; }
+.ktv-ad-1 img { vertical-align:top; }
+.swiper-container { margin: 0 auto; position: relative; overflow: hidden; z-index: 1; }
+.swiper-wrapper { position: relative; width: 100%; height: 100%; z-index: 1; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition-property: -webkit-transform; -moz-transition-property: -moz-transform; -o-transition-property: -o-transform; -ms-transition-property: -ms-transform; transition-property: transform; -webkit-transform: translate3d(0px, 0, 0); -moz-transform: translate3d(0px, 0, 0); -o-transform: translate(0px, 0px); -ms-transform: translate3d(0px, 0, 0); transform: translate3d(0px, 0, 0); -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; }
+.swiper-slide { -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-flex-shrink: 0; -ms-flex: 0 0 auto; flex-shrink: 0; width: 100%; height: 100%; position: relative; }
+.swiper-wp8-horizontal { -ms-touch-action: pan-y; touch-action: pan-y; }
+.swiper-wp8-vertical { -ms-touch-action: pan-x; touch-action: pan-x; }
+
+/*弹出层*/
+.style-one-click ul{ margin:20px 50px}
+.style-one-click{ height:18rem; left:92px; width:460px}
+.style-one{ height:auto}
+</style>
+<!--END-->
+
+<style type="text/css">
+.ktv-ad-1 { overflow: hidden; }
+.ktv-ad-1 li { float: left; overflow: hidden; }
+.ktv-ad-1 li:nth-child(1) { width: 50%; }
+.ktv-ad-1 li:nth-child(2) { width: 25%; }
+.ktv-ad-1 li:nth-child(3) { width: 25%; }
+.ktv-ad-1 li:nth-child(4) { width: 50%; }
+.ktv-ad-1 li a { display: block; position: relative; }
+.ktv-ad-1 li img { width: 100%; }
+.ktv-ad-1 li:nth-child(1) img { height: 18rem; }
+.ktv-ad-1 li:nth-child(2) img { height: 8.6rem; }
+.ktv-ad-1 li:nth-child(3) img { height: 8.6rem; }
+.ktv-ad-1 li:nth-child(4) img { height: 9.4rem; }
+.ktv-ad-1 li p { position: absolute; top: 0; left: 0; width: 100%; height: 2rem; font-size: 1rem; line-height: 2rem; overflow: hidden; color: #fff; padding-left: 10px; }
+</style>
+<!--START-->
+<div class="style-one">
+<eq name="adtype" value="style_1">
+  <h3><a href="#">样式1<img src="/Public/Images/merchant/choose.png" id="change-one"/></a></h3>
+<else/>
+  <h3><a href="#">样式1<img src="/Public/Images/merchant/not_choose.png" id="change-one" onclick="AjaxSetAdvertStyle('{$Think.get.pos}', '{$Think.get.tid}', 'style_1', 4)"/></a></h3>
+</eq>
+
+<!--END-->
+
+<section class="ktv-ad-1">
+    <ul class="clearfix">
+        <li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(1,1)"<else/>href="{$advert.1.ad_imglink}"</if>><img id="IMAGEO_STYLEO_SRC" src="{$advert.1.ad_imgsrc|default='/Public/Mobile/ktv/img/demo/ktv_ad_01.png'}"/><p>{$advert.1.ad_title}</p></a> </li>
+        <li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(1,2)"<else/>href="{$advert.2.ad_imglink}"</if>><img id="IMAGET_STYLEO_SRC" src="{$advert.2.ad_imgsrc|default='/Public/Mobile/ktv/img/demo/ktv_ad_02.png'}"/><p>{$advert.2.ad_title}</p></a> </li>
+        <li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(1,3)"<else/>href="{$advert.3.ad_imglink}"</if>><img id="IMAGES_STYLEO_SRC" src="{$advert.3.ad_imgsrc|default='/Public/Mobile/ktv/img/demo/ktv_ad_03.png'}"/><p>{$advert.3.ad_title}</p></a> </li>
+        <li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(1,4)"<else/>href="{$advert.4.ad_imglink}"</if>><img id="IMAGEF_STYLEO_SRC" src="{$advert.4.ad_imgsrc|default='/Public/Mobile/ktv/img/demo/ktv_ad_04.png'}"/><p>{$advert.4.ad_title}</p></a> </li>
+    </ul>
+</section>
+
+<!--START-->
+<div class="style-one-click style-click" id="style-1-click-1">
+                              <h2>1<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEO_IMAGEO_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-1-1-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,1,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-1-1-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEO_IMAGEO_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,1,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-1-1-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_title}" readonly="readonly" id="UPLOAD_STYLEO_IMAGEO_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_1', 1, 'UPLOAD_STYLEO_IMAGEO_VALUE', 'IMAGEO_STYLEO_SRC', 'UPLOAD_STYLEO_IMAGEO_LINK', 'UPLOAD_STYLEO_IMAGEO_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-1-click-2">
+                              <h2>2<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEO_IMAGET_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-1-2-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,2,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-1-2-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.2.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEO_IMAGET_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,2,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-1-2-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.2.ad_title}" readonly="readonly" id="UPLOAD_STYLEO_IMAGET_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_1', 2, 'UPLOAD_STYLEO_IMAGET_VALUE', 'IMAGET_STYLEO_SRC', 'UPLOAD_STYLEO_IMAGET_LINK', 'UPLOAD_STYLEO_IMAGET_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-1-click-3">
+                              <h2>3<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEO_IMAGES_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-1-3-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,3,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-1-3-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.3.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEO_IMAGES_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,3,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-1-3-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.3.ad_title}" readonly="readonly" id="UPLOAD_STYLEO_IMAGES_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_1', 3, 'UPLOAD_STYLEO_IMAGES_VALUE', 'IMAGES_STYLEO_SRC', 'UPLOAD_STYLEO_IMAGES_LINK', 'UPLOAD_STYLEO_IMAGES_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-1-click-4">
+                              <h2>4<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEO_IMAGEF_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-1-4-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,4,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-1-4-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.4.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEO_IMAGEF_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(1,4,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-1-4-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.4.ad_title}" readonly="readonly" id="UPLOAD_STYLEO_IMAGEF_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_1', 4, 'UPLOAD_STYLEO_IMAGEF_VALUE', 'IMAGEF_STYLEO_SRC', 'UPLOAD_STYLEO_IMAGEF_LINK', 'UPLOAD_STYLEO_IMAGEF_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+</div>
+<div style="clear:both;"></div>
+<!--END-->

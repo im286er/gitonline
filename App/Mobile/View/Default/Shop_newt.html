@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>九好集团企业介绍</title>
+<script type="text/javascript" src="/Public/Mobile/default/Js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="/Public/Mobile/default/Css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="/Public/Mobile/default/Css/main.css" />
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+<!-- 头部 --> 
+
+<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script> 
+
+<header class="header"  >
+    <h1 >九好集团企业介绍</h1>
+    <a href="{:U('/Index/index@yd',array('jid'=>$jid))}" class="ico header-back" ></a> </header>
+
+<style type="text/css">
+.act-detail img { width:100%; }
+.act-detail p { line-height:1.8rem; font-size:1.2rem; }
+</style>
+<script>
+	//10px 1rem;
+	!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<div class="container p-tb" id="actDetail">
+    <div class="act-detail"> 
+    	<img class="act-img" src="/Public/Mobile/jiuhao/img/jieshao.jpg" alt=""> 
+    
+    	<p>
+            浙江九好办公服务集团有限公司是一家专业从事后勤托管服务的大型企业集团。集团首创“后勤托管”模式，打造后勤托管服务平台，集结跨行业、跨品牌的众多供应商，为客户提供包括餐饮、物业、办公、IT、传媒、差旅、劳保、物流、金融等9大类81项后勤托管服务，客户群体涉及医疗、卫生、教育、部队、党政机关、事业单位等各行各业。目前，集团在杭州（总部）、北京、上海、深圳、江苏（南京）、湖南（长沙）、湖北（武汉）、四川（成都）、重庆等地设有分支机构，拥有1400余家优质核心供应商，为3800余家客户单位提供托管服务。
+    	</p>
+    </div>
+</div>
+
+<!-- /主体 --> 
+<!-- 底部 --> 
+<script type="text/javascript">
+ $(document).ready(function(){
+  			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$.post("/User/location.html",{'longitude':position.coords.longitude,'latitude':position.coords.latitude},function(data){ });
+				},function(errorObject){
+					
+				},{
+					enableHighAccuracy : true,
+					timeout    : 3000,
+					maximumAge : 60000
+				}
+			);
+});
+</script> <!-- /底部 -->
+</body>
+</html>

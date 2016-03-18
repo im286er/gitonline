@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">#dosubmit { margin-left:100px; margin-right:10px; } select { width:301px; } </style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="{$themeInfo.t_id}" name="info[t_id]" />
+            <div id="divSetting1">
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="80">模板名称</th>
+                        <td><input type="text" disabled="disabled" value="{$themeInfo.t_sign}" class="user_input" style="width:283px;" /></td>
+                    </tr>
+                    <tr>
+                        <th>模板标题</th>
+                        <td><input type="text" autocomplete="off" placeholder="请输入模板标题" name="info[t_name]" value="{$themeInfo.t_name}" class="user_input" style="width:283px;" /></td>
+                    </tr>
+                    <tr>
+                        <th>适合行业</th>
+                        <td><select name="t_vid[]" multiple="multiple"> 
+                        	<option value="0" <eq name="all" value="1"> selected="selected"</eq>>所有行业</option> 
+                        	{$vocationList} 
+                        </select> </td>
+                    </tr>
+                    <tr>
+                        <th>模板图片</th>
+                        <td>
+                        	<input type="text" readonly="readonly" placeholder="请上传模板的预览图" id="InfoImage" name="info[t_img]" value="{$themeInfo.t_img}" class="user_input" style="width:195px;" />
+                        	<input onclick="KindeditorUpload()" type="button" class="button" value="上传图片" style="border-radius:3px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>模板描述</th>
+                        <td><textarea class="textarea" placeholder="请输入模板描述" name="info[t_desc]" style="width:293px;height:60px;resize:none;">{$themeInfo.t_desc}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>模板状态</th>
+                        <td>
+                        	<label><input style="position:relative;top:2px;" name="info[t_status]" type="radio" value="1" <eq name="themeInfo.t_status" value="1">checked="checked"</eq> /> 有效</label>&#12288;&#12288;
+                        	<label><input style="position:relative;top:2px;" name="info[t_status]" type="radio" value="0" <eq name="themeInfo.t_status" value="0">checked="checked"</eq> /> 无效</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>广告位数</th>
+                        <td><input type="text" autocomplete="off" placeholder="请输入此模板所含广告位数" name="info[t_adnum]" value="{$themeInfo.t_adnum}" class="user_input" style="width:283px;" /></td>
+                    </tr>
+                    <tr>
+                        <th>价格</th>
+                        <td><input type="text" autocomplete="off" placeholder="免费模板无需设置" name="info[t_price]" value="{$themeInfo.t_price}" class="user_input" style="width:283px;" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="left">
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button> <button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:50, });
+function KindeditorUpload() {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#InfoImage').val(url); editor.hideDialog();
+			}
+		});
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K， 图片格式为 jpg,jpeg,png</div>');
+	});
+}
+
+$(document).ready(function(e) {
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; } });
+	$("#InfoTname").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入模板名称"}).regexValidator({regExp:"^([a-zA-Z0-9_]){1,30}$", onError:"模板名称必须为字母、数字或下划线组成"}).ajaxValidator({
+		url  		: "{:U('/Theme/publicCheckTname', array('tid'=>$themeInfo['tid']), true)}",
+		data       	: "tname=#InfoTname",
+        success    	: function(data) { return parseInt(data) == 1 ? true : false; },
+        buttons  	: $("#dosubmit"),
+        onError  	: "该模板名称已经存在，请重新输入一个",
+        onWait   	: "请等待……"
+    }).defaultPassed();
+	$("#InfoTitle").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入模板标题"}).defaultPassed();
+})
+</script>
+</body>
+</html>

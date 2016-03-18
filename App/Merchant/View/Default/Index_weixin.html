@@ -1,0 +1,57 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<div class="wrapper">
+    <h2 class="title add_child">微信关注</h2>
+    <div class="mian padding">                   
+        <div class="modal-content">
+            <div class="set">
+                <label>模块名称</label><input value="{$modulename}" id="ModuleName" type="text" name="text1">
+                <span>不多于6个汉字</span>
+            </div>
+            <div class="set">
+                <label>商城地址</label><input value="" type="text" name="text1" readonly>
+                <span>该地址可用于微信及网页访问</span>
+            </div>
+            <div class="set">
+                <label class="vertical">ICON</label>
+                <div class="content_b_width">
+                    <div id="divPreview1" class="pull-left">
+                        <img id="imgHeadPhoto" src="{$moduleicon}" style="width: 58px; height: 58px;" alt="" />
+                    </div>
+                    <p style="margin:5px 0px;">建议尺寸56*56 格式：JPG,PNG</p>
+                    <span class="file"><input id="UploadImage" type="button" value="更换图标" class="btn btn-blue"></span>
+                </div>
+            </div>
+            <div class="border-b top"></div>
+            <div class="set top">
+                <label></label><input id="ModuleUpdate" type="button" class="btn btn-pwd" value="保存">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+$(function() {
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#imgHeadPhoto').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	$("#ModuleUpdate").click(function() {
+		var ModuleName = $.trim($("#ModuleName").val());
+		var ModuleIcon = $("#imgHeadPhoto").attr('src');
+		if( !ModuleName || !ModuleIcon) { alert("模块名称和ICON图标不能为空"); return false; }
+		$.post("__ACTION__", {ModuleName:ModuleName, ModuleIcon:ModuleIcon})
+	})
+})
+</script>
+</block>

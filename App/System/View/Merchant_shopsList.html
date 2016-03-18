@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="addShop()">添加分店</span><span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;" id="SearchOpen">分店列表</span>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">&#12288;&nbsp;
+				<label class="fl">模糊搜索：</label>
+                <input autocomplete="off" type="text" class="user_input fl" value="{$Think.get.keyword}" name="keyword" placeholder="所属商家/店铺名称/联系人/销售电话/服务电话" style="width:280px;" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('sid[]');"></th>
+                        <th width="8%">门店名称</th>
+                        <th width="8%">所属商家</th>
+                        <th width="5%">联系人名称</th>
+                        <th width="8%">联系人电话</th>
+                        <th width="8%">服务电话</th>
+                        <th width="8%">销售电话</th>
+                        <th width="10%" style="text-align:left">所在城市</th>
+                        <th width="17%" style="text-align:left;">详细地址</th>
+						<th width="6%">账户</th>
+                        <th width="5%">状态</th>
+						<th width="6%">全民状态</th>
+                        <th width="5%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="shopsList" id="vo">
+                    	<tr id="TP_SP_{$vo.sid}">
+                            <td><input type="checkbox" name="sid[]" value="{$vo.sid}"></td>
+                            <td>{$vo.sname}</td>
+                            <td>{$vo.mnickname}</td>
+                            <td>{$vo.scontactsname}</td>
+                            <td>{$vo.scontactstel}</td>
+                            <td>{$vo.mservetel}</td>
+                            <td>{$vo.msaletel}</td>
+                            <td style="text-align:left;">{$vo.mcity|get_address_byid}</td>
+                            <td onclick="PiveMap('{$vo.lng}', '{$vo.lat}')" style="text-align:left;color:#66c9f3;font-weight:bold;cursor:pointer;" title="点击查看地图">{$vo.saddress}</td>
+							<td>{$vo.mname}</td> 
+                            <td style="cursor:pointer;" onclick="hosShop(this)" id="TD_SP_STATUS_{$vo.sid}" data-value='{$vo.status}' data-id='{$vo.sid}' title="点击禁用或解禁分店"><img src="__PUBLIC__/Images/status_{$vo.status}.gif" /></td>
+                            <td style="cursor:pointer;" onclick="qmsShop(this)" id="TD_SP_QMSTATUS_{$vo.sid}" data-value='{$vo.qmstatus}' data-id='{$vo.sid}' title="点击禁用全民返利或启用全民返利"><img src="__PUBLIC__/Images/status_{$vo.qmstatus}.gif" /></td>
+                            <td>
+                            	<!--<a href="javascript:void(0)" onclick="delShop('{$vo.sid}', 'get')">查看</a> |-->
+                                <a href="javascript:void(0)" onclick="editShop('{$vo.sid}')">修改</a>
+                                <eq name="groupid" value="10">
+                                | <a href="javascript:void(0)" onclick="CdelAgent('{$vo.sid}')">回收</a>
+                                </eq>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delShop('')" value=" 禁用 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+
+//添加分店
+function addShop() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 590,
+		height: 470,
+		title : '添加分店',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/shopAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//批量禁用分店
+function delShop( sid ) {
+	$("input[name='sid[]']").each(function(index, element) { if($(this).is(":checked")) sid = $(this).val()+','+sid; });
+    if( !sid ) { alert('参数出现错误'); return false; } sid = sid.substring(0, sid.length-1);
+	if( !confirm('删除数据有一定风险，确实要删除吗？') ) return false;
+    $.get("{:U('/Merchant/shopDel', '', true)}", {sid:sid, status:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(sid.split(','), function(key, value) { 
+			document.getElementById("TD_SP_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+        	$("#TD_SP_STATUS_"+value).attr("data-value", "0");
+		})
+		$("input[type='checkbox']").each(function() { this.checked=false; });
+    })  
+}
+
+//单个禁用或解禁分店
+function hosShop( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	
+	if( confirm(dataValue=='1' ? '确实要禁用此分店吗' : '确实要解禁此分店吗') ) {
+		$.get("{:U('/Merchant/shopDel', '', true)}", {sid:dataId, status:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}	
+}
+
+//单个禁用或解禁全民返利显示分店
+function qmsShop( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	
+	if( confirm(dataValue=='1' ? '确实要禁用此分店在全民返利显示吗' : '确实要解禁此分店在全民返利显示吗') ) {
+		$.get("{:U('/Merchant/shopQmstatus', '', true)}", {sid:dataId, qmstatus:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}	
+}
+
+
+//修改分店
+function editShop( sid ) {
+	if( !sid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 590,
+		height: 470,
+		title : '修改分店',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/shopEdit/sid/'+sid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//查看地图
+function PiveMap(lng, lat) {
+	if(!lng || !lat) { alert('此店铺没有设置地图坐标'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 430,
+		title : '查看地图',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/shopMap/lng/'+lng+'/lat/'+lat+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+
+//彻底删除分店
+function CdelAgent( sid ) {
+	if( !sid ) return false;
+	if( !confirm('确实要清除此分店吗') ) return false;
+	$.post("{:U('/Merchant/truncateShop', '', true)}", {sid:sid}, function(data) {
+		if( parseInt(data)==1 ) $("#TP_SP_"+sid).remove();
+	})
+}
+</script>
+</body>
+</html>

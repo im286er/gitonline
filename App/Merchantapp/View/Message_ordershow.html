@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>消息中心</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<style>
+.order-status p { font-size:0.8rem; }
+</style>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>订单详情-{$sname}</h1>
+		<a href="{:U('Message/msglist',array('type'=>2))}" class="ico header-back"></a>
+	</header>
+	<div class="main container" style="padding-top: 5.6rem;">
+		<div class="tab-content active">
+			<section class="order-list status-nopay" id="OID_{$o.o_id}">
+				<div class="order-title">
+					<p class="order-no">订单号：{$o.o_id}</p>
+					<p class="order-time">下单时间：{$o.o_dstime}</p>
+                    
+                    <eq name="o.o_gtype" value="Seat">
+						<div class="order-seat">包厢</div>
+                    </eq>
+				</div>
+				
+				<div class="order-body">
+					<div class="order-status">
+						<p style="width:44%;">支付类型：{$order_type[$o['o_type']]}</p>
+                        <p style="width:31%;">支付状态：{$order_pstatus[$o['o_pstatus']]}</p>
+						<p style="width:25%;">订单状态：{$order_dstatus[$o['o_dstatus']]}</p>
+					</div>
+					<div class="order-status">
+						<p style="width:40%;">收货人：<if condition="$o['o_name']">{$o.o_name}<elseif condition="$users[$o['o_uid']]['u_ename']"/><php>echo $users[$o['o_uid']]['u_ename'];</php><else /><php>echo $users[$o['o_uid']]['u_name'];</php></if></p>
+						<p style="width:33%;">电话：{$o.o_phone}</p>
+	                    
+	                    <if condition="$v['o_xftype']==1">
+							<p style="width:27%;">座位号：{$o.o_seat}</p> 
+						</if>
+					</div>
+					<if condition="$o['o_address']">
+					<if condition="$v['o_xftype']!=1">
+						<div class="order-status">
+							 <p style="width:37%;">收货地址：{$o.o_address}</p>
+						</div>
+					</if></if>
+
+					<ul class="clearfix">
+                    	<php>$count_number=0;</php>
+                    	<volist name="o.ogoods" id='g'>
+						<li>
+							<span class="order-name">{$g.sp_name}</span>
+							<span class="order-price">￥{$g.sp_gdprice}</span>
+							<span class="order-num">X{$g.sp_number}</span>
+                            <php>$count_number += $g['sp_number'];</php>
+						</li>
+                        </volist>
+					</ul>
+					<p class="order-sum clearfix">
+						<span class="order-name">本次消费金额</span>
+						<span class="order-price">￥{$o.o_price}</span>
+						<span class="order-num">共{$count_number}</span>
+					</p>
+				</div>
+				<div class="order-footer">
+                    <if condition="$o['o_dstatus']==1"><!-- 待处理 -->
+                       
+                        <!--如果用户取消了订单-->
+                        <?php if($o['o_close']==1) { ?>
+                        	<a class="btn btn-o" href="#" onClick="AgreeCancelOrder('<?php echo $o['o_id']; ?>')">同意取消</a>
+                        <?php } else {?>
+                            <!-- 如果是线上支付，并且支付失败 -->
+                            <?php if($o['o_type']!=0 && $o['o_pstatus']==0): ?>
+                            	<a class="btn btn-o disable" href="javascript:;" data-value="1" onClick="SetMessageForUser(this, '<?php echo $o['o_id']; ?>', '<?php echo $o['o_uid']; ?>')">提醒付款</a>
+                            <!-- 如果是线上支付，并且支付成功 或者 是下线支付 -->
+                            <?php elseif($o['o_type']==0 || ($o['o_type']!=0 && $o['o_pstatus']==1)):?>
+                            	<a class="btn btn-o" href="javascript:;" onClick="GetOrderInfo('<?php echo $o['o_id']; ?>')">接受订单</a>
+                            	<a class="btn btn-o" href="javascript:;" onClick="SetOrderInfo('<?php echo $o['o_id']; ?>', '<?php echo $o['o_uid']; ?>')">拒绝订单</a>
+                            <?php else:?>
+                            	<span style="color:red">订单出现问题，请联系帝鼠平台</span>
+                            <?php endif; ?>
+                        <?php } ?> 
+                        
+                    <elseif condition="$o['o_dstatus']==3"/><!-- 待完成 -->
+                    	
+                        <!--如果用户取消了订单-->
+                        <?php if($o['o_close']==1) { ?>
+                        	<a class="btn btn-o" href="javascript:;" onClick="AgreeCancelOrder('<?php echo $o['o_id']; ?>')">同意取消</a>
+                            <a class="btn btn-o" href="javascript:;" onClick="RefuseCancleOrder('<?php echo $o['o_id']; ?>', '<?php echo $o['o_sid']; ?>', '<?php echo $o['o_uid']; ?>')">拒绝取消</a>
+                            <a class="btn btn-o" href="javascript:;" onClick="SendOrder('<?php echo $o['o_id']; ?>')">确认完成</a>
+                        <?php } else {?>
+                            <!-- 如果是线上支付，并且支付成功 或者 是下线支付 -->
+                            <?php if($o['o_type']==0 || ($o['o_type']!=0 && $o['o_pstatus']==1)):?>
+                            	<a class="btn btn-o" href="javascript:;" onClick="SendOrder('<?php echo $o['o_id']; ?>')">确认完成</a>
+                            <?php else:?>
+                            	<span style="color:red">订单出现问题，请联系帝鼠平台</span>
+                            <?php endif; ?>
+                        <?php } ?> 
+
+                    <elseif condition="$o['o_dstatus']==4"/><!-- 已完成 -->
+                    	已完成
+                    <elseif condition="$o['o_dstatus']==5"/>
+                    	已关闭
+                    </if>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<div class="modal" id="" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-yes"></i>
+					<p>确认收款吗？</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-yes" href="javascript:;">确定</a>
+					<a class="btn-no" href="javascript:;">取消</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+    <script src="__PUBLIC__/Js/layer/layer.js"></script>
+    
+	<script>
+	//同意取消
+	function AgreeCancelOrder( orderid )
+	{
+		if( !orderid ) return false;		
+
+		layer.confirm('确定要同意取消此订单吗？', {
+			btn: ['确定','取消'], shade: false 
+		}, function(){
+			$.post('{:U("/Order/AjaxagreeCancelOrder")}', {oid:orderid}, function(data) {
+				if( parseInt(data)==1 ) {
+					$("#OID_"+oid).remove();
+					layer.msg("你的订单已经取消，请在 '已关闭订单' 中查看");
+				} else {
+					layer.msg('操作失败,请重新操作');
+				}
+			})	
+		}, function(){
+			return false;
+		});
+		
+		return false;	
+	}
+	
+	//提醒支付
+	function SetMessageForUser(obj, oid, uid) 
+	{
+		var value = $(obj).attr("data-value");
+		if( parseInt(value) != 1 ) {
+			layer.msg('请不要重新提醒'); return false;
+		}
+		$.post("/Order/setMessageForUser", {o:oid, u:uid}, function(data) {
+			if( parseInt(data)==1 ) {
+				$(obj).attr("data-value", "0").html( "180 S可再次提醒" );
+				var timeInterval = setInterval(function() {
+					var value = parseInt( $(obj).html() ); var time = -- value;
+					$(obj).html( time + " S可再次提醒" );
+					if(parseInt(time) <= 0) { 
+						$(obj).attr("data-value", "1").html("提醒付款"); clearInterval(timeInterval); 
+					}
+				}, 1000);
+			} else {
+				layer.msg('提醒失败，请重新提醒'); 
+			}
+		});	
+	}
+	
+	//接受订单
+	function GetOrderInfo(oid)
+	{
+		layer.confirm('确认要接受此订单吗？', {
+			btn: ['确定','取消'], shade: false 
+		}, function(){
+			$.post("/Order/setOrderStatus", {o:oid}, function(data) {
+				if( parseInt(data)==1 ) {
+					$("#OID_"+oid).remove();
+					layer.msg("您已经接受此订单，请在 '待完成订单' 中查看");
+				} else {
+					layer.msg('接受失败，请重新接受'); 	
+				}
+			});	
+		}, function(){
+			return false;
+		});
+		return false;
+	}
+	
+	//拒绝订单
+	function SetOrderInfo(oid, uid){
+				//询问框
+		layer.confirm('<div><select id="op_reason"><option value="">请选择拒绝订单原因</option><option value="库存不全">库存不全</option><option value="消费高峰">消费高峰</option><option value="店铺休息">店铺休息</option><option value="其他原因">其他原因</option></select></div>', {
+			title:'拒绝订单',btn: ['确认拒绝','取消'] //按钮
+		}, function(){
+			var op_reason = $('#op_reason').val();
+				if(!op_reason) { alert('请选择拒绝原因！'); return false; }
+				$.post("{:U('/Order/refuseOrderStatus/')}", {'oid':oid,'uid':uid, 'reason':op_reason},function(result) {
+					if( parseInt(result) == 1) { 
+						$("#OID_"+oid).remove();
+						layer.closeAll();
+						alert("您已经拒绝此订单，请在 '已关闭订单' 中查看");
+						//layer.msg("您已经拒绝此订单，请在 '已关闭订单' 中查看");
+						//layer.alert("您已经拒绝此订单，请在 '已关闭订单' 中查看", {title:'温馨提示',icon: 1,skin: 'layer-ext-moon'})
+					} else { 
+						layer.msg('操作失败，请重新尝试'); 	
+					}
+				});
+		}, function(){
+			layer.msg('取消操作');
+		});
+	}
+	
+	//拒绝取消
+	function RefuseCancleOrder(oid, sid, uid)
+	{
+		layer.confirm('你确认要拒绝此订单的取消申请吗？', {
+			btn: ['确定','取消'], shade: false 
+		}, function(){
+			$.post("/Order/refuseCancleOrder", {o:oid, s:sid, u:uid}, function(data) {
+				if( parseInt(data)==1 ) {
+					layer.msg('已将拒绝通知发送到用户');
+				} else {
+					layer.msg('操作失败，请重新操作');
+				}
+			});	
+		}, function(){
+			return false;
+		});
+		return false;
+	}
+	
+	//确认订单
+	function SendOrder(oid)
+	{
+		layer.confirm('你确认此订单已经完成了吗？', {
+			btn: ['确定','取消'], shade: false 
+		}, function(){
+			$.post("/Order/confirmOrderStatus", {o:oid}, function(data) {
+				if( parseInt(data)==1 ) {
+					$("#OID_"+oid).remove();
+					layer.msg("您已确认完成，请在 '已完成订单' 中查看");
+				} else {
+					layer.msg('操作失败，请重新操作');
+				}
+			});	
+		}, function(){
+			return false;
+		});
+		return false;
+	}
+	</script>
+</body>
+</html>

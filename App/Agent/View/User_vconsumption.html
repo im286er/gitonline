@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="dialog-main-body">
+	<div class="main-body">
+    	<div class="divSetting" style="height:400px; overflow-x:hidden; overflow-y:auto;">
+        	
+            <if condition="!is_array($orderInfo) || empty($orderInfo)">
+                <h1 style="height:80px; line-height:80px; text-align:center; font-size:24px;">暂无消费记录</h1>            
+            <else/>
+                <table class="table-list">
+                    <thead>
+                        <tr>
+                            <th width="25%">订单号</th>
+                            <th width="15%">所属商家</th>
+                            <th width="15%">下单时间</th>
+                            <th width="15%">订单状态</th>
+                            <th width="15%">订单总价</th>
+                            <th width="15%">支付状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="orderInfo" id="o">
+                            <tr>
+                                <th width="25%">{$o.flo_id}</th>
+                                <th width="15%">{$o.mnickname}</th>
+                                <th width="15%">{$o.flo_dstime}</th>
+                                <th width="15%">
+                                    <if condition="$o['flo_dstatus']==1">
+                                    配货中
+                                    <elseif condition="$o['flo_dstatus']==2"/>
+                                    待发货
+                                    <elseif condition="$o['flo_dstatus']==3"/>
+                                    已发货
+                                    <elseif condition="$o['flo_dstatus']==4"/>
+                                    已完成
+                                    <elseif condition="$o['flo_dstatus']==5"/>
+                                    无效
+                                    </if>
+                                </th>
+                                <th width="15%">{$o.flo_price}</th>
+                                <th width="15%">
+                                    <if condition="$o['flo_pstatus']==1">已支付<else/>未支付</if>
+                                </th>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </if>
+        </div>
+        <div class="btn">
+        	<span style="float:right;">总消费：{$countNum}</span>
+        </div>
+	</div>
+</div>
+</body>
+</html>

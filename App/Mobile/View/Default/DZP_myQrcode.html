@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telphone=no, email=no"/>
+<title>我的兑奖码</title>
+<link rel="stylesheet" href="/Public/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="/Public/Mobile/default/Css/lottery.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body class="">
+	<header class="header">
+		<h1>我的兑奖码</h1>
+		<a href="{$back_url}" class="ico header-back"></a>
+	</header>
+	<div class="main container p-58">
+		<section class="order-list order-code">
+			<div class="order-title">
+				<p class="order-no">抽奖码：{$prize.id}</p>
+				<p class="order-time">中奖时间：{$prize.addtime}</p>
+                <p class="order-time">有效期至：{$prize.end_time}</p>
+			</div>
+			<div class="order-body">
+				<div class="order-qrcode">
+					<img src="{:U('My/makePQrcode@flapp',array('pz_id'=>$prize['id']))}" alt="">
+				</div>
+				<p class="order-text">
+					凭此二维码，前往收银台，商户扫描确认，领取奖品
+				</p>
+			</div>
+		</section>
+		<div class="order-call">
+			<div class="sec-title">如有疑问联系客服</div>
+			<div class="sec-body">
+			<foreach name="shop" item="vo" >
+			<div class="sec-list">
+					
+					<p>{$vo.sname}客服电话：{$vo.mservetel}</p>
+					
+				</div>
+			</foreach>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

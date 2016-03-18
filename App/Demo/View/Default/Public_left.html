@@ -1,0 +1,82 @@
+    <div class="left-nav">
+        <div class="sideBar_a">
+             <div class="sideBar_nav new-sideBar_nav">
+                <ul>
+                    <li <eq name="CurrentUrl" value="Indexindex">class="curr"</eq>><a href="{:U('/Index/index', '', true)}">我的店铺</a></li>
+                </ul>
+            </div>
+            <div class="sideBar_nav">
+                <h3 class="funicon">店铺</h3>
+                <ul>
+					<li id="Managetemplate"><a href="{:U('/Manage/template', '', true)}" target="_self">店铺装修</a></li>
+					<li id="Shopindex"><a href="{:U('/Shop/index', '', true)}" target="_self">分店管理</a></li>
+                    <li id="Functionautoreply"><a href="{:U('/Function/autoreply', array('type'=>1), true)}" target="_self">自动回复</a></li>
+					<li id="Useropinion"><a href="{:U('/User/opinion', '', true)}"  target="_self">会员反馈</a></li>
+					<li id="Userindex"><a href="{:U('/User/index', '', true)}"  target="_self">会员管理</a></li>
+					<li id="Salesmyorder"><a href="{:U('/Sales/myorder', '', true)}" target="_self">订单管理</a></li>
+					<li id="Salesmyreserve"><a href="{:U('/Sales/myreserve', '', true)}" target="_self">预定管理</a></li>
+					<li id="Managedevice"><a href="{:U('/Manage/device', '', true)}"  target="_self">智能揽客神器</a></li>		
+                </ul>
+            </div>
+            <div class="sideBar_nav">
+                <h3 class="hornicon">功能</h3>
+                <ul>
+					<li id="Salesgoodsctype1"><a href="{:U('/Sales/goods', array('ctype'=>1), true)}" target="_self">商品上架</a></li>
+					<li id="Salesgoodsctype2"><a href="{:U('/Sales/goods', array('ctype'=>2), true)}" target="_self">预约上架</a></li>
+					<li id="Salesjqlist"><a href="{:U('/Sales/jqlist', '', true)}" target="_self">优惠券上架</a></li>
+					<li id="Pluginappdownset"><a href="{:U('/Plugin/appdownset', '', true)}" target="_self">应用上架</a></li>
+					<li id="Infoindex"><a href="{:U('/Info/index', array('ctype'=>3), true)}" target="_self">视频上架</a></li>
+					<li id="Indexweishop"><a href="{:U('/Index/weishop', '', true)}" target="_self">自定义连接</a></li>
+					<li id="Functionmodule"><a href="{:U('/Function/module', array('type'=>1), true)}" target="_self">添加功能插件</a></li>
+                </ul>
+            </div>
+            <div class="sideBar_nav">
+                <h3 class="fileicon">广告</h3>
+                <ul>
+					<li id="ManagesetFigure"><a href="{:U('/Manage/setFigure', '', true)}" target="_self">APP启动广告</a></li>
+					<li id="Manageadvert"><a href="{:U('/Manage/advert', '', true)}"  target="_self">店铺首页轮换</a></li>
+                </ul>
+            </div>
+            <div class="sideBar_nav">
+                <h3 class="shopicon">营销</h3>
+                <ul>
+					<li id="Messagepushmsg"><a href="{:U('/Message/pushmsg', '', true)}" target="_self">群发消息</a></li>
+					<li id="Messagehdlist"><a href="{:U('/Message/hdlist', '', true)}" target="_self">最新活动</a></li>
+					<li id="Specialsplist"><a href="{:U('/Special/splist', '', false)}" target="_self">营销专题制作</a></li>
+					<li id="Pluginshareset"><a href="{:U('/Plugin/shareset', '', true)}" target="_self">病毒营销设置</a></li>
+                </ul>
+            </div>
+            <div class="sideBar_nav">
+                <h3 class="hornicon">财务</h3>
+                <ul>
+					<li id="Managefinance"><a href="{:U('/Manage/finance', '', true)}" target="_self">财务管理</a></li>
+					<li id="Pluginsetalipay"><a href="{:U('/Plugin/setalipay', '', true)}" target="_self">支付宝设置</a></li>
+                </ul>
+            </div>
+			<volist name="modules" id="value">
+			<div class="sideBar_nav">
+                <h3 class="{$value.module_sign}">{$value.module_name}</h3>
+                <ul>
+					<volist name="value.children" id="vo">
+                    <li id="{$vo.module_link|str_replace='/','',###}"><a href="/{$vo.module_link|ltrim=###,'/'}" target="_self">{$vo.module_name}</a></li>
+					</volist>
+                </ul>
+            </div>
+			</volist>
+        </div>
+	</div>
+	<script type="text/javascript">
+	$(function() {
+		var CurrentUrl = '{$CurrentUrl}';
+		//$('.sideBar_a ul').css('display','none');
+		//$('.sideBar_a ul:first-child').css('display','block');
+		if(CurrentUrl == 'Salesgoods'){
+			var paramurl = 'ctype{:I("get.ctype")}';
+			CurrentUrl = CurrentUrl+paramurl;
+		}
+		$('#'+CurrentUrl).addClass("curr");
+		//$('#'+CurrentUrl).addClass("curr").parent('ul').css('display','block');
+		//$('.sideBar_a ul').eq(2).css('display','block');
+	});
+	</script>
+<!--left over--> 	

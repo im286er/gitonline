@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav"><span style="margin-left:15px;">意见列表</span></div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+            	<label>模糊搜索</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：意见内容/所属分店" style="width:180px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" /> 
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="30">序号</th>
+                        <th width="10%">会员昵称</th>
+                        <th width="10%">会员手机号</th>
+                        <th width="10%">会员姓名</th>
+                    <!--     <th width="10%">所在地区</th> -->
+                        <th>意见内容</th>
+                        <th width="10%">所属商家</th>
+                        <th width="9%">所属分店</th>
+                        <th width="12%">创建时间</th>
+						<th>回复内容</th>
+                        <th width="9%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="opinionlist" id="vo">
+                        <tr>
+                            <td>{$vo.op_id}</td>
+                            <td>{$vo.u_name}</td>
+                            <td>{$vo.u_phone}</td>
+                            <td>{$vo.u_ename}</td>
+                   <!--          <td>{$vo.op_address}</td> --> 
+                            <td>{$vo.op_content}</td>
+                            <td>{$vo.mnickname}</td>
+                            <td>{$vo.sname}</td>
+                            <td>{$vo.op_addtime|date='Y-m-d H:i',###}</td>
+							 <td>{$vo.op_replytxt}</td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="LookInfoList('{$vo.op_id}')">查看记录</a>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//查看记录
+function LookInfoList( opid ) {
+//alert(opid);
+    if( !opid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 500,
+		title : '查看记录',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Opinion/opinionsInfoList/opid/'+opid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <div id="ScrollForm">
+            <div class="divSetting">
+                <table class="table-form" border="0">
+                	<thead>
+                    	<tr style="height:0px;overflow:hidden;padding:0px;border:none;">
+                            <th width="100" style="padding:0px;height:0px;border:0px;"></th>
+                            <td style="padding:0px;height:0px;border:0px;"></td>
+                            <th width="70" style="padding:0px;height:0px;border:0px;"></th>
+                            <td style="padding:0px;height:0px;border:0px;"></td>
+                            <th width="80" style="padding:0px;height:0px;border:0px;"></th>
+                            <td style="padding:0px;height:0px;border:0px;"></td>
+                        </tr>
+                    </thead>
+                	<tbody>
+                    	<tr>	
+                            <td colspan="6" style="padding-left:70px; color:#00f;"><b>会员信息</b></td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th width="80">会员昵称</th>
+                            <td colspan="2">{$user.flu_nickname} (uid:{$user.flu_userid})</td> 
+							<td style="border-left:1px solid #ccc;"> <span>注册来源:&nbsp;&nbsp;</span>
+                              	<if condition="$user['flu_source']==1">
+                                    QQ
+                                <elseif condition="$user['flu_source']==2"/>
+                                    新浪
+                                <elseif condition="$user['flu_source']==3"/>
+                                    微信
+                                <else/>
+                                    系统注册
+                                </if>
+                            </td>
+                            <th width="80">注册时间</th>
+                            <td>{$user.flu_regtime}</td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th width="80">所属商家</th>
+                            <td>{$user.mnickname|default='-'}</td>
+                            <th colspan="3">所属代理商</th>
+                            <td>{$user.anickname|default='-'}</td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th width="80">手机号</th>
+                            <td>{$user.flu_phone}</td>
+                            <th width="80">会员头像</th>
+                            <td colspan="3"><img src="{$user.flu_avatar}" width="30" height="30"/></td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th width="80">最后登录时间</th>
+							<td colspan="3"> {$user.flu_lasttime}</td>
+                            <th>最后登录IP</th>
+                            <td>{$user.flu_lastip}</td>
+                        </tr>
+                        <tr style="height:42px;">
+                            <th>推广会员量</th>
+                            <td colspan="5">{$count}</td>							
+                        </tr>
+                        <tr style="height:42px;">
+                            <th>账号余额</th>
+                            <td colspan="5">{$user.flu_balance}</td>							
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

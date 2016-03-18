@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>后台管理中心</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/acommon.css" />
+<style type="text/css">
+.main-body .block .con { padding:0px; }
+div#countMap, div#ordMap { height:370px; overflow:hidden; }
+div.count { height:30px; background:#f1f1f1; } 
+div.count li { float:left; margin:3px 15px 0px; height:24px; line-height:24px; }
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/ECharts/echarts.js"></script>
+</head>
+
+<body class="main">
+<div id="main-body">
+	<div class="main-body">
+	    <div class="main-left">
+	        <!--div class="block">
+	            <h6>订单统计</h6>
+	            <div class="con" style="height:400px;">
+					<div id="ordMap"></div>
+                    <textarea style="display:none" id="ord-data-value">{$order_data}</textarea>                    
+                    <script type="text/javascript">
+					require.config({
+						paths: { echarts: '__PUBLIC__/Js/ECharts' }
+					});
+			        require(
+						['echarts', 'echarts/chart/line'], 
+						function (ec) {
+							var myChart = ec.init(document.getElementById('ordMap')); 
+							var option = {
+								title : {
+									text: '最近30天订单统计',
+									x:20,
+									y:20,
+									textStyle:{fontSize:12, color:'#3a6ea5'}
+								},
+								tooltip : {
+									show: true,
+									trigger:'axis'
+								},
+								dataZoom : {
+									show : true,
+									realtime : true,
+									start : 40,
+									end : 90
+								},
+								legend : {
+									data: ['订单总数', '已支付订单数', '未支付订单数'],
+									y:20
+								},
+								xAxis : [
+									{
+										type : 'category',
+										data : (function() {
+											var con_data_value = $.trim($("#ord-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[0]);
+											})
+											return list_date;
+										})(), 
+									}
+								],
+								yAxis : [
+									{
+										type : 'value',
+									}
+								],
+								series : [
+									{
+										"name": "订单总数",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#ord-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[1]);
+											})
+											return list_date;
+										})()
+									}, 
+									{
+										"name": "已支付订单数",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#ord-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[2]);
+											})
+											return list_date;
+										})()
+									},
+									{
+										"name": "未支付订单数",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#ord-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[3]);
+											})
+											return list_date;
+										})()
+									}
+								]
+							};
+							myChart.setOption(option); 
+						}
+					);
+					</script>
+	            	<div class="count">
+			        	<ul>
+			        		<li>订单总数 {$order_cont.countOrdero}</li>
+			        		<li>已支付订单总数 {$order_cont.countOrders}</li>
+			        		<li>未支付订单总数 {$order_cont.countOrdery}</li>
+			            </ul>
+			        </div>
+	            </div>
+	        </div-->
+		
+
+	        <div class="block c" 	<if condition="$pid eq 0 "><else />style="display:none;" </if> >
+	            <h6>代理商统计</h6>
+	            <div class="con" style="height:70px;">
+                	<div style="height:40px;"></div>
+                	<div class="count">
+			        	<ul>
+			        		<li>代理商总数 {$agent_cont}</li>
+			            </ul>
+			        </div>
+	            </div>
+	        </div>
+			
+	        <div class="block">
+	            <h6>会员统计</h6>
+	            <div class="con" style="height:70px;">
+                	<div style="height:40px;"></div>
+                	<div class="count">
+			        	<ul>
+			        		<li>会员总数 {$user_cont}</li>
+			            </ul>
+			        </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="main-right">
+	        <!--div class="block">
+	            <h6>收支统计</h6>
+	            <div class="con" style="height:400px;">
+	            	<div id="countMap"></div>
+                    <textarea style="display:none" id="con-data-value">{$data}</textarea>                    
+                    <script type="text/javascript">
+					require.config({
+						paths: { echarts: '__PUBLIC__/Js/ECharts' }
+					});
+			        require(
+						['echarts', 'echarts/chart/line'], 
+						function (ec) {
+							var myChart = ec.init(document.getElementById('countMap')); 
+							var option = {
+								title : {
+									text: '最近30天收支统计',
+									x:20,
+									y:20,
+									textStyle:{fontSize:12, color:'#3a6ea5'}
+								},
+								tooltip : {
+									show: true,
+									trigger:'axis'
+								},
+								dataZoom : {
+									show : true,
+									realtime : true,
+									start : 40,
+									end : 90
+								},
+								legend : {
+									data: ['实际收入', '预计收入', '实际支出', '预计支出'],
+									y:20
+								},
+								xAxis : [
+									{
+										type : 'category',
+										data : (function() {
+											var con_data_value = $.trim($("#con-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[0]);
+											})
+											return list_date;
+										})(), 
+									}
+								],
+								yAxis : [
+									{
+										type : 'value',
+									}
+								],
+								series : [
+									{
+										"name": "实际收入",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#con-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[3]);
+											})
+											return list_date;
+										})()
+									}, 
+									{
+										"name": "预计收入",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#con-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[1]);
+											})
+											return list_date;
+										})()
+									},
+									{
+										"name": "实际支出",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#con-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[4]);
+											})
+											return list_date;
+										})()
+									},
+									{
+										"name": "预计支出",
+										"type": "line",
+										"data": (function() {
+											var con_data_value = $.trim($("#con-data-value").val());
+											var list_date = [];
+											$.each(con_data_value.split(','), function(key, value) {
+												list_date.push($.trim(value).split('|')[2]);
+											})
+											return list_date;
+										})()
+									}
+								]
+							};
+							myChart.setOption(option); 
+						}
+					);
+					</script>
+	            	<div class="count">
+			        	<ul>
+			        		<li>预计总收入 {$count.countIncomey|number_format=###,2} 元</li>
+			        		<li>实际总收入 {$count.countIncomes|number_format=###,2} 元</li>
+			        		<li>预计总支出 {$count.countMentiony|number_format=###,2} 元</li>
+			        		<li>实际总支出 {$count.countMentions|number_format=###,2} 元</li>
+			            </ul>
+			        </div>
+	            </div>
+	        </div-->
+	        <div class="block c">
+	            <h6>商家统计</h6>
+	            <div class="con" style="height:70px;">
+                	<div style="height:40px;"></div>
+                	<div class="count">
+			        	<ul>
+			        		<li>商家总数 {$merchant_cont}</li>
+			            </ul>
+			        </div>
+	            </div>
+	        </div>
+ 	        <div class="block">
+	            <h6>版权信息</h6>
+	            <div class="con" style="height:70px;">
+	            </div>
+	        </div>
+	    </div>           
+	</div>
+</div>
+</body>
+</html>
+

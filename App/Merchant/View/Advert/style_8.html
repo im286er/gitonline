@@ -1,0 +1,76 @@
+<!--START-->
+<style type="text/css">
+.cyh-ad{ display:block; overflow:hidden; width:460px;float:left;margin-left:50px; }
+</style>
+<!--END-->
+
+<style>
+.cyh-ad a {
+display: block;
+height: 10rem;
+margin: 1rem;
+border-radius: .6rem;
+background-color: #f5f5f5;
+box-shadow: 0 .2rem .4rem #c1c2c5;
+}
+.cyh-ad img {
+width: 100%;
+height: 10rem;
+}
+</style>
+<!--START-->
+<div class="style-one">
+<eq name="adtype" value="style_8">
+<h3><a href="#">样式8<img src="/Public/Images/merchant/choose.png" id="change-one"/></a></h3>
+<else/>
+<h3><a href="#">样式8<img src="/Public/Images/merchant/not_choose.png" id="change-one" onclick="AjaxSetAdvertStyle('{$Think.get.pos}', '{$Think.get.tid}', 'style_8', 1)"/></a></h3>
+</eq>
+
+<!--END-->
+
+<section class="cyh-ad">
+<a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(8,1)"<else/>href="{$advert.1.ad_imglink}"</if>>
+<img id="IMAGEO_STYLEEE_SRC" src="{$advert.1.ad_imgsrc|default='/Public/Mobile/cyh/img/demo/cyh_ad_01.png'}" alt="">
+</a>
+</section>
+
+<!--START-->
+<div class="style-one-click style-click" id="style-8-click-1">
+      <h2>1<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+      <ul style="margin-top:-40px">
+          <li>
+              <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLEEE_IMAGEO_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+              <div class="popover popover-top" id="style-8-1-1">
+                  <div class="arrow"></div>
+                  <div class="popover-content">已成功复制</div>
+              </div>
+          </li>
+          <li>
+              <a href="javascript:void(0);" onclick="show_2(8,1,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+              <div class="popover popover-bottom" id="style-8-1-2">
+                  <div class="arrow"></div>
+                  <input  value="{$advert.1.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLEEE_IMAGEO_LINK"/>
+              </div>
+          </li>
+          <li>
+              <a href="javascript:void(0);" onclick="show_2(8,1,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+              <div class="popover popover-bottom lef-90" id="style-8-1-3">
+                  <div class="arrow"></div>
+                  <input  value="{$advert.1.ad_title}" readonly="readonly" id="UPLOAD_STYLEEE_IMAGEO_TEXT"/>
+              </div>
+          </li>
+          <li>
+          	  <a href="javascript:void(0);" onclick="uploadImageFun('style_8', 1, 'UPLOAD_STYLEEE_IMAGEO_VALUE', 'IMAGEO_STYLEEE_SRC', 'UPLOAD_STYLEEE_IMAGEO_LINK', 'UPLOAD_STYLEEE_IMAGEO_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+          </li>
+      </ul>
+</div>
+</div>
+<div style="clear:both;"></div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var H=$(".cyh-ad").height();
+$("#style-8-click-1").css({"height":H+20,"left":"90px","width":"500px"});
+});
+</script>   
+<!--END-->

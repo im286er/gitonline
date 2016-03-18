@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+td ul li { float:left; margin:3px 15px 3px 0px; position:relative; } .table-form tr { height:42px; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <div id="divSetting1">
+            <table class="table-form" border="0">
+                <tr>
+                    <th width="100">所属类型</th>
+                    <td>{$agent.arank}</td>
+                    <th width="100">代理商账户</th>
+                    <td>{$agent.mname} &nbsp;( mid:{$agent.mid} )</td>
+                </tr>
+                <tr>
+                    <th>代理区域</th>
+                    <td colspan="3">{$agent.aid|get_address_byid}</td>
+                </tr>
+                <tr>
+                    <th>企业/个人全称</th>
+                    <td>{$agent.anickname}</td>
+                    <th>企业/个人简称</th>
+                    <td>{$agent.aabbreviation}</td>
+                </tr>
+                <tr>
+                    <th>企业/个人地址</th>
+                    <td>{$agent.aaddress}</td>
+                    <th>市场专员</th>
+                    <td>{$agent.acommissioner}</td>
+                </tr>
+                <tr>
+                    <th>联系人姓名</th>
+                    <td>{$agent.acontactsname}</td>
+                    <th>联系人电话</th>
+                    <td>{$agent.acontactstel}</td>
+                </tr>
+                <tr>
+                    <th>支付宝账户</th>
+                    <td colspan="3">{$agent.mbdzh}</td>
+            	</tr>
+                <tr>
+                    <th>身份证号</th>
+                    <td colspan="3">{$agent.idcard}</td>
+            	</tr>
+                <tr>
+                    <th>相关证件</th>
+                    <td colspan="3">
+                        <ul>
+						                          <ul> 
+						    <li><a href="{$agent.acertificates.sfzz}" target="_blank"><img src="{$agent.acertificates.sfzz|default='/Public/Images/image_04.gif'}" width="97" height="113" /></a></li>
+                            <li style="margin-right:0px;"><a href="{$agent.acertificates.sfzb}" target="_blank"><img src="{$agent.acertificates.sfzb|default='/Public/Images/image_05.gif'}" width="97" height="113" /></a></li>
+                            <li><a href="{$agent.acertificates.yyzz}"  target="_blank"><img src="{$agent.acertificates.yyzz|default='/Public/Images/image_01.gif'}" width="97" height="113" /></a></li>
+                            <li><a href="{$agent.acertificates.swdj}"  target="_blank"><img src="{$agent.acertificates.swdj|default='/Public/Images/image_02.gif'}" width="97" height="113" /></a></li>
+                            <li style="margin-right:0px;"><a href="{$agent.acertificates.zzjg}"  target="_blank"><img src="{$agent.acertificates.zzjg|default='/Public/Images/image_03.gif'}" width="97" height="113" /></a></li>
+                      
+                        </ul>
+                         
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

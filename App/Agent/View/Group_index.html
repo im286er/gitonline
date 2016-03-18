@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/agent/style.css" /> 
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+ $('.title').click(function(){
+	var $ul = $(this).next('ul');
+	$('dd').find('ul').slideUp();
+	if($ul.is(':visible')){
+		$(this).next('ul').slideUp();
+	}else{
+		$(this).next('ul').slideDown();
+	}
+});
+});
+</script>
+
+
+</head>
+
+
+<body>
+
+<div class="place">
+   <span>位置：</span>
+   <ul class="placeul">
+   <li><a href="#">首页</a></li>
+   <li><a href="#">运营管理</a></li>
+   <li><a href="#">历史公告</a></li>
+   </ul>
+   </div>
+   
+   <div class="rightinfo">
+   
+   <div class="tools">
+   
+   	<ul class="toolbar">
+       <li class="click"><span><img src="__PUBLIC__/Images/t01.png" /></span><a href="{:U('Agent/Group/add')}" target="rFrame">添加</a></li>
+     
+       </ul>
+   </div>
+   
+   
+   <table class="tablelist">
+   	<thead>
+   	<tr>
+       <th><input name="" type="checkbox" value="" checked="checked"/></th>
+       <th>序号<i class="sort"><img src="__PUBLIC__/Images/px.gif" /></i></th>
+       <th>目标用户</th>
+       <th>通知标题</th>
+       <th>通知图标</th>
+       <th>后续动作</th>
+       <th>发送时间</th>
+      	<th>创建时间</th>
+      	<th>内容</th>
+      	<th>统计</th>
+      	<th>状态</th>
+      	<th>操作人</th>
+       </tr>
+       </thead>
+       <tbody>
+   	
+   	<foreach name="result" item="vo">
+   	
+       <tr>
+       <td><input name="" type="checkbox" value="" /></td>
+       <td>{$vo.pid}</td>
+       <td>
+       <if condition="$vo[putype] =='1'">全部用户<elseif condition="$vo[putype]== '2'"/>按区域推送<else />按昵称推送
+    </if>
+    </td>
+       <td>{$vo.ptitle}</td>
+       <td>{$vo.plogo}</td>
+       <td>  <if condition="$vo[psucc] =='1'">启动应用<elseif condition="$vo[psucc]== '2'"/>打开连接<else />下载应用
+    </if>
+    </td>
+       <td>{$vo.ptime}</td>
+       <td>{$vo.ptime}</td>
+       <td>{$vo.pcontent}</td>
+       <td>{$vo.pcount.response_params.success_amount}</td>
+       <td>
+       <if condition="$vo.pstatus eq 1">待发送
+    <elseif condition="$vo.pstatus eq 2"/>发送中
+    <else />已发送
+    </if>
+    </td>
+      
+       <td>{$mname}</td>
+       </tr> 
+     </foreach>
+       </tbody>
+   </table>
+   <div class="pagin">
+   	<div class="message">共<i class="blue">{$count}</i>条记录</div>
+       <ul class="paginList">
+       <li class="paginItem">{$page}</li>
+       </ul>
+   </div>
+
+   
+   <script type="text/javascript">
+
+$('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</div>
+</body>
+
+</html>

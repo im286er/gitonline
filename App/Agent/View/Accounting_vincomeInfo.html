@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+    	<a href="{:U('/Accounting/incomeInfo')}" style="margin-left:15px;">我的帝鼠收入</a>
+        <a href="{:U('/Accounting/vincomeInfo')}" style="margin-left:15px;" class="on">我的推广收入</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+        	<input type="hidden" value="{$Think.get.type}" name="type" />
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：会员名称" style="width:280px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />  
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="15%">创建日期</th>
+                    <th width="15%">流水号</th>
+                    <th width="15%">收入（元）</th>
+                    <th width="15%">所属商家</th>
+                    <th width="15%">所属分店</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<php>$_COUNTY=$__COUNTS=0;</php>
+                <volist name="accountlist" id="vo">
+                	<php>$_COUNTY+=$vo['o_price'];if($vo['o_price']==1) $_COUNTS+=$vo['o_price'];</php>
+                    <tr>
+                        <td>{$vo.o_dstime}</td>
+                        <td>{$vo.o_id}</td>
+                        <td>{$vo.o_price} （<font color="red"><eq name="vo.o_pstatus" value="1">已支付<else/>未支付</eq></font>）</td>
+                        <td>{$vo.mnickname}</td>
+                        <td>{$vo.sname}</td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="btn" align="right">本页预计收入 {$_COUNTY} 元， 实际收入 {$_COUNTS|default=0} 元</div>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+<title>首页</title>
+<link type="text/css" href="__PUBLIC__/Portal/css/style.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Portal/css/susliks.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Portal/fonts/iconfont.css">
+<style type="text/css">
+#BgDiv1{background-color:#000; position:absolute; z-index:9999;  display:none;left:0px; top:0px; width:100%; height:100%;opacity: 0.6; filter: alpha(opacity=60);}
+.DialogDiv{position:absolute;z-index:99999;}/*配送公告*/
+.U-guodu-box { padding:5px 15px;  background:#3c3c3f; filter:alpha(opacity=90); -moz-opacity:0.9; -khtml-opacity: 0.9; opacity: 0.9;  min-heigh:200px; border-radius:10px;}
+.U-guodu-box div{ color:#fff; line-height:20px; font-size:12px; margin:0px auto; height:100%; padding-top:10%; padding-bottom:10%;}
+</style>
+</head>
+
+<body class="bodybg" >
+<div id="BgDiv1"></div>
+<section class="banner_hb">
+     <div class="main_visual top_0"><img src="{$banner|default='/Public/Portal/image/banner1.jpg'}"/></div>
+    <div class="shop-logo" style="width:300px;">
+        <p class="shlogo" style="margin:0px auto 10px;"><img src="{$appicon|default='/Public/Portal/image/icon.png'}"/></p>
+        <p class="shname">{$jianame|default='帝鼠OS'}·{$sname|default='帝鼠OS'}</p>
+    </div>
+</section>
+
+<if condition="$activelist['av_img']">
+<section class="banner_hb top20">
+    <div class="boxes">
+        <p><img src="{$activelist.av_img}"/></p>
+        <p class="a-txt">{$activelist.av_title}</p>
+    </div>
+</section>
+</if>
+
+
+<if condition="$couponinfo['vu_img']">
+    <section class="banner_hb top20">
+        <div class="boxes">
+            <p><img src="{$couponinfo.vu_img}"/></p>
+            <p class="a-txt">{$couponinfo.vu_name}</p>
+        </div>
+    </section>
+</if>
+
+<div class="DialogDiv" style="display:none; ">
+    <div class="U-guodu-box">
+        <div>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" >
+                <tr><td align="center" style="border:none;line-height:20px;"><img src="__PUBLIC__/Portal/image/loading.gif"></td></tr>
+                <tr><td valign="middle" align="center" style="border:none;line-height:20px;">提交中，请稍后！</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="foot banner_hb txt-center"><a href="javascript:void(0);" id="BUTTON"><img src="__PUBLIC__/Portal/image/www.png"/>开始免费上网</a></footer>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#BUTTON').click(function(){
+		$("#BgDiv1").css({ display:"block", height:$(document).height() });
+		var yscroll = document.documentElement.scrollTop;
+		var screenx=$(window).width();
+		var screeny=$(window).height();
+		
+		$(".DialogDiv").css("display", "block");
+		$(".DialogDiv").css("top", yscroll+"px");
+	
+		var DialogDiv_width=$(".DialogDiv").width();
+		var DialogDiv_height=$(".DialogDiv").height();
+	
+		$(".DialogDiv").css("left", (screenx/2-DialogDiv_width/2)+"px")
+		$(".DialogDiv").css("top", (screeny/2-DialogDiv_height/2)+"px")
+		$("body").css("overflow", "hidden");
+		
+		TryCount=5;
+        function TryCheak(XMLHttpRequest, textStatus, errorThrown) {
+            if(TryCount-- > 0)
+            {
+                Doget();
+            } else
+            {
+                $("#BgDiv1").css("display", "none");
+                $(".DialogDiv").css("display", "none");
+                alert("网络异常，请重试！");
+            }
+        };
+
+        var url = "<?php echo $jid ? 'http://yd.dishuos.com/Index/index/jid/'.$jid.'.html' : $_GET['ld']; ?>"
+        function Doget(){
+            $.ajax({
+                        type: "get",
+                        url: "http://ap.dishuos.com/Portal/setportal.html",
+                        data: {mac:"<?php echo $_GET['mac'];?>",
+                            rip:"<?php echo $_GET['ipaddr']; ?>", rid:"<?php echo $_GET['deviceid'];?>"},
+                        success: function(data){
+                            if( data =='ok') {
+                                var infodata = {
+                                    rcode : "<?php echo $_GET['deviceid']; ?>", rusermac : "<?php echo $_GET['mac']; ?>", ruserip : "<?php echo $_GET['ipaddr']; ?>", ruinfo : "<?php echo $_SERVER['HTTP_USER_AGENT']; ?>", rlast : "<?php echo date('Y-m-d H:i:s'); ?>"
+                                }
+                                $.post('http://ap.dishuos.com/Portal/setinfo.html', infodata);
+
+                                setInterval(function() {
+                                    window.location.href = url;
+                                }, 2000);
+                            }else{
+                                TryCheak();
+                            }
+                        },
+                        error:TryCheak
+                    }
+            );
+
+        };
+        Doget();
+	})
+})
+</script>
+
+      
+</body>
+</html>

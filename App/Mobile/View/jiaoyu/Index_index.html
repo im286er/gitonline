@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/jiaoyu/css/jiaoyu.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="bg-fff <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header thjy-header"><h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="container jiaoyu p-t main" id="container">
+		<section class="slide swiper-container jiaoyu-banner" id="banner">
+			<empty name="banner_list">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><a href="javascript:;"><img class="swiper-lazy" src="" data-src="__PUBLIC__/Mobile/jiaoyu/img/demo/shouji_banner_01.jpg" alt=""></a></div>
+                </div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><a href="{$banner_list[0]['burl']}"><img class="swiper-lazy" src="{$banner_list[0]['bimg']}" data-src="{$banner_list[0]['bimg']}" alt=""></a></div>
+                    </div>
+                <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img class="swiper-lazy" src="{$vo.bimg}" data-src="{$vo.bimg}" alt=""></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination shouji-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+		</section>
+		<php>
+		$HdModule = D('Active')->getModule($jid);
+		$VoucherModule = D('Voucher')->getModule($jid);
+		$VideoModule = D('Video')->getModule($jid);
+		</php>
+        <section class="jiaoyu-nav">
+            <ul>
+                <li>
+                  <a href="{$VideoModule.Link}"><img src="{$VideoModule.Icon|default='/Public/Mobile/jiaoyu/img/demo/jy_nav_01.png'}"/><span>{$VideoModule.Name}</span></a>
+                </li>
+                <li>
+                  <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}"><img src="{$module1icon|default='/Public/Mobile/jiaoyu/img/demo/jy_nav_04.png'}" alt="{$module1name}"/><span>{$module1name|default="幼教商城"}</span></a>
+                </li>
+                <li>
+                  <a href="{$VoucherModule.Link}"><img src="{$VoucherModule.Icon|default='/Public/Mobile/jiaoyu/img/demo/jy_nav_05.png'}"/><span>{$VoucherModule.Name|default="优惠券"}</span></a>
+                </li>
+                <li>
+                  <a href="{$HdModule.Link}"><img src="{$HdModule.Icon|default='/Public/Mobile/jiaoyu/img/demo/jy_nav_02.png'}"/><span>{$HdModule.Name|default="精彩阅读"}</span></a>
+                </li>
+                <li>
+                 <!--   <a href="{:U('Mobile/App/index', array('jid'=>$jid))}"><img src="{$InfoMenuAppDownIcon|default='/Public/Mobile/jiaoyu/img/demo/jy_nav_03.png'}"/><span>{$InfoMenuAppDownName}</span></a>-->
+                </li>
+            </ul>
+        </section>
+		<php>
+		$videolist = D('Video')->getVideoList($jid,array(),4);
+		</php>
+        <section class="jiaoyu-video public">
+            <div class="sec-title">
+            <h3>最新视频</h3>
+           <a href="{$VideoModule.Link}" class="jiaoyu-more">更多</a>
+            </div>
+            <div class="sec-body">
+            <ul class="clearfix">
+				<volist name="videolist" id="vo" >
+					<li><a href="{:U('Video/show',array('jid'=>$jid,'gid'=>$vo['gid']))}"><img src="{$vo.gimg}" title="{$vo.gname}"><p>{$vo.gname}</p></a></li>
+				</volist>
+            </ul>
+           </div>
+        </section>
+		<php>
+		$newlist = D('New')->getNew($jid,array(),4);
+		$NewModule = D('New')->getModule($jid);
+		</php>
+        <section class="jiaoyu-zx public">
+            <div class="sec-title">
+            <h3>{$NewModule.Name}</h3>
+            <a href="{$NewModule.Link}" class="jiaoyu-more">更多</a>
+            </div>
+            <div class="sec-body">
+            <ul class="clearfix">
+				<volist name="newlist" id="vo" >
+					<li><a href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id],'from_index'=>1))}"><img src="{$vo.new_img}" title="{$vo.new_title}"><p>{$vo.new_title}</p></a></li>
+				</volist>
+            </ul>
+           </div>
+        </section>
+    </div>
+    <script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+    $(function() {
+        $('#container').xpull({
+            'pullThreshold':150,
+            'maxPullThreshold':0,
+            'onPullEndFunc':function(){
+                window.location.reload();
+            },
+            'spinnerTimeout':2000
+        });
+
+        var mySlide = new Swiper('#banner', {
+            speed: 400,
+            pagination: '#banner-page',
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            preloadImages: false,
+            lazyLoading: true
+        });
+    });
+    </script>
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

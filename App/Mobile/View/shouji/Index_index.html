@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/shouji/css/shouji.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="bg-fff <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header shouji-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="container shouji" id="container">
+		<section class="slide swiper-container shouji-banner" id="banner">
+            <empty name="banner_list">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><a href="javascript:;"><img class="swiper-lazy" src="" data-src="__PUBLIC__/Mobile/shouji/img/demo/shouji_banner_01.jpg" alt=""></a></div>
+                </div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><a href="{$banner_list[0]['burl']}"><img class="swiper-lazy" src="{$banner_list[0]['bimg']}" data-src="{$banner_list[0]['bimg']}" alt=""></a></div>
+                    </div>
+                <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img class="swiper-lazy" src="{$vo.bimg}" data-src="{$vo.bimg}" alt=""></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination shouji-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+		</section>
+		<section class="shouji-nav">
+			<div class="shouji-nav-h">
+				<ul class="clearfix">
+					<li>
+						<a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+							<img class="lazy" src="{$module1icon|default='/Public/Mobile/shouji/img/shouji_nav_01.png'}" alt="">
+							<span>{$module1name}</span>
+						</a>
+					</li>
+					<li>
+						<a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+							<img class="lazy" src="{$module2icon|default='/Public/Mobile/shouji/img/shouji_nav_02.png'}" alt="">
+							<span>{$module2name}</span>
+						</a>
+					</li>
+					<li>
+						<a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+							<img class="lazy" src="{$ShopMenuIcon|default='/Public/Mobile/shouji/img/shouji_nav_03.png'}" alt="">
+							<span>{$ShopMenuName}</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="shouji-nav-v">
+				<ul class="clearfix">
+                	<li> <a href="{$WshopModuleLink}"> <img class="lazy" src="{$WshopModuleIcon|default='/Public/Mobile/shouji/img/demo/shouji_nav_04.png'}" alt=""> <span>{$WshopModuleName}</span> <i class="ico ico-right"></i></a> </li>
+                    <li> <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}"> <img class="lazy" src="{$InfoMenu3Icon|default='/Public/Mobile/shouji/img/demo/shouji_nav_05.png'}" alt=""> <span>{$InfoMenu3Name}</span> <i class="ico ico-right"></i></a> </li>
+                    <li><!-- <a href="{:U('Mobile/App/index', array('jid'=>$jid))}"> <img class="lazy" src="{$InfoMenuAppDownIcon|default='/Public/Mobile/shouji/img/demo/shouji_nav_06.png'}" alt=""> <span>{$InfoMenuAppDownName}</span> <i class="ico ico-right"></i></a>--> </li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- ad -->
+        <?php  A('Advert')->loadtemp($jid, 'shouji', '1'); ?>
+		<!-- ad end -->
+
+		<section class="shouji-act">
+			<div class="sec-title">
+				<h3>{$NewModulename}</h3> <a href="{:U('Mobile/News/index', array('jid'=>$jid))}">更多</a>
+			</div>
+			<div class="sec-body">
+				<ul class="clearfix">
+                	<volist name="news_list" id="vo"  offset="0" length="6"  key="k">
+					<li>
+						<a href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id],'from_index'=>1))}">
+							<img class="lazy" src="{$vo.new_img}" alt=""> <h6>{$vo.new_title}</h6>
+						</a>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</section>
+
+		<section class="shouji-coupon">
+			<div class="sec-title">
+				<h3>{$VoucherModuleName}</h3> <a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多</a>
+			</div>
+			<div class="sec-body">
+				<ul>
+                	<volist name="coupon_list" id="v">
+					<li>
+						<if condition="$v['vu_name']">
+						<a class="" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$v[vu_id],'from_index'=>1))}">
+						<else />
+						<a class="" href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+						</if>
+							<span>{$v.vu_price|intval}元</span>
+							<h5>{$v.vu_name}</h5>
+							<p>{$v.vu_description}</p>
+						</a>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</section>
+	</div>
+
+	<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	$(function() {
+		$('#container').xpull({
+			'pullThreshold':60,
+		    'maxPullThreshold':60,
+		    'onPullEndFunc':function(){
+		    	window.location.reload();
+		    },
+		    'spinnerTimeout':2000
+		});
+
+		var mySlide = new Swiper('#banner', {
+			speed: 400,
+			pagination: '#banner-page',
+			autoplay: 5000,
+			autoplayDisableOnInteraction: false,
+			loop: true,
+			preloadImages: false,
+			lazyLoading: true
+		});
+	});
+    </script>
+<!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

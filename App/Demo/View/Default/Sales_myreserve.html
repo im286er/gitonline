@@ -1,0 +1,66 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title">预约管理</h2>
+    <div class="mian padding">
+    	<volist name="datalist" id="v" empty="暂无预约信息">
+        <div class="content_a" <neq name="i" value="1">top</neq>>
+            <h3 class="font-12">
+            	<span><php>echo $shops[$v['o_sid']];</php></span><span>{$v.sp_date|strtotime|date='m-d H:i',###}</span> <span>订单号：{$v.o_id}</span><span>下单人：<if condition="$v['o_name']">{$v.o_name}<elseif condition="$users[$v['o_uid']]['u_ename']"/><php>echo $users[$v['o_uid']]['u_ename'];</php><else /><php>echo $users[$v['o_uid']]['u_name'];</php></if></span><span>电话：{$v.o_phone}</span>
+            </h3>
+			<table class="table">
+				<tr>
+                    <th>包厢名称</th>
+                    <th>下单时间</th>
+                    <th>到店时间</th>
+					<th>当前状态</th>
+					<th>操作</th>
+                </tr>
+                <tr>
+                    <td>{$v.goodsname}</td>
+                    <td>{$v.o_dstime|strtotime|date='H:i:s',###}</td>
+                    <td>{$v.sp_date}</td>
+					<td><php>echo $odstatus[$v['o_dstatus']];</php></td>
+					<td>
+					<if condition="$v['o_dstatus'] eq 1 ">
+					<input type="button" onclick="Operation('3','{$v.o_id}',this.value)" value="接受预约">
+					<input type="button" onclick="Operation('4','{$v.o_id}',this.value)" value="拒绝预约">
+					<elseif condition="$v['o_dstatus']  eq 3"/>
+					<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
+					<elseif condition="$v['o_dstatus']  eq 4"/>
+					<input type="button" onclick="Operation('3','{$v.o_id}',this.value)" value="再次接受">
+					<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
+					<elseif condition="$v['o_dstatus']  eq 5"/>
+					<input type="button" onclick="Operation('3','{$v.o_id}',this.value)" value="再次接受">
+					</if>
+					</td>
+                </tr>
+		  </table>
+        </div>
+		</volist>
+    </div>
+	<!-- 分页 -->
+	       <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                </div>
+            </if>
+</div>
+<script type="text/javascript">
+function Operation(status,o_id,buttons){
+	if(!status && !o_id){
+		alert('参数错误');return false;
+	}
+
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('operation')}",{'type':'o_dstatus','status':status,'o_id':o_id},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+</script>
+</block>

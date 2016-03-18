@@ -1,0 +1,340 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Js/datecroll/date.css">
+<script src="__PUBLIC__/Js/datecroll/date.js"></script>
+<script src="__PUBLIC__/Js/datecroll/iscroll.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script src="__PUBLIC__/Js/Mobile/seat2.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/swiper.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/bookseat.css">
+<script type="text/javascript">
+var reqUrl   = "{:U('Mobile/Seat/submitSeat',array('jid'=>$jid))}";
+var vUrl     = "{:U('Mobile/Seat/verify',array('jid'=>$jid))}";
+var indexUrl = "{:U('Mobile/User/myreserve',array('jid'=>$jid,'jump'=>1))}";
+
+var isApp = "{$isApp}";
+var mid = "{$mid}";
+var linkurl = "{$linkurl}";
+
+var date = new Date();
+var Year = date.getFullYear();
+
+var Pullrefresh1 = null;
+
+$(function() { 
+	$('.btn-yes-user').click(function(){
+    	location.href = indexUrl;
+    })
+});
+
+</script>
+	<div class="main container p-tb" id="bookSeat">
+		<section class="seatinfo wavebottom">
+			<div class="sec-title seat-addr" id="js_addr">
+				<h3>{$shop_info.sname}</h3>
+				<input type="hidden" id="shop_id" value="{$shop_info.sid}" />
+			</div>
+			<div class="sec-body">
+				<ul>
+					<li class="seat_date_show">
+						<php>echo date('Y-m-d H:i',time()+3600);</php>
+					</li>
+					<input type="hidden" id="seat_date" value="<php>echo date('Y-m-d H:i',time()+3600);</php>"/>
+					<li class="seat_number_show">1人 <span class="seat_goods_show{$goods_list[0]['gid']}">{$goods_list[0]['gname']}</span></li>
+					<input type="hidden" id="seat_number" value="1" />					
+					<input type="hidden" id="seat_goods" />
+				</ul>
+				<div class="div-note"><a class="ico ico-note" id="js_details" href="javascript:;"></a></div>
+			</div>
+		</section>
+		
+		<section class="contactform">
+			<div class="sec-title"><h3>请填写资料，方便商户与您联系</h3></div>
+			<div class="sec-body">
+				<ul>
+					<li class="">
+						<input type="text" placeholder="请输入预定人姓名" id="seat_name" value="{$user.u_ename}">
+					</li>
+					<li class="">
+						<input type="text" placeholder="备注留言,可不填" id="o_remarks" value="">
+					</li>
+					<li class="">
+						<input type="text" placeholder="请输入预定人手机号" id="seat_tel" value="{$user.u_phone}">
+						<button class="btn btn-captcha btn-verify" href="javascript:void(0)" style="padding:0">发送验证码</button>
+					</li>
+					<li class="">
+						<input type="text" placeholder="验证码" id="seat_code">
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<div class="fixed-bottom">
+		<div class="container">
+			<a class="btn btn-block btn-primary btn-lg seat_con" href="javascript:;">提交预定</a>
+		</div>
+	</div>
+
+	<div class="modal seat_modal">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">预定已提交</h6>
+				</div>
+				<div class="modal-footer modal-footer-single">
+					<a class="btn-yes btn-yes-user" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 门店地址选择框 -->
+	<div class="modal modal-address" id="addressModal" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="swiper-container address-selector" id="address-selector">
+					    <div class="swiper-wrapper">
+					    	<volist name="shop_list" id="vo">
+								<div class="swiper-slide" shop_id="{$vo.sid}" map_lng="{$vo.lng}" map_lat="{$vo.lat}">
+									<h6>{$vo.sname}</h6>
+									<p>{$vo.saddress|msubstr=###,0,15,'utf-8',false}</p>
+								</div>
+							</volist>
+						</div>
+					</div>
+					<div class="modal-line-1"></div>
+					<div class="modal-line-2"></div>
+				</div>
+				<div class="address-tag">
+					<span>{$map_distance}</span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no js_no" href="javascript:;">否</a>
+					<a class="btn-yes js_yes" href="javascript:;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 详情选择框 -->
+	<div class="modal modal-details" id="detailsModal" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="swiper-container selector-1" id="selector-1">
+					    <div class="swiper-wrapper">
+							{$html_date}
+						</div>
+					</div>
+					<div class="swiper-container selector-2" id="selector-2">
+					    <div class="swiper-wrapper">
+							<div class="swiper-slide">08:00</div>
+							<div class="swiper-slide">08:30</div>
+							<div class="swiper-slide">09:00</div>
+							<div class="swiper-slide">09:30</div>
+							<div class="swiper-slide">10:00</div>
+							<div class="swiper-slide">10:30</div>
+							<div class="swiper-slide">11:00</div>
+							<div class="swiper-slide">11:30</div>
+							<div class="swiper-slide">12:00</div>
+							<div class="swiper-slide">12:30</div>
+							<div class="swiper-slide">13:00</div>
+							<div class="swiper-slide">13:30</div>
+							<div class="swiper-slide">14:00</div>
+							<div class="swiper-slide">14:30</div>
+							<div class="swiper-slide">15:00</div>
+							<div class="swiper-slide">15:30</div>
+							<div class="swiper-slide">16:00</div>
+							<div class="swiper-slide">16:30</div>
+							<div class="swiper-slide">17:00</div>
+							<div class="swiper-slide">17:30</div>
+							<div class="swiper-slide">18:00</div>
+							<div class="swiper-slide">18:30</div>
+							<div class="swiper-slide">19:00</div>
+							<div class="swiper-slide">19:30</div>
+							<div class="swiper-slide">20:00</div>
+							<div class="swiper-slide">20:30</div>
+							<div class="swiper-slide">21:00</div>
+							<div class="swiper-slide">21:30</div>
+							<div class="swiper-slide">22:00</div>
+							<div class="swiper-slide">22:30</div>
+							<div class="swiper-slide">23:00</div>
+							<div class="swiper-slide">23:30</div>
+						</div>
+					</div>
+					<div class="swiper-container selector-3" id="selector-3">
+					    <div class="swiper-wrapper">
+							<div class="swiper-slide">1人</div>
+							<div class="swiper-slide">2人</div>
+							<div class="swiper-slide">3人</div>
+							<div class="swiper-slide">4人</div>
+							<div class="swiper-slide">5人</div>
+							<div class="swiper-slide">6人</div>
+							<div class="swiper-slide">7人</div>
+							<div class="swiper-slide">8人</div>
+							<div class="swiper-slide">9人</div>
+							<div class="swiper-slide">10人</div>
+							<div class="swiper-slide">11人</div>
+							<div class="swiper-slide">12人</div>
+							<div class="swiper-slide">13人</div>
+							<div class="swiper-slide">14人</div>
+							<div class="swiper-slide">15人</div>
+							<div class="swiper-slide">16人</div>
+							<div class="swiper-slide">17人</div>
+							<div class="swiper-slide">18人</div>
+							<div class="swiper-slide">19人</div>
+							<div class="swiper-slide">20人</div>
+						</div>
+					</div>
+					
+					<div class="swiper-container selector-4" id="selector-4">
+					<div class="swiper-wrapper">
+					<volist name="goods_list" id="vo">
+					<div class="swiper-slide" gid="{$vo.gid}">{$vo.gname}</div>
+					</volist>
+					</div>
+					</div>
+					
+					<div class="modal-line-1"></div>
+					<div class="modal-line-2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no js_no" href="javascript:;">否</a>
+					<a class="btn-yes js_yes" href="javascript:;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	$(function () {
+		// 门店地址弹出框
+		var addrModal = $("#addressModal");
+		var detailsModal = $("#detailsModal");		
+		var adress_style = '';
+		var adress_html = '';
+		var date_style_1 = '';
+		var date_style_2 = '';
+		var date_style_3 = '';
+		var date_html_1 = '';
+		var date_html_2 = '';
+		var date_html_3 = '';
+		var swiper_index = 0;
+		var swiper_index_t1 = 0;
+		var swiper_index_t2 = 0;
+		var swiper_index_t3 = 0;
+		var swiper_index_t4 = 0;
+		$("#js_addr").click(function(ev) {
+			option1.initialSlide = swiper_index;
+			addrModal.show(0, swiper1);	
+		});
+		$("#js_details").click(function(ev) {
+			option2.initialSlide = swiper_index_t1;
+			option3.initialSlide = swiper_index_t2;
+			option4.initialSlide = swiper_index_t3;
+			option5.initialSlide = swiper_index_t4;
+			detailsModal.show(0, swiper2);			
+		});
+
+		$(".modal-body").click(function(ev) {
+			ev.stopPropagation();
+		});
+		$(".modal-dialog").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".js_no").click(function(event) {
+			$(".modal").hide();
+		});
+		$("#addressModal .js_yes").click(function(event) {
+			var shop_id = $('#addressModal').find('.swiper-slide-active').attr('shop_id');
+			var shop_name = $('#addressModal').find('.swiper-slide-active h6').html();
+			var address = $('#addressModal').find('.swiper-slide-active p').html();
+			$('#shop_id').val(shop_id);
+			$('#js_addr').find('h3').html(shop_name+'·'+address);
+			$('.seat_goods_show').html('');
+			$('#seat_goods').val('');
+			swiper_index = $('#addressModal').find('.swiper-slide-active').index();
+		});	
+		$("#detailsModal .js_yes").click(function(event) {
+			var date_format = $("#detailsModal .selector-1").find('.swiper-slide-active').attr('date_format');
+			var date_time = $("#detailsModal .selector-2").find('.swiper-slide-active').html();
+			var num = $("#detailsModal .selector-3").find('.swiper-slide-active').html();
+			var goods = $("#detailsModal .selector-4").find('.swiper-slide-active').html();
+			var gid = $("#detailsModal .selector-4").find('.swiper-slide-active').attr('gid');
+			$('#seat_number').val(num.replace(/[^0-9]/ig,"")); 
+			
+			$('.seat_number_show').html(num+' '+'<span class="seat_goods_show'+gid+'">'+goods+'</span>');
+			$('#seat_date').val(date_format+' '+date_time);
+			$('.seat_date_show').html(date_format+' '+date_time);
+			
+			$('#seat_goods').val(gid);
+			swiper_index_t1 = $("#detailsModal .selector-1").find('.swiper-slide-active').index();		
+			swiper_index_t2 = $("#detailsModal .selector-2").find('.swiper-slide-active').index();	
+			swiper_index_t3 = $("#detailsModal .selector-3").find('.swiper-slide-active').index();	
+			swiper_index_t4 = $("#detailsModal .selector-4").find('.swiper-slide-active').index();	
+		});
+		var option1 = {
+			initialSlide :0,
+			direction: 'vertical',
+			slidesPerView: 3,
+			centeredSlides: true,
+			onSlideChangeEnd: function() {
+				var longitude = $('#addressModal').find('.swiper-slide-active').attr('map_lng');
+				var latitude = $('#addressModal').find('.swiper-slide-active').attr('map_lat');
+				var sid = $('#addressModal').find('.swiper-slide-active').attr('shop_id');
+				$.post("{:U('Seat/get_distance')}",{'longitude':longitude,'latitude':latitude,'sid':sid},function(data){ 
+					$('.address-tag').find('span').html(data.l);
+					$('#selector-4').html(data.m);
+				});
+			}
+		}
+		var option2 = {
+			initialSlide :0,
+			direction: 'vertical',
+			slidesPerView: 3,
+			centeredSlides: true,
+			onSlideChangeEnd: function() {
+			}
+		}
+		var option3 = {
+				initialSlide :0,
+				direction: 'vertical',
+				slidesPerView: 3,
+				centeredSlides: true,
+				onSlideChangeEnd: function() {
+				}
+			}
+		var option4 = {
+				initialSlide :0,
+				direction: 'vertical',
+				slidesPerView: 3,
+				centeredSlides: true,
+				onSlideChangeEnd: function() {
+				}
+			}
+		var option5 = {
+				initialSlide :0,
+				direction: 'vertical',
+				slidesPerView: 3,
+				centeredSlides: true,
+				onSlideChangeEnd: function() {
+				}
+			}
+		var swiper1 = function() {
+			console.log(swiper_index,option1);
+			var addrSelector = new Swiper ('#address-selector', option1);
+		}
+		var swiper2 = function() {
+			var selector1 = new Swiper ('#selector-1', option2);
+			var selector2 = new Swiper ('#selector-2', option3);
+			var selector3 = new Swiper ('#selector-3', option4);
+			var selector4 = new Swiper ('#selector-4', option5);
+		}
+	});
+	</script>
+</block>

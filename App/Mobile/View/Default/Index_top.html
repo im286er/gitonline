@@ -1,0 +1,32 @@
+<style>
+.header-share {
+  background-image: url("__PUBLIC__/Mobile/default/img/ico_qm_share.png");
+  height: 4.4rem;
+  right: 0;
+  width: 4.4rem;
+}
+</style>
+<switch name="Think.cookie.opentype">
+	<case value="app"></case>
+	<case value="flapp">
+		<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+
+		<if condition="cookie('superiorsource') eq 'favorite'"> 
+			<a href="{:U('My/favorite@flapp')}" class="ico header-back"></a>
+		<elseif condition="cookie('superiorsource') eq 'list'"/>
+			<a href="{:U('Shop/shopList@flapp',array('v_id'=>cookie('source_vid'),'city'=>cookie('source_city'),'source'=>cookie('source')))}" class="ico header-back"></a>
+		<elseif condition="cookie('superiorsource')"/>
+			<a href="javascript:void(0);" class="ico header-back header-back-w" onclick="sendRedirect('{$Think.cookie.superiorsource}');"></a>
+		<else />
+			<a href="{:U('Shop/shopList@flapp',array('v_id'=>cookie('source_vid'),'city'=>cookie('source_city'),'source'=>cookie('source')))}" class="ico header-back"></a>
+		</if>
+		<!--<a id="favorite" class="ico header-star " onclick="favorite('{$Think.cookie.qmsid}');" href="javascript:void(0);"></a>-->
+		<a onclick="sendShareStr('{$Think.cookie.flsid}');" class="ico header-share" href="javascript:void(0);"></a>
+	</case>
+<default />
+	<eq name="Think.const.CONTROLLER_NAME" value="User">
+		<a href="{:U('Index/index')}" class="ico header-home"></a>
+	<else/>
+		<a href="{:U('User/index')}" class="ico header-user"></a>
+	</eq>
+</switch>

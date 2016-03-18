@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加员工</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+select { width:318px; } label input { position:relative; top:2px; } #dosubmit { margin-left:118px; margin-right:10px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:300px; }
+</style>
+</head>
+
+<body> 
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="{$member.mid}" name="mid" />
+            <div id="divSetting1">
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="100">真实姓名</th>
+                        <td><input type="text" placeholder="请输入员工真实姓名" autocomplete="off" name="member[msurname]" value="{$member.msurname}" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>帐&nbsp;&nbsp;&nbsp; 号</th>
+                        <td><input type="text" disabled="disabled" value="{$member.mname}" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>密&nbsp;&nbsp;&nbsp; 码</th>
+                        <td><input type="password" placeholder="请输入员工的账号密码，为空表示不修改密码" id="MemberPwd" name="member[mpwd]" value="" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>联系方式</th>
+                        <td><input type="text" placeholder="请输入正确的手机号" autocomplete="off" id="MemberPho" name="member[mphone]" value="{$member.mphone}" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>权&nbsp;限&nbsp;组</th>
+                        <td>
+                        	<select name="member[gid]" id="MemberGid">
+                            	<option value="">选择权限组</option>
+                                <volist name="authgroup" id="vo">
+                                    <option value="{$vo.id}" <if condition="$member['gid'] == $vo['id']">selected="selected"</if>>{$vo.title}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>员工状态</th>
+                        <td>
+                        	<label><input name="member[mstatus]" type="radio" value="1" <eq name="member.mstatus" value="1">checked="checked"</eq> /> 有效</label>&#12288;&#12288;
+                        	<label><input name="member[mstatus]" type="radio" value="0" <eq name="member.mstatus" value="0">checked="checked"</eq> /> 无效</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="left">
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button> <button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; } });
+    $("#MemberGid").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请选择员工所属权限组"});
+	$("#MemberPho").formValidator({empty:true, onFocus:" "}).inputValidator({min:1, max:20, onError:"请输入联系人电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"});
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>广告修改</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } td select { width:258px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:240px; }
+</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" name="info[bid]" value="{$banner.bid}" />
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr>
+                            <th width="100">广告标题</th>
+                            <td><input type="text" autocomplete="off" name="info[btitle]" value="{$banner.btitle}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>所属分店</th>
+                            <td>
+                                <select name="info[jid]" id="InfoJid">
+                                    <option value="">选择分店</option>
+                                    <volist name="mlist" id="m">
+                                    <option value="{$m.jid}" <if condition="$banner['jid'] eq $m['jid']">selected="selected"</if>>{$m.mnickname}</option>
+                                    </volist>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>广告图片</th>
+                            <td>
+                            	<input type="text" title="双击查看图片" ondblclick="LookImage(this)" readonly="readonly" autocomplete="off" id="InfoImg" name="info[bimg]" style="width:156px;" value="{$banner.bimg}" class="user_input" />
+                                <input type="button" onclick="KindeditorUpload('InfoImg')" class="button" value="上传广告图" style="border-radius:3px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>连接地址</th>
+                            <td><input type="text" autocomplete="off" id="AdUrl" name="info[burl]" value="{$banner.burl}" class="user_input" placeholder="请参照:http://baidu.com 样式去写" /></td>
+                        </tr>
+                    </table>
+                    <div class="buttonDiv" align="left">
+                        <button type="submit" class="submit_btn" style="margin-left:120px;">提交</button>&#12288;
+                        <button type="reset" class="reset_btn">重写</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+    $("#InfoJid").formValidator({onFocus:"请选择所属分店"}).inputValidator({min:1, onError:"所属分店不能为空"});
+    $("#InfoImg").formValidator({onFocus:"请上传广告图片"}).inputValidator({min:1, onError:"广告图片不能为空"});
+	$("#AdUrl").formValidator({onFocus:" ", empty:true}).regexValidator({regExp:"url", dataType:"enum", onError:"URL格式输入不正确"});
+})
+
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:50, });
+function KindeditorUpload(InputVal) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, 
+			clickFn:function(url, title, width, height, border, align) {
+				$('#'+InputVal).val(url); editor.hideDialog();
+			}
+		});
+			$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K， 图片格式为 jpg,png</div>');
+	});
+}
+function LookImage( obj ) {
+	if(obj.value) {
+		var KindeditorDialogs=KindEditor.dialog({
+			width:480, height:230, title:'预览图片', body :'<div><img src="'+obj.value+'" width="480" height="230" /></div>',
+			closeBtn : { name:'关闭', click:function(e) { KindeditorDialogs.remove(); } }
+		});	
+	}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:20px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,232,231); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; text-align:left; }
+table.wlist th span b { color:rgb(62,125,254); }
+table.wlist .ilist { width:100%; border-top:none; border-left:none; }
+table.wlist .ilist tr.last td { border-bottom:none; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+    	<a href="{:U('/Order/ordersList')}" style="margin-left:15px;" class="on">帝鼠OS订单</a>
+        <a href="{:U('/Order/vordersList')}" style="margin-left:15px;">全民返利订单</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">下单时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="15" value="{$Think.get.endtime}" id="endtime" name="endtime">
+            	&#12288;&#12288;<label>模糊查询：</label>
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="分店名称/交易号" style="width:240px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+    	<table class="table-list">
+        	<thead>
+                <tr>
+                    <th width="11%">交易号</th>
+                    <th width="11%">所属商家</th>
+                    <th width="11%">所属分店</th>
+                    <th width="11%">收货人姓名</th>
+                    <th width="11%">收货人手机</th>
+                    <th width="12%">下单时间</th>
+                    <th width="11%">订单总价</th>
+                    <th width="11%">订单状态</th>
+                    <th width="11%">支付状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="orderlist" id="o">
+                <tr>
+                    <td>{$o.o_id}</td>
+                    <td>{$o.j_name}</td>
+                    <td>{$o.s_name}</td>
+                    <td>{$o.o_name}</td>
+                    <td>{$o.o_phone}</td>
+                    <td>{$o.o_dstime}</td>
+                    <td>{$o.o_price}</td>
+                    <td>
+                    	<if condition="$o['o_dstatus'] eq 1">
+                        	配货中
+                        <elseif condition="$o['o_dstatus'] eq 2"/>
+                        	待发货
+                        <elseif condition="$o['o_dstatus'] eq 3"/>
+                        	已发货
+                        <elseif condition="$o['o_dstatus'] eq 4"/>
+                        	已完成
+                        <elseif condition="$o['o_dstatus'] eq 5"/>
+                        	无效订单
+                        </if>
+                    </td>
+                    <td><if condition="$o['o_pstatus'] eq 1">已付款<else/>未付款</if></td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d %H:%M:%S", showTime:true, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d %H:%M:%S", showTime:true, minuteStep:1, onSelect:function() { this.hide(); } });
+</script>
+</body>
+</html>

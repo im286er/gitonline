@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } select { width:179px; }
+td ul li { float:left; margin:3px 15px 3px 0px; cursor:pointer; position:relative; } 
+td ul li a { position:absolute; top:3px; right:3px; background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
+td ul li a:hover { background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="{$Think.get.rid}" name="rid" />
+           	<div id="divSetting1">
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="120">选择商家或分店 <b style="color:red;">*</b></th>
+                        <td>
+                            <select name="info[rmerchant]" id="Merchant" style="width:130px;">
+                                <option value="">选择商家</option>
+                                <volist name="merchant" id="m">
+                                <option value="{$m.jid}" <if condition="isset($jid) && $jid==$m['jid']">selected="selected"</if>>{$m.mnickname}</option>
+                                </volist>
+                            </select>
+                            
+                            <if condition="isset($shoplist) && is_array($shoplist)">
+                                <select name="info[rshop]" id="RSHOP" style="width:130px;">
+                                    <option value="">选择分店</option>
+                                    <volist name="shoplist" id="s">
+                                    <option value="{$s.sid}" <if condition="isset($sid) && $sid==$s['sid']">selected="selected"</if>>{$s.sname}</option>
+                                    </volist>
+                                </select>
+                            <else/>
+                                <select name="info[rshop]" id="RSHOP" style="width:130px;display:none;">
+                                </select>
+                            </if>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="center">
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button>&#12288;<button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+	$("#Merchant").change(function() {
+		$.get("{:U('/Device/getShop')}", {id:$(this).val()}, function(data) {
+			if( data=='' ) {
+				$("#RSHOP").hide().html('');
+			} else { $("#RSHOP").show().html(data); }
+		})
+	})
+});
+</script>
+</body>
+</html>

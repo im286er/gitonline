@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Css/treetable.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body style="overflow-x:hidden;overflow-y:auto;"> 
+<div id="dialog-main-body">
+    <div class="table-list" id="load_priv">
+        <table width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th class="text-l cu-span" style='padding-left:30px;'>
+                        <span onClick="selectAllInput(1)">全选</span>/
+                        <span onClick="selectAllInput(0)">取消</span>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <form name="myform" action="__ACTION__" method="post">
+            <input type="hidden" name="gid" value="{$Think.get.gid}" />
+            <table width="100%" cellspacing="0" id="dnd-example">
+                <tbody> {$rulelist}</tbody>
+            </table>
+            <div class="btn"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="提交" /></div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery1.8.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/treetable.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#dnd-example").treeTable({ indent: 20 });
+});
+
+function checknode(obj) {
+      var chk = $("input[type='checkbox']");
+      var count = chk.length;
+      var num = chk.index(obj);
+      var level_top = level_bottom =  chk.eq(num).attr('level')
+      for (var i=num; i>=0; i--) {
+		  var le = chk.eq(i).attr('level');
+		  if(eval(le) < eval(level_top)) {
+			  chk.eq(i).attr("checked",'checked');
+			  var level_top = level_top-1;
+		  }
+      }
+      for (var j=num+1; j<count; j++) {
+		  var le = chk.eq(j).attr('level');
+		  if(chk.eq(num).attr("checked")=='checked') {
+			  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",'checked');
+			  else if(eval(le) == eval(level_bottom)) break;
+		  } else {
+			  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",false);
+			  else if(eval(le) == eval(level_bottom)) break;
+		  }
+      }
+}
+function selectAllInput( value ) {
+	if( value==1 ) {
+		$("input[name='rules[]']").attr('checked', true)	
+	} else {
+		$("input[name='rules[]']").attr('checked', false)	
+	}	
+} 
+ 
+</script>
+</body>
+</html>

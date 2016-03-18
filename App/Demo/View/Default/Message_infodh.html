@@ -1,0 +1,39 @@
+<extend name="Public:partial"/>
+<block name="body">
+<div class="reveal-modal reveal-modals" style="display:block;border:none;">
+    <h3>活动详情 <span class="close" id="AddGoods_close">×</span></h3>
+    <div class="modal-content modal-contents clearfix">
+        <div class="modal-a">
+            <div id="divPreview"><img id="AV_IMG" src="{$avinfo.av_img}" style="width: 240px; height: 240px;" alt="" /></div>
+        </div>
+        <div class="modal-b">
+            <div class="set">
+                <label>活动名称：</label> <input type="text" value="{$avinfo.av_title}" readonly>
+            </div>
+            <div class="set">
+                <label>活动内容：</label> <textarea style="width:170px;height:70px;" readonly>{$avinfo.av_con}</textarea>
+            </div>
+            <div class="set">
+                <label>开始时间：</label> <input type="text" value="{$avinfo.av_stime}" readonly>
+            </div>
+            <div class="set">
+                <label>结束时间：</label> <input type="text" value="{$avinfo.av_etime}" readonly>
+            </div>
+            <div class="set">
+                <label>所属分店：</label>
+                <php>$sid = array_filter(explode(',', $avinfo['av_sid'])); </php>
+                <volist name="splist" id="s"><if condition="in_array($s['sid'], $sid)">{$s.sname}<br></if></volist>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#AddGoods_close,#AddGoods_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+});
+</script>
+</block>

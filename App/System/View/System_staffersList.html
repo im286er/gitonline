@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>员工列表</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/acommon.css" />
+</head>
+
+<body>
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addStaffer()">添加员工</span><span style="margin-left:15px;font-size:12px;border-bottom-color:red;line-height:38px;" id="SearchOpen">员工列表</span>
+	</div>
+    <div class="search_list" id="SearchForm">
+    	<form action="__ACTION__" method="get">
+            <div class="explain-col">
+                <label class="fl">开通时间：</label>
+                <input type="text" class="user_input" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                <input type="text" style="width:200px;" autocomplete="off" placeholder="搜索：登录账号/姓名/权限组" class="user_input fl" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </option>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+		            	<th width="40"><input name="" type="checkbox" id="checkbox" onclick="selectAll('mid[]')" /></th>
+                        <th width="80">员工编号</th>
+                        <th width="10%">登录帐号</th>
+                        <th width="10%">真实姓名</th>
+                        <th width="10%">联系方式</th>
+                        <th width="10%">权限组</th>
+                        <th width="15%">开通时间</th>
+                        <th width="10%">状态</th>
+                        <th width="15%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                	<volist name="staffersList" id="vo">
+                    <tr id="TP_RULE_{$vo.mid}">
+                        <td><input type="checkbox" name="mid[]" value="{$vo.mid}"></td>
+                        <td>{$vo.mid}</td>
+                        <td>{$vo.mname}</td>
+                        <td>{$vo.msurname}</td>
+                        <td>{$vo.mphone|default='-'}</td>
+                        <td>{$vo.title}</td>
+                        <td>{$vo.mregdate}</td>
+                        <td style="cursor:pointer;" title="禁用或解禁员工" data-id="{$vo.mid}" data-value="{$vo.mstatus}" onclick="hosStaffer(this)"><img src="__PUBLIC__/Images/status_{$vo.mstatus}.gif" /></td>
+                        <td>
+                        	<a href="javascript:editStaffer('{$vo.mid}')">修改</a> |
+                            <a href="javascript:void(0);" onclick="delStaffer('{$vo.mid}', 'get')">删除</a>
+                        </td>
+                    </tr> 
+                    </volist>
+		        </tbody>
+		    </table>
+		    <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delStaffer('0', 'post')" value=" 删除 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+
+//添加员工
+function addStaffer() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 360,
+		title : '添加员工',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/stafferAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//修改员工
+function editStaffer( mid ) {
+	if( !mid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 360,
+		title : '修改员工',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/System/stafferEdit/mid/'+mid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//删除员工
+function delStaffer( mid, type ) {
+	if( type=='post' ) {
+		$("input[name='mid[]']").each(function(index, element) {  if($(this).is(":checked")) mid = mid+','+$(this).val(); });	
+	}
+	if( !mid ) { alert('参数出现错误'); return false; }
+	if( !confirm('删除数据有一定有风险，确实要删除吗？') ) return false;
+	$.get("{:U('/System/stafferDel', '', true)}", {mid:mid}, function( data ) {
+		if( parseInt(data)==1 ) $.each(mid.split(','), function(key, value) { $("#TP_RULE_"+value).hide(600); })
+	})		
+}
+
+//禁用或解禁员工
+function hosStaffer( obj ) {
+    var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+    if( !dataId ) return false;
+    if( confirm(dataValue=='1' ? '确实要禁用此员工吗' : '确实要解禁此员工吗') ) {
+        $.get("{:U('/System/publicHosStaffer', '', true)}", {mid:dataId, status:dataValue}, function(data) {
+            if(parseInt(data)==0) return false;
+            if(dataValue=='1') {
+                $(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+            } else {
+                $(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+            }
+        })
+    }
+}
+
+function selectAll(name) {
+	if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

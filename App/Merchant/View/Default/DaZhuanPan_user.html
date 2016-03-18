@@ -1,0 +1,55 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+.dis {display:none;}
+</style>
+	<div class="wrapper">
+	<h2 class="title"><a href="{:U('DaZhuanPan/index')}" style="text-decoration:underline;">基本设置</a> | <a href="{:U('DaZhuanPan/prize')}" style="text-decoration:underline;">奖品设置</a>  | 抽奖记录</h2>   
+   
+		<div class="mian padding">
+			<div class="content_a top">
+			<form id="form1">
+				<table class="table border-b">
+					<tr>
+						<th width="10%">编号</th>
+						<th width="10%">用户昵称</th>
+						<th width="25%">抽奖时间</th>
+						<th width="10%">抽奖结果</th>
+						<th width="10%">是否领奖</th>
+						<th width="10%">操作</th>
+					</tr>
+					<volist name="datalist" id="v">
+					<tr>
+					<td>{$v.id}</td>
+					<td>{$v.uname}</td>
+					<td>{$v.addtime}</td>
+					<td><if condition="$v[rtype] eq 0">未中奖<elseif condition="$v[rtype] eq 1" />{$v.rname}<elseif condition="$v[rtype] eq 2" />{$v.vname}</if></td>
+					<td><if condition="$v[isget] eq 0">未领奖<elseif condition="$v[isget] eq 1" />已领奖</if></td>
+					<td><if condition="$v[isget] eq 0"><input type="button" value="确认领奖" onClick="lj({$v.id});"><else />无</if></td>
+					</tr>
+					</volist>
+				</table>
+				</form>
+			</div>
+			<if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='/DaZhuanPan/user/page/'+this.value">{$pages}
+                </div>
+            </if>
+		</div>
+	</div>
+<script>
+function lj(id){
+	if(confirm('确认该奖项已领取吗?')){
+		$.post("{:U('/DaZhuanPan/lj', '', true)}", {'id':id}, function( data ) {
+			alert('操场成功');
+			location.reload();
+		});
+	}
+}
+</script>
+</block>

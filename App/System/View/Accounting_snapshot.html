@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+table.wlist { width:100%; border-top:1px solid #ddd; border-left:1px solid #ddd; margin-bottom:10px; }
+table.wlist td, table.wlist th { border-right:1px solid #ddd; border-bottom:1px solid #ddd; text-align:center; }
+table.wlist th { height:42px; line-height:42px; background:rgb(230,232,231); text-align:left; }
+table.wlist th span { display:inline-block; margin:0 10px; text-align:left; }
+table.wlist .ilist { width:100%; border-top:none; border-left:none; }
+table.wlist .ilist td { padding:10px 0px; } table.wlist .ilist tr.last td { border-bottom:none; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+	<div class="main-body">
+        <table class="wlist">
+            <tr>
+                <th colspan="4">
+                    <span>下单时间：{$order.flo_dstime}</span>
+                    <span>交易号：{$order.flo_id}</span>
+                    <span>返现金额：{$order.flo_backprice}</span>
+                </th>
+            </tr>
+            <tr style="line-height:48px;">
+                <td width="50%">
+                	<if condition="$order['flo_gtype']==4">
+                    	话费充值
+                    <elseif condition="$order['flo_gtype']==5"/>
+                    	流量充值
+                    <elseif condition="$order['flo_gtype']==3"/>
+                    	升级VIP
+                    <else/>
+                        <table class="ilist">
+                            <volist name="goods" id="g">
+                            <tr class="<if condition='count($goods)==$i'>last</if>">
+                                <td width="60%" style="text-align:left; padding-left:15px;"><img src="{$g.flg_img|default='/Public/Images/i04.png'}" width="60" height="60" /> {$g.sp_name}</td>
+                                <td width="20%"><s>{$g.flg_goprice}</s><br />{$g.flg_gdprice}</td>
+                                <td width="20%" style="border-right:none;">{$g.flg_number|default='0'}</td>
+                            </tr>
+                            </volist>
+                        </table>
+                    </if>
+                </td>
+                <td width="10%">{$order.flo_price}</td>
+                <td width="20%">订单备注：{$order.flo_remarks|default='无'}</td>
+                <td width="20%"><if condition="$order['flo_pstatus'] == 0"><font color="red">尚未付款</font><else/>已支付</if></td>
+            </tr>
+            <tr>
+            	<th colspan="4">
+                	<span>订单分成明细</span>
+                    <if condition="$order['flo_isback']==0">
+                    <span style="color:red;">此订单还未执行返利动作</span>
+                    </if>
+                </th>
+            </tr>
+            <volist name="user_info_list" id="ug">
+            <tr style="line-height:48px;">
+                <td width="50%" colspan="2" style="text-align:left; padding-left:15px;">{$ug.username} ( 会员ID：{$ug.userid} )</td>
+                <td width="50%" colspan="2" style="border-right:none;">获得返利：{$ug.price|default='0.00'} 元</td>
+            </tr>
+            </volist>
+            
+        </table>
+	</div>
+</div>
+</body>
+</html>

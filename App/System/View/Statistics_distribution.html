@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/acommon.css" />
+<style type="text/css">
+.main-body .block .con { padding:0px; }
+div#countMap, div#ordMap { height:600px; overflow:hidden; }
+div.count { height:30px; background:#f1f1f1; } 
+div.count li { float:left; margin:3px 15px 0px; height:24px; line-height:24px; }
+.subnav span.on, .subnav span.on a { border-color:red; }
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<eq name="Think.get.type" value="2">
+<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+<else/>
+<script type="text/javascript" src="/Public/Js/jquery.dataTables.min.js"> </script>
+<link type="text/css" rel="stylesheet" href="/Public/Css/jquery.dataTables.min.css"/>
+</eq>
+</head>
+
+
+<body class="main">
+<div id="main-body">
+	<div class="subnav">
+        <span <eq name="Think.get.type" value="1">class="on"</eq>><a href="{:U('Statistics/distribution@xt', array('type'=>1), true, true)}">文字报表</a></span>
+        <span <eq name="Think.get.type" value="2">class="on"</eq> style="margin-left:10px;"><a href="{:U('Statistics/distribution@xt', array('type'=>2), true, true)}">图文报表</a></span>
+	</div>
+	<div class="main-body">
+		<?php if(intval($_GET['type'])==1): ?>
+			<table class="table-list" id="tableList">
+				<thead>
+					<tr>
+						<th width="20%">编号</th>
+						<th width="20%">区域</th>
+						<th width="20%">代理商数</th>
+						<th width="20%">商家数</th>
+						<th width="20%">会员数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $i=1; foreach($info['agent'] as $k=>$v): ?>
+						<tr>
+							<td><?php echo $i; ?></td>
+							<td><?php echo $v['name']; ?></td>
+							<td><?php echo $v['value']; ?></td>
+							<td><?php echo $info['merchant'][$k]['value']; ?></td>
+							<td><?php echo $info['member'][$k]['value']; ?></td>
+						</tr> 
+					<?php $i++; endforeach; ?>
+				</tbody>
+			</table>
+			<script type="text/javascript">
+			$(document).ready(function() {
+			    var tableListObj = $('#tableList').DataTable( {
+			        "language": { "url": "/Public/Js/Chinese.json" },
+			        "order": [[ 2, "desc" ]],
+			        "searching":false,
+			        "lengthChange":false,
+			        "pageLength":12
+			    } );
+			} );
+			</script>
+		<?php else: ?>
+			<div id="ordMap"></div>
+	        <script type="text/javascript">
+			require.config({
+				paths: { echarts: 'http://echarts.baidu.com/build/dist' }
+			});
+	        require(
+				['echarts', 'echarts/chart/map'], 
+				function (ec) {
+					var myChart = ec.init(document.getElementById('ordMap')); 
+					var option = {
+						title : {
+							text: '代理商;商家;会员分布图',
+							subtext: '',
+							x:'center'
+						},
+						tooltip : {
+							trigger: 'item'
+						},
+						legend: {
+							orient: 'vertical',
+							x:'left',
+							data:['代理商','商家','会员']
+						},
+						dataRange: {
+							min: 0,
+							max: 2500,
+							x: 'left',
+							y: 'bottom',
+							text:['高','低'],           // 文本，默认为数值文本
+							calculable : true
+						},
+						toolbox: {
+							show: false
+						},
+						roamController: {
+							show: false,
+						},
+						series : [
+							{
+								name: '代理商',
+								type: 'map',
+								mapType: 'china',
+								roam: false,
+								itemStyle:{
+									normal:{label:{show:true}},
+									emphasis:{label:{show:true}}
+								},
+								data:[
+									<?php $i=1; $c=count($info['agent']); foreach($info['agent'] as $a){ if($i==$c) {?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>}
+									<?php } else { ?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>},
+									<?php } $i++; } ?>
+								]
+							},
+							{
+								name: '商家',
+								type: 'map',
+								mapType: 'china',
+								itemStyle:{
+									normal:{label:{show:true}},
+									emphasis:{label:{show:true}}
+								},
+								data:[
+									<?php $i=1; $c=count($info['merchant']); foreach($info['merchant'] as $a){ if($i==$c) {?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>}
+									<?php } else { ?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>},
+									<?php } $i++; } ?>
+								]
+							},
+							{
+								name: '会员',
+								type: 'map',
+								mapType: 'china',
+								itemStyle:{
+									normal:{label:{show:true}},
+									emphasis:{label:{show:true}}
+								},
+								data:[
+									<?php $i=1; $c=count($info['member']); foreach($info['member'] as $a){ if($i==$c) {?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>}
+									<?php } else { ?>
+										{name: '<?php echo $a["name"] ?>',value: <?php echo $a['value']; ?>},
+									<?php } $i++; } ?>
+								]
+							}
+						]
+					};
+					myChart.setOption(option); 
+				}
+			);
+			</script>
+		<?php endif; ?>
+	</div>
+</div>
+</body>
+</html>
+

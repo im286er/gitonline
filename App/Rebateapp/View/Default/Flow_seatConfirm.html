@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>提交订单</title>
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<!-- <link rel="stylesheet" href="css/main.css"> -->
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Js/datecroll/date.css">
+    <script src="__PUBLIC__/Js/datecroll/date.js"></script>
+    <script src="__PUBLIC__/Js/datecroll/iscroll.js"></script>
+   <script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+<script src="__PUBLIC__/Rebateapp/Js/seat.js"></script>
+<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <script type="text/javascript">
+var reqUrl   = "{:U('Flow/submitSeat',array('jid'=>$jid,'sid'=>$sid))}";
+var vUrl     = "{:U('Flow/verify',array('jid'=>$jid,'sid'=>$sid))}";
+var indexUrl = "{:U('My/booking',array('sid'=>$sid))}";
+var userid = "{$userid}";
+var msystem = "{$msystem}";
+var linkurl = "{$linkurl}";
+
+var date = new Date();
+var Year = date.getFullYear();
+
+$(function() { 
+	$('#seat_date').date({
+		theme:"datetime",
+		beginyear : Year
+	});
+	$('.btn-yes').click(function(){
+    	location.href = indexUrl;
+    });
+	$('.btn-login-no').click(function(){
+		$("#unlogin").hide();
+    });
+	$('.btn-login-yes').click(function(){
+		$("#unlogin").hide();
+    });
+	$('.seat_con').click(function(){
+    	checkLogin(linkurl,'submitSeat(response)');
+    });
+});
+
+</script>
+</head>
+<body>
+	<header class="header">
+		<h1>提交订单</h1>
+		<a href="{:U('Flow/reserve',array('jid'=>$jid,'sid'=>$sid))}" class="ico header-back"></a>
+	</header>
+	<div class="container p-tb" id="bookSeat">
+		<section class="seatinfo wavebottom">
+			<div class="sec-title">
+				<h3>{$shop_info.sname}</h3>
+			</div>
+			<div class="sec-body">
+				<ul>
+					<li>
+						<input placeholder="点击选择预约日期"  type="text" id="seat_date" style="border:0 none;width:70%" >
+					</li>
+					<volist name="goods_list" id="vo">
+					
+					<li>
+						{$vo.gname} {$vo.cname}
+					</li>
+					</volist>
+				</ul>
+				<a class="div-note" href="javascript:;"><i class="ico ico-note" href="javascript:;"></i></a>
+			</div>
+		</section>
+		<div id="datePlugin"></div>
+		<section class="contactform">
+			<div class="sec-title"><h3>请填写资料，方便商户与您联系</h3></div>
+			<div class="sec-body">
+				<ul>
+					<li class="">
+						<input type="text" placeholder="请输入预定人姓名" id="seat_name" value="{$user.u_ename}">
+					</li>
+					<li class="">
+						<input type="text" placeholder="请输入预定人手机号" id="seat_tel" value="{$user.u_phone}">
+						<button class="btn btn-captcha btn-verify" href="javascript:void(0)" style="width:8rem;">发送验证码</button>
+					</li>
+					<li class="">
+						<input type="text" placeholder="验证码" id="seat_code">
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<div class="fixed-bottom">
+		<div class="container">
+			<a class="btn btn-block btn-lg btn-red seat_con" href="javascript:;">提交预定</a>
+		</div>
+	</div>
+
+	<div class="modal" id="seat-success">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">预定已提交</h6>
+				</div>
+				<div class="modal-footer modal-footer-single">
+					<a class="btn-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="unlogin">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">您尚未登录，是否现在去登录?</h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-login-no" href="javascript:;">取消</a><a class="btn-login-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

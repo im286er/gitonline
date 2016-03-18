@@ -1,0 +1,90 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title">订单管理</h2>
+    <div class="mian padding">
+    	<volist name="datalist" id="v">
+        <div class="content_a" <neq name="i" value="1">top</neq>>
+            <h3 class="font-12">
+            	<span><php>echo $shops[$v['o_sid']];</php></span><span>{$v.o_dstime|strtotime|date='m-d H:i',###}</span> <span>{$v.extendstr}</span> <span>订单号：{$v.o_id}</span><span>下单人：
+				<if condition="$v['o_name']">{$v.o_name}<elseif condition="$users[$v['o_uid']]['u_ename']"/><php>echo $users[$v['o_uid']]['u_ename'];</php><else /><php>echo $users[$v['o_uid']]['u_name'];</php></if></span>
+            </h3>
+			<table class="table">
+				<tr>
+                    <th width="150px">商品</th>
+					<th>名称</th>
+                    <th>单价(元）</th>
+                    <th>数量</th>
+                    <th>下单时间</th>
+                    <th>付款/状态</th>
+                    <th>实付款(元)/操作</th>
+                </tr>
+                <php>$_j = 1; $rowspan = count($v[ogoods])</php>
+                <volist name="v.ogoods" id="g" empty="暂无预定信息">
+                <tr>
+                    <td style=""><img src="{$g.sp_img}" alt="" width="60" height="50"> </td>
+					<td>{$g.sp_name}</td>
+                    <td>{$g.sp_gdprice}</td>
+                    <td>{$g.sp_number}</td>
+                    <eq name="_j" value="1">
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">{$v.o_dstime|strtotime|date='H:i:s',###} </td>
+						<td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">
+						<php>echo $oostatus[$v['o_pstatus']];</php>
+                        <if condition="$v['o_dstatus'] eq 1">
+                           {$v.o_pstime|strtotime|date='H:i:s',###} 线下付款
+                        </if>
+						<br/><br/><php>echo $odstatus[$v['o_dstatus']];</php>
+						</td>
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">
+						￥{$v.o_price}
+						<br/>
+						<if condition="$v['o_dstatus'] eq 1 ">
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','3','{$v.o_id}',this.value)" value="接受订单"></p>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','4','{$v.o_id}',this.value)" value="拒绝订单"></p>
+						<elseif condition="$v['o_dstatus']  eq 3"/>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','5','{$v.o_id}',this.value)" value="关闭订单"></p>
+							<if condition="$v['o_pstatus'] eq 0 ">
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_pstatus','1','{$v.o_id}',this.value)" value="已支付"></p>
+							<elseif condition="$v['o_pstatus']  eq 1"/>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_pstatus','2','{$v.o_id}',this.value)" value="支付已退"></p>
+							</if>
+
+						<elseif condition="$v['o_dstatus']  eq 4"/>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','3','{$v.o_id}',this.value)" value="再接受订单"></p>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','5','{$v.o_id}',this.value)" value="关闭订单"></p>
+						<elseif condition="$v['o_dstatus']  eq 5"/>
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('o_dstatus','3','{$v.o_id}',this.value)" value="再接受订单"></p>
+						</if>
+						</td>
+                    </eq>
+                </tr>
+                <php>$_j++;</php>
+                </volist>
+		  </table>
+        </div>
+		</volist>
+    </div>
+	<!-- 分页 -->
+	       <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                </div>
+            </if>
+<script type="text/javascript">
+function Operation(type,status,oid,buttons){
+	if(!type && !status && !oid){
+		alert('参数错误');return false;
+	}
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('operation')}",{'type':type,'status':status,'o_id':oid},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+</script>
+</div>
+</block>

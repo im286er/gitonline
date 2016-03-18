@@ -1,0 +1,116 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<form id="addMenuForm" name="addMenuForm" method="post">
+    <div class="reveal-modal reveal-modals" style="display:block; border:none;">
+        <h3>上传视频 <span class="close" id="AddMenu_close">×</span></h3>
+        <div class="modal-content modal-contents clearfix">
+            <div class="modal-a">
+                <div id="divPreview"><img id="VideoImage" src="" style="width:250px; height:150px;" alt="" /></div>
+                <p class="c-a2a2a6">视频截图建议尺寸640*350，JPG,PNG ，大小200 KB</p>
+                <span class="file"><input id="UploadImage" type="button" value="上传" class="btn btn-blue"></span>
+            </div>
+            <div class="modal-b">
+                <div class="set">
+                    <label>视频名称：</label><input type="text" id="VideoName" name="gname">
+                </div>
+                <div class="set">
+                    <label>视频描述：</label><textarea name="gdescription" style="width:170px;height:70px;"></textarea>
+                </div>
+				<div class="set">
+                    <label>视频链接：</label><input type="text" id="VideoLink" value='{$vinfo.glink}' name="glink">
+					<p class="c-a2a2a6" style="margin-left:110px;line-height:20px;">本地上传或视频链接，任选一项，支持优酷移动端分享链接</p>
+                </div>
+                <div class="set" id="bendishangchuan" style="display:none;">
+                    <label>视频文件：</label><input type="text" id="VideoFile" name="gfile">
+                </div>
+                <div class="set">
+                    <label></label><input id="UploadFile" type="button" value="本地上传" class="btn btn-blue">
+					<p class="c-a2a2a6" style="margin-left:110px;line-height:20px;">视频大小建议20M ，格式为mp4</p>
+                </div>
+                <div class="set">
+                    <label>视频分类：</label>
+                    <select name="cid" id="VideoCid">
+                        <foreach name="clist" item="v"><option <if condition="isset($_GET['cid']) && intval($_GET['cid'])==$v['cid']">selected</if> value="{$v.cid}">{$v.cname}</option></foreach>
+                    </select>
+					<input type="hidden" value="{$jid}" name="jid">
+                    <input type="hidden" value="{$sid}" name="sid">
+                    <input type="hidden" value="{$Think.get.ctype}" name="ctype">
+                </div>
+                <div class="set top">
+                    <label></label>
+                    <input type="button" value="确认" class="btn btn-pwd" id="AddMenu_Save">
+                    <input type="button" value="取消" class="btn btn-hui" id="AddMenu_Cancl">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#AddMenu_close,#AddMenu_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	
+	//上传图片
+	$("#UploadImage").click(function() {
+		var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#VideoImage').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//上传视频
+	$("#UploadFile").click(function() {
+		var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', array('conf'=>'f','custompath'=>'|Media|'.$jid.'|'), true)}", imageUploadLimit:1, });
+		editor.loadPlugin('insertfile', function() {
+			editor.plugin.fileDialog({
+				showRemote:false, clickFn:function(url, title) {
+					$('#bendishangchuan').show();
+					$('#VideoFile').val(url); 
+					editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//提交前判断
+	function CheckForm() {
+		var VideoName = $("#VideoName").val();
+		if( !VideoName ) { alert('视频名称不能为空'); return false; }
+		
+		var VideoFile  = $("#VideoFile").val();
+		var VideoLink  = $("#VideoLink").val();
+		if( !VideoFile && !VideoLink ) { alert('视频文件不能为空，请本地上传或者输入视频链接'); return false; }
+		
+		var VideoCid  = $("#VideoCid").val();
+		if( !VideoCid || !/[1-9]\d{0,5}/.test(VideoCid) ) { alert('视频分类不能为空'); return false; }
+		
+		return true;
+	}
+	
+	//提交信息
+	$("#AddMenu_Save").click(function() {
+		if( !CheckForm() ) return false;
+		var infodata = $('#addMenuForm').serialize() + "&gimg=" + $("#VideoImage").attr("src");
+		
+		$.post('__ACTION__', infodata, function(data) {
+			var data = eval('(' + data + ')');
+			if( data.msg == '') {
+				InsertVideo(data.info, 'a', 'p'); var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+			} else { alert( data.msg ); }
+		})
+	})
+});
+</script>
+</block>

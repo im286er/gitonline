@@ -1,0 +1,95 @@
+
+<extend name="Public:partial"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<form action="__ACTION__" method="post">
+    <div class="reveal-modal" style="border:none;margin-left:-233px;">
+        <h3>申请提现 <span class="close" id="DialogClose">×</span></h3>
+        <div class="modal-content">
+        	<div class="set" style="text-align:center; font-weight:bold;">
+        		<p style="color:red;">温馨提示：提现金额的最低数为100元</p>
+        		<p style="color:red;text-align:left;">
+        			手续费为：<Br>提现350元以下（含350）为2元，350元以上为0.6%, 最高收取 25 元
+        		</p>
+        	</div>
+            <div class="set">
+                <label>可提现金额</label> <strong style="color:red;font-size:25px;">{$member.money}</strong>元
+            </div>
+            <div class="set">
+                <label>确认提现账户</label> <strong style="color:#669900;font-size:20px;">{$member.msurname}</strong>({$member.mbdzh})
+            </div>
+            <div class="set">
+                <label>提现金额</label> <input <lt name="member.money" value="100">disabled="disabled"</lt> type="text" id="bmention" name="bmention" value="">
+            </div>
+            <div class="set">
+                <label>其他扣除费用</label> 手续费：<span id="bjy">0.0</span>元 服务费：<span id="bjs">0.0</span>元 
+            </div>
+            <div class="set">
+                <label>实际到账金额</label> <strong style="color:red;font-size:25px;" id="bsj">0</strong>元
+            </div>
+            <div class="set">
+                <label></label> <input <lt name="member.money" value="100">disabled="disabled"</lt> type="button" value="确认" class="btn btn-pwd" id="DialogSave">
+                <input <lt name="member.money" value="100">disabled="disabled"</lt> type="button" value="取消" class="btn btn-hui" id="DialogCancl">
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#DialogClose,#DialogCancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	});
+	var money = '{$member.money}';
+	var bmention = '';
+	$("#bmention").blur(function(){
+		bmention = $('#bmention').val();
+		if(parseFloat(bmention) > parseFloat(money)){ 
+			alert("提现金额不能大于实际账户金额");
+			$('#bmention').focus();
+			return false;
+		}
+		$.get('__ACTION__', {action:'calculate',bmention:bmention},function(result) {
+			if( parseInt(result.status) == 1 ) {
+				$("#bjy").html(result.data.bjy);$("#bjs").html(result.data.bjs);$("#bsj").html(result.data.bsj);
+			}
+		});
+	});
+
+
+
+	
+	function CheckFrom() {
+		bmention = $('#bmention').val();
+		if( !bmention) { alert("请输入提现金额"); $('#bmention').focus(); return false; }
+		if(parseFloat(bmention) > parseFloat(money)){ 
+			alert("提现金额不能大于实际账户金额");
+			$('#bmention').focus();
+			return false;
+		}
+		return true;
+	}
+	
+	//提交信息
+	$("#DialogSave").click(function() {
+
+		if( CheckFrom() == false) return false;
+		 var bsj = $("#bsj").html();
+		// if(bsj!=0){
+			 var result = confirm('确定要提现'+bmention+'元？');
+			 if(!result)return false;
+			 $.post('__ACTION__', {bmention:bmention},function(result) {
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				alert(result.msg);
+				location.reload();
+			 });
+
+		// }
+		
+	});
+});
+</script>
+</block>

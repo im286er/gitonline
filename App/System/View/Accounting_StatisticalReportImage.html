@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+div.btn ul { display:block; width:100%; }
+div.btn li { float:left; width:26%; }
+div.btn li.l { width:22%; }
+div.btn li input { position:relative; top:2px; }
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"> </script>
+<script type="text/javascript" src="__PUBLIC__/Js/ECharts/echarts.js"></script>
+</head>
+
+<body>
+<div id="main-body">
+	<div class="main-body">
+        <div class="btn" style="margin:0px;height:120px;">
+            <span style="color:red">温馨说明：图标中的字段表示含意</span>
+            <ul class="btn_ul">
+                <li><b>[a]</b> 预计收入，线上线下，不包含已退款</li>
+                <li><b>[b]</b> 预计收入，线上商家，不包含已退款</li>
+                <li><b>[c]</b> 预计收入，线上平台，不包含已退款</li>
+                <li class="l"><b>[d]</b> 预计收入，线下商家</li>
+                <li><b>[e]</b> 实际收入，线上线下，不包含已退款</li>
+                <li><b>[f]</b> 实际收入，线上商家，不包含已退款</li>
+                <li><b>[g]</b> 实际收入，线上平台，不包含已退款</li>
+                <li class="l"><b>[h]</b> 实际收入，线下商家</li>
+                <li><b>[i]</b> 商家，待退款</li>
+                <li><b>[j]</b> 商家，已退款</li>
+                <li><b>[k]</b> 平台，待退款</li>
+                <li class="l"><b>[l]</b> 平台，已退款</li>
+            </ul>
+        </div>
+        <div style="height:10px;display:block;"></div>
+        <div id="CreateMap" style="height:350px;width:100%;">
+            
+        </div>
+        <script type="text/javascript">
+            require.config({
+				paths: { echarts: '__PUBLIC__/Js/ECharts' }
+			});
+			require(
+				[
+                    'echarts', 
+                    'echarts/chart/line',
+                    'echarts/chart/bar',
+                ], 
+				function (ec) {
+					var myChart = ec.init(document.getElementById('CreateMap')); 
+					var option = {
+						title : {
+                            show:false
+                        },
+						tooltip : {
+							trigger: 'axis'
+						},
+						legend: {
+							data:['[ a ]','[ b ]','[ c ]','[ d ]','[ e ]','[ f ]','[ g ]','[ h ]','[ i ]','[ j ]','[ k ]','[ l ]']
+						},
+						toolbox: {
+							show : true,
+							feature : {
+								mark : {show: true},
+								magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+								restore : {show: true},
+								saveAsImage : {show: true}
+							}
+						},
+						dataZoom : {
+							show : true,
+							realtime : true,
+							start : 80,
+							end : 90
+						},
+						xAxis : [
+							{
+								type : 'category',
+								boundaryGap : false,
+								data : ['{$xAxis_data}']
+							}
+						],
+						yAxis : [
+							{
+								type : 'value',
+								splitNumber : 10
+							}
+						],
+						series : [
+							{
+								name:'[ a ]',
+								type: 'line',
+								data:[{$yAxis_a}]
+							},
+							{
+								name:'[ b ]',
+								type:'line',
+								data:[{$yAxis_b}]
+							},
+							{
+								name:'[ c ]',
+								type:'line',
+								data:[{$yAxis_c}]
+							},
+							{
+								name:'[ d ]',
+								type:'line',
+								data:[{$yAxis_d}]
+							},
+							{
+								name:'[ e ]',
+								type:'line',
+								data:[{$yAxis_e}]
+							},
+                            {
+                                name:'[ f ]',
+                                type:'line',
+                                data:[{$yAxis_f}]
+                            },
+                            {
+                                name:'[ g ]',
+                                type:'line',
+                                data:[{$yAxis_g}]
+                            },
+                            {
+                                name:'[ h ]',
+                                type:'line',
+                                data:[{$yAxis_h}]
+                            },
+                            {
+                                name:'[ i ]',
+                                type:'line',
+                                data:[{$yAxis_i}]
+                            },
+                            {
+                                name:'[ j ]',
+                                type:'line',
+                                data:[{$yAxis_j}]
+                            },
+                            {
+                                name:'[ k ]',
+                                type:'line',
+                                data:[{$yAxis_k}]
+                            },
+                            {
+                                name:'[ l ]',
+                                type:'line',
+                                data:[{$yAxis_l}]
+                            }
+						]
+					};
+					myChart.setOption(option); 
+				}
+			);
+			
+			
+        </script>
+	</div>
+</div>
+</body>
+</html>

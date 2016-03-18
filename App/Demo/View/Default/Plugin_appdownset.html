@@ -1,0 +1,124 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+.modal-content .set > input[type="text"] { width:350px; }
+</style>
+	<div class="wrapper">
+		<h2 class="title">应用上架</h2>
+        
+        <eq name="tfs" value="1">
+        <div class="mian padding">                   
+            <div class="modal-content">
+                <div class="set">
+                    <label>模块名称</label> <input type="text" id="ModuleName" value="{$modulename}">
+                    <span>不多于6个汉字</span>
+                </div>
+                <div class="set">
+                    <label>模块地址</label> <input type="text" readonly value="{$modulelink}">
+                    <span>该地址可用于微信及网页访问</span>
+                </div>
+                <div class="set">
+                    <label class="vertical">ICON</label>
+                    <div class="content_b_width">
+                        <div class="pull-left">
+                            <img id="ModuleIcon" src="{$moduleicon|default='/Public/Images/merchant/noperson_1.gif'}" style="width:80px; height:80px;" />
+                        </div>
+                        <p>建议尺寸：132 * 132 &#12288;格式：jpg、png</p>
+                        <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+                    </div>
+                </div>
+                <div class="border-b top"></div>
+                <div class="set top">
+                    <label></label> <input type="button" id="ModuleUpdate" class="btn btn-pwd" value="保存">
+                </div>
+            </div>
+        </div>
+        </eq>
+    
+        
+		<div class="mian padding">
+			<div class="content_c">
+				<form action="__ACTION__" method="get">
+                    <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.get.keywords}" placeholder="搜索：APP名称/来源">
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+			<div class="content_a top">
+				<table class="table border-b">
+					<tr>
+						<th>App名称</th>
+						<th>来源</th>
+						<th>版本</th>
+						<th>安卓|苹果</th>
+						<th>分类</th>
+						<th>上架时间</th>
+						<th>排序</th>
+						<th>下载量</th>
+					</tr>
+					<foreach name="datalist" item="vo">
+					<tr>
+						<td>{$vo.name}</td>
+						<td>{$vo.source}</td>
+						<td>{$vo.versions}</td>
+						<td><empty name="vo.androidsize"><span style="color:red;">--</span><else /><span style="color:#008000;">{$vo.androidsize}</span></empty> | <empty name="vo.iossize"><span style="color:red;">--</span><else /><span style="color:#008000;">{$vo.iossize}</span></empty></td>
+						<td><php>echo $appCategoryList[$vo['categoryid']]['title'];</php></td>
+						<td>{$vo.addtime|date='Y-m-d',###}</td>
+						<td style="width:80px;"><div id="app{$vo.appid}" style="display:block;cursor:pointer;" title="点击修改" onclick="$('#app{$vo.appid}').hide();$('#orders{$vo.appid}').show();"><neq name="vo.orders" value="9999">{$vo.orders}<else />--</neq></div><div id="orders{$vo.appid}" style="display:none;"><input type="text" autocomplete="off" name="orders" style="width:20px;height:10px;" value='<neq name="vo.orders" value="9999">{$vo.orders}</neq >' onblur="javascript:updateorder({$vo.appid},{$vo.orders},this.value);"></div></td>
+						<td><php>echo $vo[androidhit]+$vo[ioshit]</php></td>
+					</tr> 
+					</foreach>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+function updateorder(appid,noworders,orders){
+	if(noworders == orders)return false;
+	if(orders > 9999 && orders < 1)alert('请输入1-9999的任意整数');
+	if(orders=='')return false;
+	$.post("{:U(null)}", {'appid':appid,'orders':orders}, function( data ) {
+		if( parseInt(data)==1 ){
+			window.location.reload();
+		}else{
+			alert('操作失败');return false;
+		}
+    });
+}
+</script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+$(function() {
+	//上传图片
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#ModuleIcon').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//在线消费 最顶部 模块名称和ICON设置
+	$("#ModuleUpdate").click(function() {
+		var ModuleName = $.trim($("#ModuleName").val());
+		var ModuleIcon = $("#ModuleIcon").attr('src');
+		if( !ModuleName || !ModuleIcon ) { alert("模块名称和ICON图标不能为空"); return false; }
+		$.post("{:U('/Plugin/resetAppdown', '', true)}", {ModuleName:ModuleName, ModuleIcon:ModuleIcon}, function( data ) {
+			alert( parseInt(data) == 1 ? "设置成功" : "设置失败" );	
+		})
+	})
+});
+</script>
+
+</block>

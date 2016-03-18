@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>特价秒杀</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/saleslist.css">
+	<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+		var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="">
+	<header class="header">
+		<h1>特价秒杀</h1>
+		<eq name="Think.get.superiorsource" value="home">
+			<a href="javascript:void(0);" class="ico header-back" onclick="sendRedirect('home');"></a>
+		<else />
+			<a href="{:U('Index/index',array('jid'=>$jid))}" class="ico header-back"></a>
+		</eq>
+	</header>
+	<php>$goods_list = D('Goods')->getGoods($jids,array(),8);</php>
+	<div class="main container pt-50 pb-50" id="">
+		<div class="sale-banner"><img src="__PUBLIC__/Mobile/default/img/sale_banner_new.png" alt=""></div>
+		<ul class="li-2 product-list clearfix">
+			<volist name="goods_list" id="vo">
+			<li>
+				<div>
+					<a class="sale-link" href="#"><img src="{$vo.gimg}" data-echo="{$vo.gimg}" alt="" style="height:150px"></a>
+                    <h2 class="sale-name">{$vo.gname|msubstr=###,0,5,'utf-8',false}</h2>
+					<h6 class="sale-title">{$vo.gdescription}</h6>
+					<span class="sale-price"><em>减<php>echo rtrim(format_money($vo['gdprice']>0?$vo['gdprice']:$vo['goprice']),'.')*0.3;</php></em></span>
+					<span class="old-price">￥<php>echo rtrim(format_money($vo['gdprice']>0?$vo['gdprice']:$vo['goprice']),'.')*1.3;</php></span>
+					<a class="btn-buy" href="#"><php>echo rtrim(format_money($vo['gdprice']>0?$vo['gdprice']:$vo['goprice']),'.');</php>抢</a>
+				</div>
+			</li>
+			</volist>                  
+          </ul>
+	</div>
+	<!-- 下拉列表 -->
+	<div class="cart-modal" id="cartModal" style='display:none;'>
+		<div class="cart-dialog">
+			<div class="order-cart">
+				<div class="ico ico-cart"><span>16</span></div>
+				<i class="ico ico-sort-up"></i>
+				<ul>
+					<li>
+						<div class="item-title">烟灰色棉麻短袖</div>
+						<div class="item-sum">￥56</div>
+						<div class="item-option active">
+							<a class="ico ico-decrease"></a>
+							<span>2</span>
+							<a class="ico ico-increase"></a>
+						</div>
+					</li>
+					<li>
+						<div class="item-title">健身房神器套装</div>
+						<div class="item-sum">￥88</div>
+						<div class="item-option">
+							<a class="ico ico-decrease"></a>
+							<span>1</span>
+							<a class="ico ico-increase"></a>
+						</div>
+					</li>
+					<li>
+						<div class="item-title">迪斯尼背带裤</div>
+						<div class="item-sum">￥48</div>
+						<div class="item-option">
+							<a class="ico ico-decrease"></a>
+							<span>1</span>
+							<a class="ico ico-increase"></a>
+						</div>
+					</li>
+					<li>
+						<div class="item-title">海边旅游必入白色长裙</div>
+						<div class="item-sum">￥120</div>
+						<div class="item-option">
+							<a class="ico ico-decrease"></a>
+							<span>10</span>
+							<a class="ico ico-increase"></a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="catg-modal" id="catgModal" style="display:none;">
+		<div class="catg-dialog">
+			<div class="catg-modal-sort clearfix">
+				<div class="catg-modal-head">切换分类<a href="javascript:;" class="ico ico-catg-up" id="catgUpBtn"></a></div>
+				<ul class="clearfix">
+					<li><a href="javascript:;">裙子</a></li>
+					<li><a href="javascript:;">配件&首饰</a></li>
+					<li><a href="javascript:;">鞋子</a></li>
+					<li><a href="javascript:;">15年最新款上架中！</a></li>
+					<li><a href="javascript:;">天天特价区</a></li>
+					<li><a href="javascript:;">长裙&袍子</a></li>
+					<li><a href="javascript:;">单品</a></li>
+					<li><a href="javascript:;">一口价5折起</a></li>
+					<li><a href="javascript:;">15年最新款上架中！</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<!--<script src="js/jquery.lazyload.min.js"></script>-->
+	<script src="__PUBLIC__/Mobile/default/Js/echo.min.js"></script>
+	<script>
+	$(function() {
+		echo.init({
+			offset: 100,
+			throttle: 0,
+			unload: false
+		});
+	});
+		var oTabNavUl = $(".tab-nav ul");
+		var aTabNavLi = $(".tab-nav li");
+		var aTabNavLiA = $(".tab-nav li a");
+		var len = aTabNavLi.length;
+		var catgDownBtnWidth = $("#catgDownBtn").outerWidth();
+		var ulWidth = catgDownBtnWidth;
+
+		for (var i = 0; i < len; i++) {
+			ulWidth = ulWidth + aTabNavLi.eq(i).outerWidth()+1;
+		}
+		oTabNavUl.css('width', ulWidth);
+
+		aTabNavLiA.click(function() {
+			aTabNavLi.removeClass('active');
+			$(this).parent('li').addClass('active');
+		});
+
+		// $('img').lazyload({
+	 //        threshold: 0,
+	 //        effect: 'fadeIn',
+	 //        skip_invisible: false
+	 //    });
+
+		// 购物车弹出框
+		var cartModal = $("#cartModal");
+		$("#cartBtn").click(function(ev) {
+			cartModal.show();
+			$("#okBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+		});
+		$("#okBtn").click(function(ev) {
+			cartModal.show();
+			$("#cartBtn").hide();
+			$("#subBtn").show();
+			$(this).hide();
+		});
+		$(".cart-dialog").click(function(ev) {
+			$(".cart-modal").hide();
+			$("#cartBtn").show();
+			$("#subBtn").hide();
+			$("#okBtn").show();
+		});
+		$(".order-cart").click(function(ev) {
+			ev.stopPropagation();
+		});
+
+		//切换分类
+		var oCatgDownBtn = $("#catgDownBtn");
+		var oCatgModal = $("#catgModal");
+		var oCatgUpBtn = $("#catgUpBtn");
+
+		oCatgDownBtn.click(function() {
+			var _this = $(this);
+			oCatgModal.show();
+		});
+		oCatgUpBtn.click(function() {
+			var _this = $(this);
+			oCatgModal.hide();
+		});
+		$(".catg-dialog").click(function(ev) {
+			$(".catg-modal").hide();
+			ev.stopPropagation();
+		});
+	</script>
+</body>
+</html>

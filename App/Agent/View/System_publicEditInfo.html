@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+select { width:318px; } label input { position:relative; top:2px; } #dosubmit { margin-left:118px; margin-right:10px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:300px; }
+</style>
+</head>
+
+<body> 
+<div id="main-body">
+	<div class="subnav"><span class="on">修改个人信息</span></div>
+    <div class="main-body">
+        <form method='post' id="form" name="form" >
+        	<input type="hidden" value="{$member.mid}" name="mid" />
+            <div id="divSetting1">
+                <table class="table-form" border="0">
+                	<tr>
+                        <th width="100">帐&nbsp;&nbsp;&nbsp; 号</th>
+                        <td>{$member.mname}</td>
+                    </tr>
+                    <tr>
+                        <th width="100">真实姓名</th>
+                        <td><input type="text" placeholder="请输入真实姓名" autocomplete="off" name="member[msurname]" value="{$member.msurname}" class="user_input" /></td>
+                    </tr>
+					   <tr>
+                        <th>原&nbsp;密&nbsp;码</th>
+                        <td><input type="password" placeholder="请输入您的账号原密码"  name="ympwd" value="" class="user_input" id="ympwd"/><div id="ympwdTip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>现&nbsp;密&nbsp;码</th>
+                        <td><input type="password" placeholder="请输入您现在要更改的密码，为空表示不修改密码" id="MemberPwdO" name="member[mpwd]" value="" class="user_input" /><div id="MemberPwdOTip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>确认密码</th>
+                        <td><input type="password" placeholder="请输入您现在要更改的密码，为空表示不修改密码" id="MemberPwdT" value="" class="user_input" /><div id="MemberPwdTTip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>联系方式</th>
+                        <td><input type="text" placeholder="请输入正确的手机号" autocomplete="off" id="MemberPho" name="member[mphone]" value="{$member.mphone}" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>上传头像</th>
+                        <td>
+                        	<img style="cursor:pointer;" onclick="KindeditorUpload()" src="{$member.avatar|default='/Public/Images/nophoto.gif'}" id="MemberAvatarSrc" width="148" height="148" />
+                            <input type="hidden" name="member[avatar]" value="{$member.avatar}" id="MemberAvatarVal" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="left" style="margin-top:10px;">
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button> <button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+	$("#ympwd").formValidator({onShow:"请输入原密码", onFocus:"请输入原密码"}).inputValidator({min:1, onError:"原密码不能为空"});
+	$("#MemberPwdO").formValidator({empty:true, onFocus:"请输入新密码"}).inputValidator({min:1, onError:"新密码不能为空"});
+	$("#MemberPwdT").formValidator({empty:true, onFocus:"请输入新密码"}).inputValidator({min:1,onerror:"新密码不能为空"}).compareValidator({desID:"MemberPwdO", operateor:"=", onError:"两次密码不一致,请确认"});;
+});
+
+var editor = KindEditor.editor({ uploadJson:"{:U('System/publicKindeditorUpload', '', true)}", imageUploadLimit:50});
+function KindeditorUpload() {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$("#MemberAvatarSrc").attr('src', url); $('#MemberAvatarVal').val(url); editor.hideDialog();
+			}
+		});
+	});
+}
+</script>
+</body>
+</html>

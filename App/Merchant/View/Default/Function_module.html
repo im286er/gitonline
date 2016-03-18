@@ -1,0 +1,80 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title">
+     <eq name="Think.get.type" value='1'>功能插件<else/>模块列表</eq>
+        <p class="returnMenu">
+            <a href="{:U('/Function/module', array('type'=>1), true)}" <eq name="Think.get.type" value='1'>class="curr"</eq>>已安装的模块</a>
+            <a href="{:U('/Function/module', array('type'=>0), true)}" <eq name="Think.get.type" value='0'>class="curr"</eq>>模块列表</a>
+        </p>
+    </h2>
+    <!--<div class="prompt-div"><i class="prompticon"></i>该功能主要用于商家模块自动设置。</div>-->
+	<div class="content_a top">
+		<table class="table border-b">
+			<tr>
+				<th width="15%">模块名称</th>
+				<th width="15%">模块图像</th>
+				<th width="50%">模块简介</th>
+				<th width="25%">操作</th>
+			</tr>
+			<foreach name="datalist" item="v" empty="暂无安装模块">
+			<tr>
+				<td valign="middle">{$v.module_name}</td>
+				<td valign="middle"><img src="{$v.module_logo}" style="width:40;height:40px;"></td>
+				<td valign="middle">{$v.module_brief}</td>
+				<td valign="middle" style="text-align:right;padding-right:2px;">
+					<p>
+				<in name="v.module_sign" value="$merchant.modules">
+					<input type="button" value="已安装" style="color:#c0c0c0;" >
+					<if condition="($v['module_system'] eq 1) AND in_array($merchant['vid'],explode(',',$v['module_industry'])) ">
+					<input type="button" style="color:#c0c0c0;" value="系统禁卸">
+					<else/>
+					<input type="button" style="color:#ff0000;" onclick="Operation('uninstall','{$v.module_sign}',this.value,true);" value="卸载" id="uninstall{$v.module_sign}">
+					</if>
+					</p><p style="padding-top:5px;">
+					<input type="button" value="选择模版"  onClick="DialogFrameFun(650, 530, '{:U('Function/moduletemp',array('module_id'=>$v[module_sign]))}')">
+					<notempty name="v.module_template">
+
+					</notempty>
+				<else/>
+					<input type="button" onclick="Operation('install','{$v.module_sign}','安装');" value="立即安装" id="install{$v.module_sign}">
+				</in>
+					</p>
+				</td>
+			</tr> 
+			</foreach>
+		</table>
+		<if condition="$pages">
+        <div class="page clearfix"><a href="javascript:void(0);" class="btnpre" id="btnpre">跳转</a><input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}</div>
+        </if>
+	</div>
+</div>
+<!-- 弹窗 -->
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+function Operation(action,module_id,buttons,msg){
+	if(!action && !module_id){
+		alert('参数错误');
+		return false;
+	}
+	if(msg==true){
+		if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+			return false;
+		}
+	}
+	$('#'+action+module_id).val(buttons+'中..');
+	setInterval(function() {
+		$.post("{:U()}",{'action':action,'module_id':module_id},function(result){
+			if(result==1)window.location.reload();
+			if(result==0)alert('操作失败');
+		});
+		return false;
+	}, 2000);
+}
+</script>
+</block>

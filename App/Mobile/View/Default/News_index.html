@@ -1,0 +1,17 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+	 <style>img { width:100%; }</style>
+	<div class="main container p-tb" id="activity">
+		<ul class="actlist">
+			<volist name="active_list" id="vo" empty="暂时没有数据">
+			<li>
+				<a class="div-a" href="{:U('Mobile/News/info', array('jid'=>$jid,'new_id'=>$vo[new_id]))}">
+					<h6 class="act-title">{$vo.new_title}</h6>
+					<p class="act-time">{$vo.new_time}</p>
+					<p class="act-desc">{$vo.new_con|strip_tags|mb_substr=###,0,40,'UTF-8'}...</p>
+				</a>
+			</li>
+			</volist>
+		</ul>
+	</div>
+</block>

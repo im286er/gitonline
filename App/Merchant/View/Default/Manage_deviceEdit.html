@@ -1,0 +1,45 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; line-height:32px; padding-left:8px; width:320px; }
+.set > label { width:115px; }
+</style>
+<script type="text/javascript">
+function checkForm(){
+	var ssido =  document.getElementById("ssido").value;
+	if(! ssido){alert("一定要设置WIFI名称呢！");return false;} 
+	return true;
+}
+</script>
+<div class="wrapper">
+    <h2 class="title">智能揽客神器/修改设置<input type="button" value="<返回" onClick="window.location.href='{:U('/Manage/device', '', true)}'"></h2>
+    <div class="mian padding">
+         <form action="__ACTION__" method="post" onsubmit="return checkForm();">
+         	<input type="hidden" value="{$deviceInfo.rcode}" name="rcode" />
+            <input type="hidden" value="{$deviceInfo.rid}" name="rid">
+            <div class="set">
+                <label>添加白名单</label><input value="{$ymlist}" type="text" name="ym" placeholder="请输入要放行的域名，多个值以“;”分隔" id="sname">
+            </div>
+            <div class="set">
+                <label>SSID (WIFI名称)</label><input value="{$ssid}" type="text" name="ssido" id="ssido" placeholder="请输入SSID名称">
+            </div>
+            <div class="set">
+                <label>免认证的MAC地址</label><input value="{$deviceInfo.norsysver}" type="text" name="norsysver" placeholder="请输入mac地址，多个值用“;”分隔">
+            </div>
+            
+            <div class="set">
+                <label>认证类型 </label>
+                <label><input type="radio" name="rwebtype" <eq name="deviceInfo['rwebtype']" value="1">checked="checked"</eq> value="1" /> 免费上网认证</label>
+                <label><input type="radio" name="rwebtype" <eq name="deviceInfo['rwebtype']" value="2">checked="checked"</eq> value="2" /> 登录上网认证</label>
+                <label><input type="radio" name="rwebtype" <eq name="deviceInfo['rwebtype']" value="3">checked="checked"</eq> value="3" disabled="disabled" /> 微信关注上网</label>
+                <label><input type="radio" name="rwebtype" <eq name="deviceInfo['rwebtype']" value="4">checked="checked"</eq> value="4" disabled="disabled" /> 分享上网</label>
+            </div>
+            
+            <div class="set top">
+                <input type="submit" class="btn btn-pwd" value="确认">
+                <input type="button" class="btn btn-hui" value="修改">
+            </div>
+        </form>
+    </div>
+</div>	
+</block>

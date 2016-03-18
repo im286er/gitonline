@@ -1,0 +1,221 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script src="__PUBLIC__/Js/jquery1.8.min.js"></script>
+<style type="text/css">
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; vertical-align:middle; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+.category_order { height:50px; display:block; line-height:50px; }
+.category_order li { float:left; text-align:center; width:20%; }
+.category_order li a { display:block; width:100%; height:100%; font-size:14px; }
+.category_order li.on { border-bottom:2px solid #0099ff; }
+</style>
+<div class="wrapper">
+    <h2 class="title">订单编辑 </h2>
+
+    <div class="mian padding">
+        		
+    	
+        <div class="content_a">
+            <h3 class="font-12">
+            	<span>{$shop.sname}</span>
+                <span>{$order_info.o_dstime|strtotime|date='m-d H:i',###}</span> 
+                <span>订单号：{$order_info.o_id}</span>
+                <span>订单金额：{$order_info.o_price}元</span>
+				<if condition="$order_info['o_xftype']==1">
+                	<span>座位号：{$order_info.o_seat}	<if condition="$shop['seatlist']"><input onclick="editSeat({$order_info.o_id},'{$order_info.o_seat}','{$shop.sname}' )" class="btn btn-pwd" type="button" value="换座位号"></span></if>
+				</if>
+            </h3>
+            
+			<table class="table">
+				<tr>
+                    <th width="150px">商品</th>
+					<th>名称</th>
+                    <th>单价(元）</th>
+                    <th>数量</th>
+                    <th>操作</th>
+                </tr>
+                
+                <volist name="order_goods" id="g" empty="暂无信息">
+                <tr <if condition="$g.sp_status eq 0">style="color:red"</if>>
+                    <td style=""><img src="{$g.sp_img}" alt="" width="60" height="50"> </td>
+					<td>{$g.sp_name}</td>
+                    <td>{$g.sp_gdprice}</td>
+                    <td>
+                    <if condition="$g.sp_status eq 0">
+                    {$g.sp_number}
+                    <else />
+                    <input autocomplete="off" type="text" value="{$g.sp_number}" sp_id="{$g.sp_id}" />
+                    </if>
+                    </td>
+                    <td>
+                    <if condition="$g.sp_status eq 0">
+                    	已取消
+                    <else />
+                    <p><input type="button" onclick="tuiding({$g.sp_id},{$g.sp_oid},'{$g.sp_name}')" value="退除商品"></p>
+                    </if>
+                    </td>
+                </tr>
+                
+                </volist>
+		  </table>
+		  
+        </div>
+		<div style="padding-top:30px;TEXT-ALIGN: center">
+		  <input id="save" class="btn btn-pwd" type="button" value="保存">
+		  </div>
+		  <hr>
+		   <h3>添加商品</h3>
+		  <div class="content_c" style="padding-top:30px;">
+		 <form action="__ACTION__" method="get">
+		<input type="hidden" name="oid" value="{$Think.get.oid}" /> 
+		<input style="width:300px" type="text" autocomplete="off" placeholder="商品名称"  value="{$Think.get.goods_name}" name="goods_name" />&nbsp; <input type="submit" value="搜索" class="button">
+		</form>
+		  </div>
+		  <if condition="$add_goods">
+		  <div class="content_a">
+		  <table class="table">
+				<tr>
+                    <th width="150px">商品</th>
+					<th>名称</th>
+                    <th>单价(元）</th>
+                    <th>数量</th>
+                    <th>操作</th>
+                </tr>
+                
+                <volist name="add_goods" id="ag" empty="暂无信息">
+                <tr>
+                    <td style=""><img src="{$ag.gimg}" alt="" width="60" height="50"> </td>
+					<td>{$ag.gname}</td>
+                    <td>{$ag['gdprice']>0 ? $ag['gdprice'] : $ag['goprice']}</td>
+                    <td>                
+                    <input autocomplete="off" type="text" value="1" id="gid_{$ag.gid}" />
+                    </td>
+                    <td>                 
+                    <p><input type="button" onclick="tianjia({$ag.gid})" value="添加"></p>
+                    </td>
+                </tr>
+                
+                </volist>
+		  </table>
+		  </div>
+		  </if>
+    </div>
+     
+     
+       
+	<script type="text/javascript">
+	var oid = '{$Think.get.oid}';
+	$(function() {
+		$("#save").click(function() {
+			var goods = '';
+			var ms = 0;
+			$(".table input[type='text']").each(function () {
+				if($(this).val() < 1){
+					ms = 1;
+				}else{
+					goods += $(this).attr('sp_id') + ':' + $(this).val() + '|';
+				}
+            });
+			if(ms == 1){
+				alert('商品数量必须大于0');
+				return false;
+			}
+			$.post("{:U('/Sales/editOrderGoods', '', true)}", {goods:goods,oid:oid}, function( data ) {
+				if(data == 1){
+					alert('订单保存成功');
+					window.location.reload();
+				}else{
+					alert('订单保存失败');
+				}
+			})
+		})
+		
+	});
+	function tuidings(sp_id){
+		if (confirm("确认要删除这个商品吗?")) {
+			$.post("{:U('/Sales/deleteOrderGoods', '', true)}", {sp_id:sp_id}, function( data ) {
+				window.location.reload();
+			})
+		}
+	}
+
+	
+	//更改座位号
+	function editSeat(oid,o_seat,sname )
+	{
+		var d = dialog({
+			id:'replymsg',
+			title: '更改座位号-'+sname,
+			opacity: 0.87,
+			lock: true,
+			background: '#600', // 背景色
+			content: '<div style="padding:20px 40px 20px 40px;"><p>当前座位号：'+o_seat+'</p><br/><p><select id="o_seat_eidt"><?php $seatlist = explode(',', $shop['seatlist']);if(is_array($seatlist))foreach($seatlist as $value){ echo '<option value="'.$value.'"'.($value==$order_info['o_seat']?"selected":"").'>'.$value.'</option>';} ?></select></p></div>',
+			okValue: '确认换座',
+			cancel: true,
+			cancelValue: '取消',
+			ok: function () {
+				var o_seat = $('#o_seat_eidt').val();
+				if(o_seat == "<?php echo $order_info['o_seat'];?>") { alert('您的座位号未更改！'); return false; }
+				$.post("{:U('/Sales/editOseat', '', true)}", {oid:oid,o_seat:o_seat}, function( data ) {
+					window.location.reload();
+				})
+			}
+		});
+		d.show();
+	}
+
+
+
+	//拒绝订单
+	function tuiding(sp_id,sp_oid,sp_title )
+	{
+		var d = dialog({
+			id:'replymsg',
+			title: '退除商品-'+sp_title,
+			opacity: 0.87,
+			lock: true,
+			background: '#600', // 背景色
+			content: '<div style="padding:20px 40px 20px 40px;"><p><select id="sp_reason" onchange=\'if(this.value==10)$("#sp_cause_c").show();else $("#sp_cause_c").hide();\'><option value="">请选择退除商品订单原因</option><option value="1">经理同意</option><option value="2">库存不全</option><option value="3">客人要求</option><option value="4">质量问题</option><option value="10">其他原因</option></select></p><br/><p id="sp_cause_c" style="display:none;">原因：<input type="text" name="sp_cause" value="" id="sp_cause"></p></div>',
+			okValue: '确认退除',
+			cancel: true,
+			cancelValue: '取消',
+			ok: function () {
+				var sp_reason = $('#sp_reason').val();
+				var sp_cause = $('#sp_cause').val();
+				if(!sp_reason) { alert('请选退除商品原因！'); return false; }
+				$.post("{:U('/Sales/deleteOrderGoods', '', true)}", {sp_id:sp_id,sp_reason:sp_reason,sp_cause:sp_cause}, function( data ) {
+					window.location.reload();
+				})
+			}
+		});
+		d.show();
+	}
+
+
+
+	function tianjia(gid){
+		if (confirm("确认要添加这个商品进订单吗?")) {
+			var number = $("#gid_"+gid).val();
+			if(number < 1){
+				alert('商品数量必须大于0');
+				return false;
+			}
+			$.post("{:U('/Sales/addOrderGoods', '', true)}", {gid:gid,oid:oid,number:number}, function( data ) {
+				if(data == 1){
+					alert('商品添加成功');
+					window.location.reload();
+				}else{
+					alert('商品添加失败');
+				}
+			})
+		}
+	}
+	</script>
+	
+</div>
+</block>

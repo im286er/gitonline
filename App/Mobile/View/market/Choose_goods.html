@@ -1,0 +1,27 @@
+<ul class="li-2 product-list clearfix">
+	<volist name="result_list" id="va" empty="暂时没有数据">
+	<volist name="va.list" id="vo">
+    <li>
+        <div>
+        	<a href="{:U('Mobile/Choose/detail', array('gid'=>$vo['gid'],'sid'=>$sid))}">
+            <img src="<empty name='vo[gimg]'>__PUBLIC__/Images/mobile/ttt.png<else />{$vo.gimg}</empty>" data-original="{$vo.gimg}" alt="{$vo.gname}">
+            <h6 class="">{$vo.gname}</h6>
+            <p class="">
+            <if condition="$vo['gdescription']">
+            {$vo.gdescription|strip_tags|msubstr=###,0,14,'utf-8',false}
+            <else />
+            商品暂无描述
+            </if>
+            </p>
+            <span class="prod_price">￥{$vo['gdprice']>0 ? $vo['gdprice'] : $vo['goprice'] }</span>
+            <div class="item-option active">
+                <a href="javascript:;" class="ico ico-decrease btn_left" gid="{$vo.gid}"></a>
+                <span class="gnum_{$vo.gid}" id="number_{$vo.gid}" >0</span>
+                <a href="javascript:;" class="ico ico-increase btn_right" gid="{$vo.gid}"></a>
+            </div>
+            </a>
+        </div>
+    </li>
+    </volist>
+    </volist>
+</ul>

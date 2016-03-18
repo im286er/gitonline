@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+        <a href="{:U('/User/usersList')}" style="margin-left:15px;" class="on">帝鼠OS会员</a>
+        <a href="{:U('/User/vusersList')}" style="margin-left:15px;">全民返利会员</a>
+        <a href="{:U('/User/downloadUsers')}" style="margin-left:15px;">导出会员</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+        	<input type="hidden" value="{$Think.get.type}" name="type" />
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：会员昵称/来源/所属商家" style="width:280px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />  
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+    	<form onsubmit="return false;" name="form" id="form" method="post">
+            <table class="table-list">
+                <thead>
+                    <tr>
+                        <th width="40"><input type="checkbox" id="checkbox" onclick="selectAll('uid[]');"></th>
+                        <th width="10%">会员昵称</th>
+                        <th width="10%">来源</th>
+                        <th width="17%">会员手机号</th>
+                        <th width="9%">所属商家</th>
+                        <th width="9%">所属代理商</th>
+
+                        <th width="15%">开通时间</th>
+
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<php>$usource=array(1=>'qq',2=>'sina',3=>'weixin');</php>
+                    <volist name="usersList" id="vo">
+                        <tr>
+                           <if condition="$vo['u_clientid']==null">  
+                        	<td><input type="checkbox" name=""  value=""  disabled="disabled" ></td> 
+                           <else />
+						   <td><input type="checkbox" name="uid[]"  value="{$vo.u_id}"></td> 
+						   </if>
+                            <td>{$vo.u_name}</td>
+                            <td>{$usource[$vo['u_source']]?$usource[$vo['u_source']]:$vo['u_source']}</td>
+                            <td>{$vo.u_phone}</td>
+                            <td>{$vo.mnickname}</td>
+                            <td>{$vo.anickname}</td>
+                            <td>{$vo.u_regtime}</td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="LookUserInfo('{$vo.u_id}')">账号信息</a> |
+                                <a href="javascript:void(0);" onclick="LookConsumption('{$vo.u_id}')">消费记录</a> |
+								<if condition="!$vo['u_clientid']==null">
+                                <a href="javascript:void(0);" onclick="SendMessage('{$vo.u_id}', 'get')">推送消息</a> 
+								<else />
+								<a href="#" style="color:#ccc">推送消息</a>
+								</if>
+                            </td>
+                        </tr>
+                    </volist>
+                </tbody>
+            </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="SendMessage(0, 'post')" value="&nbsp;推送消息&nbsp;" name="dosubmit" class="button" />
+		    </div>
+        	<div id="pages"> {$pages} </div>
+		</form>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+var KindeditorDialog = null;
+//推送消息
+function SendMessage( uid, type ) {
+	if( type=='post' ) {
+		$("input[name='uid[]']").each(function(index, element) { if($(this).is(":checked")) uid = uid+','+$(this).val(); });
+	}
+	if( !uid ) { alert('请选择要接收的会员'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 575,
+        height: 350,
+        title : '按会员推送消息',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Message/messageAddByMid/uid/'+uid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });
+}
+
+//查看会员信息
+function LookUserInfo( uid ) {
+	if( !uid ) { alert('请选择要接收的会员'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 800,
+        height: 500,
+        title : '查看会员信息',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/User/usersInfo/uid/'+uid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });	
+}
+
+//查看会员消息记录
+function LookConsumption( uid ) {
+	if( !uid ) { alert('请选择要接收的会员'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 900,
+        height: 500,
+        title : '查看消息记录',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/User/consumption/uid/'+uid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });	
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

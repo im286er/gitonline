@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<include file="Public:head"/>
+	<style>
+#shareit {display: none;position: absolute;width: 100%;height: 100%;background: rgba(0,0,0,1);text-align: right;top: 0;left: 0;z-index: 105;}
+img {max-width: 100%;right: 0%;top:0%; }
+.dl-detail p { padding-left:0; text-indent:0; }
+.dl-detail p span { width:100%; clear: both; display:inline; text-align: left; }
+.container img { vertical-align:middle; }
+</style>
+</head>
+<body>
+
+<header class="header header-dl"><a href="javascript:void(0);"><neq name="Think.get.source" value="app"><i class="ico header-back"></i></neq>{$page_name}</a></header>
+<div id="shareit" style="dispaly:none;"> <img src="__PUBLIC__/Images/mobile/weixinyingdao.png" onclick="$('#shareit').hide();"> </div>
+<div class="container p-tb">
+	<empty name="banner_list">
+		<section class="">
+		   <div class="main_image_one" >
+			 <img src="__PUBLIC__/Mobile/{$tpl_name}/upload/slide.jpg" class="img_2_one"/>
+		   </div>
+		</section>
+	<else />
+    	<if condition="count($banner_list) eq 1">
+		<section class="slide swiper-container dl-slide">
+			<div  class="swiper-wrapper">
+		 		<a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" class="img_2_one" style="width:100%;height:auto;"/></a>
+	   		</div>
+		</section>
+	   	<else />
+		<section class="slide swiper-container dl-slide">
+			<div class="swiper-wrapper">
+				<volist name="banner_list" id="vo" >
+				<div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" alt=""></a></div>
+				</volist>
+			</div>
+			<div class="swiper-pagination">
+				<volist name="banner_list" id="vo" >
+				<span class="swiper-pagination-bullet"></span>
+				</volist>
+			</div>
+		</section>
+		</if>
+	</empty>
+		<section class="dl-info clearfix">
+			<div class="pull-left">
+				<img src="{$app.applogo}" alt="" style="width:80%;height:auto;">
+			</div>
+			<div class="pull-right">
+				<h2>{$app.appname}</h2>
+				<p>{$app.mnickname}</p>
+				<a id="DownAppFile" href="javascript:void(0);" onclick="$('#shareit').show();" class="btn btn-dl" >立即下载</a>
+		        <script type="text/javascript">
+					var isdownload = "{$app.isdown}"
+					var issystem = '{$apptype}'
+					if( parseInt(isdownload)==1 ) {
+						var ImageObj = new Image();
+						ImageObj.src = "http://ds.dishuos.com/img/_wayos_ver3_logo.jpg";
+						ImageObj.onload = function() {
+							document.getElementById('VideoSrc').src="http://ds.dishuos.com/mmc/mmc/sd/share{$info.gfile}";
+							if( issystem=='1' ) {
+								document.getElementById("DownAppFile").href = "http://ds.dishuos.com/mmc/mmc/sd/share{$app.appurl}"
+							} else {
+								document.getElementById("DownAppFile").href = "itms-services://?action=download-manifest&url=https://ds.dishuos.com/mmc/mmc/sd/share{$app.iosurl}"
+							}
+						}
+					}
+				</script>
+			</div>
+		</section>
+		<section class="dl-detail">
+			<p><span>版本：</span>{$app.appversions}</p>
+			<p><span>大小：</span>7.3MB</p>
+			<p><span>行业：</span>{$vocation.v_title}</p>
+			<p><span>商户介绍：</span>{$app.appjs}</p>
+		</section>
+	</div>
+
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+	var mySlide = new Swiper('.swiper-container', {
+		speed: 400,
+		pagination: '.swiper-pagination',
+		autoplay: 5000,
+		autoplayDisableOnInteraction: false,
+		loop: true
+	});
+    </script>
+</body>
+</html>

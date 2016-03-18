@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>关于我们</title>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css?v=20160106">
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Rebateapp/Js/interactive.js"></script>
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <script>
+    function ss(ver){
+   		 $("#ver").html(ver);
+		  $("#vers").html(ver);
+    }
+    </script>
+</head>
+<body class="">
+	<header class="header about_head">
+		<a href="javascript:void(0);" class="ico header-back header-back-w" onclick="sendRedirect('my');"></a>
+	</header>
+	<div class="main container about_cont">
+		<div class="au-logo p-t">
+			<img src="__PUBLIC__/Rebateapp/Images/au_logo.png?v=20160115" alt="">
+			<p><span class="number">v<font id="ver"></font></span></p>
+		</div>
+		<div>
+			<ul class="about-list">
+				<li>
+                    <span>官方网站</span>
+                    <em>http://www.dishuos.com</em>
+				</li>
+				<li>
+                    <span>新浪微博</span>
+                    <em>@阿宅订</em>
+				</li>
+				<li>
+                    <span>微信</span>
+                    <em>tuoer518</em>
+				</li>
+				<li>
+                    <span>联系我们</span>
+                    <em><a href="tel:400-879-2388">400-879-2388</a></em>
+				</li>                                                
+			</ul>
+            <ul class="about-list">
+				<li>
+                    <span>当前版本</span>
+                    <em>v<font id="vers"></font></em>
+				</li>                                               
+			</ul>
+		</div>
+		<div class="au-company">
+			<p>杭州阿宅订网络科技有限公司</p>
+			<p>http://www.dishuos.com</p>
+		</div>
+	</div>
+	<script>
+	 var str1 = '{ "type": "getVersion"}';
+	 var ver  = interactive(str1,'ss(response)');
+	</script>
+</body>
+</html>

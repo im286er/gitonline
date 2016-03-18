@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" href="__PUBLIC__/Css/login.css" rel="stylesheet"/>
+<title>后台登入</title>
+
+</head>
+
+<body id="bodybg">
+
+<div class="page">
+    <p class="logo"><img src="__PUBLIC__/Images/login/logo.png"/></p>
+    <div class="fromgroup">
+        <div style="margin-top:55px">
+            <p class="not top width375 font12" id="MsgError">请先输入您的登录账号</p>
+            <p class="jt"><img src="__PUBLIC__/Images/login/jt.png"/></p>
+        </div>
+        <input name="username" id="username" type="text" class="name heightline ridus fontsize" placeholder="请输入账号"/> 
+        <input name="password" id="password" type="password" class="name heightline ridus fontsize" placeholder="请输入密码"  autocomplete="off" />
+        <div class="code">
+            <input name="verify" id="verify" maxlength="4" type="text" class="codetxt heightline ridus fontsize" placeholder="请输入右侧验证码"/>
+             <p class="codepic h48"><img src="{:U('Public/verify@xt', array('fontSize'=>18, 'height'=>48, 'width'=>120), true, true)}" onclick="imghh()" id="img2"/></p>
+        </div>
+        <button type="submit" class="heightline btn ridus fontsize" onclick="SublimeLoginForm();">登录</button>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script>
+function imghh(){
+	document.getElementById("img2").src=document.getElementById("img2").src+'?'+Math.random();
+}
+
+function CheckLoginForm() {
+	var username = document.getElementById("username").value;
+	if( !username ) { document.getElementById("MsgError").innerHTML="请先输入您的登录账号"; document.getElementById("username").focus(); return false; }
+	
+	var password = document.getElementById("password").value;
+	if( !password ) { document.getElementById("MsgError").innerHTML="请先输入您的登录密码"; document.getElementById("password").focus(); return false; }
+	
+	var verify = document.getElementById("verify").value;
+	if( !verify || !/\d{4}/.test(verify) ) { 
+		document.getElementById("MsgError").innerHTML="验证证格式不正确"; document.getElementById("verify").focus(); return false;
+	}
+	return true;	
+}
+
+function SublimeLoginForm(){
+	var username=$("#username").val(); 
+	var password=$("#password").val(); 
+	var verify=$("#verify").val();
+	
+	if(CheckLoginForm()==true){
+		$.post("/Public/checklogin", {username:username,password:password,verify:verify}, function(data) {
+			data = parseInt(data);
+			if(data==5) {$("#MsgError").text("此账号不存在");$("#verify").val("");  imghh(); 	}  
+			if(data==3) {$("#MsgError").text("账号被禁用");$("#verify").val("");  imghh(); 	}
+			if(data==2) {$("#MsgError").text("账号密码错误");$("#verify").val("");  imghh(); 	}
+			if(data==1) {$("#MsgError").text("验证码错误");$("#verify").val("");  imghh(); } 
+			if(data==6) {$("#MsgError").text("您所在的权限组被关闭，请联系管理员");$("#verify").val("");  imghh(); } 
+			
+			if(data==4) {location.href="/Index/index";} 
+		})
+	}
+} 
+
+window.onkeydown = function( event ) {
+	var keyCode=event.keyCode ? event.keyCode:event.which?event.which:event.charCode;
+	if(keyCode==13) { SublimeLoginForm(); } 
+}
+
+</script>
+</body>
+</html>

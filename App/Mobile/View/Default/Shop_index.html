@@ -1,0 +1,50 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/branchlist.css">
+	<div class="main container p-t">
+		<section class="branch-list clearfix">
+			<ul id='shop_list'>
+				<volist name="shop_list" id="vo" empty="暂时没有数据">
+				<li <eq name="key" value="0">class="nearest"</eq>>
+					<notempty name="vo.exterior">
+						<img src="" data-echo="{$vo.exterior}" alt="">
+					</notempty>
+					<a href="{$vo.url}">
+						<h6 class="branch-title">{$vo.sname}</h6>
+						<p class="branch-addr">{$vo.saddress}</p>
+						<notempty name="vo.dis">
+						<div class="branch-distance"><i class="ico ico-pos"></i><span><php>echo distance_convert($vo['dis']);</php></span><if condition="$key eq 0"><span class="shop-zjj">最接近</span></if></div>
+						</notempty>
+					</a>
+				</li>
+				</volist>
+			</ul>
+		</section>
+	</div>
+    <script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/Mobile/default/Js/echo.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $.cookie("ProductList", '', {path:'/'})
+    $(function() {
+		echo.init({
+			offset: 100,
+			throttle: 0,
+			unload: false
+		});
+	});
+    </script>
+	<eq name="Think.cookie.opentype" value="app">
+	<script type="text/javascript">
+		var typemod = '{$Think.get.mod}';
+		sendStrType('geolocation','shop_list(response)');
+		function shop_list(geolocation){
+			if(!geolocation)return false;
+			//alert(geolocation);
+			if(msystem != 'ios')$.post("{:U('')}",{'location':geolocation,'mod':typemod},function(result){
+				//alert(result);
+				$('#shop_list').html(result);
+			});
+		}
+	</script>
+	</eq>
+</block>

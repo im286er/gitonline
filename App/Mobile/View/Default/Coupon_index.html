@@ -1,0 +1,25 @@
+﻿<extend name="Public:common"/>
+<block name="body">    
+	<div class="main container p-tb">
+		<section class="coupon">
+			<div class="sec-body">
+				<ul>
+					<volist name="coupon_list" id="vo" empty="暂时没有数据">
+					<li>
+						<a class="bg-block coupon-red" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id]))}">
+							<div class="coupon-left">
+								<h5>{$vo.vu_name}价值{$vo.vu_price}元</h5>
+								<p>{$vo.vu_description|msubstr=###,0,16}</p>
+							</div>
+							<div class="coupon-right">
+								<h5>立即领取</h5>
+								<p class="coupon-validity">有效期至：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p>
+							</div>
+						</a>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</section>
+	</div>
+</block>

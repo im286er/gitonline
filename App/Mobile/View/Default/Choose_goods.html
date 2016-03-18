@@ -1,0 +1,31 @@
+﻿<volist name="result_list" id="va" empty="暂时没有数据">
+
+<div class="item-list item-list-prod">
+	<h5 class="list-title">{$va.cname}</h5>
+	<ul>
+		<volist name="va.list" id="vo">
+			<li>
+				<a href="{:U('Mobile/Choose/detail', array('gid'=>$vo['gid'],'sid'=>$sid))}">
+					<div>
+						<div class="item-prod">
+							<img src="<empty name='vo[gimg]'>__PUBLIC__/Images/mobile/ttt.png<else />{$vo.gimg}</empty>" alt="{$vo.gname}">
+							<h6 class="item-title item-title-prod">{$vo.gname}</h6>
+							<p class="item-description">{$vo['gdescription'] ? msubstr($vo['gdescription'],0,30) : '商品暂无描述' }</p>
+							<p class="item-description">库存:{$vo['gstock'] == -1 ? '无限' : $vo['gstock']}</p>
+						</div>
+						<div class="item-price">
+							<span class="price-new">￥{$vo['gdprice']>0?$vo['gdprice']:$vo['goprice']}</span>
+							<gt name="vo.gdprice" value="0"><span class="price-old">￥{$vo['goprice']}</span></gt>
+						</div>
+						<div class="item-option active">
+							<a class="ico ico-decrease btn_left" gid="{$vo.gid}"></a>
+							<span class="gnum_{$vo.gid}" id="number_{$vo.gid}">0</span>
+							<a class="ico ico-increase btn_right" gid="{$vo.gid}"></a>
+						</div>
+					</div>
+				</a>
+			</li>
+		</volist>
+	</ul>
+</div>
+</volist>				

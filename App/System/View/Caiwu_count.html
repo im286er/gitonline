@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>收支明细</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+div.count { width:100%; height:80px; background:#f5f5f5; overflow:hidden; display:block; clear:both; margin-bottom:10px; }
+div.count li { float:left; text-align:center; min-width:120px; line-height:24px; margin-top:15px; font-size:14px; }
+tr.notice { color:red; background:#f6f6f6; }
+tr.notice td a { color:red; }
+</style>
+</head>
+
+<body>
+<div id="main-body">
+<div class="subnav">
+    	
+    </div>
+	<div class="main-body">
+        <div class="btn"  style="margin:0px;">
+            <span>商户总余额收入</span>
+            <span><font color="red"><b>{$merchant.t1}</b></font> 元.</span>
+            &#12288;&#12288;
+            <span>商户总提现额</span>
+            <span><font color="red"><b>{$merchant.t2}</b></font> 元.</span>
+            &#12288;&#12288;
+            <span>商户总余额</span>
+            <span><font color="red"><b>{$merchant.t3}</b></font> 元.</span>
+        </div>
+        <div class="btn"  style="margin:0px;">
+            <span>返利会员总收入</span>
+            <span><font color="red"><b>{$user.t1}</b></font> 元.</span>
+            &#12288;&#12288;
+            <span>返利会员总提现</span>
+            <span><font color="red"><b>{$user.t2}</b></font> 元.</span>
+            &#12288;&#12288;
+            <span>返利会员总余额</span>
+            <span><font color="red"><b>{$user.t3}</b></font> 元.</span>
+        </div>
+	</div>
+</div>
+</body>
+</html>

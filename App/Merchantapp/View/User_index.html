@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>会员管理</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>会员管理</h1>
+		<a href="{:U('/Index/index')}" class="ico header-back"></a>
+	</header>
+	<div class="tab-nav tab-nav-h nav-member">
+		<div class="container">
+			<ul class="li-4 tab-member">
+				<li class="hy <eq name='Think.get.type' value='1'>active</eq>"><a href="{:U('/User/index', array('type'=>1))}"><div><span>{$count_a}</span><p>会员总数</p></div></a></li>
+				<li class="wxhy <eq name='Think.get.type' value='2'>active</eq>"><a href="{:U('/User/index', array('type'=>2))}"><div><span>{$count_w}</span><p>微信会员</p></div></a></li>
+				<li class="qqhy <eq name='Think.get.type' value='3'>active</eq>"><a href="{:U('/User/index', array('type'=>3))}"><div><span>{$count_x}</span><p>QQ会员</p></div></a></li>
+				<li class="wbhy <eq name='Think.get.type' value='4'>active</eq>"><a href="{:U('/User/index', array('type'=>4))}"><div><span>{$count_b}</span><p>微博会员</p></div></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-126">
+		<div class="tab-content active">
+        	<if condition="$userlist">
+                 <ul class="member-list hy-list">
+                 	<volist name="userlist" id='u'>
+                    <li>
+                        <a href="{:U('/User/opinion', array('uid'=>$u['flu_userid']))}">
+                            <div><img src="{$u.flu_avatar|default='/Public/Merchantapp/images/nopic1.png'}" alt=""><if condition="$u['u_msg']"><span></span></if></div>
+                            <h3>{$u.flu_nickname}</h3>
+                            <p>来源：<if condition="$u['flu_source']=='1'">QQ<elseif condition="$u['flu_source']=='2'"/>微博<elseif condition="$u['flu_source']=='3'"/>微信</if></p>
+                            <i class="ico ico-bubble"></i>
+                        </a>
+                    </li>
+                    </volist>
+                </ul>
+             <else/>
+                 <p class="nomember" style="display:block;">你的推广不到位哦</p>
+             </if>
+		</div>
+	</div>
+</body>
+</html>

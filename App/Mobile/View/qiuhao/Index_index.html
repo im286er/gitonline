@@ -1,0 +1,131 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+
+<div id="wrapper">
+	<div id="scroller">
+	<div class="main container p-b">
+		<div id="pullDown">
+			<i class="ico pullDownIcon"></i>
+			<p class="pullDownLabel">本系统由阿宅订提供技术支持</p>
+		</div>
+	<empty name="banner_list">
+		<section class="">
+		   <div class="main_image_one" >
+			 <img src="__PUBLIC__/Mobile/{$tpl_name}/upload/slide.jpg" class="img_2_one"/>
+		   </div>
+		</section>
+	<else />
+    	<if condition="count($banner_list) eq 1">
+		<section class="">
+			<div  class="swiper-wrapper">
+		 		<a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" class="img_2_one" style="width:100%;height:auto;"/></a>
+	   		</div>
+		</section>
+	   	<else />
+		<section class="slide swiper-container">
+			<div class="swiper-wrapper">
+				<volist name="banner_list" id="vo" >
+				<div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" alt=""></a></div>
+				</volist>
+			</div>
+			<div class="swiper-pagination">
+				<volist name="banner_list" id="vo" >
+				<span class="swiper-pagination-bullet"></span>
+				</volist>
+			</div>
+		</section>
+		</if>
+	</empty>
+		<section class="nav">
+			<ul class="clearfix">
+				<li>
+					<a href="{:U('/Shop/newt')}">
+						<img src="{$module1icon}" alt="{$module1name}">
+						<span>{$module1name}</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('/Shop/newo')}">
+						<img src="{$module2icon}" alt="{$module2name}">
+						<span>{$module2name}</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+						<img src="{$ShopMenuIcon}" alt="{$ShopMenuName}">
+						<span>{$ShopMenuName}</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section class="nav-list">
+			<ul>
+				<li>
+					<a href="{$WshopModuleLink}">
+
+						<img src="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}"/>
+
+						<h4>{$WshopModuleName}</h4>
+						<p></p>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+					   <img src="{$InfoMenu3Icon|default='/Public/Images/mobile/002.png'}" />
+						<h4>{$InfoMenu3Name}</h4>
+						<p></p>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section class="activity">
+			<div class="sec-title">
+				<h3>{$HdModuleName}</h3>
+				<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}"><i class="ico ico-right"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul>
+				<volist name="active_list" id="vo" >
+					<li><a href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}"><img src="{$vo.av_img}" alt="{$vo.av_title}"><p>{$vo.av_title}</p></a></li>
+				</volist>
+				</ul>
+			</div>
+			<div class="sec-footer"><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">查看其他{$HdModuleName}</a></div>
+		</section>
+        <!--
+		<section class="coupon">
+			<div class="sec-title">
+				<h3>{$VoucherModuleName}</h3>
+				<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}"><i class="ico ico-right"></i></a>
+			</div>
+			<div class="sec-body">
+				<ul>
+				<volist name="coupon_list" id="vo" >
+					<li>
+						<a class="bg-block {$key%2==0?'coupon-red':'coupon-yellow'}" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}">
+							<div class="coupon-left"><h5>{$vo.vu_name}</h5><p>{$vo.vu_description|msubstr=###,0,30}</p></div>
+							<div class="coupon-right"><h5>立即领取</h5><p class="coupon-validity">有效期至：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p></div>
+						</a>
+					</li>
+				</volist>
+				</ul>
+			</div>
+			<div class="sec-footer"><a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">查看其他{$VoucherModuleName}</a></div>
+		</section>
+        -->
+</div>
+</div>
+</div>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/iscroll-4.2.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/pulldown.js"></script>
+	<script>
+	var mySlide = new Swiper('.swiper-container', {
+		speed: 400,
+		pagination: '.swiper-pagination',
+		autoplay: 5000,
+		autoplayDisableOnInteraction: false,
+		loop: true
+	});
+    </script>
+</block>

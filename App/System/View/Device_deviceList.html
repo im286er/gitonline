@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.table-list td img { display:block; margin:auto; }</style>
+</head>
+
+<body>
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addDevice()">导入设备</span>
+        <a href="{:U('Device/deviceList', array('type'=>1))}" style="margin-left:15px;font-size:12px;line-height:38px;<eq name='Think.get.type' value='1'>border-bottom-color:red;</eq>">所有设备</a>
+        <a href="{:U('Device/deviceList', array('type'=>2))}" style="margin-left:15px;font-size:12px;line-height:38px;<eq name='Think.get.type' value='2'>border-bottom-color:red;</eq>">未分配列表</a>
+        <a href="{:U('Device/deviceList', array('type'=>3))}" style="margin-left:15px;font-size:12px;line-height:38px;<eq name='Think.get.type' value='3'>border-bottom-color:red;</eq>">已分配列表</a>
+	</div>
+    <div class="search_list" id="SearchForm">
+    	<form name="search" action="__ACTION__">
+            <label class="fl">查询条件：</label>
+            <select name="search_type" class="fl">
+                <option value="" <if condition="!isset($_GET['search_type']) || $_GET['search_type']==''">selected="selected"</if>>搜索方式</option>
+                <option value="1" <if condition="isset($_GET['search_type']) && $_GET['search_type']=='1'">selected="selected"</if>>箱号</option>
+                <option value="2" <if condition="isset($_GET['search_type']) && $_GET['search_type']=='2'">selected="selected"</if>>序号</option>
+                <option value="3" <if condition="isset($_GET['search_type']) && $_GET['search_type']=='3'">selected="selected"</if>>授权号</option>
+            </select>
+            
+            <input type="text" autocomplete="off" placeholder="箱号/序号/授权号" class="user_input fl" value="{$Think.get.sq}" name="sq" />&nbsp;
+            
+            <neq name="Think.get.type" value="2">
+            <select name="status" class="fl">
+                <option value="" <if condition="!isset($_GET['status']) || $_GET['status']==''">selected="selected"</if>>在线状态</option>
+                <option value="0" <if condition="isset($_GET['status']) && $_GET['status']=='0'">selected="selected"</if>>离线</option>
+                <option value="1" <if condition="isset($_GET['status']) && $_GET['status']=='1'">selected="selected"</if>>在线</option>
+            </select>
+            </neq>
+            
+            <input type="hidden" value="{$Think.get.type}" name="type" />
+            <input type="submit" value="搜索" class="button fl" name="search" />
+    	</form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                    	<th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('rid[]');"></th>
+                        <th width="5%">序号</th>
+                       	<th width="10%">箱号</th>
+                        <th width="10%">授权号</th>
+                        <th width="5%">版本号</th>
+                        <th width="13%">所在代理商</th>
+                        <th width="13%">所在商家</th>
+                        <th width="13%">所在分店</th>
+                        <th width="5%">状态</th>
+                        <th>操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                	<volist name="deviceList" id="v">
+                        <tr>
+                        	<td><input type="checkbox" name="rid[]" value="{$v.rid}"></td>
+                            <td>{$v.rid}</td>
+                            <td>{$v.boxnum}</td>
+                            <td>{$v.rcode}</td>
+                            <td>{$v.rsysver}</td>
+                            <td>{$agentlistarr[$v['ragent']]|default='未分配'}</td>
+                            <td>{$merchantlistarr[$v['rmerchant']]|default='未分配'}</td>
+                            <td>{$shoplistarr[$v['rshop']]|default='未分配'}</td>
+                            <td id="{$v.rcode}"><eq name='v.rstatus' value="1">运行中<else/>离线</eq></td>
+                            <td>
+                                <a href="{:U('/Device/linksInfos@xt', array('rid'=>$v['rcode']), true, true)}">连接情况</a> |
+                                <a href="javascript:SetMerchant('{$v.rid}');">分配商家</a> |
+                                <a href="javascript:void(0);">详细</a> |
+                                <a href="javascript:restart('{$v.rcode}');">重启</a>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+                <input type="button" onclick="MsetMerchant()" value=" 分配商家 " name="dosubmit" class="button" />
+		    </div>
+            <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//导入设备
+function addDevice() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 360,
+		title : '导入设备',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Device/addDevice", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//分配商家
+function SetMerchant( rid ) {
+	if( !rid ) { alert('参数出错'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 650,
+		height: 360,
+		title : '分配商家',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="http://xt.dishuos.com/Device/setMerchant/type/1/rid/'+rid+'.html"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//批量设置商家
+function MsetMerchant( ) {
+	var rid = '';
+	$("input[name='rid[]']").each(function(index, element) {
+        if( $(this).is(":checked") ) rid = rid + "," + $(this).val();
+    });	
+	if( rid == '' ) { alert("请选择要分配的商家"); return false; }
+	rid = rid.substr(1);
+	
+	KindeditorDialog = KindEditor.dialog({
+		width : 650,
+		height: 360,
+		title : '分配商家',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="http://xt.dishuos.com/Device/setMerchant/type/2/rid/'+rid+'.html"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//重启设备
+function restart( routeid ) {
+	if( !routeid ) return false;
+	$.getJSON("http://ap.dishuos.com/Portal/obstart.html?jsoncallback=?", { rid:routeid })
+	$("#"+routeid).html("离线");
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

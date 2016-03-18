@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Css/jquery.dataTables.min.css"/>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+div.btn ul { display:block; width:100%; }
+div.btn li { float:left; width:26%; }
+div.btn li.l { width:22%; }
+div.btn li input { position:relative; top:2px; }
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"> </script>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.dataTables.min.js"> </script>
+</head>
+
+<body>
+<div id="main-body">
+	<div class="main-body">
+        <div class="btn" style="margin:0px;height:120px;">
+            <span style="color:red">温馨说明：需要显示哪个字段，要在此选择</span>
+            <ul class="btn_ul">
+                <li><label><input type="checkbox" name="1" checked /> <b>[a]</b> 预计收入，线上线下，不包含已退款</label></li>
+                <li><label><input type="checkbox" name="2" checked /> <b>[b]</b> 预计收入，线上商家，不包含已退款</label></li>
+                <li><label><input type="checkbox" name="3" checked /> <b>[c]</b> 预计收入，线上平台，不包含已退款</label></li>
+                <li class="l"><label><input type="checkbox" name="4" checked /> <b>[d]</b> 预计收入，线下商家</label></li>
+                <li><label><input type="checkbox" name="5" checked /> <b>[e]</b> 实际收入，线上线下，不包含已退款</label></li>
+                <li><label><input type="checkbox" name="6" checked /> <b>[f]</b> 实际收入，线上商家，不包含已退款</label></li>
+                <li><label><input type="checkbox" name="7" checked /> <b>[g]</b> 实际收入，线上平台，不包含已退款</label></li>
+                <li class="l"><label><input type="checkbox" name="8" checked /> <b>[h]</b> 实际收入，线下商家</label></li>
+                <li><label><input type="checkbox" name="9" checked /> <b>[i]</b> 商家，待退款</label></li>
+                <li><label><input type="checkbox" name="10" checked /> <b>[j]</b> 商家，已退款</label></li>
+                <li><label><input type="checkbox" name="11" checked /> <b>[k]</b> 平台，待退款</label></li>
+                <li class="l"><label><input type="checkbox" name="12" checked /> <b>[l]</b> 平台，已退款</label></li>
+            </ul>
+        </div>
+        <div style="height:10px;display:block;"></div>
+        <table class="table-list dataTable" id="tableList">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th class="td_1" style="text-align:right;">a</th>
+                    <th class="td_2" style="text-align:right;">b</th>
+                    <th class="td_3" style="text-align:right;">c</th>
+                    <th class="td_4" style="text-align:right;">d</th>
+                    <th class="td_5" style="text-align:right;">e</th>
+                    <th class="td_6" style="text-align:right;">f</th>
+                    <th class="td_7" style="text-align:right;">g</th>
+                    <th class="td_8" style="text-align:right;">h</th>
+                    <th class="td_9" style="text-align:right;">i</th>
+                    <th class="td_10" style="text-align:right;">j</th>
+                    <th class="td_11" style="text-align:right;">k</th>
+                    <th class="td_12" style="text-align:right;">l</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $ca=$cb=$cc=$cd=$ce=$cf=$cg=$ch=$ci=$cj=$ck=$cl=0;?>
+                <volist name="accountListArray" id="o">
+                    <?php
+                        $ca+=$o['a']; $cb+=$o['b']; $cc+=$o['c']; $cd+=$o['d']; $ce+=$o['e']; $cf+=$o['f'];
+                        $cg+=$o['g']; $ch+=$o['h']; $ci+=$o['i']; $cj+=$o['j']; $ck+=$o['k']; $cl+=$o['l'];
+                    ?>
+                    <tr>
+                        <td>{$o[0]}</td>
+                        <td class="td_1" style="text-align:right;">{$o.a|number_format=###,2}</td>
+                        <td class="td_2" style="text-align:right;">{$o.b|number_format=###,2}</td>
+                        <td class="td_3" style="text-align:right;">{$o.c|number_format=###,2}</td>
+                        <td class="td_4" style="text-align:right;">{$o.d|number_format=###,2}</td>
+                        <td class="td_5" style="text-align:right;">{$o.e|number_format=###,2}</td>
+                        <td class="td_6" style="text-align:right;">{$o.f|number_format=###,2}</td>
+                        <td class="td_7" style="text-align:right;">{$o.g|number_format=###,2}</td>
+                        <td class="td_8" style="text-align:right;">{$o.h|number_format=###,2}</td>
+                        <td class="td_9" style="text-align:right;">{$o.i|number_format=###,2}</td>
+                        <td class="td_10" style="text-align:right;">{$o.j|number_format=###,2}</td>
+                        <td class="td_11" style="text-align:right;">{$o.k|number_format=###,2}</td>
+                        <td class="td_12" style="text-align:right;">{$o.l|number_format=###,2}</td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <table class="table-list">
+            <tbody>
+                <tr style="background:#FFFFE1;color:red;">
+                    <td>统计总和</td>
+                    <td class="td_1" style="text-align:right;">￥ {$ca|number_format=###,2}</td>
+                    <td class="td_2" style="text-align:right;">￥ {$cb|number_format=###,2}</td>
+                    <td class="td_3" style="text-align:right;">￥ {$cc|number_format=###,2}</td>
+                    <td class="td_4" style="text-align:right;">￥ {$cd|number_format=###,2}</td>
+                    <td class="td_5" style="text-align:right;">￥ {$ce|number_format=###,2}</td>
+                    <td class="td_6" style="text-align:right;">￥ {$cf|number_format=###,2}</td>
+                    <td class="td_7" style="text-align:right;">￥ {$cg|number_format=###,2}</td>
+                    <td class="td_8" style="text-align:right;">￥ {$ch|number_format=###,2}</td>
+                    <td class="td_9" style="text-align:right;">￥ {$ci|number_format=###,2}</td>
+                    <td class="td_10" style="text-align:right;">￥ {$cj|number_format=###,2}</td>
+                    <td class="td_11" style="text-align:right;">￥ {$ck|number_format=###,2}</td>
+                    <td class="td_12" style="text-align:right;">￥ {$cl|number_format=###,2}</td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    var tableListObj = $('#tableList').DataTable( {
+        "language": { "url": "__PUBLIC__/Js/Chinese.json" },
+        "order": [[ 3, "desc" ]],
+        "searching":false,
+        "lengthChange":false,
+        "pageLength":6
+    } );
+
+    function ShowHideTd() {
+        $("ul.btn_ul li input").each(function() {
+            var className = "td_"+$(this).attr("name");
+            if( $(this).is(":checked") ) {
+                $("."+className).css("display", "");
+            } else {
+                $("."+className).css("display", "none"); 
+            }
+        })
+    }
+
+    tableListObj.on( 'draw', function () { ShowHideTd(); } );
+    $("ul.btn_ul li input").click(function() { ShowHideTd(); })
+} );
+</script
+></body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>消息中心</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header message-header">
+		<h1>消息中心</h1>
+		<a href="{:U('/Index/index')}" class="ico header-back"></a>
+	</header>
+	<div class="tab-nav nav-message">
+		<div class="container">
+			<ul class="li-3 tab-message clearfix">
+				<li class="<eq name="Think.get.type" value="1">active</eq>"><a href="{:U('/Message/msglist', array('type'=>1))}">用户消息</a></li>
+				<li class="<eq name="Think.get.type" value="2">active</eq>"><a href="{:U('/Message/msglist', array('type'=>2))}">订单消息</a></li>
+				<li class="<eq name="Think.get.type" value="3">active</eq>"><a href="{:U('/Message/msglist', array('type'=>3))}">系统消息</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-88">
+		<div class="tab-content <eq name="Think.get.type" value="1">active</eq>">
+			<ul class="member-list hy-list">
+				
+                <volist name="msglist" id='msg'>
+                <li>
+					<a href="{:U('/Message/showmsg', array('msid'=>$msg['msid']))}">
+						<div><img src="{$msg.avatar|default='/Public/Merchantapp/images/nopic1.png'}" alt=""><eq name="msg['status']" value="0"><span></span></eq></div>
+						<h3><?php echo Org\Util\String::msubstr($msg['title'], 0, 10, 'utf-8', false); ?></h3>
+						<p><?php echo Org\Util\String::msubstr($msg['content'], 0, 20, 'utf-8', false); ?></p>
+						<span class="message-time">{$msg.addtime}</span>
+					</a>
+				 </li>
+                 </volist>
+                
+			</ul>
+			<p class="nomember">暂无用户消息</p>
+		</div>
+		<div class="tab-content <eq name="Think.get.type" value="2">active</eq>">
+			<ul class="member-list order-msg-list">
+				
+                <volist name="msglist" id='msg'>
+                 <li>
+					<a href="{:U('/Message/showmsg', array('msid'=>$msg['msid'],'oid'=>$msg['oid']))}">
+						<div><img src="{$msg.avatar|default='/Public/Merchantapp/images/nopic1.png'}" alt="" width="100%" height="100%"><eq name="msg['status']" value="0"><span></span></eq></div>
+						<h3><?php echo Org\Util\String::msubstr($msg['title'], 0, 10, 'utf-8', false); ?></h3>
+						<p><span>{$msg.extend1}</span>{$msg.extend2}</p>
+						<p class="order-msg-time">{$msg.addtime}</p>
+					</a>
+				 </li>
+                 </volist>
+                
+			</ul>
+			<p class="nomember">暂无订单消息</p>
+		</div>
+		<div class="tab-content <eq name="Think.get.type" value="3">active</eq>">
+			<ul class="member-list hy-list">
+				<volist name="msglist" id='msg'>
+                 <li>
+					<a href="{:U('/Message/showmsg', array('msid'=>$msg['msid']))}">
+						<div><img src="{$msg.avatar|default='/Public/Merchantapp/images/nopic1.png'}" alt=""><eq name="msg['status']" value="0"><span></span></eq></div>
+						<h3><?php echo Org\Util\String::msubstr($msg['title'], 0, 10, 'utf-8', false); ?></h3>
+						<p><?php echo Org\Util\String::msubstr($msg['content'], 0, 20, 'utf-8', false); ?></p>
+						<span class="message-time">{$msg.addtime}</span>
+					</a>
+				 </li>
+                 </volist>
+			</ul>
+			<p class="nomember">暂无系统消息</p>
+		</div>
+	</div>
+
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+	<script>
+		var aTabNavLi = $(".tab-nav li");
+		var aTabContent = $(".tab-content");
+
+		aTabNavLi.click(function() {
+			var _this = $(this);
+			var index = _this.index();
+			aTabNavLi.removeClass('active');
+			_this.addClass('active');
+			aTabContent.removeClass('active');
+			aTabContent.eq(index).addClass('active');
+		});
+	</script>
+</body>
+</html>

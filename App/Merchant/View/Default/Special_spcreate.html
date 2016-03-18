@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-controller="AppCtrl">
+<head>
+<meta property="qc:admins" content="25322764376510156375" />
+<meta name="baidu-site-verification" content="2MKKT6mbuL" />
+<meta charset="utf-8" />
+<meta name="viewport"content="width=device-width, initial-scale=1.0" />
+<meta property="qc:admins" content="1051036742036375" />
+<meta property="wb:webmaster" content="354b970d8cd61602" />
+<title>专题设置</title>
+<script type="text/javascript">
+var PREFIX_URL = "http://"+window.location.host+"/json/";
+var JSON_URL = "http://"+window.location.host+"/index.php";
+var PREFIX_S1_URL = "http://"+window.location.host+"/";
+var PREFIX_S2_URL = "http://"+window.location.host+"/";
+var PREFIX_HOST = "http://"+window.location.host+"/";
+var PREFIX_FILE_HOST = "http://"+window.location.host+'/Public/Yqx/'; 
+var SYS_FILE_HOST = "http://"+window.location.host+"/Public/Yqx/";
+var CLIENT_CDN = "http://"+window.location.host+"/";
+var INTERVAL_OBJ = {};
+function gt_custom_ajax(result, selector) {
+	selectorA = selector;
+	if (result) {
+		challenge = selector(".geetest_challenge").value;
+		validate = selector(".geetest_validate").value;
+		seccode = selector(".geetest_seccode").value;
+		submit = true;
+	}
+}
+</script>
+
+
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/jquery.Jcrop.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/angular.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/angular-route.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/angular-animate.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/select.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/sortable.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/Chart.min.js"></script>
+<script type="text/javascript" src="/Public/Yqx/static/js/ZeroClipboard.min.js"></script>
+            
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/angular-ui-select/0.8.3/select.min.css"/>
+<link rel="stylesheet" href="/Public/Yqx/static/css_o/eqShow-common-2.9.1.css"/>
+<link rel="stylesheet" href="/Public/Yqx/static/css_o/ui-grid.min.css"/>
+<link rel="stylesheet" href="/Public/Yqx/static/css_o/hint.min.css"/>
+<link rel="stylesheet" href="/Public/Yqx/static/css_o/bootstrap.vertical-tabs.min.css"/>
+<link rel="stylesheet" href="/Public/Yqx/static/css_o/eqShow-2.9.1.css"/>
+
+<script src="/Public/Yqx/static/js/ui-grid.min.js"></script>
+<script src="/Public/Yqx/static/js/bootstrap-wysiwyg.min.js"></script>
+<script src="/Public/Yqx/static/js/jquery.hotkeys.min.js"></script>
+<script src="/Public/Yqx/static/js/angular-file-upload.min.js"></script>
+<script src="/Public/Yqx/static/js/angular-file-upload-directives.min.js"></script>
+<script src="/Public/Yqx/static/js/angular-locale_zh-cn.min.js"></script>
+<script src="/Public/Yqx/static/js/hammer.min.js"></script>
+<script src="/Public/Yqx/static/js/eqShow-2.9.1.js"></script>
+    
+<style>
+.myGrid { width:998px; height:550px; }
+.myGrid1 { width:650px; height:550px; }
+.choose_template .main .content .mask ul li .roll :hover .cc { display:block; }
+</style>
+</head>
+ 
+<body>
+
+    <div style="z-index:2000;" id="notify" ng-include="'notifications.tpl.html'" ng-if="notifications.getCurrent().length"></div>
+    <div id="eq_main" ng-view></div>
+</body>
+</html>

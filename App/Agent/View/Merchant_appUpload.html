@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加商户</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="{$Think.get.jid}" name="jid" />
+            <div class="divSetting">
+            	<div style="height:40px;"></div>
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="100">客户端应用</th>
+                        <td colspan="3">
+                            <input type="text" readonly="readonly" autocomplete="off" id="appurl" name="appurl" style="width:231px;" value="" class="user_input" />
+                            <input type="button" onclick="KindeditorUpload()" class="button" value="上传应用" style="border-radius:3px;" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="divSetting">
+                <div class="buttonDiv" align="center">
+                    <button type="reset" class="submit_btn">重设</button>&#12288; <button type="submit" class="submit_btn">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+//上传证件
+var editor = KindEditor.editor({ uploadJson:"{:U('/Agent/publicKindeditorUpload', '', true)}", imageUploadLimit:50, });
+function KindeditorUpload() {
+	editor.loadPlugin('insertfile', function() {
+		editor.plugin.fileDialog({
+			fileUrl : $('#appurl').val(),
+			clickFn : function(url, title) {
+				$('#appurl').val(url); editor.hideDialog();
+			}
+		});
+	});
+}
+</script>
+</body>
+</html>

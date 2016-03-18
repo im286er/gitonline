@@ -1,0 +1,72 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+.dis {display:none;}
+</style>
+	<div class="wrapper">
+	<h2 class="title"><a href="{:U('DaZhuanPan/index')}" style="text-decoration:underline;">基本设置</a> | 奖品设置  | <a href="{:U('DaZhuanPan/user')}" style="text-decoration:underline;">抽奖记录</a></h2>   
+   
+		<div class="mian padding">
+			<div class="content_a top">
+			<form id="form1">
+				<table class="table border-b">
+					<tr>
+						<th width="15%"></th>
+						<th width="15%">中奖概率</th>
+						<th width="35%">奖品类型</th>
+						<th width="35%">奖品名称</th>
+					</tr>
+					<volist name="default" id="vv">
+					<tr>
+					<td>区域{$key+1}:</td>
+					<td><input type="text" value="{$prize ? $prize[gailv][$key] : 10}" name="prize[gailv][]" style="width:20px"><font color="red">%</font></td>
+					<td>
+					<select name="prize[ptype][]" onchange="ch_prize(this.value,{$key});">
+					<option value="0" <if condition="$prize[ptype][$key] eq 0">selected</if>>无奖品</option>
+					<option value="1" <if condition="$prize[ptype][$key] eq 1">selected</if>>实物</option>
+					<option value="2" <if condition="$prize[ptype][$key] eq 2">selected</if>>优惠券</option>
+					</select>
+					</td>
+					<td>
+					<input type="text" value="{$prize.pname.$key}" name="prize[pname][]" style='width:150px;height: 26px;border:1px solid black;<if condition="$prize[ptype][$key] eq 1">display:inline</if>' class="dis c_{$key}" id="c_{$key}_1" >
+					<select name="prize[pvid][]" style='width:150px;height: 26px;<if condition="$prize[ptype][$key] eq 2">display:inline-block</if>' class="dis c_{$key}" id="c_{$key}_2">
+					<option value="0">请选择</option>
+					<volist name="voucher" id="v">
+					<option value="{$v.vu_id}" <if condition="$prize[pvid][$vv] eq $v[vu_id]">selected</if>>{$v.vu_name}</option>
+					</volist>
+					</select>
+					</td>
+					</tr>
+					</volist>
+				</table>
+				</form>
+			</div>
+			<div class="set">
+					<input id="ModuleUpdate" type="button" class="btn btn-pwd" value="保存">
+			</div>
+		</div>
+	</div>
+<script>
+function ch_prize(v,k){
+	$(".c_"+k).hide();
+	if(v==1 || v==2){
+		$("#c_"+k+"_"+v).show();
+	}
+}
+$("#ModuleUpdate").click(function() {
+	$.post("__ACTION__", $("#form1").serialize(), function(data) {
+		var data = eval('(' + data + ')');	
+		if(data.code == 'error1'){
+			alert('总的中奖概率必须等于100');
+		}else if(data.code == 'error2'){
+			alert(data.msg);
+		}else{
+			alert('保存成功');
+		}
+	})
+})
+</script>
+</block>

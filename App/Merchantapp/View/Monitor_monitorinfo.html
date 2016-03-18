@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>消息中心_客流监控</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body class="bg-3c3c3c <eq name="runmode" value="macapp">ios</eq>">
+	<header class="header traffic-header">
+		<h1>{$sname}</h1>
+		<a class="ico header-back header-back-w" href="javascript:window.history.go(-1)"></a>
+	</header>
+	<div class="main container p-54">
+		<section class="canvas-list canvas-1">
+			<div class="cvs-title">
+				<h3>今日客流量</h3>
+				<p>{$nowmax}人</p>
+			</div>
+			<div class="cvs-content" id="todayTraffic"></div>
+		</section>
+		<section class="canvas-list canvas-2">
+			<div class="cvs-title">
+				<h3>今日老客总量</h3>
+				<p>{$yesnum}人</p>
+			</div>
+			<div class="cvs-content" id="todayOldCustomers"></div>
+		</section>
+		<section class="canvas-list canvas-3">
+			<div class="cvs-title">
+				<h3>昨日老客流量</h3>
+				<p>{$yeonum}人</p>
+			</div>
+			<div class="cvs-content" id="cumulativeCustomers"></div>
+		</section>
+		<section class="canvas-list canvas-4">
+			<div class="cvs-title">
+				<h3>累计客户量</h3>
+				<p>{$counnum}人</p>
+			</div>
+			<div class="cvs-content" id="currentCustomers"></div>
+		</section>
+	</div>
+
+	<script src="__PUBLIC__/Merchantapp/js/echarts/echarts.js"></script>
+	<script>
+		require.config({
+			paths: {
+				echarts: '__PUBLIC__/Merchantapp/js/echarts'
+			}
+		});
+		require(
+			[
+				'echarts',
+				'echarts/chart/line'
+			],
+			function(ec) {
+				var chart1 = ec.init(document.getElementById('todayTraffic'));
+				var chart2 = ec.init(document.getElementById('todayOldCustomers'));
+				var chart3 = ec.init(document.getElementById('cumulativeCustomers'));
+				var chart4 = ec.init(document.getElementById('currentCustomers'));
+
+				var option1 = {
+					tooltip : {
+						show: false
+					},
+					legend: {
+						show: false,
+						data: ['今日客流量']
+					},
+					toolbox: {
+						show : false
+					},
+					grid: {
+						x: 44,
+						y: 22,
+						x2: 30,
+						y2: 32,
+						borderWidth: 0
+					},
+					xAxis : [
+						{
+							type : 'category',
+							boundaryGap : false,
+							data : ['{$nowcon.0}:00', '{$nowcon.1}:00', '{$nowcon.2}:00', '{$nowcon.3}:00', '{$nowcon.4}:00'],
+							splitLine: {
+								show: false
+							}
+						}
+					],
+					yAxis : [
+						{
+							type : 'value',
+							splitLine: {
+								show: true,
+								lineStyle: {
+									color: '#ffea07'
+								}
+							}
+						}
+					],
+					series : [
+						{
+							name:'今日客流量',
+							type:'line',
+							// symbol: 'emptyCircle',
+							symbolSize: 3,
+							smooth:false,
+							data:[{$nowcon.5|default=0}, {$nowcon.6|default=0}, {$nowcon.7|default=0}, {$nowcon.8|default=0}, {$nowcon.9|default=0}],
+							itemStyle: {
+								normal: {
+									color: '#ffbf0d',
+									borderColor: '#fff',
+									lineStyle: {
+										width: 2,
+										color: '#fff'
+									},
+									areaStyle: {
+										color: (function () {
+											var zrColor = require('zrender/tool/color');
+											return zrColor.getLinearGradient(
+												0, 100, 0, 150,
+												[[0, 'rgba(255,228,20,0.8)'],[0.8, 'rgba(255,255,255,0)']]
+											)
+										})()
+									}
+								}
+							}
+						}
+					]
+				};
+				var option2 = {
+					tooltip : {
+						show: false
+					},
+					legend: {
+						show: false,
+						data: ['昨日游客量']
+					},
+					toolbox: {
+						show : false
+					},
+					grid: {
+						x: 44,
+						y: 22,
+						x2: 30,
+						y2: 32,
+						borderWidth: 0
+					},
+					xAxis : [
+						{
+							type : 'category',
+							boundaryGap : false,
+							data : ['{$yescon.0}:00', '{$yescon.1}:00', '{$yescon.2}:00', '{$yescon.3}:00', '{$yescon.4}:00'],
+							splitLine: {
+								show: false
+							}
+						}
+					],
+					yAxis : [
+						{
+							type : 'value',
+							splitLine: {
+								show: true,
+								lineStyle: {
+									color: '#6cffff'
+								}
+							}
+						}
+					],
+					series : [
+						{
+							name:'昨日游客量',
+							type:'line',
+							symbolSize: 3,
+							smooth:false,
+							data:[{$yescon.5|default=0}, {$yescon.6|default=0}, {$yescon.7|default=0}, {$yescon.8|default=0}, {$yescon.9|default=0}],
+							itemStyle: {
+								normal: {
+									color: '#2a6ed1',
+									borderColor: '#fff',
+									lineStyle: {
+										width: 2,
+										color: '#fff'
+									},
+									areaStyle: {
+										color: (function () {
+											var zrColor = require('zrender/tool/color');
+											return zrColor.getLinearGradient(
+												0, 100, 0, 150,
+												[[0, 'rgba(65,173,235,0.8)'],[0.8, 'rgba(255,255,255,0)']]
+											)
+										})()
+									}
+								}
+							}
+						}
+					]
+				};
+				var option3 = {
+					tooltip : {
+						show: false
+					},
+					legend: {
+						show: false,
+						data: ['昨日老客流量']
+					},
+					toolbox: {
+						show : false
+					},
+					grid: {
+						x: 44,
+						y: 22,
+						x2: 30,
+						y2: 32,
+						borderWidth: 0
+					},
+					xAxis : [
+						{
+							type : 'category',
+							boundaryGap : false,
+							data : ['{$yeocon.0}:00', '{$yeocon.1}:00', '{$yeocon.2}:00', '{$yeocon.3}:00', '{$yeocon.4}:00'],
+							splitLine: {
+								show: false
+							}
+						}
+					],
+					yAxis : [
+						{
+							type : 'value',
+							splitLine: {
+								show: true,
+								lineStyle: {
+									color: '#ff9a6e'
+								}
+							}
+						}
+					],
+					series : [
+						{
+							name:'今日客流总量',
+							type:'line',
+							symbolSize: 3,
+							smooth:false,
+							data:[{$yeocon.5|default=0}, {$yeocon.6|default=0}, {$yeocon.7|default=0}, {$yeocon.8|default=0}, {$yeocon.9|default=0}],
+							itemStyle: {
+								normal: {
+									color: '#ff6f43',
+									borderColor: '#fff',
+									lineStyle: {
+										width: 2,
+										color: '#fff'
+									},
+									areaStyle: {
+										color: (function () {
+											var zrColor = require('zrender/tool/color');
+											return zrColor.getLinearGradient(
+												0, 100, 0, 150,
+												[[0, 'rgba(255,173,104,0.8)'],[0.8, 'rgba(255,255,255,0)']]
+											)
+										})()
+									}
+								}
+							}
+						}
+					]
+				};
+				var option4 = {
+					tooltip : {
+						show: false
+					},
+					legend: {
+						show: false,
+						data: ['累计客户量']
+					},
+					toolbox: {
+						show : false
+					},
+					grid: {
+						x: 44,
+						y: 22,
+						x2: 30,
+						y2: 32,
+						borderWidth: 0
+					},
+					xAxis : [
+						{
+							type : 'category',
+							boundaryGap : false,
+							data : ['{$countnum.0}', '{$countnum.1}', '{$countnum.2}', '{$countnum.3}', '{$countnum.4}'],
+							splitLine: {
+								show: false
+							}
+						}
+					],
+					yAxis : [
+						{
+							type : 'value',
+							splitLine: {
+								show: true,
+								lineStyle: {
+									color: '#68ff82'
+								}
+							}
+						}
+					],
+					series : [
+						{
+							name:'累计客户量',
+							type:'line',
+							symbolSize: 3,
+							smooth:false,
+							data:[{$countnum.5|default=0}, {$countnum.6|default=0}, {$countnum.7|default=0}, {$countnum.8|default=0}, {$countnum.9|default=0}],
+							itemStyle: {
+								normal: {
+									color: '#27d730',
+									borderColor: '#fff',
+									lineStyle: {
+										width: 2,
+										color: '#fff'
+									},
+									areaStyle: {
+										color: (function () {
+											var zrColor = require('zrender/tool/color');
+											return zrColor.getLinearGradient(
+												0, 100, 0, 150,
+												[[0, 'rgba(60,238,73,0.8)'],[0.8, 'rgba(255,255,255,0)']]
+											)
+										})()
+									}
+								}
+							}
+						}
+					]
+				};
+
+				chart1.setOption(option1);
+				chart2.setOption(option2);
+				chart3.setOption(option3);
+				chart4.setOption(option4);
+			}
+		);
+    </script>
+</body>
+</html>

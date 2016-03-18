@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+select { width:248px; } label input { position:relative; top:2px; } #dosubmit { margin-left:118px; margin-right:10px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:230px; }
+</style>
+</head>
+
+<body> 
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+            <div id="divSetting1">
+                <table class="table-form" border="0">
+                    <tr>
+                        <th width="100">父级节点</th>
+                        <td>
+                        	<select name="info[pid]">
+                                <option value="0">顶级节点</option> {$rulesList}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100">节点类型</th>
+                        <td>
+                        	<select name="info[type]">
+                                <option value="1">一级节点</option>
+                                <option value="2" <if condition="isset($pruleInfo['type']) and $pruleInfo['type']==1">selected="selected"</if>>二级节点</option>
+                                <option value="3" <if condition="isset($pruleInfo['type']) and $pruleInfo['type']==2">selected="selected"</if>>三级节点</option>
+                                <option value="4" <if condition="isset($pruleInfo['type']) and $pruleInfo['type']==3">selected="selected"</if>>普通节点</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>节点名称</th>
+                        <td><input type="text" autocomplete="off" id="InfoName" name="info[name]" value="" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>节点标题</th>
+                        <td><input type="text" autocomplete="off" id="InfoTitle" name="info[title]" value="" class="user_input" /></td>
+                    </tr>
+                    <tr>
+                        <th>节点状态</th>
+                        <td>
+                        	<label><input name="info[status]" type="radio" value="1" checked="checked" /> 有效</label>&#12288;&#12288;
+                        	<label><input name="info[status]" type="radio" value="0" /> 无效</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="left">
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button> <button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; } });
+	$("#InfoName").formValidator({onFocus:"请输入节点名称"}).inputValidator({min:1, onError:"节点名称不能为空"});
+	$("#InfoTitle").formValidator({onFocus:"请输入节点标题"}).inputValidator({min:1, onError:"节点标题不能为空"});
+})
+</script>
+</body>
+</html>

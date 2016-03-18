@@ -1,0 +1,51 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+</style>
+	<div class="wrapper">
+		<h2 class="title">会员管理</h2>
+		<div class="mian padding">
+			<div class="content_c">
+				<form action="__ACTION__" method="post">
+                	<eq name="type" value="1">
+                    <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.post.keywords}" placeholder="搜索：门店名称/来源/会员账号">
+                    <else/>
+                    <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.post.keywords}" placeholder="搜索：来源/会员账号">
+                    </eq>
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+			<div class="content_a top">
+				<table class="table border-b">
+					<tr>
+						<th width="100px">会员图像</th>
+						<th width="100px">会员昵称</th>
+						<th width="50px">来源</th>
+						<th>门店来源</th>
+						<th>注册时间</th>
+						<th width="130px">最后登录</th>
+					</tr>
+					<foreach name="userlist" item="v">
+					<tr>
+						<td><img src="{$v.u_avatar}" style="width:40;height:40px;"></td>
+						<td>{$v.u_name}</td>
+						<td>{$v.u_source}</td>
+						<td>——</td>
+						<td>{$v.u_regtime}</td>
+						<td>{$v.u_lasttime}</td>
+					</tr> 
+					</foreach>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+</block>

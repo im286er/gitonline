@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>修改密码</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>修改密码</h1>
+		<a href="javascript:window.history.go(-1);" class="ico header-back"></a>
+		<a href="javascript:;" class="ico header-more"></a>
+	</header>
+	<div class="main container p-65">
+		<div class="input-list">
+			<ul>
+				<li>
+					<input type="text" id="newpassword" placeholder="请输入新密码">
+					<a class="ico ico-eye" href="javascript:;"></a>
+					<p></p>
+				</li>
+				<li>
+					<input type="text" id="compassword" placeholder="请确认新密码">
+					<a class="ico ico-eye" href="javascript:;"></a>
+					<p></p>
+				</li>
+			</ul>
+		</div>
+		<div class="div-a">
+			<a class="btn btn-block btn-lg btn-blue disable" id="SendForm" href="javascript:;">确认</a>
+		</div>
+	</div>
+
+	<div class="modal" id="item-details">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-no"></i>
+					<p id="item-details-error">密码不一致</p>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+	<div class="modal" id="item-success">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-yes"></i>
+					<p>修改成功</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+	<script>
+		$("#SendForm").click(function() {
+			var newpassword = $("#newpassword").val();
+			if( !newpassword ) {
+				$("#item-details-error").html("新密码不能为空"); $("#item-details").show();
+				return false;
+			}
+			
+			var compassword = $("#compassword").val();
+			if( !compassword ) {
+				$("#item-details-error").html("确认密码不能为空"); $("#item-details").show();
+				return false;
+			}
+			
+			if( newpassword != compassword ) {
+				$("#item-details-error").html("两次密码不一致"); $("#item-details").show();
+				return false;
+			}
+			
+			$.post("/Index/changepwdt", {newpassword:newpassword, compassword:compassword}, function(data) {
+				var data = parseInt(data);
+				switch( data ) {
+					case 1: 
+						$("#item-details-error").html("两次密码不一致"); $("#item-details").show();
+					break;
+					case 2:
+						$("#item-success").show();
+						setTimeout(function() { window.location.href="{:U('/Index/setinfo')}"; }, 2000);
+					break;
+					default:
+						$("#item-details-error").html("修改密码失败"); $("#item-details").show();
+					break;				
+				}
+			})
+		})
+		
+		$(".modal-backdrop, .modal-dialog").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".modal-content").click(function(ev) {
+		//	ev.stopPropagation();
+		});
+	</script>
+</body>
+</html>

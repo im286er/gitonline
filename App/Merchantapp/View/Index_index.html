@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>商户管家</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script src="__PUBLIC__/Js/jquery1.8.min.js"></script>
+<script src="__PUBLIC__/Js/Mobile/interactive.js?v=123"></script>
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<script type="text/javascript">
+var msystem = "{$msystem}";
+var jid = "{$jid}"
+var Pullrefresh1 = null;//这个设置为全局
+baichuanMerchant("{$sid?'dishumd':'dishusj'}","{$sid?$sid:$jid}<notempty name='serverid'>-{$serverid}</notempty>");
+function Pullrefresh(url){
+	if (Pullrefresh1 == null) {
+		Pullrefresh1 = new Date().getTime();
+	} else {       
+		var Pullrefresh2 = new Date().getTime();
+		if(Pullrefresh2 - Pullrefresh1 < 500){
+			Pullrefresh1 = Pullrefresh2;
+			return;
+		} else {
+			Pullrefresh1 = Pullrefresh2;
+		}
+	}
+	location.href=url;
+}
+$(document).ready(function(){
+		interactive('{"type":"getcid"}','checkBind(response)');
+});
+function checkBind(response){
+	if(response && response.toString().indexOf("cid") > -1){		
+		var ccid = response.toString().split(":");
+		$.post("{:U('/Public/checkbind')}", {cid:ccid[1]}, function(data) {});
+	}
+}
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>商户管家</h1>
+		<a class="ico header-set" href="{:U('/Index/setinfo')}"></a>
+		<a class="ico header-notice" href="{:U('/Message/msglist')}">
+			<i></i><span id="PushMsg">0</span>
+		</a>
+	</header>
+	<div class="main container p-tb">
+		<section class="slide swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><img src="__PUBLIC__/Merchantapp/img/demo/slide_01.jpg" alt=""></div>
+				<div class="swiper-slide"><img src="__PUBLIC__/Merchantapp/img/demo/slide_01.jpg" alt=""></div>
+				<div class="swiper-slide"><img src="__PUBLIC__/Merchantapp/img/demo/slide_01.jpg" alt=""></div>
+			</div>
+			<div class="swiper-pagination">
+				<span class="swiper-pagination-bullet"></span>
+				<span class="swiper-pagination-bullet"></span>
+				<span class="swiper-pagination-bullet"></span>
+			</div>
+		</section>
+		<section class="nav-list">
+			<ul class="clearfix">
+				<li>
+					<a href="javascript:;" onclick="Pullrefresh('{:U('/Monitor/index')}')">
+						<i class="ico ico-kljk"></i>
+						<span>客流监控</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;" onclick="Pullrefresh('{:U('/User/index')}')">
+						<i class="ico ico-hygl"></i>
+						<span>会员管理</span>
+					</a>
+				</li>
+				<li class="bdr-n">
+					<a href="javascript:;" onclick="Pullrefresh('{:U('/Order/index')}')">
+						<i class="ico ico-ddgl"></i>
+						<span>订单管理</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;" onclick="Pullrefresh('{:U('/Device/index')}')">
+						<i class="ico ico-sbgl"></i>
+						<span>设备管理</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;" onClick="Mydialog()">
+						<i class="ico ico-sjtj"></i>
+						<span>数据统计</span>
+					</a>
+				</li>
+				<li class="bdr-n last">
+					<a href="javascript:;">
+						<i class="ico ico-plus"></i>
+					</a>
+				</li>
+			</ul>
+		</section>
+	</div>
+	<div class="index-bottom">
+		<a href="javascript:;" onclick="scan();">
+			<i class="ico ico-scan"></i>
+			<p>扫一扫</p>
+		</a>
+	</div>
+	<a id="HahaButton" href="http://app.dishuos.com/Public/haha" target="IFRAME" style=" display:none;">aa</a>
+	<iframe id="IFRAME" src="" style="display:none;"></iframe>
+
+	<script src="__PUBLIC__/Merchantapp/js/swiper.min.js"></script> 
+    <script src="__PUBLIC__/Js/layer/layer.js"></script>
+	<script>
+	var mySlide = new Swiper('.swiper-container', {
+		speed: 400,
+		pagination: '.swiper-pagination',
+		autoplay: 5000,
+		autoplayDisableOnInteraction: false,
+		loop: true,
+		preloadImages: false,
+		lazyLoading: true
+	});
+	
+	function JSVibrate_Haha() {
+		if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+			document.getElementById("HahaButton").click();
+		} else if (window._WebView_JS_Bridge) {
+			window._WebView_JS_Bridge.vibrate(); 
+		}
+	}
+	
+	
+	
+	var count=0, i=1;
+	setInterval(function() {
+	$.get("{:U('/Message/checkmsg')}", function(data) {
+		if( parseInt( data) != 0 ) { 
+			if(i==1 || count!=parseInt(data)) { //如果是第一次
+				$("#PushMsg").html( data ); JSVibrate_Haha(); count=parseInt(data);	
+			}
+			i++;
+		} else { $("#PushMsg").html("0"); }
+	})
+	}, 5000);
+	
+	function Mydialog() {
+		layer.msg('暂未开放');
+	}
+	
+	function scan(){
+		interactive('{"type":"scan"}','');
+	}
+    </script>
+</body>
+</html>

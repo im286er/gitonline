@@ -1,0 +1,194 @@
+<!--START-->
+<style type="text/css">
+.huansha-ad { display:block; overflow:hidden; width:460px; float:left;margin-left:50px;}
+
+.style-one-click{ }
+</style>
+<!--END-->
+
+<style type="text/css">
+.huansha-ad{ border-top:none;}
+.huansha-ad{ padding:1rem;}
+.huansha-ad ul li{ float:left;}
+.huansha-ad ul li:nth-child(2n) { width:53.6%;}
+.huansha-ad ul li:nth-child(2n-1){ width:46.4%;}
+.huansha-ad ul li:first-child { width: 100%;}
+.huansha-ad ul li img{ width:100%;}
+</style>
+
+<!--START-->
+<div class="style-one" >
+<eq name="adtype" value="style_6">
+  <h3><a href="#">样式6<img src="/Public/Images/merchant/choose.png" id="change-one"/></a></h3>
+<else/>
+  <h3><a href="#">样式6<img src="/Public/Images/merchant/not_choose.png" id="change-one" onclick="AjaxSetAdvertStyle('{$Think.get.pos}', '{$Think.get.tid}', 'style_6', 5)"/></a></h3>
+</eq>
+
+<!--END-->
+
+<section class="huansha-ad">
+	<ul class="clearfix">
+		<li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(6,1)"<else/>href="{$advert.1.ad_imglink}"</if>><img id="IMAGEO_STYLESIX_SRC" src="{$advert.1.ad_imgsrc|default='/Public/Mobile/hunsha/img/demo/hunsha_ad_01.jpg'}"/></a></li>
+		<li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(6,2)"<else/>href="{$advert.2.ad_imglink}"</if>><img id="IMAGET_STYLESIX_SRC" src="{$advert.2.ad_imgsrc|default='/Public/Mobile/hunsha/img/demo/hunsha_ad_02.jpg'}"/></a></li>
+		<li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(6,3)"<else/>href="{$advert.3.ad_imglink}"</if>><img id="IMAGES_STYLESIX_SRC" src="{$advert.3.ad_imgsrc|default='/Public/Mobile/hunsha/img/demo/hunsha_ad_03.jpg'}"/></a></li>
+		<li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(6,4)"<else/>href="{$advert.4.ad_imglink}"</if>><img id="IMAGEF_STYLESIX_SRC" src="{$advert.4.ad_imgsrc|default='/Public/Mobile/hunsha/img/demo/hunsha_ad_04.jpg'}"/></a></li>
+		<li><a <if condition="$houtai eq 1">href="javascript:void(0);" onclick="show_1(6,5)"<else/>href="{$advert.5.ad_imglink}"</if>><img id="IMAGEI_STYLESIX_SRC" src="{$advert.5.ad_imgsrc|default='/Public/Mobile/hunsha/img/demo/hunsha_ad_05.jpg'}"/></a></li>
+	</ul>
+</section>
+        
+<!--START-->
+<div class="style-one-click style-click" id="style-6-click-1">
+                              <h2>1<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLESIX_IMAGEO_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-6-1-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,1,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-6-1-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLESIX_IMAGEO_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,1,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-6-1-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.1.ad_title}" readonly="readonly" id="UPLOAD_STYLESIX_IMAGEO_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_6', 1, 'UPLOAD_STYLESIX_IMAGEO_VALUE', 'IMAGEO_STYLESIX_SRC', 'UPLOAD_STYLESIX_IMAGEO_LINK', 'UPLOAD_STYLESIX_IMAGEO_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-6-click-2">
+                              <h2>2<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLESIX_IMAGET_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-6-2-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,2,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-6-2-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.2.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLESIX_IMAGET_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,2,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-6-2-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.2.ad_title}" readonly="readonly" id="UPLOAD_STYLESIX_IMAGET_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_6', 2, 'UPLOAD_STYLESIX_IMAGET_VALUE', 'IMAGET_STYLESIX_SRC', 'UPLOAD_STYLESIX_IMAGET_LINK', 'UPLOAD_STYLESIX_IMAGET_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-6-click-3">
+                              <h2>3<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLESIX_IMAGES_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-6-3-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,3,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-6-3-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.3.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLESIX_IMAGES_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,3,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-6-3-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.3.ad_title}" readonly="readonly" id="UPLOAD_STYLESIX_IMAGES_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_6', 3, 'UPLOAD_STYLESIX_IMAGES_VALUE', 'IMAGES_STYLESIX_SRC', 'UPLOAD_STYLESIX_IMAGES_LINK', 'UPLOAD_STYLESIX_IMAGES_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-6-click-4">
+                              <h2>4<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLESIX_IMAGEF_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-6-4-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,4,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-6-4-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.4.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLESIX_IMAGEF_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,4,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-6-4-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.4.ad_title}" readonly="readonly" id="UPLOAD_STYLESIX_IMAGEF_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_6', 4, 'UPLOAD_STYLESIX_IMAGEF_VALUE', 'IMAGEF_STYLESIX_SRC', 'UPLOAD_STYLESIX_IMAGEF_LINK', 'UPLOAD_STYLESIX_IMAGEF_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+<div class="style-one-click style-click" id="style-6-click-5">
+                              <h2>5<img src="/Public/Images/merchant/close_ceng.png" class="close"/></h2>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);" class="copy" data-clipboard-target="UPLOAD_STYLESIX_IMAGEI_LINK"><img src="/Public/Images/merchant/icon_copy.png" class="active"/><img src="/Public/Images/merchant/icon_copy_white.png"/><span>复制链接</span></a>
+                                      <div class="popover popover-top" id="style-6-5-1">
+                                          <div class="arrow"></div>
+                                          <div class="popover-content">已成功复制</div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,5,2)"><img src="/Public/Images/merchant/icon_link.png" class="active"/><img src="/Public/Images/merchant/icon_link_white.png"/><span>跳转链接</span></a>
+                                      <div class="popover popover-bottom" id="style-6-5-2">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.5.ad_imglink}" readonly="readonly"  id="UPLOAD_STYLESIX_IMAGEI_LINK"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);" onclick="show_2(6,5,3)"><img src="/Public/Images/merchant/icon_pic_title.png" class="active"/><img src="/Public/Images/merchant/icon_pic_title_white.png"/><span>图片标题</span></a>
+                                      <div class="popover popover-bottom lef-90" id="style-6-5-3">
+                                          <div class="arrow"></div>
+                                          <input  value="{$advert.5.ad_title}" readonly="readonly" id="UPLOAD_STYLESIX_IMAGEI_TEXT"/>
+                                      </div>
+                                  </li>
+                                  <li>
+                                  	  <a href="javascript:void(0);" onclick="uploadImageFun('style_6', 5, 'UPLOAD_STYLESIX_IMAGEI_VALUE', 'IMAGEI_STYLESIX_SRC', 'UPLOAD_STYLESIX_IMAGEI_LINK', 'UPLOAD_STYLESIX_IMAGEI_TEXT')"><img src="/Public/Images/merchant/icon_upload.png"/><span>重新上传</span></a>
+                                  </li>
+                              </ul>
+</div>
+</div>
+<div style="clear:both;"></div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var H=$(".huansha-ad").height();
+	$("#style-6-click-1,#style-6-click-2,#style-6-click-3,#style-6-click-4,#style-6-click-5").css({"height":H,"left":"108px","top":"14px"});
+});
+</script>      
+<!--END-->

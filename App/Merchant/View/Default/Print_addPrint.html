@@ -1,0 +1,77 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<form action="post" id="AddPrintForm">
+	<input type="hidden" value="{$Think.get.sid}" name="sid" id="PrintSid" />
+	<style type="text/css">
+    ::-webkit-input-placeholder { color:#999; }
+    :-moz-placeholder { color:#999; }
+    ::-moz-placeholder { color:#999; }
+    :-ms-input-placeholder { color:#999; }
+    </style>
+    <div class="reveal-modal reveal-modals" style="display:block;border:none;">
+        <h3>新增打印机 <span class="close" id="AddPrint_close">×</span></h3>
+        <div class="modal-content modal-contents clearfix">
+            <div class="set">
+                <label>打印机名称：</label> <input type="text" name="pname" id="PrintName">
+            </div>
+            <div class="set">
+                <label>打印时机：</label> 
+                <select multiple id="print_time" name="print_time" style="width:150px;height:50px">
+                    <option value="1">用户下单</option>
+                    <option value="2">接受订单</option>
+                    <option value="3">订单完成</option>
+            </select>
+            </div>
+            <div class="set">
+                <label>是否打印合计：</label> <input type="radio" name="is_count" value="1" checked />打印  <input type="radio" name="is_count" value="0" />不打印 
+            </div>
+            <div class="set">
+                <label>是否支持分单：</label> <input type="radio" name="is_balance" value="1"  />支持  <input type="radio" name="is_balance" value="0" checked />不支持 
+            </div>
+            <div class="set">
+                <label>设为默认打印机：</label> <input type="radio" name="is_pay" value="1"  />是  <input type="radio" name="is_pay" value="0"  checked />否 
+            </div>
+            <div class="set top">
+                <label></label>
+                <input type="button" value="确认" class="btn btn-pwd" id="AddPrint_Save">
+                <input type="button" value="取消" class="btn btn-hui" id="AddPrint_Cancl">
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#AddPrint_close,#AddPrint_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	
+	//提交信息
+	$("#AddPrint_Save").click(function() {
+		var PrintName = $("#PrintName").val();
+		var PrintSid  = $("#PrintSid").val();
+		var PrintTime = $("#print_time").val();
+		var is_count = $('input[name="is_count"]:checked').val();
+		var is_balance = $('input[name="is_balance"]:checked').val();
+		var is_pay = $('input[name="is_pay"]:checked').val();
+		
+		if( !PrintName ) { alert("打印机名称不能为空"); return false; }
+		if( !PrintTime ) { alert("请选择打印时机"); return false; }
+		
+		$.post('__ACTION__', {name:PrintName, sid:PrintSid, time:PrintTime,is_count:is_count,is_balance:is_balance,is_pay:is_pay }, function(data) {
+			
+			var data = eval('(' + data + ')');
+			if( data.msg == '') {
+				//InsertPrints( data.info, 'a', 'p');
+				//var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				//$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				window.parent.location.href = '/Print/printList.html';
+			} else { alert( data.msg ? data.msg : '添加失败' ); }
+		})
+	})
+});
+</script>
+</block>

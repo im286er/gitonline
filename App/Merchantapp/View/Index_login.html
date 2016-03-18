@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>登录</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>商家登录</h1>
+	</header>
+	<div class="main container p-65">
+		<div class="input-list input-list-login">
+			<ul>
+				<li>
+					<label class="ico ico-person"></label>
+					<input type="text" value="{$username}" id="username" placeholder="请输入授权账户">
+				</li>
+				<li>
+					<label class="ico ico-lock"></label>
+					<input type="password" value="{$password}" id="password" placeholder="请输入密码">
+					<a class="ico ico-clear" href="javascript:;"></a>
+				</li>
+			</ul>
+		</div>
+		<div class="div-a">
+			<a class="btn btn-block btn-lg btn-blue disable" href="javascript:;" onClick="login();">登录</a>
+		</div>
+		<p class="copyright"><span class="fl-l">版权所有：杭州阿宅订网络科技有限公司</span><a class="fl-r" href="javascript:;">联系我们</a></p>
+	</div>
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+	<script>
+		$(".ico-clear").click(function(event) {
+			$("input:password").val("");
+		});
+		function checkForm() {
+			var username=$("#username").val(), pass=$("#password").val();	
+			if( !username ) {		
+				alert("请输入用户名"); $("#username").focus(); return false;
+			}	
+			if( !pass )	{		
+				alert("请输入密码"); $("#password").focus(); return false;	
+			}
+			return true;
+		}
+		
+		function login() {	
+			if( !checkForm() ) return false;
+			var username=$("#username").val(), pass=$("#password").val();
+			$.post("{:U('/Public/checklogin')}", {username:username, password:pass}, function(data) {
+				var data = parseInt(data);
+				if( data==1 ) { alert("登录账号输入错误！"); return false; }
+				if( data==2 ) { alert("您的账号存在风险，请联系管理员！"); return false; }
+				if( data==3 ) window.location.href="{:U('/Index/index', array('appkey'=>'merchantapp'))}";
+			})	
+		}
+	</script>
+		<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+		<php>if(!$appinfo){ $appinfo = M('App')->find(2); }</php>
+		<script type="text/javascript">
+			var Versions;//当前版本类型
+			var Newversion ="{$appinfo.versions}";
+			var Msystem;
+			var Iosupgradeurl = "{:U('App/down@yd',array('jid'=>70,'appid'=>$appinfo['id']),false)}?iosversions={$appinfo.versions}";
+			function connectWebViewJavascriptBridge(callback) {
+				if (window.WebViewJavascriptBridge) {
+					callback(WebViewJavascriptBridge)
+				} else {
+					document.addEventListener('WebViewJavascriptBridgeReady', function() {
+						callback(WebViewJavascriptBridge)
+					}, false)
+				}
+			}
+			connectWebViewJavascriptBridge(function(bridge) {
+				bridge.init(function(message, responseCallback) {
+				});
+				
+				var data = 'get version number';
+				bridge.send(data, function(responseData) {
+					Versions = responseData;
+					Msystem='ios';
+					is_versions();
+				});
+			});
+			$(document).ready(function(){
+				if(window._WebView_JS_Info != undefined){
+					Versions = window._WebView_JS_Info.VersionName();
+					Msystem='android';
+					is_versions();
+				}
+
+				if(!Versions && window._WebView_JS_versionCode){
+					Versions = window._WebView_JS_versionCode.versionCode();
+					Msystem='android';
+					is_versions();
+				}
+				
+			});
+			
+			function is_versions() {
+					checkVersions();
+			}
+			function checkVersions(){
+				if(Versions && Versions >= Newversion)return false;
+				if(!Versions)return false;
+				layer.open({type: 2,shade: true,time: 10,content: '检测更新中…'});
+				$.post("{:U('Public/is_update')}",{'appversions':Versions},function(result){
+					layer.closeAll();
+					if(result.status==0 && result.msg)
+						layer.open({content:result.msg, time: 1});
+					else if(result.status==1 && result.msg){
+						layer.open({
+							content: result.msg,
+							style: 'width:100%; ',
+							btn: ['立即下载', '取消下载'],
+							shadeClose: false,
+							yes: function(){
+								layer.closeAll();
+								if(Msystem=='ios') {
+									$('#Pullrefresh').attr("href",Iosupgradeurl);
+									document.getElementById("Pullrefresh").click();
+								}else if(Msystem=='android') {
+									window.location.href=result.url;
+								}else{
+								}
+							}, no: function(){
+								layer.closeAll();	
+							}
+						});
+					}
+				});
+			}
+		</script>
+	<script>
+		var Pullrefresh1 = null;//这个设置为全局
+		function Pullrefresh(url){
+				if (Pullrefresh1 == null){
+					Pullrefresh1 = new Date().getTime();
+				}else{       
+					var Pullrefresh2 = new Date().getTime();
+					if(Pullrefresh2 - Pullrefresh1 < 500){
+						Pullrefresh1 = Pullrefresh2;
+						return;
+					}else{
+						Pullrefresh1 = Pullrefresh2;
+					}
+				}
+			if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+				$('#Pullrefresh').attr("href",url);
+				document.getElementById("Pullrefresh").click();
+			}else{
+				location.href=url;
+			}
+			location.href=url;
+		}
+	</script>
+	<a id="Pullrefresh" href="#" target="IFRAME" style="display:none;"></a>
+	<iframe id="IFRAME" src="" style="display:none;"></iframe>
+</body>
+</html>

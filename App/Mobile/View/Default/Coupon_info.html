@@ -1,0 +1,86 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script>
+var reqUrl = "{:U('Mobile/Coupon/getCoupon',array('jid'=>$jid))}";
+var vu_id  =  "{$coupon_info.vu_id}";
+var isApp = "{$isApp}";
+var mid = "{$mid}";
+var linkurl = "{$linkurl}";
+$(document).ready(function(){
+   
+    $('.get-coupon').click(function(){
+    	
+    		if(mid > 0){
+    			getCoupon();
+    		}else{
+    			location.href = linkurl;
+    		}
+    	
+    });
+    
+});
+function getCoupon(){
+	$.ajax( {    
+	    url:reqUrl,   
+	    data:{    
+	    	vu_id : vu_id,
+	    },    
+	    type:'post',    
+	    cache:false,    
+	    dataType:'json',    
+	    success:function(data) {    
+	        //alert(data.msg);
+	    	var msg = dialog({title: '提示',content: data.msg,id: 'm1'});
+			msg.show();
+	    },
+	    error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	//alert(JSON.stringify(XMLHttpRequest));
+	    	if(XMLHttpRequest.status == '200'){
+	    		var data = eval('('+ XMLHttpRequest.responseText +')');
+	    		//alert(data.msg);
+	    		var msgnot = dialog({title: '提示',content: data.msg,id: 'm1'});
+			    msgnot.show();
+	    	}
+	    }
+	});
+}
+</script>  
+	<div class="main container p-tb bg-fff">
+		<div class="coupon-div">
+			<a class="bg-block coupon-red" href="javascript:;">
+				<div class="coupon-left">
+					<h5>{$coupon_info.vu_name}价值{$coupon_info.vu_price}元</h5>
+					<p>{$coupon_info.vu_description|msubstr=###,0,16}</p>
+				</div>
+				<div class="coupon-right">
+					<h5 class="get-coupon">立即领取</h5>
+					<p class="coupon-validity">有效期至：<br><php>echo date('Y-m-d',strtotime($coupon_info[vu_etime]))</php></p>
+				</div>
+			</a>
+		</div>
+		<style type="text/css">
+		.coupon-detail > div { height: auto; line-height: 1.95rem; margin-bottom:2.0rem; overflow:hidden; }
+		.coupon-detail .coupon-price { width:8rem; }
+		</style>
+		<div class="coupon-detail">
+			<div>{$coupon_info.vu_description}</div>
+			<div class="bdd">
+				<span class="pull-left">{$coupon_info.vu_name}</span>
+				<div class="pull-right ta-r">
+					<span class="">{$coupon_info.vu_cum}份</span><span class="coupon-price">{$coupon_info.vu_price}元</span>
+				</div>
+			</div>
+			<div class="ta-r" style="margin:0px;">总价值<span class="coupon-price">{$coupon_info.vu_price}元</span></div>
+			<div class="ta-r">已领取<span class="coupon-price">{$count_num}份</span></div>
+			<p>
+				有效期<br>·<php>echo date('Y-m-d',strtotime($coupon_info[vu_stime]))</php>至<php>echo date('Y-m-d',strtotime($coupon_info[vu_etime]))</php>
+			</p>
+		</div>
+	</div>
+	<footer class="btn-footer">
+		<a href="javascript:;" class="get-coupon">立即领取</a>
+	</footer>
+	
+</block>

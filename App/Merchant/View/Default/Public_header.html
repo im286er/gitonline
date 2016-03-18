@@ -1,0 +1,18 @@
+<div class="header" id="header">
+    <div class="container clearfix">
+        <a href="{:U('/Index/index', '', true)}" class="logo"><p style="font-size:28px;padding-right:20px;padding-left:20px;font-family: 'Microsoft YaHei' ! important; color: #fff; ">帝鼠商户后台</p></a>
+        <ul class="menulist">
+        	
+            <foreach name="top_menu" item="vo" >
+        <if condition="$type == 1 || $vo['type'] == 0">    	<li <if condition="$vo[code] eq $menucode">class="current"</if> ><a href="{$vo.url}" target="_self"><em class="icon {$vo.code}"></em><p>{$vo.name}</p></a></li> </if>
+            </foreach>
+        </ul>
+        <p class="pull-right navbar">
+			<a href="/Message/notice.html"></a>
+            <a href="/Index/index.html"><em class="brandlogo"><img src="{$mtapp2.applogo}"></em>{$mnickname}</a>
+            <a href="/Index/bindtel.html">绑定手机</a> <span>|</span>
+            <a href="/Index/editpwd.html">修改密码</a> <span>|</span>
+            <a href="/Public/logout.html" target="_top">退出</a>
+        </p>
+    </div>
+</div>

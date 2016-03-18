@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>推送透传</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+td ul li { float:left; margin:3px 10px 3px 0px; padding-right:20px; cursor:pointer; position:relative; }
+td ul li a { position:absolute; top:3px; right:3px; background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
+td ul li a:hover { background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:427px; }
+textarea#Pcontent { width:436px; height:65px; resize:none; }
+td label input { position:relative; top:2px; }
+td ul li { display:block; clear:both; overflow:hidden; padding:0px; margin:3px 0px; }
+td li span { width:80px; text-align:center; display:inline-block; }
+td li input.user_input, td li input.user_input_hover, td li input.user_input_focus, td li input.user_input_error { width:341px; float:none; }
+td li textarea.textarea { width:350px; height:65px; resize:none; }
+</style>
+</head>
+
+<body>
+<taglib name="html" />
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                    	<tr style="height:0px;overflow:hidden;">
+                        	<td width="80" style="padding:0px;margin:0px;border:none;"></td>
+                            <td width="140" style="padding:0px;margin:0px;border:none;"></td>
+                            <td width="80" style="padding:0px;margin:0px;border:none;"></td>
+                            <td style="padding:0px;margin:0px;border:none;"></td>
+                        </tr>
+                        <tr id="MsgTitle">
+                            <th width="100">透传描述</th>
+                            <td colspan="3"><input type="text" placeholder="透传描述" autocomplete="off" id="Ptitle" name="ptitle" value="" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>透传内容</th>
+                            <td colspan="3"><textarea placeholder="透传内容" class="textarea" id="Pcontent" name="pcontent"></textarea></td>
+                        </tr>
+                        <tr>
+                        	<th>目录用户</th>
+                        	<td colspan="3">
+                            	<label><input type="radio" name="type" value="1" checked="checked" /> 全部用户</label>&#12288;
+                            	<label><input type="radio" name="type" value="2" /> 按区域推送</label>&#12288;
+                            	<label><input type="radio" name="type" value="3" /> 按昵称推送</label>&#12288;
+                            </td>
+                        </tr>
+                        <tr id="Ptype_02" style="display:none;">
+                        	<th>&nbsp;</th>
+                            <td colspan="3">
+                            	<input type="text" name="p1" class="user_input" placeholder="输入省份，如：北京市,浙江,西藏" />
+                            </td>
+                        </tr>
+                        <tr id="Ptype_03" style="display:none;">
+                        	<th>&nbsp;</th>
+                        	<td colspan="3">
+                                <input type="text" placeholder="输入CID，多个值用,分隔" value="" name="c_t_b" class="user_input" />
+                            </td>
+                        </tr>
+                        <tr>
+                        	<th>有效时长</th>
+                        	<td colspan="3">
+                            	<input type="text" value="2" name="c_s1_v" class="user_input" style="float:none;height:20px;width:30px;" />&#12288; 小时
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="buttonDiv" align="center">
+                        <button type="submit" class="submit_btn">推送</button>&#12288; <button type="reset" class="reset_btn">重写</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $("input[name='type']").click(function() {
+		var value = $(this).val();	$("tr[id^='Ptype_0']").css("display", "none"); $("#Ptype_0"+value).css("display", "");
+	})
+});
+</script>
+</body>
+</html>

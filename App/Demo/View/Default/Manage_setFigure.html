@@ -1,0 +1,99 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+
+<style type="text/css">.modal-content .set > input[type="text"] { width:260px; }</style>
+
+<script type="text/javascript">
+
+var DeleteClassPath		= '{:U("/Info/delClass@ce", "", true, true)}';
+
+var DeleteInfoUrlPath	= '{:U("/Info/delGoods@ce", "", true, true)}';
+
+</script>
+
+<div class="wrapper">
+
+    <h2 class="title">APP启动广告</h2> 
+
+    
+
+    <div class="mian padding">                   
+
+        <div class="modal-content">
+
+            <img id="UploadImage" src="{$FileSrc}" style="width:240px; height:360px; cursor:pointer;">
+
+            &#12288;
+
+            <b>温馨提示：</b>图片尺寸为 1080*1920， 图片大小不超过200K， 图片格式为 jpg,png
+
+            <div class="border-b top"></div>
+
+            <div class="set top">
+
+                <label></label> <input type="button" id="ModuleUpdate" class="btn btn-pwd" value="保存">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+
+<script type="text/javascript">
+
+$(function() {
+
+	var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', array('conf'=>'aps'), true)}", imageUploadLimit:1, });
+
+	
+
+	//上传图片
+
+	$("#UploadImage").click(function() {
+
+		editor.loadPlugin('image', function() {
+
+			editor.plugin.imageDialog({
+
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+
+					$('#UploadImage').attr("src", url); editor.hideDialog();
+
+				}
+
+			});
+
+		});
+
+	})
+
+	
+
+	//保存图片
+
+	$("#ModuleUpdate").click(function() {
+
+		var src = $("#UploadImage").attr("src");
+
+		if( !src ) { alert("请先上传图片"); return false; }
+
+		$.post("__ACTION__", {data:src}, function(data) {
+
+			alert( parseInt(data)==1 ? "设置成功" : '设置失败' );	
+
+		})
+
+	})	
+
+});
+
+</script>
+
+</block>

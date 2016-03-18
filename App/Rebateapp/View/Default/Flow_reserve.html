@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$shop_name}</title>
+	<script src="__PUBLIC__/Rebateapp/Js/jquery-2.1.3.min.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Rebateapp/Css/qmfl.css">
+	<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+    <script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+	<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <script>
+var pro = {};
+function addPro(gid,gname){
+	pro[gid] = {gid:gid,gname:gname};
+
+	savePro();
+}
+function deletePro(gid){
+	delete pro[gid];
+	savePro();
+}
+function savePro(){
+	var name = '';
+	$.each(pro,function(index,o){
+		name += o.gname+',';
+	})
+	$("#pro_seat").html('已选定'+name);
+	$("#sure_pro").html('确定选定'+name);
+}
+$(document).ready(function(){
+  $('.btn-red').click(function(){
+	if(JSON.stringify(pro) == '{}'){
+		var chmsg = dialog({title: '提示',content: '没有选中任何商品',id: 'm1'});
+ 		chmsg.show();
+  		return false;
+	}
+	$("#modal-checkseat").show();
+  });
+  $('.btn-no').click(function(){
+	  $("#modal-checkseat").hide();
+  })
+  $('.btn-yes').click(function(){
+	  $.cookie("seat", JSON.stringify(pro),{path:'/'});
+      location.href="{:U('Flow/seatConfirm',array('jid'=>$jid,'sid'=>$sid))}";
+  })
+});
+</script>
+</head>
+<body>
+	<header class="header">
+		<h1>{$shop_name}</h1>
+		<a href="{:U('Shop/shopInfo',array('sid'=>$sid))}" class="ico header-back"></a>
+	</header>
+
+	<div class="main-wrapper top-t selseat" id="selectSeat">
+		<div class="main-container">
+			<div class="side-nav" id="sideNav">
+				<ul>
+					<volist name="result_list" id="vo" >
+    				    <li cid="{$vo.cid}"><a href="javascript:void(0)">{$vo.cname}</a></li>
+    				</volist>
+				</ul>
+			</div>
+			<div class="main-content">
+				<div class="items">
+					
+					<volist name="result_list" id="va" empty="暂时没有数据">
+				<div class="item-list">
+				<h5 class="list-title">{$va.cname}</h5>
+						<ul>
+						<volist name="va.list" id="vo">
+						<li>
+								<div class="item-left">
+									<h6 class="item-title">{$vo.gname}</h6>
+									<p class="item-description">{$vo.gdescription|msubstr=0,17,'utf-8'}</p>
+									<div class="item-expend">
+										<span class="">最低消费:<strong>{$vo.goprice}</strong></span>
+										<span class="">优惠:<strong>{$vo.gdprice}</strong></span>
+									</div>
+								</div>
+								<div class="item-right">
+									<!--p class="item-status {$vo['gstock']>0 ? '' : 'c-gray'}">{$vo['gstock']>0 ? '空闲' : '繁忙'}</p-->
+                                    <p class="item-status"></p>
+									<a href="javascript:;" gid="{$vo.gid}" gname="{$vo.gname}"><i class="ico ico-select" ></i></a>
+								</div>
+							</li>
+						</volist>
+						</ul>
+					</div>
+			    </volist>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="bottomBar clearfix">
+		<div class="container">
+		<div class="cart clearfix">
+			<div class="cart-price" id="pro_seat"></div>
+		</div>
+		<a class="btn btn-red" href="javascript:void(0);">选好了</a>
+		</div>
+	</footer>
+
+	<div class="modal" id="modal-checkseat">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-flex">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single" id="sure_pro"></h6>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no" href="javascript:;">否</a>
+					<a class="btn-yes" href="javascript:;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<script>
+	var aSlideNavLi  = $("#sideNav li");
+	var aSlideNavLiA = $("#sideNav li a");
+	aSlideNavLiA.click(function() {
+		aSlideNavLi.removeClass('active');
+		$(this).parent("li").addClass('active');
+		var _thisIndex=$(this).parent("li").index();
+		$('.item-list').eq(_thisIndex).css('display','block').addClass('fadeL').siblings().css('display','none');
+	});
+
+	var aTabNavLi = $("#tabNav li");
+	aTabNavLi.click(function() {
+		location.href = $(this).attr('u');
+	});
+
+	var aItemStatus = $(".item-status");
+	aItemStatus.each(function(index, el) {
+		var _this = $(el);
+		if(_this.text() == "繁忙") {
+			_this.siblings('a').hide();
+		}
+	});
+
+	var aSelect = $(".item-right a");
+	aSelect.click(function(event) {
+		var _this = $(this);
+		var gid = $(this).attr('gid');
+		var gname = $(this).attr('gname');
+		var _thisLi = _this.parents('li');
+		if(_thisLi.hasClass('checked')) {
+			_thisLi.removeClass('checked');
+			deletePro(gid);
+		} else {
+			_thisLi.addClass('checked');
+			addPro(gid,gname);
+		}
+	});
+	</script>
+</body>
+</html>

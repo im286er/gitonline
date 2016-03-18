@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } select { width:177px; }
+td ul li { float:left; margin:3px 15px 3px 0px; cursor:pointer; position:relative; } 
+td ul li a { position:absolute; top:3px; right:3px; background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
+td ul li a:hover { background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
+.table-form tr.header td { padding:0px; height:0px; margin:0px; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="0" name="info[atype]" />
+           <div id="divSetting1">
+                <table class="table-form" border="0">
+                	<tr style="height:0px; visibility:hidden;" class="header"><td width="120"></td><td width="220"></td><td width="100"></td><td></td></tr>
+                    <tr>
+                        <th width="100">所属类型 <b style="color:red;">*</b></th>
+                        <td width="220" colspan="3">
+                        	<label><input type="radio" name="info[arank]" value="p" checked="checked" /> 省级代理</label>&#12288;
+                        	<label><input type="radio" name="info[arank]" value="c" /> 市级代理</label>&#12288;
+                            <label><input type="radio" name="info[arank]" value="q" /> 区级代理</label>&#12288;
+                            <label><input type="radio" name="info[arank]" value="g" /> 个人代理</label>&#12288;
+                            <label style="color:red;"><b>更改类型后，代理区域会恢复默认！！</b></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>代理区域 <b style="color:red;">*</b></th>
+                        <td colspan="3">
+                        	<select id="SelectScity" onchange="FselectScity();">
+                                <volist name='addressList' id='vo'>
+                                <option value="{$vo.aid}">{$vo.aname}</option>
+                                </volist>
+                            </select>
+                        	<select id="SelectHcity" style="display:none;" onchange="FselecctHcity();"></select>
+                            <select id="SelectQcity" style="display:none;" onchange="FselectQcity();"></select>
+                            <input type="hidden" value="" name="info[aid]" id="ShopScity" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>企业/个人全称 <b style="color:red;">*</b></th>
+                        <td><input type="text" autocomplete="off" placeholder="企业或个人全称" id="InfoAnickname" name="info[anickname]" value="" class="user_input" style="width:200px;" /></td>
+                        <th>企业/个人简称</th>
+                        <td><input type="text" autocomplete="off" placeholder="企业或个人简称(可选)" name="info[aabbreviation]" value="" class="user_input" style="width:200px;" /></td> 
+                    </tr>
+                    <tr>
+                        <th>企业地址 <b style="color:red;">*</b></th> 
+                        <td><input type="text" autocomplete="off" placeholder="企业或个人详细地址" id="InfoAddress" name="info[aaddress]" value="" class="user_input" style="width:200px;" /></td>
+                        <th>市场专员</th>
+                        <td><input type="text" autocomplete="off" placeholder="市场专号" name="info[acommissioner]" value="" class="user_input" style="width:200px;" /></td>
+                    </tr>
+                    <tr>
+                        <th>联系人姓名 <b style="color:red;">*</b></th>
+                        <td><input type="text" autocomplete="off" placeholder="联系人姓名" id="InfoContactsName" name="info[acontactsname]" value="" class="user_input" style="width:200px;" /></td>
+                        <th>联系人电话 <b style="color:red;">*</b></th>
+                        <td><input type="text" autocomplete="off" placeholder="联系人电话" id="InfoContactsTel" name="info[acontactstel]" value="" class="user_input" style="width:200px;" /></td>
+                    </tr>
+					<tr>
+                        <th>代理商账户 <b style="color:red;">*</b></th>
+                        <td><input type="text" autocomplete="off" placeholder="代理商账户，用于登录管理平台" id="InfoMname" name="member[mname]" value="" class="user_input" style="width:200px;" /></td>
+                        <th>代理商密码 <b style="color:red;">*</b></th>
+                        <td>
+                        	<input type="password" placeholder="账户密码，用于登录管理平台" id="InfoMpwd" name="member[mpwd]" value="" class="user_input" style="width:200px;" />
+                            <input type="hidden" value="1" name="member[mtype]" />
+                            <input type="hidden" value="1" name="member[mstatus]" />
+                            <input type="hidden" value="{:date('Y-m-d H:i:s')}" name="member[mregdate]" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>身份证号 <b style="color:red;">*</b></th>
+                        <td colspan="3"><input type="text" placeholder="请输入代理商的身份证号" autocomplete="off" name="member[idcard]" id="IdCard" value="" class="user_input" style="width:520px;" /></td>
+                    </tr>
+                    <tr>
+                        <th>可开最大商家数 <b style="color:red;">*</b></th>
+                        <td colspan="3"><input type="text" placeholder="请输入此代理商最大可以开的商户数" autocomplete="off" name="info[maxnum]" id="MaxNum" value="" class="user_input" style="width:520px;" /></td>
+                    </tr>
+                    <tr>
+                      <th>相关证件建议上传<br />尺寸在200kb以内</th>
+                        <td colspan="3">
+                        	<ul>
+								<li><b style="color:red;">*</b><img id="ImageSrcSfzz" onclick="KindeditorUpload('ImageSrcSfzz', 'ImageSfzz')" src="__PUBLIC__/Images/image_04.gif" width="90" height="113" /><input type="hidden" id="ImageSfzz" name="image[sfzz]" value="" /> <a href="javascript:ResetValue('Sfzz', 4);">&nbsp;</a></li>
+                        		<li ><b style="color:red;">*</b><img id="ImageSrcSfzb" onclick="KindeditorUpload('ImageSrcSfzb', 'ImageSfzb')" src="__PUBLIC__/Images/image_05.gif" width="90" height="113" /><input type="hidden" id="ImageSfzb" name="image[sfzb]" value="" /> <a href="javascript:ResetValue('Sfzb', 5);">&nbsp;</a></li>
+                        		<li><img id="ImageSrcYyzz" onclick="KindeditorUpload('ImageSrcYyzz', 'ImageYyzz')" src="__PUBLIC__/Images/image_01.gif" width="90" height="113" /><input type="hidden" id="ImageYyzz" name="image[yyzz]" value="" /> <a href="javascript:ResetValue('Yyzz', 1);">&nbsp;</a></li>
+                        		<li><img id="ImageSrcSwdj" onclick="KindeditorUpload('ImageSrcSwdj', 'ImageSwdj')" src="__PUBLIC__/Images/image_02.gif" width="90" height="113" /><input type="hidden" id="ImageSwdj" name="image[swdj]" value="" /> <a href="javascript:ResetValue('Swdj', 2);">&nbsp;</a></li>
+                        		<li style="margin-right:0px;"><img id="ImageSrcZzjg" onclick="KindeditorUpload('ImageSrcZzjg', 'ImageZzjg')" src="__PUBLIC__/Images/image_03.gif" width="90" height="113" /><input type="hidden" id="ImageZzjg" name="image[zzjg]" value="" /> <a href="javascript:ResetValue('Zzjg', 3);">&nbsp;</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonDiv" align="center">
+            	<p style="color:red; font-weight:bold; font-size:14px; margin-bottom:5px;">温馨提示：数据填写完整后，请先检查一遍再进行提交！！！</p>
+        		<button type="submit" id="dosubmit" class="submit_btn">提交</button>&#12288;<button type="reset" class="reset_btn">重写</button>
+        	</div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:50, });
+
+function KindeditorUpload(ImageSrc, InputVal) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#'+ImageSrc).attr("src", url); $('#'+InputVal).val(url); editor.hideDialog();
+			}
+		});
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K， 图片格式为 jpg,jpeg,png</div>');
+	});
+}
+
+function ResetValue(ImageId, ImageName) {
+    $("#ImageSrc"+ImageId).attr("src", '/Public/Images/image_0'+ImageName+'.gif'); $("#Image"+ImageId).val('');
+}
+
+function SetAddressValue() {
+	var gtype = $("input[name='info[arank]']:checked").val();
+	$("#SelectScity").show(); $("#SelectHcity").show(); 
+	if( $("#SelectQcity").html() ) $("#SelectQcity").show();
+	/*
+	if( gtype=='p' ) {
+		$("#SelectScity").show(); $("#SelectHcity").hide(); $("#SelectQcity").hide();
+	} else if( gtype=='c' ) {
+		$("#SelectScity").show(); $("#SelectHcity").show(); $("#SelectQcity").hide();
+	} else {
+		$("#SelectScity").show(); $("#SelectHcity").show(); 
+		if( $("#SelectQcity").html() ) $("#SelectQcity").show();
+	}
+	*/
+	if($("#SelectQcity").is(":visible")) {
+		$("#ShopScity").val( $("#SelectQcity").val() );
+	} else if($("#SelectHcity").is(":visible")) {
+		$("#ShopScity").val( $("#SelectHcity").val() );
+	} else {
+		$("#ShopScity").val( $("#SelectScity").val() );	
+	}
+}
+
+//选择省份
+function FselectScity() {
+	var value = $("#SelectScity").val();
+	$.get("{:U('/Agent/publicGetaddress', '', true)}", {pid:value}, function( data ) { 
+		if(data) $("#SelectHcity").html( data ); setTimeout( function() { FselecctHcity(); }, 100);
+	})
+}
+
+//选择市级
+function FselecctHcity( ) {
+	var value = $("#SelectHcity").val();
+	$.get("{:U('/Agent/publicGetaddress', '', true)}", {pid:value, dval:''}, function( data ) { 
+		if( data ) $("#SelectQcity").html( data ); setTimeout( function() { FselectQcity(); }, 100);
+	})
+}
+
+//选择区级
+function FselectQcity( bool ) {
+	var value = $("#SelectQcity").val();
+	if( value ) { $("#ShopScity").val(value); }
+	SetAddressValue();
+}
+
+$(document).ready(function(e) {
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+	$("#InfoAnickname").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入企业/个人全称"});
+	$("#InfoAddress").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入企业个人地址"});
+	$("#InfoContactsName").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入联系人姓名"});
+	$("#InfoContactsTel").formValidator({onFocus:" "}).inputValidator({min:1, max:15, onError:"请输入联系人电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"});
+    $("#InfoMname").formValidator({onFocus:" "}).regexValidator({regExp:"^([a-zA-Z0-9_]){1,30}$", onError:"账户必须为字母、数字或下划线组成"}).inputValidator({min:1, onError:"请输入代理商帐户"}).ajaxValidator({
+		url  		: "{:U('/System/publicCheckMname', '', true)}",
+		data       	: "mname=#InfoMname",
+        success    	: function(data) { return parseInt(data) == 1 ? true : false; },
+        buttons  	: $("#dosubmit"),
+        onError  	: "该账户已经存在，请重新输入一个",
+        onWait   	: "请等待……"
+    });
+	$("#IdCard").formValidator({onFocus:" "}).regexValidator({regExp:"(^[0-9]{15}$)|(^[0-9]{17}([0-9]|X|x)$)", onError:"身份证号格式不正确"}).inputValidator({min:1, onError:"身份证号不能为空"})
+	$("#InfoMpwd").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入代理商账户密码"})
+	$("#ImageSfzz").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请上传身份证正面照"});
+	$("#ImageSfzb").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请上传身份证背面照"});
+	$("#MaxNum").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请输入此代理最大可以开的商户数"});
+	
+	//选择省份
+	$("input[name='info[arank]']").click( function() { FselectScity(); })
+})
+</script>
+</body>
+</html>

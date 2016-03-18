@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="#5681f7" />
+	<title>{$merchant.mabbreviation}</title>
+	<script src="__PUBLIC__/Js/jquery.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/{$tpl_name}/css/thjy.css">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+<style>
+.wif {
+    margin: auto;
+    width: 100%;
+}
+.wifi {
+    background-color: #404040;
+    bottom: 0;
+    height: 60px;
+    opacity: 0.9;
+    position: fixed;
+    width: 100%;
+	  z-index: 101;
+}
+.icon-logo {
+    float: left;
+    margin-left: 25px;
+    width: 50px;
+}
+.icon-logo span {
+    color: #fff;
+    line-height: 50px;
+    margin-left: 5px;
+}
+.icon-logo img {
+    border-radius: 5px;
+    height: 44px;
+    margin-top: 8px;
+    width: 44px;
+}
+.c-fff {
+    color: #fff;
+}
+.txt-icon {
+    float: left;
+    margin-top: 10px;
+    width: 150px;
+}
+.btn-click {
+    float: right;
+    margin-right: 10px;
+}
+.closed {
+    position: absolute;
+    z-index: 101;
+}
+.closed img {
+    width: 18px;
+}
+.btn-wifi {
+    border: 1px solid #00c405;
+    border-radius: 6px;
+    color: #00c405;
+    display: block;
+    line-height: 30px;
+    margin-top: 12px;
+    padding: 0 5px;
+    text-align: center;
+}
+.btn-wifi:hover {
+    color: #00c405;
+}
+</style>
+	<header class="header bg-5681f7">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="main container p-t" id="container">
+	 <empty name="banner_list">
+		<section class="">
+		   <div class="main_image_one" >
+			 <img src="__PUBLIC__/Mobile/{$tpl_name}/upload/slide.jpg" class="img_2_one"/>
+		   </div>
+		</section>
+	<else />
+    	<if condition="count($banner_list) eq 1">
+		<section class="">
+			<div  class="swiper-wrapper">
+		 		<a href="{$banner_list[0]['burl']}"><img  src="{$banner_list[0]['bimg']}" class="img_2_one" style="width:100%;height:auto;"/></a>
+	   		</div>
+		</section>
+	   	<else />
+		<section class="slide swiper-container" id="banner">
+			<div class="swiper-wrapper">
+				<volist name="banner_list" id="vo" >
+				<div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" alt=""></a></div>
+				</volist>
+			</div>
+			<div class="swiper-pagination" id="banner-page">
+				<volist name="banner_list" id="vo" >
+				<span class="swiper-pagination-bullet"></span>
+				</volist>
+			</div>
+		</section>
+		</if>
+	</empty>
+		<section class="nav-thjy">
+			<ul class="clearfix">
+				<li class="li-zbkt">
+					<a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+						<img src="{$module2icon|default='/Public/Mobile/tonghui/img/img_zbkt.png'}"/>
+						<span>{$module2name|default='直播课堂'}</span>
+					</a>
+				</li>
+				<li class="li-yjsc">
+					<a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+						<img src="{$module1icon|default='/Public/Mobile/tonghui/img/img_yjsc.png'}" alt="">
+						<span>{$module1name}</span>
+					</a>
+				</li>
+				<li class="li-spsb">
+					<a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+						<img src="{$InfoMenu3Icon|default='/Public/Mobile/tonghui/img/img_spsb.png'}" alt="">
+						<span>{$InfoMenu3Name}</span>
+					</a>
+				</li>
+				<li class="li-jcyd">
+					<a href="{$WshopModuleLink}">
+						<img src="{$WshopModuleIcon|default='/Public/Mobile/tonghui/img/img_jcyd.png'}" alt="">
+						<span>{$WshopModuleName|default='最近阅读'}</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section class="video-list">
+			<div class="sec-title sec-title-thjy">
+				<h3>最新视频</h3>
+				<a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">更多</a>
+			</div>
+			<div class="sec-body sec-body-thjy">
+				<ul class="li-2 clearfix">
+					<php>$videolist = D('Video')->getVideo(array('where'=>array('jid'=>$jid,'gstatus'=>'1'),limit=>'4'));</php>
+					<volist name="videolist" id="vo" >
+					<li><a href="{:U('Video/show',array('jid'=>$jid,'gid'=>$vo['gid']))}"><img src="{$vo.gimg}" title="{$vo.gname}"><h6>{$vo.gname}</h6><p>{$vo.gdescription|msubstr=###,0,100}</p></a></li>
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="book-list">
+			<div class="sec-title sec-title-thjy">
+				<h3>{$HdModuleName|default='最近阅读'}</h3>
+				<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多</a>
+			</div>
+			<div class="sec-body sec-body-thjy">
+				<ul class="li-3 clearfix">
+					<volist name="active_list" id="vo" >
+					<li>
+						<a href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}"><img src="{$vo.av_img}" alt="{$vo.av_title}">
+							<!--<img src="__PUBLIC__/Mobile/{$tpl_name}/upload/book_pic_02.jpg" alt="">-->
+							<h6>{$vo.av_title}</h6>
+							<p>{$vo.av_con|msubstr=###,0,100}</p>
+						</a>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="coupon">
+			<div class="sec-title sec-title-thjy">
+				<h3>{$VoucherModuleName}</h3>
+				<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多</a>
+			</div>
+			<div class="sec-body">
+				<ul>
+
+				<volist name="coupon_list" id="vo" >
+					<li>
+					<if condition="$vo['vu_img']">
+					<a class="bg-block {$key%2==0?'coupon-red':'coupon-yellow'}" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}" style="background-image: url('{$vo.vu_img}');">
+
+						</a>
+					<else />
+					<a class="bg-block {$key%2==0?'coupon-red':'coupon-yellow'}" href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}">
+							<div class="coupon-left">
+								<h5>{$vo.vu_name}</h5>
+								<p>{$vo.vu_description|msubstr=###,0,30}</p>
+							</div>
+							<div class="coupon-right">
+								<h5>立即领取</h5>
+								<p class="coupon-validity">有效期至：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p>
+							</div>
+						</a>
+					</if>
+
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+	</div>
+
+<script src="__PUBLIC__/Mobile/default/Js/jquery.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+<script>
+$(function() {
+	$('#container').xpull({
+		'pullThreshold':150,
+	    'maxPullThreshold':0,
+	    'onPullEndFunc':function(){
+	    	window.location.reload();
+	    },
+	    'spinnerTimeout':2000
+	});
+
+	var mySlide = new Swiper('#banner', {
+		speed: 400,
+		pagination: '#banner-page',
+		autoplay: 5000,
+		autoplayDisableOnInteraction: false,
+		loop: true,
+		preloadImages: false,
+		lazyLoading: true
+	});
+});
+</script>
+
+<!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

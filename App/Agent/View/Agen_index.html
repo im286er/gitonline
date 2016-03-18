@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.table-list td img { display:block; margin:auto; }</style>
+</head>
+
+<body>
+
+<div id="main-body">
+	<div class="subnav">
+        <span class="on" onclick="addAgen()">添加代理商</span>
+        <if condition="isset($_GET['pid']) and !empty($_GET['pid'])">
+            <a href="{:U('/Agen/index', '', true)}" style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">返回列表</a>
+        <else/>
+            <span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;">代理商列表</span>
+        </if>
+        <a href="{:U('/Agen/downloadAgents')}" style="margin-left:15px;font-size:12px;line-height:38px;">导出数据</a>
+	</div>
+
+    <div class="search_list" id="SearchForm">
+    	<form name="search" action="__ACTION__">
+            <label class="fl">企业/个人全称：</label>
+            <input type="text" autocomplete="off" placeholder="企业/个人全称" class="user_input fl" value="{$Think.get.keyword}" name="keyword" />&nbsp;
+            <select name="arank" class="fl">
+            	<option value="" <if condition="!isset($_GET['arank']) || $_GET['arank']==''">selected="selected"</if>>代理商等级</option>
+            	<if condition="$addressApid=='p'">
+                    <option value="c" <if condition="isset($_GET['arank']) && $_GET['arank']=='c'">selected="selected"</if>>市级代理</option>
+                	<option value="q" <if condition="isset($_GET['arank']) && $_GET['arank']=='q'">selected="selected"</if>>区级代理</option>
+                	<option value="g" <if condition="isset($_GET['arank']) && $_GET['arank']=='g'">selected="selected"</if>>个人代理</option>
+                <elseif condition="$addressApid=='c'"/>
+                    <option value="q" <if condition="isset($_GET['arank']) && $_GET['arank']=='q'">selected="selected"</if>>区级代理</option>
+                	<option value="g" <if condition="isset($_GET['arank']) && $_GET['arank']=='g'">selected="selected"</if>>个人代理</option>
+                <elseif condition="$addressApid=='q'"/>
+                    <option value="g" <if condition="isset($_GET['arank']) && $_GET['arank']=='g'">selected="selected"</if>>个人代理</option>
+                </if>
+            </select>&nbsp;
+            <input type="submit" value="搜索" class="button fl" name="search" />
+    	</form>
+    </div>
+
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                    	<th width="3%"><input type="checkbox" id="checkbox" onclick="selectAll('bid[]');"></th>
+                        <th width="3%">编号</th>
+                        <th width="20%" style="text-align:left;">企业/个人全称</th>
+                        <th width="10%">代理商等级</th>
+                        <th width="13%" style="text-align:left;">代理区域</th>
+                        <th width="5%">联系人姓名</th>
+                        <th width="8%">联系人电话</th>
+                        <th width="10%">开通时间</th>
+                        <th width="5%">账户状态</th>
+                        <th>操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                	<volist name="agentsList" id="v">
+                        <tr id="CdelAgen_{$v.id}">
+                        	<td><input type="checkbox" name="bid[]" value="{$v.id}"></td>
+                            <td>{$v.id}</td>
+                            <td style="text-align:left;">{$v.anickname}</td>
+                            <td>
+                                <switch name="v['arank']" >
+                                    <case value="p">省级代理</case>
+                                    <case value="c">市级代理</case>
+                                    <case value="q">区级代理</case>
+                                    <case value="g">个人代理</case>
+                                </switch>
+                            </td>
+                            <td style="text-align:left;">{$v.aid|get_address_byid}</td>
+                            <td>{$v.acontactsname}</td> 
+                            <td>{$v.acontactstel}</td>
+                            <td>{$v.mregdate}</td> 
+                            <td style="cursor:pointer;" onclick="hosAgen(this)" id="TD_AGENT_STATUS_{$v.id}" data-id="{$v.id}" data-value="{$v.mstatus}"><img src="__PUBLIC__/Images/status_{$v.mstatus}.gif" /></td>
+                            <td>
+                                <eq name="v.count" value="0">
+                                    <a href="javascript:void(0);" style="color:#aaa;">查看子代理</a> |
+                                <else/>
+                                    <a href="{:U('/Agen/index', array('pid'=>$v['id']), true)}">查看子代理</a> |
+                                </eq>
+                                <a href="javascript:lookAgenInfo('{$v.id}');">预览</a> |
+                                <a href="javascript:editAgen('{$v.id}');">修改</a> |
+                            
+		 						<if condition="$v['mpwd']=='ff92a240d11b05ebd392348c35f781b2'">  
+		   							<a href="javascript:;">已重置</a>
+        						<else />		  
+									<a href="javascript:;" onclick="hosmAgen(this)" id="{$v.mid}" data-id="{$v.mid}">重 &nbsp; 置</a>
+								</if>
+                        	</td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delAgen('')" value=" 禁用 " name="dosubmit" class="button" />
+		    </div>
+            <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+
+//添加代理商
+function addAgen() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 620,
+		title : '添加代理商',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Agen/add", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//修改代理商
+function editAgen( id ) {
+	if( !id ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 710,
+		height: 640,
+		title : '修改代理商',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Agen/edit/id/'+id+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//预览代理商
+function lookAgenInfo( id ) {
+    KindeditorDialog = KindEditor.dialog({
+        width : 700,
+        height: 540,
+        title : '预览',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Agen/preview/id/'+id+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });
+}
+
+//批量禁用代理商
+function delAgen( bid ) {
+	$("input[name='bid[]']").each(function(index, element) { if($(this).is(":checked")) bid = $(this).val()+','+bid; });
+    bid = bid.substr(0, bid.length-1);
+	if( !bid || !confirm('确实要禁用所选代理商吗？') ) return false;
+    $.get("{:U('/Agen/agentDel', '', true)}", {id:bid, mstatus:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(bid.split(','), function(key, value) { 
+            $("#TD_AGENT_STATUS_"+value).attr("data-value", '0').children("img").attr("src", "/Public/Images/status_0.gif");
+            $("input[type='checkbox']").attr("checked", false); 
+        })
+    })  
+}
+
+//单独禁用或解禁代理商
+function hosAgen( obj ) {
+    var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+    if( !dataId || dataValue!=1 ) return false;
+    if( confirm('确实要禁用此代理商吗') ) {
+        $.get("{:U('/Agen/agentDel', '', true)}", {id:dataId, mstatus:1}, function(data) {
+            if(parseInt(data)==0) return false;
+            if(dataValue=='1') {
+                $(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+            }
+        })
+    }
+}
+
+//重置密码
+function hosmAgen( obj ) {
+    var dataId=$(obj).attr('data-id');  
+    if( !dataId ) return false;
+    if( confirm('确实要重置代理商的账户密码，一旦重置 此代理商的密码将回到初始值 000000 ') ) {  
+        $.get("/Agen/updateMpwd", {mid:dataId}, function(data) {       
+            if(parseInt(data)==0) {alert("修改失败");}    
+			if(parseInt(data)==1){alert("密码重置成功!默认：000000");$(obj).css("color","#ccc");$(obj).html("已重置");}   
+           
+        })
+    }
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

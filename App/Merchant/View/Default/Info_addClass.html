@@ -1,0 +1,48 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<style type="text/css">.modal-content .set > input[type="text"] { width:260px; }</style>
+<div class="reveal-modal" style="display:block; border:none;">
+    <h3>添加分类 <span class="close" id="AddMenu_close">×</span></h3>
+    <div class="modal-content">
+        <div class="text-center Sort">
+            <p>分类名称不多于6个汉字或12个字母：</p>
+            <input type="text" value="" style="width:224px;" id="AddMenu_Value"><br>
+            <input type="button" value="保存" class="btn btn-pwd" id="AddMenu_Save">
+            <input type="button" value="取消" class="btn btn-hui" id="AddMenu_Cancl">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function() {
+	var ctype='{$Think.get.ctype}', sid='{$sid}';
+	
+	if( !ctype ) {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	}
+	
+	//取消或关闭
+	$("#AddMenu_close,#AddMenu_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	
+	//提交信息
+	$("#AddMenu_Save").click(function() {
+		var value = $("#AddMenu_Value").val();
+		if( !ctype || !value ) { alert("参数出现错误"); return false; }
+		
+		$.post('__ACTION__', {cname:value, ctype:ctype, sid:sid}, function(data) {
+			if( parseInt(data) != 0 ) {
+				var PwindowObj = window.parent.document.getElementById('ClassList');
+				$(PwindowObj).load("/Info/ajaxClass/sid/"+sid+"/ctype/"+ctype+".html");
+				
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+			} else { alert("添加失败"); }
+		})
+	})
+});
+</script>
+</block>

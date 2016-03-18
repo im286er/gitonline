@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<style type="text/css">
+* { margin:0px; padding:0px; font-size:12px; }
+#dialog-main-body { padding:5px 10px; overflow-x:hidden; overflow-y:auto; }
+li { min-height:60px; display:block; overflow:hidden; margin:5px 0px; padding:10px 15px; border:1px solid #ccc; }
+li.l { background:#d7d7d7; }
+li.l .img { float:left; display:block; width:60px; height:60px; overflow:hidden; margin-right:10px; }
+li.l .txt { float:left; width:550px; height:60px; }
+li.l .txt span { float:left; display:block; height:24px; line-height:24px; margin-right:15px; }
+li.l .txt p { clear:both; display:block; line-height:24px; }
+li.r .img { float:right; display:block; width:60px; height:60px; overflow:hidden; margin-left:10px; }
+li.r .txt { float:right; width:550px; height:60px; text-align:right; }
+li.r .txt span { float:right; display:block; height:24px; line-height:24px; margin-left:15px; }
+li.r .txt p { clear:both; display:block; line-height:24px; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+	<div class="main-body">
+		<ul>
+        	<volist name="opinion" id="op">
+            <if condition="$op['op_type'] eq '1' or $op['op_type'] eq '0'">
+                <li class="l">
+                    <div class="img"><img src="{$op.avatar|default='/Public/Images/nophoto.gif'}" width="60" height="60" /></div>
+                    <div class="txt">
+                        <span><b>{$op.u_name}</b></span><span>{$op.op_addtime|date='Y-m-d H:i',###}</span>
+                        <p>{$op.op_content}</p>
+                    </div>
+					</li>
+               <li class="1">
+
+
+                    <div class="txt">
+                    <span><b>{$op.sname}</b></span>
+                     <p>回复内容 :{$op.op_replytxt}</p> 
+                    </div>
+
+			   </li>
+
+            <elseif condition="$op['op_type'] eq '2'"/>
+                <li class="r">
+                    <div class="img"><img src="{$op.avatar|default='/Public/Images/nophoto.gif'}" width="60" height="60" /></div>
+                    <div class="txt">
+                        <span>{$op.op_addtime|date='Y-m-d H:i',###}</span> <span><b>{$op.mnickname}</b></span>
+                        <p>{$op.op_content}</p>
+                    </div>
+
+                </li>
+               <li class="1">
+
+
+                    <div class="txt">
+                    <span><b>{$op.sname}</b></span>
+                     <p>回复内容 :{$op.op_replytxt}</p> 
+                    </div>
+
+			   </li>
+            </if>
+            </volist>
+        </ul>
+	</div>
+</div>
+</body>
+</html>

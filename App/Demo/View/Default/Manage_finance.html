@@ -1,0 +1,107 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title">财务管理</h2>
+    <div class="prompt-div clearfix">
+    	<i class="prompticon"></i><b id="MyBdzhInfo">{$mbdzh|default='尚未设置提现账户'}</b>
+        <input type="button" class="btn btn-blue pull-right" value="设置"  id="btnUser" onClick="DialogFrameFun(465, 305, '{:U('/Manage/editifo@ce', '', true, true)}')">
+    </div>
+    <div class="mian padding">
+        <div class="content_a">
+            <h3>账户明细 <span class="c_a2a2a6">申请提现后半个工作日内到账，非工作日顺延</span><input type="button" value="提现" onClick="alert('账户金额为0')"></h3>
+            <ul class="clearfix ul-cell">
+                <li><p>0.00</p>可提现金额</li>
+                <li class="last"><p>0.00</p>账户金额</li>
+            </ul>
+        </div>
+        <div class="content_a top">
+            <h3>提现记录</h3>
+            <table class="table border-b">
+                <tr>
+                    <th width="150px">创建时间</th>
+                    <th width="90px">结算收益</th>
+                    <th width="90px">技术服务费</th>
+                    <th width="90px">交易手续费</th>
+                    <th width="100px">实际提现金额</th>
+                    <th width="110px">提现账户</th>
+                    <th width="100px">真实姓名</th>
+                    <th width="80px">状态</th>
+                </tr>
+                <volist name="falist" id="f">
+                <tr>
+                    <td>{$f.bstime}</td>
+                    <td>{$f.bmention}</td>
+                    <td>{$f.bjs}</td>
+                    <td>{$f.bjy}</td>
+                    <td>{$f.bsj}</td>
+                    <td>{$f.bdzh}</td>
+                    <td>{$f.msurname}</td>
+                    <td>
+                    	<if condition="$f['btype'] eq 1">
+                        	<a href="javascript:void(0);" class="c_5da3ea">已处理</a>
+                        <elseif condition="$f['btype'] eq 2"/>
+                        	<a href="javascript:void(0);" class="c_5da3ea">无效</a>
+                        <elseif condition="$f['btype'] eq 0"/>
+                        	<a href="javascript:void(0);" class="c_5da3ea">待处理</a>
+                        </if>
+                    </td>
+                </tr>
+                </volist>
+            </table>
+            <if condition="$page">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='/Manage/finance/page/'+this.value">{$pages}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+
+<!-- 弹出层 -->
+<div class="modal" id="modal">
+    <div class="reveal-modal">
+        <h3>操作提示 <span class="close">×</span></h3>
+        <div class="modal-content">
+            <div class="set top10">
+                <label>可提现现金</label>
+                <span>1111元</span>
+            </div>
+            <div class="set">
+                <label>提现金额</label>
+                <input type="text">
+                <span>元</span>
+            </div>
+            <div class="set">
+                <label>手机验证</label>
+                <span>137****1225</span>
+                <input type="button" value="发送验证" class="btn btn-blue">
+            </div>
+            <div class="set">
+                <label>验证码</label>
+                <input type="text">
+            </div>
+            <div class="set">
+                <label></label>
+                <input type="button" value="确认" class="btn btn-pwd">
+                <input type="button" value="取消" class="btn btn-hui">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function DialogFrameFun(width, height, src) {
+	document.getElementById('DialogFrame').src = src;
+	document.getElementById('DialogFrame').width = width;
+	document.getElementById('DialogFrame').height = height;
+	$("#DialogFrameModel").children("div.DialogFrameModel").width(width);
+	$("#DialogFrameModel").children("div.DialogFrameModel").animate({top:"100px"}).end().fadeIn();
+}
+</script>
+</block>

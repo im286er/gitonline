@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.subnav a.on { font-size:12px; line-height:38px; border-bottom-color:red; }
+#CountInfo { background:#DDD; height:40px; line-height:40px; margin-bottom:10px; color:#06F; }
+label input { position:relative; top:2px; }
+form p { margin:10px 0px; } .button { border-radius:5px; }
+</style>
+</head>
+
+<body>
+
+<div id="main-body">
+	<div style="margin:15px;font-size:16px;">
+        <form method="post" action="__ACTION__">
+        	<input type="hidden" value="{$Think.get.uid}" name="uid" />
+            此商家为：
+            <label><input type="checkbox" <if condition="$userinfo['flu_gagentid']">checked</if> name="isagent" value="1" id="AgentID" /> 代理商</label>&#12288;
+            <label><input type="checkbox" <if condition="$userinfo['flu_gjid']">checked</if> name="ismerchant" value="1" id="MerchantID" /> 商家</label>
+            <p>
+            	选择代理：
+            	<select name="agentid" id="SelectAgentId">
+                	<if condition="$agentinfo">
+                    	<option value="{$agentinfo.id}">{$agentinfo.anickname}</option>
+                    <else/>
+                    	<option value="">所属代理商</option>
+                    </if>
+                </select>
+            </p>
+            <p>
+            	选择商家：
+                <select id="SelectMerchantId">
+                	<if condition="$agentinfos">
+                    	<option value="{$agentinfos.id}">{$agentinfos.anickname}</option>
+                    <else/>
+                    	<option value="">所属代理商</option>
+                    </if>
+                </select>
+                
+            	<select name="jid" id="SelectMerchantTid">
+                    <if condition="$merchantinfo">
+                    	<option value="{$merchantinfo.jid}">{$merchantinfo.mnickname}</option>
+                    <else/>
+                    	<option value="">所属商家</option>
+                    </if>
+                </select>
+            </p>
+            
+            <p><input type="submit" value="提交" class="button" name="search" />  </p>
+        </form>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript">
+$("#AgentID").click(function() {
+	if( $(this).is(":checked") ) {
+		$("#SelectAgentId").load("{:U('/User/ajaxAgent')}");
+	} else {
+		$("#SelectAgentId").html('<option>所属代理商</option>');
+	}
+})
+
+$("#MerchantID").click(function() {
+	if( $(this).is(":checked") ) {
+		$("#SelectMerchantId").load("{:U('/User/ajaxAgent')}");
+	} else {
+		$("#SelectMerchantId").html('<option>所属代理商</option>');
+		$("#SelectMerchantTid").html('<option>所属商家</option>');
+	}	
+})
+
+$("#SelectMerchantId").change(function() {
+	if( $(this).val() ) {
+		$("#SelectMerchantTid").load("{:U('/User/ajaxMerchant')}", {agentid:$(this).val()} );
+	} else {
+		$("#SelectMerchantTid").html('<option>所属商家</option>');
+	}	
+})
+
+
+
+</script>
+</body>
+</html>

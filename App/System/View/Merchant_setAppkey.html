@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } td select { width:258px; }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:240px; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+            <input type="hidden" value="{$info.jid}" name="info[jid]" />
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr>
+                            <th width="100">APPID</th>
+                            <td><input type="text" autocomplete="off" name="info[gt_appid]" value="{$info.gt_appid}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th width="100">APPKEY</th>
+                            <td><input type="text" autocomplete="off" name="info[gt_appkey]" value="{$info.gt_appkey}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th width="100">APPSECRET</th>
+                            <td><input type="text" autocomplete="off" name="info[gt_appsecret]" value="{$info.gt_appsecret}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th width="100">MASTERSECRET</th>
+                            <td><input type="text" autocomplete="off" name="info[gt_mastersecret]" value="{$info.gt_mastersecret}" class="user_input" /></td>
+                        </tr>
+                    </table>
+                    <div class="buttonDiv" align="left">
+                        <button type="submit" class="submit_btn" style="margin-left:120px;">提交</button>&#12288;
+                        <button type="reset" class="reset_btn">重写</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

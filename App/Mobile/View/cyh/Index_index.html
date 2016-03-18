@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>{$merchant.mabbreviation}</title>
+    <link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/cyh/css/cyh.css?v=201509091440">
+	<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+</head>
+<body class="cyh-bg">
+	<header class="header cyh-header">
+		<h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+	</header>
+	<div class="container cyh" id="container">
+		<section class="slide swiper-container cyh-banner" id="banner">
+        	<empty name="banner_list">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" > <img src="__PUBLIC__/Mobile/cyh/img/demo/cyh_banner_01.jpg" data-src="__PUBLIC__/Mobile/netbar/img/demo/netbar_banner_01.jpg" class="swiper-lazy" alt="" /> </div>
+                </div>
+            <else />
+                <if condition="count($banner_list) eq 1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slider"> <a href="{$banner_list[0]['burl']}"><img  data-src="{$banner_list[0]['bimg']}" src="{$banner_list[0]['bimg']}" class="swiper-lazy" style="width:100%;height:auto;"/></a> </div>
+                    </div>
+                <else />
+                    <div class="swiper-wrapper">
+                        <volist name="banner_list" id="vo" >
+                            <div class="swiper-slide"><a href="{$vo.burl}"><img src="{$vo.bimg}" data-src="{$vo.bimg}" alt="" class="swiper-lazy"></a></div>
+                        </volist>
+                    </div>
+                    <div class="swiper-pagination 	cyh-banner-page" id="banner-page">
+                        <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                    </div>
+                </if>
+            </empty>
+        </section>
+        <section class="cyh-nav">
+        <div class="slide swiper-container" id="nav">
+            <div class="swiper-wrapper">
+				
+		
+				<if condition="in_array('InfoMenu1Name',$setting_array) OR !$setting_array">
+                <!-- 下订单-->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$module1icon}" data-src="{$module1icon}" alt="">
+                        <span>{$module1name}</span>
+                    </a>
+                </div>
+				</if>
+				<if condition="in_array('InfoMenu2Name',$setting_array) OR !$setting_array">
+                <!-- 预约 -->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$module2icon}" data-src="{$module2icon}" alt="">
+                        <span>{$module2name}</span>
+                    </a>
+                </div>
+				</if>
+				<if condition="in_array('InfoMenu3Name',$setting_array) OR !$setting_array">
+                <!-- 视频-->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$InfoMenu3Icon}" data-src="{$InfoMenu3Icon}" alt="">
+                        <span>{$InfoMenu3Name}</span>
+                    </a>
+                </div>
+				</if>
+				<if condition="in_array('WshopModuleName',$setting_array) OR !$setting_array">
+                <!-- 自定义连接-->
+                <div class="swiper-slide">
+                    <a href="{$WshopModuleLink}">
+                        <img class="swiper-lazy" src="{$WshopModuleIcon}" data-src="{$WshopModuleIcon}" alt="">
+                        <span>{$WshopModuleName}</span>
+                    </a>
+                </div>
+				</if>
+				<if condition="in_array('BoutiqueModuleName',$setting_array) OR !$setting_array">
+                <!-- 营销专题-->
+               <!--  <div class="swiper-slide">
+                    <a href="{:U('Mobile/Boutique/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$BoutiqueModuleIcon}" data-src="{$BoutiqueModuleIcon}" alt="">
+                        <span>{$BoutiqueModuleName}</span>
+                    </a>
+                </div>-->
+				</if>
+                <!-- 优惠券-->
+                <div class="swiper-slide">
+                    <a href="{$VoucherModuleLink}">
+                        <img class="swiper-lazy" src="{$VoucherModuleIcon}" data-src="{$VoucherModuleIcon}" alt="">
+                        <span>{$VoucherModuleName}</span>
+                    </a>
+                </div>
+                <!-- 最新活动-->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$NewModuleicon}" data-src="{$NewModuleicon}" alt="">
+                        <span>{$HdModuleName}</span>
+                    </a>
+                </div>
+
+                <!-- 最新资讯-->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/News/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$HdModuleIcon}" data-src="{$HdModuleIcon}" alt="">
+                        <span>{$NewModulename}</span>
+                    </a>
+                </div>
+				<if condition="in_array('ShopName',$setting_array) OR !$setting_array">
+                <!-- 门店介绍-->
+                <div class="swiper-slide">
+                    <a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$ShopMenuIcon}" data-src="{$ShopMenuIcon}" alt="">
+                        <span>{$ShopMenuName}</span>
+                    </a>
+                </div>
+				</if>
+				<if condition="in_array('InfoMenuAppDownName',$setting_array) OR !$setting_array">
+              <!--   <div class="swiper-slide">
+                    <a href="{:U('Mobile/App/index', array('jid'=>$jid))}">
+                        <img class="swiper-lazy" src="{$InfoMenuAppDownIcon|default='/Public/Mobile/default/img/ico_mart.png'}" data-src="{$InfoMenuAppDownIcon|default='/Public/Mobile/default/img/ico_mart.png'}" alt="">
+                        <span>{$InfoMenuAppDownName}</span>
+                    </a>
+                </div>-->
+				</if>
+            </div>
+            <div class="swiper-pagination cyh-nav-page" id="nav-page">
+                <span class="swiper-pagination-bullet"></span>
+                <span class="swiper-pagination-bullet"></span>
+                <span class="swiper-pagination-bullet"></span>
+            </div>
+        </div>
+        </section>
+        <?php  A('Advert')->loadtemp($jid, 'cyh', '1'); ?>
+    </div>
+    <script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script>
+    $(function() {
+        $('#container').xpull({
+            'pullThreshold':150,
+            'maxPullThreshold':0,
+            'onPullEndFunc':function(){
+                window.location.reload();
+            },
+            'spinnerTimeout':2000
+        });
+
+        var myBanner = new Swiper('#banner', {
+            speed: 400,
+            pagination: '#banner-page',
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            preloadImages: false,
+            lazyLoading: true
+        });
+        var mySlide = new Swiper('#nav', {
+            pagination: '#nav-page',
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            preloadImages: false,
+            lazyLoading: true
+        });
+    });
+    </script>
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+</body>
+</html>

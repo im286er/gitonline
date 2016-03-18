@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta id="eqMobileViewport" name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no" servergenerated="true">
+<title>{$confinfo2['title']}</title>
+
+<link rel="stylesheet" href="http://www.dishuos.com/Public/Yqx/static/css/eqShow-2.9.1_view.css"/>
+<div id='wx_pic' style='margin:0 auto;display:none;' ><img src="http://sj.dishuos.com/Public/Yqx/{$confinfo2['imgsrc']}"/></div>
+
+</head>
+<body>
+<div id="shareImage" style="display: none;">
+    <img src="http://sj.dishuos.com/Public/Yqx/{$confinfo2['imgsrc']}"/>
+</div>
+    
+<div id="ppitest" style="width:1in;visible:hidden;padding:0px"></div>
+<div class="p-index main phoneBox" id="con" style="display: none;"> 
+    <div class="top"></div>
+    <div class="phone_menubar"></div>
+    <div class="scene_title_baner" style="display: none">
+        <div class="scene_title"></div>
+    </div>
+    <div class="nr"> 
+        <div id="audio_btn" class="off">
+            <div id="yinfu"></div>
+            <audio loop src="" id="media" autoplay="" preload></audio>
+        </div>
+        <div id="loading" class="loading">
+            <div class="loadbox">
+                <div class="loadlogo"></div>
+                <div class="loadbg"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom"></div>
+</div>
+</body>
+<script type="text/javascript">
+	var PREFIX_URL =  "http://"+window.location.host+"/";
+	var PREFIX_S1_URL = "http://"+window.location.host+"/json/";
+	var PREFIX_S2_URL = "http://"+window.location.host+"/index.php";
+	var PREFIX_HOST = "http://"+window.location.host+"/index.php";
+	var PREFIX_FILE_HOST ="http://"+window.location.host+"/Public/Yqx/";
+	var CLIENT_CDN = "http://"+window.location.host+"/Public/Yqx/static/js/"; 
+	var clientWidth = document.documentElement.clientWidth;
+	var INTERVAL_OBJ = {};
+</script>
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.dishuos.com/Public/Yqx/static/js/eqShow.view.js"></script>
+<div  style="opacity:0; "></div>
+</html>

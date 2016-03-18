@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>{$merchant.mabbreviation}</title>
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/ktv/css/ktv.css">
+<script>
+var msystem = "{$msystem}";
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+
+<body class="bg-0d0d21 <eq name="runmode" value="macapp">ios</eq>">
+    <header class="header ktv-header">
+        <h1>{$merchant.mabbreviation}</h1>
+		<include file="Index:top"/>
+    </header>
+    <!-- <div id="wrapper">
+        <div id="scroller"> -->
+        <div class="container ktv" id="container">
+           	<section class="slide swiper-container" id="banner">
+                <empty name="banner_list">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><a href="#"><img class="swiper-lazy" src="" data-src="__PUBLIC__/Mobile/ktv/img/demo/ktv_banner_01.jpg" alt=""></a></div>
+                    </div>
+                <else />
+                    <if condition="count($banner_list) eq 1">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide"><a href="{$banner_list[0]['burl']}"><img class="swiper-lazy" src="" data-src="{$banner_list[0]['bimg']}" alt=""></a></div>
+                        </div>
+                    <else />
+                        <div class="swiper-wrapper">
+                            <volist name="banner_list" id="vo" >
+                                <div class="swiper-slide"><a href="{$vo.burl}"><img class="swiper-lazy" src="" data-src="{$vo.bimg}" alt=""></a></div>
+                            </volist>
+                        </div>
+                        <div class="swiper-pagination ktv-page" id="banner-page">
+                            <volist name="banner_list" id="vo" > <span class="swiper-pagination-bullet"></span> </volist>
+                        </div>
+                    </if>
+                </empty>
+            </section>
+            <section class="ktv-nav">
+                <ul class="clearfix">
+                    <li> <a href="{:U('Mobile/Choose/index', array('jid'=>$jid))}"> <img class="lazy" data-original="{$module1icon|default='/Public/Mobile/ktv/img/ktv_nav_01.png'}" alt=""> <span>{$module1name}</span> </a> </li>
+                    <li> <a href="{:U('Mobile/Seat/index', array('jid'=>$jid))}"> <img class="lazy" data-original="{$module2icon|default='/Public/Mobile/ktv/img/ktv_nav_02.png'}" alt=""> <span>{$module2name}</span> </a> </li>
+                    <li> <a href="{:U('Mobile/Shop/brand', array('jid'=>$jid))}"> <img class="lazy" data-original="{$ShopMenuIcon|default='/Public/Mobile/ktv/img/ktv_nav_03.png'}" alt=""> <span>{$ShopMenuName}</span> </a> </li>
+                    <li> <a href="{$WshopModuleLink}"> <img class="lazy" data-original="{$WshopModuleIcon|default='/Public/Mobile/default/img/ico_mart.png'}" alt=""> <span>{$WshopModuleName}</span> </a> </li>
+                    <li> <a href="{:U('Mobile/Video/index', array('jid'=>$jid))}"> <img class="lazy" data-original="{$InfoMenu3Icon|default='/Public/Mobile/ktv/img/ktv_nav_05.png'}" alt=""> <span>{$InfoMenu3Name}</span> </a> </li>
+                    <li><!--  <a href="{:U('Mobile/App/index', array('jid'=>$jid))}"> <img class="lazy" data-original="{$InfoMenuAppDownIcon|default='/Public/Mobile/ktv/img/ktv_nav_06.png'}" alt=""> <span>{$InfoMenuAppDownName}</span> </a>--> </li>
+                </ul>
+            </section>
+
+            <!--第一个广告位 -->
+            <?php  A('Advert')->loadtemp($jid, 'ktv', '1'); ?>
+
+            <!--第二个广告位 -->
+            <?php  A('Advert')->loadtemp($jid, 'ktv', '2'); ?>
+
+           <section class="ktv-news">
+                <div class="sec-title">
+                    <h3>{$HdModuleName}</h3>
+                    <a href="{:U('Mobile/Active/index', array('jid'=>$jid))}"><i class="ico ico-right"></i></a>
+                </div>
+                <div class="sec-body">
+                    <ul class="clearfix">
+                        <empty name="active_list">
+                            <li><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}"> <img class="lazy" data-original="/Public/Mobile/ktv/img/demo/ktv_news_01.png" alt=""> </a></li>
+						<else />
+                            <volist name="active_list" id="vo"  offset="0" length="6"  key="k">
+                            <li> <a href="{:U('Mobile/Active/info', array('jid'=>$jid,'av_id'=>$vo[av_id],'from_index'=>1))}"> <img class="lazy" data-original="{$vo.av_img}" alt=""> </a> </li>
+                            </volist>
+                        </empty>
+                    </ul>
+                </div>
+            </section>
+            <section class="ktv-coupon">
+                <div class="sec-title">
+                    <h3>{$VoucherModuleName}</h3>
+                    <a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}"><i class="ico ico-right"></i></a>
+                </div>
+                <div class="sec-body">
+                	<ul>
+                        <li>
+                            <if condition="$coupon_list[0]['vu_name']">
+                            <a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[0][vu_id],'from_index'=>1))}">
+                            <else />
+                            <a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                            </if>
+							<img class="lazy" src="" data-original="{$coupon_list.0.vu_img|default='/Public/Mobile/ktv/upload/coupon_01.png'}" alt="">
+							<if condition="$coupon_list[0]['vu_name']">
+								<div class="ktv-cp-mask">
+                                	<p class="ktv-cp-txt">{$coupon_list.0.vu_name|default=''}</p>
+                                </div>
+                           	</if>
+							</a>
+                        </li>
+                        <li>
+                            <if condition="$coupon_list[1]['vu_name']">
+                            <a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$coupon_list[1][vu_id],'from_index'=>1))}">
+                            <else />
+                            <a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">
+                            </if>
+							<img class="lazy" src="" data-original="{$coupon_list.1.vu_img|default='/Public/Mobile/ktv/upload/coupon_02.png'}" alt="">
+							<if condition="$coupon_list[1]['vu_name']">
+								<div class="ktv-cp-mask">
+                                    <p class="ktv-cp-txt">{$coupon_list.1.vu_name|default=''}</p>
+                                </div>
+							</if>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+            </section>
+            </div>
+<!--     	</div>
+    </div> -->
+<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/xpull.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/jquery.lazyload.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+<script>
+$(function() {
+    $('#container').xpull({
+        'pullThreshold':150,
+        'maxPullThreshold':0,
+        'onPullEndFunc':function(){
+            window.location.reload();
+        },
+        'spinnerTimeout':2000
+    });
+
+    var bannerSlide = new Swiper('#banner', {
+        speed: 400,
+        pagination: '#banner-page',
+        autoplay: 4000,
+        autoplayDisableOnInteraction: false,
+        loop: true,
+        preloadImages: false,
+        lazyLoading: true
+    });
+})
+
+    $('img.lazy').lazyload({
+        container: $(".container"),
+        threshold: 0,
+        effect: 'fadeIn',
+        skip_invisible: false
+    });
+</script>
+
+<!-- 公共底部文件 -->
+   <include file="Index:footer"/>
+   <include file="Public:footer"/>
+
+</body>
+</html>

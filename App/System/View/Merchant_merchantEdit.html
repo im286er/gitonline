@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.table-form label input { position:relative; top:2px; } .buttonDiv .reset_btn { margin:0 15px; }
+td ul li { float:left; margin:3px 12px 3px 0px; cursor:pointer; position:relative; }
+td ul li a { position:absolute; top:3px; right:3px; background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
+td ul li a:hover { background:url("__PUBLIC__/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
+input.user_input, input.user_input_hover, input.user_input_focus, input.user_input_error { width:180px; }
+div.main-body { width:690px; overflow:hidden; } div.main-body #ScrollForm { position:relative; top:0px; left:0px; overflow:hidden; }
+</style>
+</head>
+
+<body>
+<div id="dialog-main-body">
+    <div class="main-body">
+        <form method='post' id="form" name="form" action="__ACTION__">
+        	<input type="hidden" value="{$merchant.jid}" name="info[jid]" />
+        	<input type="hidden" value="{$merchant.jid}" name="app[jid]" />
+            <div id="ScrollForm">
+                <div class="divSetting">
+                    <table class="table-form" border="0">
+                        <tr>
+                            <th width="100">商户全称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="infomnickname" name="info[mnickname]" value="{$merchant.mnickname}" class="user_input" /></td>
+                            <th width="80">商户简称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" name="info[mabbreviation]" value="{$merchant.mabbreviation}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>所在城市</th>
+                            <td colspan="3">
+                                <if condition="isset($addressArrs[0])">
+                                <select  style="width:180px;" disabled="disabled"><option value="">{$addressArrs.0}</option></select>
+                                </if>
+                                <if condition="isset($addressArrs[1])">
+                                <select  style="width:173px;" disabled="disabled"><option value="">{$addressArrs.1}</option></select>
+                                </if>
+                                <if condition="isset($addressArrs[2])">
+                                <select  style="width:172px;" disabled="disabled"><option value="">{$addressArrs.2}</option></select> 
+                                </if>
+                            	<input type="hidden" value="{$merchant.mcity}" name="info[mcity]" id="ShopScity" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>所属代理商<b style="color:red">*</b></th>
+                            <td>
+                                <select disabled="disabled" style="width:198px;">
+                                    <option value="">{$merchant.anickname}</option>
+                                </select>
+                                <input type="hidden" value="{$merchant.magent}" name="info[magent]" />
+                            </td>
+                            <th>所属行业</th>
+                            <td>
+                            	
+                                <select disabled="disabled" style="width:198px;">
+                                    <option value="">{$merchant.vname}</option>
+                                </select>
+                                <input type="hidden" value="{$merchant.vid}" name="info[vid]" />
+                                
+                                <!--
+                                <select name="info[vid]" style="width:198px;">
+                                    <option value="">选择所属行业</option>
+                                    <volist name="vocation" id="v">
+                                    <option <if condition="$v['v_id']==$merchant['vid']">selected="selected"</if> value="{$v.v_id}"><neq name="v.v_pid" value="0">&nbsp;&nbsp;&nbsp;&nbsp;</neq>{$v.v_title}</option>
+                                    </volist>                                    
+                                </select>
+                                -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>法人名称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="infomlpname" name="info[mlpname]" value="{$merchant.mlpname}" class="user_input" /></td>
+                            <th>法人电话<b style="color:red">*</b></th>
+                            <td><input type="text" maxlength="11" autocomplete="off" id="infomlptel" name="info[mlptel]" value="{$merchant.mlptel}" class="user_input" /></td>
+                        </tr>
+                        <tr>
+                            <th>APP名称<b style="color:red">*</b></th>
+                            <td><input type="text" autocomplete="off" id="appname" name="app[appname]" value="{$merchant.appname}" class="user_input" /></td>
+                            <th>店铺Logo<b style="color:red">*</b></th>
+                            <td>
+                            	<input type="text" readonly="readonly" autocomplete="off" id="applogo" name="app[applogo]" style="width:96px;" value="{$merchant.applogo}" class="user_input" />
+                                <input type="button" onclick="applogoUpload('', 'applogo')" class="button" value="上传Logo" style="border-radius:3px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>绑定账户</th>
+                            <td colspan="3">
+                            	<input type="text" placeholder="商家提现时所需要的账户" autocomplete="off" name="member[mbdzh]" value="{$merchant.mbdzh}" class="user_input" />
+                                <input type="hidden" value="{$merchant.mid}" name="member[mid]" />
+                            </td>
+                        </tr>
+                        <tr>
+                        	<th>门店模板<b style="color:red">*</b></th>
+                            <td>
+                            	<select name="info[theme]" id="mtemplate" style="width:198px;">
+                                    <option value="">选择模板</option>
+                                    <volist name="theme" id="t">
+                                    <option <if condition="$t['t_sign']==$merchant['theme']">selected="selected"</if> value="{$t.t_sign}">{$t.t_name}</option>
+                                    </volist>
+                                </select>
+                            </td>
+                        	<th>身 份 证<b style="color:red">*</b></th>
+                            <td><input type="text" maxlength="18" id="IdCard" autocomplete="off"  value="{$merchant.idcard}" class="user_input" name="member[idcard]" disabled /></td>  
+                        </tr>
+                        <tr>
+                           <th>相关证件<span>建议上传尺寸在200kb以内</span></th>
+                            <td colspan="3">
+                                <ul>
+                                    <li><b style="color:red;">*</b><img id="ImageSrcSfzz" data-id="{$merchant.mcertificates.sfzz}" src="{$merchant.mcertificates.sfzz|default='/Public/Images/image_04.gif'}" width="97" height="113" /><input type="hidden" id="ImageSfzz" name="image[sfzz]" value="{$merchant.mcertificates.sfzz}" /> </li>
+                                    <li ><b style="color:red;">*</b><img id="ImageSrcSfzb" data-id="{$merchant.mcertificates.sfzb}" src="{$merchant.mcertificates.sfzb|default='/Public/Images/image_05.gif'}" width="97" height="113" /><input type="hidden" id="ImageSfzb" name="image[sfzb]" value="{$merchant.mcertificates.sfzb}" /> </li>
+                                    <li><img id="ImageSrcYyzz" data-id="{$merchant.mcertificates.yyzz}" onclick="KindeditorUpload('ImageSrcYyzz', 'ImageYyzz');cc(this)" src="{$merchant.mcertificates.yyzz|default='/Public/Images/image_01.gif'}" width="97" height="113" /><input type="hidden" id="ImageYyzz" name="image[yyzz]" value="{$merchant.mcertificates.yyzz}" /> <a href="javascript:ResetValue('Yyzz', 1);">&nbsp;</a></li> 
+                                    <li><img id="ImageSrcSwdj" data-id="{$merchant.mcertificates.swjd}" onclick="KindeditorUpload('ImageSrcSwdj', 'ImageSwdj');cc(this)" src="{$merchant.mcertificates.swdj|default='/Public/Images/image_02.gif'}" width="97" height="113" /><input type="hidden" id="ImageSwdj" name="image[swdj]" value="{$merchant.mcertificates.swdj}" /> <a href="javascript:ResetValue('Swdj', 2);">&nbsp;</a></li>
+                                    <li style="margin-right:0px;"><img id="ImageSrcZzjg" data-id="{$merchant.mcertificates.zzjg}" onclick="KindeditorUpload('ImageSrcZzjg', 'ImageZzjg');cc(this)" src="{$merchant.mcertificates.zzjg|default='/Public/Images/image_03.gif'}" width="97" height="113" /><input type="hidden" id="ImageZzjg" name="image[zzjg]" value="{$merchant.mcertificates.zzjg}" /> <a href="javascript:ResetValue('Zzjg', 3);">&nbsp;</a></li> 
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                
+                    <div class="buttonDiv" align="center">
+                        <button type="reset" class="reset_btn">重写</button>
+                        <button type="submit" class="submit_btn">提交</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Formvalidator/formValidator.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:50, });
+
+function KindeditorUpload(ImageSrc, InputVal) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				if(ImageSrc) $('#'+ImageSrc).attr("src", url); $('#'+InputVal).val(url); editor.hideDialog();
+			}
+		});
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K， 图片格式为 jpg,jpeg,png</div>');
+	});
+}
+//上传applogo
+var logoeditor = KindEditor.editor({ uploadJson:"{:U('/Merchant/kindeditorAppUpload', '', true)}", imageUploadLimit:50, });
+function applogoUpload(ImageSrc, InputVal) {
+	logoeditor.loadPlugin('image', function() {
+		logoeditor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				if(ImageSrc) $('#'+ImageSrc).attr("src", url); $('#'+InputVal).val(url); logoeditor.hideDialog(); 
+			}
+		});
+
+$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过10kb， 图片格式为 jpg,jpeg,png,gif,icon ,建议尺寸180X180</div>');
+	});
+}
+function ResetValue(ImageId, ImageName) {
+    $("#ImageSrc"+ImageId).attr("src", '/Public/Images/image_0'+ImageName+'.gif'); $("#Image"+ImageId).val('');
+}
+
+function cc( obj ) {
+	
+		var url=$(obj).attr('data-id');
+		 if(!url==""){
+	  var flag = window.open("http://www.dishuos.com/"+url, "_blank");   
+		
+			  if(flag==null) {  
+				 alert("您的浏览器启用弹出窗口过滤功能！\n\n请暂时先关闭此功能！") ;  
+			  } 
+	}else{
+	
+	//location.href=url;  
+	
+	}
+} 
+
+$(document).ready(function(e) {
+	$.formValidator.initConfig({ formID:"form", submitOnce:false, onError:function(msg, obj, errorlist) { alert(msg); return false; }, ajaxPrompt:'有数据正在异步验证，请稍等...' });
+    $("#infomnickname").formValidator({onFocus:"请输入商户全称"}).inputValidator({min:1, onError:"商户全称不能为空"});
+	$("#infomlpname").formValidator({onFocus:"请输入法人名称"}).inputValidator({min:1, onError:"法人名称不能为空"});
+    $("#infomlptel").formValidator({onFocus:"请输入法人电话"}).regexValidator({regExp:["mobile", "tel"], dataType:"enum", onError:"电话格式输入不正确"}).inputValidator({min:1, onError:"法人电话不能为空"});
+	$("#ImageSfzz").formValidator({onFocus:"请上传身份证正面照"}).inputValidator({min:1, onError:"身份证正面照不能为空"});
+	$("#ImageSfzb").formValidator({onFocus:"请上传身份证背面照"}).inputValidator({min:1, onError:"身份证背面照不能为空"});
+	$("#appname").formValidator({onFocus:"请输入App名称"}).inputValidator({min:1, onError:"App名称不能为空"});
+	$("#applogo").formValidator({onFocus:"请上传店铺Logo"}).inputValidator({min:1, onError:"店铺Logo不能为空"});
+	$("#IdCard").formValidator({onFocus:" "}).regexValidator({regExp:"(^[0-9]{15}$)|(^[0-9]{17}([0-9]|X|x)$)", onError:"身份证号格式不正确"}).inputValidator({min:1, onError:"身份证号不能为空"})
+	$("#infomtc").formValidator({onFocus:"请输入代理商提成比例"}).inputValidator({min:1, onError:"请输入代理商提成比例"}).functionValidator({ 
+		fun: function(val, elem) {
+			if( !/^(([0-9]{1,2}\.[0-9]{1,3})|([0-9]{1,3}))$/.test( val ) ) return "提现比例出现错误";
+			if( parseFloat(val) >=100 || parseFloat(val)<0 ) return "提现比例出现错误"; return true;
+		}
+	});
+	$("#mtemplate").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请选择商家选用模板"})
+})
+</script>
+</body>
+</html>

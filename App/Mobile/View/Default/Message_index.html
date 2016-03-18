@@ -1,0 +1,23 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.act-title { margin-top:1.0rem; }
+#message { line-height:2.0rem; }
+#message p { text-indent:2em; margin-bottom:1rem; }
+</style>
+
+<div class="main container p-tb" id="activity" style="padding-left:1.5rem; padding-right:1.5rem; padding-top:0rem;">
+	<h6 class="act-title">
+    	{$message.ptitle|msubstr=###,0,10}<br />
+        <span style="font-size:14px;">{$message.ptime}</span>
+    </h6>
+
+    <div style="height:20px;"></div>
+    <div id="message">
+    	{$message.pcontent}    
+    </div>
+</div>
+
+
+
+</block>

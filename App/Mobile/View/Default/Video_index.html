@@ -1,0 +1,46 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+	<div class="tab-nav tab-video">
+		<div style="margin: 0 auto;max-width: 540px;position: relative;overflow-x: auto;">
+			<ul>
+				<!--<li <empty name="Think.get.cid"> class="active"</empty>><a href="{:U(null)}">全部</a></li>-->
+				<volist name="category_list" id="vo">
+				<li <eq name="vo.cid" value="$Think.get.cid"> class="active"</eq>><a href="{:U(null,array('cid'=>$vo['cid']))}">{$vo.cname}</a></li>
+				</volist>
+
+			</ul>
+		</div>
+	</div>
+	<div class="main container" id="weiVideo">
+		<ul class="li-2 videolist clearfix">
+		
+			<volist name="video_list" id="vo" empty="该分类暂无视频" >
+			<li>
+				<a href="{:U('show',array('jid'=>$jid,'gid'=>$vo['gid']))}">
+					<img src="{$vo.gimg}" alt="">
+					<h6 class="">{$vo.gname}</h6>
+					<p class="">{$vo.gdescription}</p>
+				</a>
+			</li>
+			</volist>
+			
+		</ul>
+	</div>
+	<script>
+		var oTabVideoUl = $(".tab-video ul");
+		var aTabVideoLi = $(".tab-video li");
+		var aTabVideoLiA = $(".tab-video li a");
+		var len = aTabVideoLi.length;
+		var ulWidth = 0;
+		for (var i = 0; i < len; i++) {
+			ulWidth = ulWidth + aTabVideoLi.eq(i).outerWidth()+1;
+		}
+		oTabVideoUl.css('width', ulWidth);
+
+		aTabVideoLiA.click(function() {
+			aTabVideoLi.removeClass('active');
+			$(this).parent('li').addClass('active');
+		});
+
+	</script>
+</block>

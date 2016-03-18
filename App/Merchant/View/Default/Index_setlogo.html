@@ -1,0 +1,46 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<div class="wrapper">
+    <h2 class="title">我的分店 / 账户设置 / LOGO修改<input type="button" value="<返回" onclick="javascript:history.go(-1);"></h2>
+    <div class="mian padding">
+        <form action="__ACTION__" method="post">
+        	<input type="hidden" name="info[applogo]" value="{$data.applogo}" id="applogo">
+            <input type="hidden" value="{$data.applogo|default='/Public/Images/noimage.jpg'}" id="HiddenDefaultValue">
+            <div class="set">
+                <label>客户端名称</label><input type="text" name="info[appname]" value="{$data.appname}">
+            </div>
+            <div class="set">
+                <label>企业LOGO</label>
+                <img id="UploadImage" src="{$data.applogo|default='/Public/Images/noimage.jpg'}" title="单击上传头像" style="width:120px; height:120px; cursor:pointer;">
+                &#12288;<span>建议尺寸：120*120 支持格式：JPG,PNG</span>
+            </div>
+            <div class="set">
+                <label></label><input type="submit" value="确认" class="btn btn-pwd">
+                <input id="UploadImageCal" type="button" value="取消" class="btn btn-pwd">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+$(function() {
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$("#UploadImage").attr("src", url); $('#applogo').val(url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	$("#UploadImageCal").click(function() {
+		$("#UploadImage").attr("src", $("#HiddenDefaultValue").val()); $('#applogo').val($("#HiddenDefaultValue").val());
+	})
+});
+</script>
+</block>

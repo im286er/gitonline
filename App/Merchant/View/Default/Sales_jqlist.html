@@ -1,0 +1,151 @@
+<extend name="Public:common"/>
+<block name="body">
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<div class="wrapper">
+	<h2 class="title">
+        <p class="returnMenu">
+            <a href="{:U('/Message/hdlist')}">最新活动</a>
+            <a href="{:U('/Sales/jqlist')}" class="curr">优惠券上架</a>
+            <a href="{:U('/News/index')}" >最新资讯</a>
+        </p>
+    </h2>
+	<div class="mian padding">
+    	<eq name="type" value="1">                 
+            <div class="modal-content">
+                <div class="set">
+                    <label>模块名称</label> <input value="{$VoucherModule[Name]?$VoucherModule[Name]:'优惠券'}" type="text" id="VoucherModuleName" maxlength="6">
+                    <span>不多于6个汉字</span>
+                </div>
+                <div class="set">
+                  <label>模块地址</label> <input type="text" name="VoucherModuleLink" value="http://yd.dishuos.com/Coupon/index/jid/<?php echo \Common\Org\Cookie::get(C('USER_COOKIE_JID'));?>.html" id="VoucherModuleLink">
+                    <span>该地址可用于微信及网页访问</span>
+                </div>
+                <div class="set">
+	                <label class="vertical">ICON</label>
+	                <div class="content_b_width">
+	                    <div class="pull-left">
+	                        <img id="VoucherModuleIcon" src="<php>echo $VoucherModule[Icon]?$VoucherModule[Icon]:'/Public/Images/merchant/noperson_1.gif'</php>" style="width:80px; height:80px;" />
+	                    </div>
+	                    <p>建议尺寸：132 * 132 &#12288;格式：jpg、png</p>
+	                    <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+	                </div>
+	            </div>
+                <div class="border-b top"></div>
+                <div class="set top">
+                    <label></label> <input type="button" onClick="ResetModuleName();" class="btn btn-pwd" value="保存">
+                </div>
+            </div>
+        </eq>
+		<div class="content_a top">
+			<h3>优惠券列表<input type="button" value="新增优惠券" onClick="DialogFrameFun(650, 650, '{:U('/Sales/addjq', '', true)}')"></h3>
+			<table class="table border-b">
+				<tr>
+					<th width="140px">优惠券名称</th>
+					<th width="50px">面值</th>
+					<th width="100px">领取限制</th>
+					<th width="150px">有效期</th>
+					<th width="50">已使用</th>
+                    <th width="50">状态</th>
+					<th width="165px">操作</th>
+				</tr>
+                <volist name="vulist" id="v">
+				<tr id="voucher_{$v.vu_id}">
+					<td>{$shopname[$v['vu_sid']]}<p class="c-a2a2a6">{$v.vu_name}</p></td>
+					<td>￥{$v.vu_price}</td>
+					<td>一人 {$v.vu_num} 张<p class="c-a2a2a6">剩余：{$v['vu_cum']-$v['vu_sum']}</p></td>
+					<td>{$v.vu_stime}<br>至<br>{$v.vu_etime}</td>
+					<td>{$v.vu_used}</td>
+                    <td><if condition="$v['vu_status'] eq 3">
+					核销
+					<elseif condition="$v['vu_stime'] gt date('Y-m-d H:i')"/>
+					未开始
+					<elseif condition="$v['vu_stime'] elt date('Y-m-d H:i') and $v['vu_etime'] egt date('Y-m-d H:i')"/>
+					有效
+					<elseif condition="$v['vu_etime'] elt date('Y-m-d H:i')"/>失效</if>
+					</td>
+					<td>
+                    	<eq name="v.vu_status" value="1">
+                            <input type="button" value="修改" onClick="DialogFrameFun(650, 650, '{:U('/Sales/editjq', array('id'=>$v['vu_id']), true)}')">
+                            <!--<input type="button" value="失效" onClick="DeleteActive('{$v.vu_id}', 2)">-->
+                            <input type="button" value="核销" onClick="DeleteActive('{$v.vu_id}', 3)">
+                        <else/>
+                        	-
+                        </eq>
+                    </td>
+				</tr>
+                </volist>
+			</table>
+			<if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='/Sales/jqlist/page/'+this.value">{$pages}
+                </div>
+            </if>
+		</div>
+	</div>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+$("#UploadImage").click(function() {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#VoucherModuleIcon').attr("src", url); editor.hideDialog();
+			}
+		});
+	});
+})
+
+function DialogFrameFun(width, height, src) {
+	document.getElementById('DialogFrame').src = src;
+	document.getElementById('DialogFrame').width = width;
+	document.getElementById('DialogFrame').height = height;
+	
+	$("#DialogFrameModel").children("div.DialogFrameModel").width(width);
+	$("#DialogFrameModel").children("div.DialogFrameModel").animate({top:"100px"}).end().fadeIn();
+}
+
+function DeleteActive( vuid , type ) {
+	if( !vuid ) { alert("参数出现错误"); return false; }
+	$.post("{:U('/Sales/deljq', '', true)}", {id:vuid, status:type}, function(data) {
+		if( parseInt(data)==1 ) {
+			if( type == 2) {
+				$("#voucher_"+vuid).children(":eq(5)").text("失效");
+			} else {
+				$("#voucher_"+vuid).children(":eq(5)").text("核销");
+			}
+			$("#voucher_"+vuid).children(":eq(6)").html("-");	
+		}
+	});
+}
+
+function ResetModuleName( ) {
+	var VoucherModuleName = document.getElementById("VoucherModuleName").value;
+	var VoucherModuleLink = document.getElementById("VoucherModuleLink").value;
+	var VoucherModuleIcon = document.getElementById("VoucherModuleIcon").src;
+	if( !VoucherModuleName ) { alert("请先输入模块名称"); return false; }
+	if(_length(VoucherModuleName)>12){alert("模块名称不能超过6个汉字"); return false;}
+	$.post("{:U()}", {'VoucherModuleName':VoucherModuleName, 'VoucherModuleLink':VoucherModuleLink, 'VoucherModuleIcon':VoucherModuleIcon}, function( data ) {
+		if( parseInt( data ) == 1 ) { alert("修改成功"); }
+	});
+}
+function _length(str){
+	var len=0;
+	for(var i=0;i<str.length;i++){
+		if(str.charAt(i)>'~'){len+=2;}else{len++;}
+	}
+	return len;
+}
+</script>
+</block>

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现明细</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">tr.brd { font-weight:bold; background:#f6f6f6; color:red; } tr.brd td a { color:red; }</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav"><span style="margin-left:15px;">我的提现</span></div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+        	<input type="hidden" value="{$Think.get.type}" name="type" />
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+                <input type="submit" value="搜索" class="button fl" name="search" />  
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th width="12%">申请日期</th>
+                    <th width="6%">提现对象</th>
+                    <th width="10%">流水号</th>
+                    <th width="9%">提现金额（元）</th>
+                    <th width="9%">技术服务费</th>
+                    <th width="9%">交易手续费</th>
+                    <th width="9%">实现提现金额</th>
+                    <th width="10%">提现账户</th>
+                    <th width="10%">法人名称</th>
+                    <th width="8%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="bookkeepinglist" id="vo">
+                    <tr <eq name="vo.btype" value="0">class="brd"</eq>>
+                        <td>{$vo.bstime}</td>
+                        <td>{$vo.flu_nickname}</td>
+                        <td>{$vo.bls}</td>
+                        <td>{$vo.bmention}</td>
+                        <td>{$vo.bjs}</td>
+                        <td>{$vo.bjy}</td>
+                        <td>{$vo.bsj}</td>
+                        <td>{$vo.bdzh}</td>
+                        <td>{$vo.flu_username}</td>
+                        <td><a href="javascript:void(0);" onclick="LookInfoList('{$vo.bls}')">查看</a></td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+function LookInfoList( bls ) {
+    if( !bls ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 540,
+		title : '查看明细',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Accounting/accountingInfo/type/0/bls/'+bls+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+</script>
+</body>
+</html>

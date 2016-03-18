@@ -1,0 +1,192 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+<script>
+var pro = {};
+function addPro(gid,gname){
+	pro[gid] = {gid:gid,gname:gname};
+
+	savePro();
+}
+function deletePro(gid){
+	delete pro[gid];
+	savePro();
+}
+function savePro(){
+	var name = '';
+	$.each(pro,function(index,o){
+		name += o.gname+',';
+	})
+	$("#pro_seat").html('已选定'+name);
+	$("#sure_pro").html('确定选定'+name);
+}
+$(document).ready(function(){
+  $('.btn-primary').click(function(){
+	if(JSON.stringify(pro) == '{}'){
+		var chmsg = dialog({title: '提示',content: '没有选中任何商品',id: 'm1'});
+ 		chmsg.show();
+  		return false;
+	}
+	$("#modal-checkseat").show();
+  });
+  $('.btn-no').click(function(){
+	  $("#modal-checkseat").hide();
+  })
+  $('.btn-yes').click(function(){
+	  $.cookie("seat", JSON.stringify(pro),{path:'/'});
+      location.href="{:U('Mobile/Seat/confirm',array('jid'=>$jid,'sid'=>$sid))}";
+  })
+});
+</script>
+	<div class="main-wrapper" id="">
+		<div class="main-container">
+			<div class="slide-nav" id="slideNav">
+				<ul>
+					<volist name="result_list" id="vo" >
+    				    <li cid="{$vo.cid}"><a href="javascript:void(0)">{$vo.cname}</a></li>
+    				</volist>
+				</ul>
+			</div>
+			<div class="main-content">
+				<div class="items">
+
+					<volist name="result_list" id="va" empty="暂时没有数据">
+				<div class="item-list">
+				<h5 class="list-title">{$va.cname}</h5>
+						<ul>
+						<volist name="va.list" id="vo">
+						<li gid="{$vo.gid}" gname="{$vo.gname}">
+								<div class="item-left">
+									<a href="javascript:;" class="pro_box" gid="{$vo.gid}"><img id="modal_dialog_bimage_{$vo.gid}" src="{$vo.gimg|default='/Public/Mobile/default/img/item_img.png'}" alt=""></a>
+									<h6 class="item-title item-title-book" id="modal_dialog_btitle_{$vo.gid}">{$vo.gname}</h6>
+									<p class="item-description">{$vo.gdescription|msubstr=0,17,'utf-8'}</p>
+									<p style="display:none;" id="modal_dialog_bdescription_{$vo.gid}">{$vo.gdescription}</p>
+									<p class="item-expend">最低消费:<strong id="modal_dialog_bpricea_{$vo.gid}">{$vo.goprice}</strong></p>
+									<p class="item-expend">优惠价格:<strong id="modal_dialog_bpriceb_{$vo.gid}">{$vo.gdprice}</strong></p>
+								</div>
+								<div class="item-right">
+                                    <p class="item-status"></p>
+									<a href="javascript:;"><i class="ico ico-select" ></i></a>
+								</div>
+							</li>
+						</volist>
+						</ul>
+					</div>
+			    </volist>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="bottomBar clearfix">
+		<div class="container">
+		<div class="cart clearfix">
+			<div class="cart-price" id="pro_seat"></div>
+		</div>
+		<a class="btn btn-primary" href="javascript:void(0);">选好了</a>
+		</div>
+	</footer>
+
+	<div class="modal" id="modal-detail">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="item-title-m" id="modal_dialog_title"></h6>
+					<img class="item-pic-m" src="" alt="" id="modal_dialog_image">
+					<div class="item-pricebox-m clearfix">
+						<div class="item-price-m"><span>最低消费:</span><b id="modal_dialog_pricea">0</b><span> 优惠:</span><b id="modal_dialog_priceb">0</b></div>
+					</div>
+					<p class="item-description-m" id="modal_dialog_description"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="modal-checkseat">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-flex">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single" id="sure_pro"></h6>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no" href="javascript:;">否</a>
+					<a class="btn-yes" href="javascript:;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var aSlideNavLi  = $("#slideNav li");
+		var aSlideNavLiA = $("#slideNav li a");
+		aSlideNavLiA.click(function() {
+			aSlideNavLi.removeClass('active');
+			$(this).parent("li").addClass('active');
+			var _thisIndex=$(this).parent("li").index();
+			$('.item-list').eq(_thisIndex).css('display','block').addClass('fadeL').siblings().css('display','none');
+		});
+
+		var aTabNavLi = $("#tabNav li");
+		aTabNavLi.click(function() {
+			location.href = $(this).attr('u');
+		});
+
+		var aItemStatus = $(".item-status");
+		aItemStatus.each(function(index, el) {
+			var _this = $(el);
+			if(_this.text() == "繁忙") {
+				_this.siblings('a').hide();
+			}
+		});
+
+		function changeGoodsInfo(obj){
+			var gid = $(obj).attr("gid");
+			$("#modal_dialog_title").html( $("#modal_dialog_btitle_"+gid).html() );
+			$("#modal_dialog_image").attr("src", $("#modal_dialog_bimage_"+gid).attr("src") );
+			$("#modal_dialog_pricea").html( $("#modal_dialog_bpricea_"+gid).html() );
+			$("#modal_dialog_priceb").html( $("#modal_dialog_bpriceb_"+gid).html() );
+			$("#modal_dialog_description").html( $("#modal_dialog_bdescription_"+gid).html() );
+		}
+
+		// 座位详情模态框
+		$(".pro_box").click(function(ev){
+			ev.stopPropagation(); changeGoodsInfo(this);
+			$("#modal-detail").show();
+		});
+		$(".modal-backdrop").click(function(ev) {
+			$("#modal-detail").hide();
+		});
+		$(".modal-dialog").click(function(ev) {
+			$("#modal-detail").hide();
+		});
+		$(".modal-content").click(function(ev) {
+			ev.stopPropagation();
+		});
+
+		var aIcoSelect = $(".ico-select");
+		var aSelectLi = aIcoSelect.parents('li');
+		aSelectLi.click(function(event) {
+			var _this = $(this);
+			var gid = $(this).attr('gid');
+			var gname = $(this).attr('gname');
+
+			if(_this.hasClass('checked')) {
+				_this.removeClass('checked');
+				deletePro(gid);
+			} else {
+				_this.addClass('checked');
+				addPro(gid,gname);
+			}
+		});
+
+	</script>
+</block>

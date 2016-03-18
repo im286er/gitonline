@@ -1,0 +1,220 @@
+<extend name="Public:common"/>
+<block name="body">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<style type="text/css">.modal-content .set > input[type="text"] { width:420px; }</style>
+<script type="text/javascript">
+var DeleteClassPath		= '{:U("/Info/delClass@ce", "", true, true)}';
+var DeleteInfoUrlPath	= '{:U("/Info/delGoods@ce", "", true, true)}';
+</script>
+<div class="wrapper">
+    <h2 class="title">{$ptitle}</h2> 
+    
+    <eq name="tfs" value="1">
+    <div class="mian padding">                   
+        <div class="modal-content">
+            <div class="set">
+                <label>模块名称</label> <input type="text" id="ModuleName" value="{$modulename}">
+                <span>不多于6个汉字</span>
+            </div>
+            <div class="set">
+                <label>模块地址</label> <input type="text" readonly value="{$modulelink}">
+                <span>该地址可用于微信及网页访问</span>
+            </div>
+            <div class="set">
+                <label class="vertical">ICON</label>
+                <div class="content_b_width">
+                    <div class="pull-left">
+                        <img id="ModuleIcon" src="{$moduleicon|default='/Public/Images/merchant/noperson_1.gif'}" style="width:80px; height:80px;" />
+                    </div>
+                    <p>建议尺寸：132 * 132 &#12288;格式：jpg、png</p>
+                    <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+                </div>
+            </div>
+            <div class="border-b top"></div>
+            <div class="set top">
+                <label></label> <input type="button" id="ModuleUpdate" class="btn btn-pwd" value="保存">
+            </div>
+        </div>
+    </div>
+    </eq>
+    
+    <div class="border-b"></div>
+    <div class="mian padding">
+        <div class="border">
+            <div class="clearfix border-b">
+            	<!-- 左边的分类列表 -->
+                <div class="manage-left">
+                    <h2 class="manage">分类管理
+                        <span class="pull-right show" id="addorder">
+                            <i class="addicon" id="add" onClick="DialogFrameFun(465, 234, '{:U('Info/addClass',array('ctype'=>I('get.ctype'),'sid'=>$sid))}')"></i>
+                            <i class="orderby" id="orderby"></i>
+                        </span>
+                        <span class="pull-right hide" id="button">
+                            <input type="button" value="完成" class="btn btn-blue" id="finish">
+                            <input type="button" value="取消" class="btn" id="cancel">
+                        </span>
+                    </h2>
+                    <ul class="list" id="ClassList">
+                        <foreach name="classlist" item="v">
+                            <li data-id="{$v.cid}" data-order='{$v.corder}' class="<if condition='$cid eq $v["cid"]'>curr</if>">
+								<a href="/Info/index/ctype/{$Think.get.ctype}/sid/{$sid}/cid/{$v.cid}.html" style="float: left;text-decoration: none;width: 150px;">{$v.cname}</a>
+                                <b class="pull-right" style="display:none;">
+                                	<i class="writeicon" onClick="DialogFrameFun(465, 234, '/Info/editClass/sid/{$sid}/cid/{$v.cid}.html')"></i>
+                                    <i onClick="DeleMenu('{$v.cid}')" class="deleteicon"></i>
+                                </b>
+                            </li>							
+                        </foreach>
+                    </ul>
+                </div>
+                
+                <!-- 右边的商品列表 -->
+                <div class="manage-right" id="getTable">
+                    <h2 class="manage">
+                        <span class="pull-left show manage-margin">
+                            <input type="checkbox" id="checkbox">全选/反选
+                            <input type="button" value="删除" class="btn btn-red" id="btn-delete">
+                        </span>
+                        <span class="pull-right" id="addorders">
+                        	<eq name="tfs" value="1">
+							<in name="Think.get.ctype" value="1,2">
+                        	<i id="sync" class="synchronous" onClick="DialogFrameFun(465, 450, '{:U('/Info/synchro@ce', array('ctype'=>$_GET['ctype']), true, true)}')"></i>
+							</in>
+                            </eq>
+                            <i class="addicon" id="addshopp" onClick="DialogFrameFun(650, 450, '{:U('Info/addGoods',array('ctype'=>I('get.ctype'),'sid'=>$sid,'cid'=>$cid))}')"></i>
+                            <i class="orderby" id="orderbyshopp"></i>
+                        </span>
+                        <span class="pull-right hide" id="buttons">
+                            <input type="button" value="完成" class="btn btn-blue" id="finishs">
+                            <input type="button" value="取消" class="btn" id="cancels">
+                        </span>
+                    </h2>
+                    
+                    <table class="tables" style="display: block;" id="gtableslist">
+                    	<tbody>
+                        <foreach name="infolist" item="v"> 
+                            <?php if(isset($_GET['ctype']) && intval($_GET['ctype'])!=3) { ?>
+                            	
+                                <?php if($v['gtype']==0){ ?>
+                                    <tr data-id="{$v.gid}" data-type="product" data-cid="{$v.cid}" data-order="{$v.gorder}">
+                                        <td class="vertical" width="60px"><input type="checkbox"></td>
+                                        <td <neq name="tfs" value="1">width="250px"<else/>width="330px;"</neq>>
+                                            <dl class="table-content">
+                                                <dt class="pull-left" style="height:63px;"><img src="{$v.gimg}" alt="" class="gimg"></dt>
+                                                <dd class="" >
+                                                    <p class="gname">{$v.gname}</p>
+                                                    <p class="c-a2a2a6 gdescription">{$v.gdescription}</p>
+                                                  
+                                                    <span class="c-bf242a">活动价￥<span class="gdprice">{$v.gdprice}
+													 <span class="c-bf242a">原价￥<span class="gdprice" >{$v.goprice}</span></span> 
+                                                </dd>
+                                            </dl>
+                                        </td>
+                                        <neq name="tfs" value="1">
+                                        <td width="100px" class="vertical ">库存:<span class="gstock">{$v.gstock}</span></td>
+                                        </neq>
+                                        <td class="vertical">
+                                            <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 450, '/Info/editGoods/sid/{$v.sid}/gid/{$v.gid}.html')">
+                                            <input type="button" value="删除" class="btndelete" onClick="DeleteVideoById('{$v.gid}', 1)">
+                                        </td>
+                                    </tr>
+                            	<?php } else { ?>
+                                    <tr data-id="{$v.gid}" data-type="product" data-cid="{$v.cid}" data-order="{$v.gorder}">
+                                        <td class="vertical" width="60px"><input type="checkbox"></td>
+                                        <td width="330px">
+                                            <dl class="table-content">
+                                                <dt class="pull-left"><img src="{$v.gimg}" alt="" class="gimg"></dt>
+                                                <dd class="">
+                                                    <p class="gname">{$v.gname}</p>
+                                                    <p class="c-a2a2a6 gdescription">
+                                                    	{$v.gdescription}
+                                                    	<br>最低消费{$v.goprice}  优惠价格{$v.gdprice}
+                                                    </p>
+                                                </dd>
+                                            </dl>
+                                        </td>
+                                        <td class="vertical">
+                                            <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 450, '/Info/editGoods/sid/{$v.sid}/gid/{$v.gid}.html')">
+                                            <input type="button" value="删除" class="btndelete" onClick="DeleteVideoById('{$v.gid}', 1)">
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            
+                            <?php } else { ?>
+                            	<tr data-id="{$v.gid}" data-type="product" data-cid="{$v.cid}" data-order="{$v.gorder}">
+                                    <td class="vertical" width="60px"><input type="checkbox"></td>
+                                    <td width="330px">
+                                        <dl class="table-content">
+                                            <dt class="pull-left"><img src="{$v.gimg}" alt="" class="gimg"></dt>
+                                            <dd class="">
+                                                <p class="gname">{$v.gname}</p>
+                                                <p class="c-a2a2a6 gdescription">{$v.gdescription}</p>
+                                                <neq name="Think.get.ctype" value="3">
+                                                <span class="c-bf242a">￥<span class="gdprice" data-goprice="{$v.goprice}">{$v.gdprice}</span></span>
+                                                </neq>
+                                            </dd>
+                                        </dl>
+                                    </td>
+                                    <neq name="Think.get.ctype" value="3">
+                                    <td width="100px" class="vertical ">库存:<span class="gstock">{$v.gstock}</span></td>
+                                    </neq>
+                                    <td class="vertical">
+                                        <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 450, '/Info/editVideo/sid/{$v.sid}/gid/{$v.gid}.html')">
+                                        <input type="button" value="删除" class="btndelete" onClick="DeleteVideoById('{$v.gid}', 2)">
+                                    </td> 
+                                </tr>
+                            <?php } ?>                           
+                            
+                        </foreach>	
+                        </tbody>						
+                    </table>
+				
+                </div>
+            </div>
+            <if condition="$page">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U('Info/index',array('ctype'=>I('get.ctype', 1, 'intval'),'sid'=>I('get.sid'),'cid'=>I('get.cid')))}?page='+this.value">{$page}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+<!-- 弹窗 -->
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<eq name="type" value="1">
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+$(function() {
+	var ModuleType = '{$Think.get.ctype}';
+	
+	//上传图片
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#ModuleIcon').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//在线消费 最顶部 模块名称和ICON设置
+	$("#ModuleUpdate").click(function() {
+		var ModuleName = $.trim($("#ModuleName").val());
+		var ModuleIcon = $("#ModuleIcon").attr('src');
+		if( !ModuleName || !ModuleIcon || !ModuleType ) { alert("模块名称和ICON图标不能为空"); return false; }
+		$.post("{:U('/Info/resetModuleInfo', '', true)}", {ModuleName:ModuleName, ModuleIcon:ModuleIcon, ModuleType:ModuleType}, function( data ) {
+			alert( parseInt(data) == 1 ? "设置成功" : "设置失败" );	
+		})
+	})
+});
+</script>
+</eq>
+</block>

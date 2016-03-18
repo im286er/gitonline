@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>绑定手机</title>
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Merchantapp/css/sj.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body <eq name="runmode" value="macapp">class="ios"</eq>>
+	<header class="header">
+		<h1>绑定手机</h1>
+		<a href="{:U('/Index/setinfo')}" class="ico header-back"></a>
+		<a href="javascript:;" class="ico header-more"></a>
+		<div class="header-submenu">
+			<span class="ico ico-triangle"></span>
+			<ul>
+				<li>
+					<a href="{:U('/Index/index')}">
+						<i class="ico ico-home"></i> <span>首页</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:U('/Message/msglist')}">
+						<i class="ico ico-msg"></i> <span>消息</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<div class="main container p-65">
+		<div class="bg-block img-device"></div>
+		<div class="input-list">
+			<ul>
+				<li>
+					<input id="inputPhone" type="number" placeholder="请输入手机号">
+					<a class="btn btn-o disable" id="btnGetCaptcha" href="javascript:;">发送验证码</a>
+				</li>
+				<li>
+					<input id="inputCaptcha" type="number" placeholder="请输入验证码">
+				</li>
+			</ul>
+		</div>
+		<div class="div-a">
+			<a class="btn btn-block btn-lg btn-blue disable" id="SendForm" href="javascript:;">确认</a>
+		</div>
+	</div>
+
+	<div class="modal" id="item-details">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<i class="ico ico-no"></i>
+					<p id="item-details-error">验证码错误</p>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+	<script src="__PUBLIC__/Merchantapp/js/jquery-2.1.3.min.js"></script>
+	<script>
+		var btnHeaderMore = $(".header-more");
+		var divHeaderSubmenu = $(".header-submenu");
+		btnHeaderMore.click(function(event) {
+			divHeaderSubmenu.toggle();
+		});
+		
+		$("#btnGetCaptcha").click(function() {
+			var phonevalue = $("#inputPhone").val();
+			if( /^13[0-9]{9}$|^15[0-9]{9}$|^17[0-9]{9}$|^18[0-9]{9}$|^147[0-9]{9}$/.test(phonevalue) == false) {
+				$("#item-details-error").html("请输入正确的手机号"); $("#item-details").show();
+			} else {
+				$.get("{:U('/Index/pushmsg')}", {tel:phonevalue}, function( data ) {
+					if( parseInt(data)==1 ) {
+						$("#btnGetCaptcha").html("60s");
+						var timeInterval = setInterval(function() {
+							var time = parseInt($("#btnGetCaptcha").html()); time--;
+							$("#btnGetCaptcha").html( time + "s" );
+							if(parseInt(time) <= 0) { 
+								$("#btnGetCaptcha").html("发送验证码"); clearInterval(timeInterval); 
+							}
+						}, 1000);					
+					} else {
+						$("#item-details-error").html("发送验证码失败"); $("#item-details").show();
+					}
+				});	
+			}
+		})
+		
+		$("#SendForm").click(function() {
+			var phonevalue = $("#inputPhone").val();
+			if( /^13[0-9]{9}$|^15[0-9]{9}$|^17[0-9]{9}$|^18[0-9]{9}$|^147[0-9]{9}$/.test(phonevalue) == false) {
+				$("#item-details-error").html("手机号格式不正确"); $("#item-details").show();
+				return false;
+			}
+			
+			var code = $("#inputCaptcha").val();
+			if( /^[0-9]{4}$/.test(code) == false ) {
+				$("#item-details-error").html("验证码格式不正确"); $("#item-details").show();
+				return false;
+			}
+			
+			$.post("/Index/bindphone", {tel:phonevalue, code:code}, function(data) {
+				var data = parseInt(data);
+				switch( data ) {
+					case 2: 
+						$("#item-details-error").html("验证码输入错误"); $("#item-details").show();
+					break;
+					case 1:
+						window.location.href="{:U('/Index/bindphone', '')}";
+					break;
+					default:
+						$("#item-details-error").html("绑定手机失败"); $("#item-details").show();
+					break;				
+				}
+			})
+		})
+
+		$(".modal-backdrop, .modal-dialog").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".modal-content").click(function(ev) {
+		//	ev.stopPropagation();
+		});
+	</script>
+</body>
+</html>

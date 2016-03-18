@@ -1,0 +1,629 @@
+﻿<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/swiper.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/orderpay.css">
+<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/smartTouchScroll.js"></script>
+<script>
+var reqUrl = "{:U('Mobile/Flow/submit',array('jid'=>$jid,'sid'=>$sid))}";
+var total = {$total_price};
+var used_coupon = '';
+//支付方式
+<if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype')">
+var paytype = 'weixin';
+<php> $weixinpay = true;</php>
+<else/>
+<if condition="$setting['pay_type']==1">
+var paytype = 'alipay';
+<else/>
+var paytype = 'cod';
+</if>
+</if>
+<if condition="$setting['consume_type']==1">
+var xftype = 1;
+<elseif condition="$setting['consume_type']==2"/>
+var xftype = 2;
+<else/>
+var xftype = "<if condition='$receivingid eq 0'>1<else/>2</if>";
+</if>
+
+var msg_title_1 = "{$setting.consume_title_1}";
+var msg_title_2 = "{$setting.consume_title_2}";
+
+var sarr = "{$sarr}";
+var isApp = "{$isApp}";
+var mid = "{$mid}";
+var linkurl = "{$linkurl}";
+var Pullrefresh1 = null;
+function usedCoupon(pid){
+	var price = $("#price_"+pid).html();
+	var new_total = total - price;
+	if(new_total < 0){
+		new_total = 0;
+	}
+	$(".order-pice").html(new_total);
+	used_coupon = pid;
+}
+function unusedCoupon(){
+	used_coupon = '';
+	$(".order-pice").html(total);
+}
+function ch_address(){
+	changeAddress(linkurl);
+}
+function saveAddress(){
+	var o_name    = $("#o_name").val();
+	var o_phone   = $("#o_phone").val();
+	//var op_name    = $("#op_name").val();
+	//var op_phone   = $("#op_phone").val();
+	//var o_address = $("#o_address").val();
+	var addr = {
+			o_name:o_name,
+			o_phone:o_phone,
+			//op_name:op_name,
+			//op_phone:op_phone,
+			//o_address:o_address
+	};
+	$.cookie("addr", JSON.stringify(addr),{path:'/'});
+}
+function getAddress(){
+	var addr = eval('('+ $.cookie("addr") +')');
+	if(addr != undefined){
+		$("#o_name").val(addr.o_name);
+		$("#o_phone").val(addr.o_phone);
+		//$("#op_name").val(addr.op_name);
+		//$("#op_phone").val(addr.op_phone);
+		//$("#o_address").val(addr.o_address);
+	}
+}
+$(document).ready(function(){
+	getAddress();
+    $('.flow_sub').click(function(){
+    	saveAddress();
+    	
+    		if(mid > 0){
+    			submitChoose();
+    		}else{
+    			location.href = linkurl;
+    		}
+    	
+    });
+    $('.btn-go').click(function(){
+    	location.href = "{:U('Mobile/User/myorder',array('jid'=>$jid,'jump'=>1))}";
+    });
+    document.addEventListener('touchmove', function(event) {
+        //判断条件,条件成立才阻止背景页面滚动,其他情况不会再影响到页面滚动
+        if(!$("#seatModal").is(":hidden")){
+            event.preventDefault();
+        }
+    });
+});
+function submitChoose(){
+	
+	if (Pullrefresh1 == null){
+		Pullrefresh1 = new Date().getTime();
+	}else{
+		var Pullrefresh2 = new Date().getTime();
+		if(Pullrefresh2 - Pullrefresh1 < 2000){
+			Pullrefresh1 = Pullrefresh2;
+			return false;
+		}else{
+			Pullrefresh1 = Pullrefresh2;
+		}
+	}
+	
+	var re = /^1\d{10}$/;	  
+	var msg = '';
+	
+	var  o_seat    = $("#o_seat").val();
+	var  o_address = $("#o_address").val();
+	var  o_remarks = $("#o_remarks").val();
+	if(xftype == '1'){
+		var o_name    = $("#o_name").val();
+		var o_phone   = $("#o_phone").val();
+		if(o_name == ''){
+			msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
+		    msg.show(); 
+		    return false;
+		}
+		if(o_phone == ''){
+			msg = dialog({title: '提示',content: '请输入您的手机号',id: 'm1'});
+		    msg.show(); return false;
+		}
+		if(!re.test(o_phone)){
+			msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
+		    msg.show(); return false;
+		}
+		if(sarr != ''){		
+			if(o_seat == 0){
+				msg = dialog({title: '提示',content: '店内消费请选择座位号',id: 'm1'});
+	  		    msg.show();
+	  		  	return false;
+			}
+		}
+	}else{
+		var o_name    = $("#op_name").val();
+		var o_phone   = $("#op_phone").val();
+		
+			if(o_name == ''){
+				msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(o_phone == ''){
+				msg = dialog({title: '提示',content: '请输入您的手机号',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(!re.test(o_phone)){
+				msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(o_address == ''){
+				msg = dialog({title: '提示',content: '请输入您的收货地址',id: 'm1'});
+	  		    msg.show();
+	  		  	return false;
+			}
+		
+	}
+	$.ajax( {    
+		    url:reqUrl,   
+		    data:{    
+		    	used_coupon : used_coupon,
+				paytype : paytype,
+				o_xftype : xftype,
+				o_seat : o_seat,
+				o_name : o_name,
+				o_phone : o_phone,
+				o_address : o_address,
+				o_remarks : o_remarks,
+		    },    
+		    type:'post',    
+		    cache:false,    
+		    dataType:'json',    
+		    success:function(data) {   
+				if(data.msg =="pay"){
+					location.href = data.url;
+				}else if(data.msg =="yspay"){
+					payOrder(paytype,data.oid);
+				}else if(data.msg =="true" ){
+		        	$(".modal-ss").show();
+		        }else{
+		        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
+		  		    msg.show();
+		        }
+		     },
+		     error:function(XMLHttpRequest, textStatus, errorThrown){
+			    	//alert(JSON.stringify(XMLHttpRequest));
+			    	if(XMLHttpRequest.status == '200'){
+			    		var data = eval('('+ XMLHttpRequest.responseText +')');
+			    		if(data.msg =="pay"){
+							location.href = data.url;
+						}else if(data.msg =="yspay"){
+							payOrder(paytype,data.oid);
+						}else if(data.msg =="true" ){
+				        	$(".modal-ss").show();
+				        }else{
+				        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
+				  		    msg.show();
+				        }
+			    	}
+			 }
+	});
+}
+
+
+function msgopen( type )
+{
+	var msg = null;
+	switch( type)
+	{
+		case 1:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“到店支付”, 敬请期待！',id: 'm1'});
+		break;
+
+		case 2:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“支付宝支付”, 敬请期待！',id: 'm1'});
+		break;
+		case 3:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_2+'”, 敬请期待！',id: 'm1'});
+		break;
+		case 4:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_1+'”, 敬请期待！',id: 'm1'});
+		break;
+	}
+	msg.show();
+}
+</script>
+	<div class="main container" id="submitOrder">
+		<section class="orderlist wavebottom">
+			<div class="sec-title">
+				<span>数量: <strong>{$total_number}</strong></span>
+				<span>总价: <strong>￥{$total_price}</strong></span>
+			</div>
+			<div class="sec-body">
+				<ul>
+					<volist name="goods_list" id="vo">
+					<li>
+						<div class="order-dishname" style="white-space:nowrap;overflow:hidden">{$vo.gname}</div>
+						<div class="order-num">x{$vo.number}</div>
+						<div class="order-price">
+							<span class="order-price-new">￥{$vo.gprice}</span>
+							<!--<span class="order-price-old">￥{$vo.t_price}</span>-->
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="mycoupon">
+			<div class="sec-title"><h3>我的优惠</h3></div>
+			<div class="sec-body">
+				<ul>
+					<volist name="coupon_list" id="vo">
+						
+					<li>
+						<p>{$vo.vu_name}-减免<font color="red" id="price_{$vo.uvid}">{$vo.vu_price}</font>元</p>
+						<i class="ico ico-select ico-coupon" pid="{$vo.uvid}"></i>
+					</li>
+					
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="consumeway">
+			<div class="sec-title">
+			   <ul>
+			   		<if condition="$setting['consume_type']==1">
+						<li class="checked ico-xf" xftype="1">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_1}</span>
+						</li>
+						<li xftype="2" onclick="msgopen(3)">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_2}</span>
+						</li>
+					</if>
+
+					<if condition="$setting['consume_type']==2">
+						<li xftype="1" onclick="msgopen(4)">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_1}</span>
+						</li>
+						<li class="checked ico-xf" xftype="2">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_2}</span>
+						</li>
+					</if>
+
+					<if condition="$setting['consume_type']==3">
+						<li class="<if condition='$receivingid eq 0'>checked</if> ico-xf" xftype="1">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_1}</span>
+						</li>
+						<li class="<if condition='$receivingid gt 0'>checked</if> ico-xf" xftype="2">
+							<i class="ico ico-toggle"></i>
+							<span>{$setting.consume_title_2}</span>
+						</li>
+					</if>
+				</ul>
+			</div>
+			<div class="sec-body">
+				<?php if($setting['consume_type']==1): ?>
+					<form class="active" id="diannei-div">
+						<div>
+							<label for="">姓名：</label>
+							<input type="text" value="{$user_info.flu_username}" id="o_name" name="o_name" placeholder="请输入姓名">
+						</div>
+						<div>
+							<label for="">手机：</label>
+							<input type="number" value="{$user_info.flu_phone}" id="o_phone" name="o_phone" placeholder="请输入手机号码">
+						</div>
+						<if condition="$sarr">
+						<div>
+							<a class="seat-info" id="js_seat" href="javascript:;">请选择您的座位号<i class="ico ico-right"></i></a>
+						</div>
+						</if>
+						<input type="hidden" name="o_seat" id="o_seat" value="" />
+						<div>
+							<label for="">备注：</label>
+							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
+						</div>
+					</form>
+				<?php endif;?>
+
+				<?php if($setting['consume_type']==2): ?>
+					
+						<form <if condition='$receivingid gt 0'>class="active"</if> id="dianwai-div" <eq name="setting.consume_type==2">style="display: block;"</eq>>
+							<div>
+								<label for="">姓名：</label>
+								<input type="text" id="op_name" name="o_name" placeholder="请输入姓名">
+							</div>
+							<div>
+								<label for="">手机：</label>
+								<input type="number" id="op_phone" name="o_phone" placeholder="请输入手机号码">
+							</div>
+							<div>
+								<label for="">地址：</label>
+								<input type="text" id="o_address" name="o_address" placeholder="请输入地址">
+							</div>
+							<div>
+								<label for="">备注：</label>
+								<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
+							</div>
+						</form>
+					
+				<?php endif;?>
+
+				<?php if($setting['consume_type']==3): ?>
+					<form <if condition='$receivingid eq 0'>class="active"</if> id="diannei-div">
+						<div>
+							<label for="">姓名：</label>
+							<input type="text" value="{$user_info.flu_username}" id="o_name" name="o_name" placeholder="请输入姓名">
+						</div>
+						<div>
+							<label for="">手机：</label>
+							<input type="number" value="{$user_info.flu_phone}" id="o_phone" name="o_phone" placeholder="请输入手机号码">
+						</div>
+						
+						<if condition="$sarr">
+						<div>
+							<a class="seat-info" id="js_seat" href="javascript:;">请选择您的座位号<i class="ico ico-right"></i></a>
+						</div>
+						</if>
+						<input type="hidden" name="o_seat" id="o_seat" value="" />
+						
+						<div>
+							<label for="">备注：</label>
+							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
+						</div>
+					</form>
+					
+						<form <if condition='$receivingid gt 0'>class="active"</if> id="dianwai-div">
+							<div>
+								<label for="">姓名：</label>
+								<input type="text" id="op_name" name="o_name" placeholder="请输入姓名">
+							</div>
+							<div>
+								<label for="">手机：</label>
+								<input type="number" id="op_phone" name="o_phone" placeholder="请输入手机号码">
+							</div>
+							<div>
+								<label for="">地址：</label>
+								<input type="text" id="o_address" name="o_address" placeholder="请输入地址">
+							</div>
+							<div>
+								<label for="">备注：</label>
+								<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
+							</div>
+						</form>
+					
+				<?php endif;?>
+			</div>
+		</section>
+		<section class="payments">
+			<div class="sec-title"><h3>支付方式</h3></div>
+			<div class="sec-body">
+				<ul>
+					<if condition="$setting['pay_type']==1">
+						<if condition="$weixinpay">
+						<li class="checked">
+							<img src="__PUBLIC__/Images/mobile/weixin.jpg" alt="">
+							<div>
+								<h6>微信支付</h6>
+								<p>推荐用户使用微信支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="weixin"></i>
+						</li>
+						</if>
+						<li class="{$weixinpay?'':'checked'}">
+							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
+							<div>
+								<h6>支付宝</h6>
+								<p>推荐支付宝用户使用</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="alipay"></i>
+						</li>
+						<li onclick="msgopen(1)">
+							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
+							<div>
+								<h6>到店支付</h6>
+								<p>门店现金/刷卡支付</p>
+							</div>
+							<i class="ico ico-select" paytype="cod"></i>
+						</li>
+					</if>
+
+					<if condition="$setting['pay_type']==2">
+						<if condition="$weixinpay">
+						<li class="checked">
+							<img src="__PUBLIC__/Images/mobile/weixin.jpg" alt="">
+							<div>
+								<h6>微信支付</h6>
+								<p>推荐用户使用微信支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="weixin"></i>
+						</li>
+						</if>
+						<li onclick="msgopen(2)">
+							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
+							<div>
+								<h6>支付宝</h6>
+								<p>推荐支付宝用户使用</p>
+							</div>
+							<i class="ico ico-select" paytype="alipay"></i>
+						</li>
+						<li class="{$weixinpay?'':'checked'}">
+							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
+							<div>
+								<h6>到店支付</h6>
+								<p>门店现金/刷卡支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="cod"></i>
+						</li>
+					</if>
+
+					<if condition="$setting['pay_type']==3">
+						<if condition="$weixinpay">
+						<li class="checked">
+							<img src="__PUBLIC__/Images/mobile/weixin.jpg" alt="">
+							<div>
+								<h6>微信支付</h6>
+								<p>推荐用户使用微信支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="weixin"></i>
+						</li>
+						</if>
+						<li>
+							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
+							<div>
+								<h6>支付宝</h6>
+								<p>推荐支付宝用户使用</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="alipay"></i>
+						</li>
+						<li class="{$weixinpay?'':'checked'}">
+							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
+							<div>
+								<h6>到店支付</h6>
+								<p>门店现金/刷卡支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="cod"></i>
+						</li>
+					</if>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<footer class="bottomBar">
+		<div class="container clearfix">
+			<div class="cart clearfix">
+			<div class="cart-price">共￥<span class="order-pice">{$total_price}</span></div>
+		</div>
+		<a class="btn btn-primary flow_sub" href="javascript:void(0);">立即下单</a>
+		</div>
+	</footer>
+
+	<div class="modal modal-ss" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title">订单已提交</h6>
+					<p class="modal-p">结账可通过门店所提供的现金/刷卡等支付方式</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-yes btn-go" href="javascript:;" style="width:100%;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 详情选择框 -->
+	<div class="modal modal-seat" id="seatModal" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="swiper-container selector" id="selector">
+					    <div class="swiper-wrapper">
+					    	<volist name="sarr" id="vo2">
+	                                <notempty name="vo2">
+	                                    <div class="swiper-slide">{$vo2}</div>
+	                                </notempty>
+	                        </volist>
+						</div>
+					</div>
+					<div class="modal-line-1"></div>
+					<div class="modal-line-2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no js_no" href="javascript:;">否</a>
+					<a class="btn-yes js_yes" href="javascript:;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		$(".ico-coupon").click(function(event) {
+			var _this = $(this);
+			var pid = $(this).attr('pid');
+			var _thisLi = _this.parents('li');
+			var s = _thisLi.hasClass('checked');
+			$(".ico-coupon").parents('li').removeClass('checked');
+			if(s) {
+				_thisLi.removeClass('checked');
+				unusedCoupon();
+			} else {
+				_thisLi.addClass('checked');
+				usedCoupon(pid);
+			}
+		});
+		$(".ico-pay").click(function(event) {
+			var _this = $(this);
+			var type = $(this).attr('paytype');
+			var _thisLi = _this.parents('li');
+			var s = _thisLi.hasClass('checked');
+			$(".ico-pay").parents('li').removeClass('checked');
+			if(s) {
+				//_thisLi.removeClass('checked');
+				//unusedCoupon();
+				_thisLi.addClass('checked');
+			} else {
+				_thisLi.addClass('checked');
+				paytype = type;
+			}
+		});
+		$(".ico-xf").click(function(event) {
+			var _this = $(this);
+			var type = $(this).attr('xftype');
+			if(type == '1'){
+				xftype = '1';
+				$("#dianwai-div").hide();
+				$("#diannei-div").show();
+			}else{
+				xftype = '2';
+				$("#diannei-div").hide();
+				$("#dianwai-div").show();
+			}
+			$(this).addClass("checked").siblings("li").removeClass("checked");
+		});
+	
+		// 选择座位弹出框
+		var seatModal = $("#seatModal");
+		var swiper_index = 0;
+		$("#js_seat").click(function(ev) {
+			option.initialSlide = swiper_index;
+			seatModal.show(0, swiper);
+		});
+		$(".modal-body").click(function(ev) {
+			ev.stopPropagation();
+		});
+		$(".modal-dialog").click(function(ev) {
+			$(".modal").hide();
+		});
+		$(".js_no").click(function(event) {
+			$(".modal").hide();
+		});
+		$(".js_yes").click(function(event) {
+			var ss = seatModal.find('.swiper-slide-active').html();
+			$("#js_seat").html(ss);
+			$("#o_seat").val(ss);
+			swiper_index = seatModal.find('.swiper-slide-active').index();
+		});	
+		var option = {
+			direction: 'vertical',
+			slidesPerView: 3,
+			centeredSlides: true,
+			onSlideChangeEnd: function() {
+				// 滚动后执行的动作
+			}
+		}
+		var swiper = function() {
+			var addrSelector = new Swiper ('#selector', option);
+		}
+
+	</script>
+</block>

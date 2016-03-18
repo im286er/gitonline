@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>云管理后台</title>
+<style type="text/css">
+html,body,div,a,ul,li,span,i,img,h2 { margin:0px; padding:0px; border:0px; font-size:14px; }
+ul,li,dl,dd,dt { display:block; list-style:none; }
+body { background:url("__PUBLIC__/Images/timg/topbg.gif") repeat-x 0px 0px; margin:8px 8px 0px; padding:0px; }
+.topLeft { float:left; width:330px; height:71px; } div.topLeft a { display:block; width:100%; height:100%; }
+.topNav, div.topNav ul { float:left; overflow:hidden; } div.topNav ul { margin-left:20px; }
+.topNav li { float:left; width:87px; height:80px; text-align:center; }
+.topNav li a { display:block; width:87px; height:88px; transition:background-color 0.3s linear; text-decoration:none; }
+.topNav li a.selected { background:url("__PUBLIC__/Images/timg/navbg.png") no-repeat; }
+.topNav li a:hover { display:block; color:#fff; background:none repeat scroll 0% 0% rgb(43, 127, 181); }
+.topNav li a img { margin-top:7px; }
+.topNav li a h2 { font-size:14px; color:#fff; margin-top:4px; }
+.topRight { display:block; overflow:hidden; }
+.topRight ul { padding-top:15px; float:right; padding-right:12px; }
+.topRight ul li { float:left; padding-left:9px; padding-right:9px; background:url("__PUBLIC__/Images/line.gif") no-repeat right; }
+.topRight ul li.last { background:none; }
+.topRight ul li a { font-size:13px; color:#e9f2f7; text-decoration:none; }
+.topRight ul li a:hover { color:#fff; }
+.topRight ul li span { margin-top:2px; float:left; padding-right:3px; }
+.topRight .user { height:30px;  clear:both; margin-top:10px; float:right; margin-right:12px; border-radius:30px; white-space:nowrap; position:relative; }
+.topRight .user span { display:inline-block; padding-right:10px; background:url("__PUBLIC__/Images/timg/user.png") no-repeat 15px 10px; line-height:30px; font-size:14px;color:#b8ceda; padding-left:20px; padding-left:35px; }
+.topRight .user b { display:inline-block; width:20px; height:18px; background:url("__PUBLIC__/Images/timg/msg.png"); text-align:center; font-weight:normal; color:#fff; font-size:14px; margin-right:13px; margin-top:7px; line-height:18px; }
+.topRight .user i { display:inline-block; margin-right:5px; font-style:normal; line-height:30px; font-size:14px; color:#b8ceda; }
+
+li { list-style:none; }
+a { background:transparent; text-decoration:none; color:#fff; }
+a:hover, a:active, a:focus { outline:0 }
+a:active {text-decoration:none;color:#fff;} 
+
+
+button, input, select, textarea { font-family:inherit; margin:0 }
+button, input { line-height:normal; outline:none; }
+button, select { text-transform:none }
+button, html input[type="button"], input[type="reset"], input[type="submit"] { -webkit-appearance:button; cursor:pointer; }
+button[disabled], html input[disabled] { cursor:default }
+input[type="checkbox"], input[type="radio"] { box-sizing:border-box; padding:0 }
+button::-moz-focus-inner, input::-moz-focus-inner { border:0; padding:0 }
+.sideBar_a {  width:187px; border-right:1px solid #e7e7eb; font-size:14px; }
+.sideBar_a .title { width:100%; height:34px; line-height:34px; color:#fff; text-align:center; background:#ff9503 }
+.sideBar_a .title>a { text-align:center; color:#fff; }
+.sideBar_nav { border-bottom:1px solid #e7e7eb; padding:10px 0px; }
+.new-sideBar_nav { border:0px; padding:0px; }
+.sideBar_nav>h3 { font-size:14px; color:#909397; font-weight:normal; padding:0px 0px 0px 52px; margin:5px 0px; }
+.sideBar_nav>h3>i { display:inline-block; }
+.sideBar_nav>ul>li { line-height:30px; height:30px; width:135px; padding-left:52px; display:block }
+.sideBar_nav>ul>li>a { font-size:14px; display:block; color:#000; }
+.sideBar_nav>ul>li>a:hover{ font-size:14px; display:block; color:#000; }
+
+.sideBar_a .sideBar_nav ul li:hover, .sideBar_a .sideBar_nav ul li.selected { background:#f1fafc; display:block; color:#fff ;}
+.sideBar_a .sideBar_nav ul .curr:hover{ color:#000; }
+.sideBar_nav>ul>li.curr { height:30px; line-height:30px; color:#000 }
+.sideBar_nav>ul>li.curr>a { color:#000;}
+
+.funicon_2 { background:url("__PUBLIC__/Images/limg/leftico01.png") 30px center no-repeat; }
+.funicon_3 { background:url("__PUBLIC__/Images/limg/leftico02.png") 30px center no-repeat; }
+.funicon_4 { background:url("__PUBLIC__/Images/limg/leftico03.png") 30px center no-repeat; }
+.funicon_128 { background:url("__PUBLIC__/Images/limg/leftico04.png") 30px center no-repeat; }
+.funicon_133 { background:url("__PUBLIC__/Images/limg/leftico05.png") 30px center no-repeat; }
+.funicon_20 { background:url("__PUBLIC__/Images/limg/leftico06.png") 30px center no-repeat; }
+.funicon_29 { background:url("__PUBLIC__/Images/limg/leftico07.png") 30px center no-repeat; }
+.funicon_44 { background:url("__PUBLIC__/Images/limg/leftico08.png") 30px center no-repeat; }
+.funicon_48 { background:url("__PUBLIC__/Images/limg/leftico09.png") 30px center no-repeat; }
+.funicon_49 { background:url("__PUBLIC__/Images/limg/leftico10.png") 30px center no-repeat; }
+.funicon_50 { background:url("__PUBLIC__/Images/limg/leftico11.png") 30px center no-repeat; }
+.funicon_64 { background:url("__PUBLIC__/Images/limg/leftico12.png") 30px center no-repeat; }
+.funicon_67 { background:url("__PUBLIC__/Images/limg/leftico13.png") 30px center no-repeat; }
+.funicon_177 { background:url("__PUBLIC__/Images/limg/leftico14.png") 30px center no-repeat; }
+.function_undefined{display:none;}
+.liimg{ background:url("__PUBLIC__/Images/limg/libg.png")  center no-repeat; }
+</style>
+</head>
+
+<body>
+
+<div style="height:81px; overflow:hidden;">
+    <div class="topLeft" style="width:250px">
+        <a href="{:U('Index/main@dl', '', true, true)}" target="rFrame"><p style="font-size:28px;padding-right:20px;padding-left:20px;font-family: 'Microsoft YaHei' ! important; color: #fff; ">帝鼠代理商后台</p></a>
+    </div>
+    <div class="topNav">
+        <ul id="TopUl">
+             <volist name="menulist" id="nav" key="nk">
+                <li>
+                    <a data-value="{$key}" <eq name="nk" value="1">class="selected"</eq> target="lFrame">
+                        <img src="__PUBLIC__/Images/timg/icon{$nav.icon}.png" width="45" height="45" /> <h2>{$nav.name}</h2>
+                    </a>
+                </li>  
+            </volist>
+        </ul>
+    </div>
+
+    <div class="topRight">    
+        <div class="user">
+            <a href="{:U('System/publicEditInfo@dl', '', true, true)}" target="rFrame" title="点击修改个人信息"><span>{$Think.cookie.mname|base64_decode|unserialize}</span></a>
+            <a href="{:U('Notice/noticesList@dl', '', true, true)}" target="rFrame" id="msg" title="点击查看通知"><i>通知</i><b id="ParentMsg">{$msg|default='0'}</b></a>
+            <a href="{:U('Public/logout@dl', '', true, true)}" class="last" target="_parent" style="color:#666;">退出</a>  
+        </div>    
+    </div>
+</div>
+
+<div class="neiz" style="">      
+    <div style="overflow:hidden;_zoom:1; border-right:1px solid #e7e7eb;position:absolute;width:10%;" class="neileft">
+        <div class="sideBar_a" id="LeftRuleList">
+        	<php>$_IKN=1;</php>
+            <volist name="authRuleList" id="vo">    
+                 <div class="sideBar_nav">
+                 	<h3 class="funicon_{$vo.icon}">{$vo.name}</h3> 
+                    <ul class="menuson">
+                        <volist name="vo.list" id="voo">
+                            <php>$vlist = explode('|', $voo);</php>
+                            <li onClick="ChangeClassName(this)" <eq name="_IKN" value="1">class="selected"</eq>><cite></cite><a href="{:U($vlist[1].'@dl', '', true, true)}" target="rFrame">{$vlist[0]}</a><i></i></li>
+                        	<php>$_IKN++;</php> 
+                        </volist>
+                    </ul>
+                </div>
+            </volist>    
+        </div>
+    </div>
+    <div class="neiright" style="position:absolute;right:10%;width:80%;">   
+       <iframe id="rFrame" name="rFrame" title="rFrame" src="{:U('Index/main@dl', '', true)}" frameborder="0" style="width:112%;height:810px;"  scrolling="no" ></iframe>  
+    </div>
+</div>
+<script language="JavaScript" src="__PUBLIC__/Js/jquery.js"></script> 
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $("#TopUl li").click(function() {
+		$("#TopUl li a").removeClass("selected"); $(this).children("a").addClass("selected");	
+		$("#LeftRuleList").load("/Index/left/pid/"+$(this).children("a").attr("data-value"));
+	})
+});
+
+function ChangeClassName(obj) {
+    $("#LeftRuleList .sideBar_nav ul li").removeClass("selected");
+    $(obj).addClass("selected");
+}
+
+function LoadRightUrl( url ) {
+	if(url) document.getElementById("rFrame").src = url;
+}
+</script>
+
+</body>
+</html>

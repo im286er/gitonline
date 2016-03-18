@@ -1,0 +1,147 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 175px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+</style>
+<div class="wrapper">
+    
+		<h2 class="title"><a href="{:U('Sales/myorder')}" style="text-decoration:underline;">订单管理</a> | 返利订单管理</h2>
+		
+    <div class="mian padding">
+    	<div class="content_c">
+				<form action="__ACTION__" method="get">
+					<input type="text" autocomplete="off" placeholder="订单号"  value="{$Think.get.flo_id}" name="flo_id" />&nbsp;
+					<select name="flo_dstatus" class="fl">
+						<option value="" <if condition="$_GET['flo_dstatus']==''">selected="selected"</if>>全部</option>
+						<volist name="odstatus" id="vo">
+							<option value="{$key}" <if condition="$_GET['flo_dstatus'] == $key && $_GET['flo_dstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+						</volist>
+					</select>
+
+					<select name="flo_pstatus" class="fl">
+						<option value="" <if condition="$_GET['flo_pstatus']==''">selected="selected"</if>>全部</option>
+						<volist name="oostatus" id="vo">
+							<option value="{$key}" <if condition="$_GET['flo_pstatus'] == $key && $_GET['flo_pstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
+						</volist>
+					</select>
+                    <input type="submit" value="开始搜索" class="button">
+                </form>
+			</div>
+		<div style="width:100%;height:15px;"></div>
+    	<volist name="datalist" id="v">
+        <div class="content_a" <neq name="i" value="1">top</neq>>
+            <h3 class="font-12">
+            <span></span><span>{$v.flo_dstime|strtotime|date='m-d H:i',###}</span>  <span>订单号：{$v.flo_id}</span><span>下单人：<php>echo $users[$v['flo_uid']]['flu_nickname'];</php></span><span><php>if($users[$v['flo_uid']]['flu_phone'])echo '下单人电话：'.$users[$v['flo_uid']]['flu_phone'];</php></span>
+            <!-- 	<span></span><span>{$v.flo_dstime|strtotime|date='m-d H:i',###}</span>  <span>订单号：{$v.flo_id}</span><span>下单人：{$v.flo_name}</span><span>联系电话：{$v.flo_phone}</span>-->
+            	<span>收货人：{$v.flo_name}</span><span>收货人电话：{$v.flo_phone}</span><span>收货地址：{$v.flo_address}</span>
+            </h3>
+			<table class="table">
+				<tr>
+                    <th width="150px">商品</th>
+					<th>名称</th>
+                    <th>单价(元）</th>
+                    <th>数量</th>
+                    <th>下单时间</th>
+                    <th>付款/状态</th>
+                    <th>实付款(元)/操作</th>
+                </tr>
+                <php>$_j = 1; $rowspan = count($v[ogoods])</php>
+                <volist name="v.ogoods" id="g" empty="暂无返利订单信息">
+                <tr>
+                    <td style=""><img src="{$g.flg_img}" alt="" width="60" height="50"> </td>
+					<td>{$g.flg_name}</td>
+                    <td>{$g.flg_gdprice}</td>
+                    <td>{$g.flg_number}</td>
+                    <eq name="_j" value="1">
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">{$v.flo_dstime|strtotime|date='H:i:s',###} </td>
+						<td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">
+						<p>支付状态：<php>echo $oostatus[$v['flo_pstatus']];</php></p>
+						<p>订单状态：<php>echo $odstatus[$v['flo_dstatus']];</php></p>
+						</td>
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb;">
+						￥{$v.flo_price}
+						<br/>
+						<if condition="$v['flo_dstatus'] eq 1 ">
+							<if condition="$v['flo_pstatus'] eq 0 ">
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('flo_dstatus','5','{$v.flo_id}',this.value)" value="关闭订单"></p>
+							<elseif  condition="$v['flo_pstatus'] eq 1 " />
+							<p style="margin-top:5px;"><input type="button" onclick="Operation('flo_dstatus','3','{$v.flo_id}',this.value)" value="接受订单"></p>
+                            <p style="margin-top:5px;"><input type="button" onclick="Operation('flo_dstatus','5','{$v.flo_id}',this.value)" value="拒绝订单"></p>
+							</if>
+						<elseif  condition="$v['flo_dstatus'] eq 3 " />
+						<if condition="$v['flo_pstatus'] eq 1 ">
+						<p style="margin-top:5px;"><input type="button" onclick="SendOrder('{$v.flo_id}')" value="确认完成"></p>
+						<p style="margin-top:5px;"><input type="button" onclick="Operation('flo_dstatus','5','{$v.flo_id}',this.value)" value="拒绝订单"></p>    
+						<else />
+						<p style="margin-top:5px;"><input type="button" onclick="Operation('flo_dstatus','5','{$v.flo_id}',this.value)" value="关闭订单"></p>
+						</if>
+						<elseif  condition="$v['flo_dstatus'] eq 4 " />
+						已完成
+						<elseif  condition="$v['flo_dstatus'] eq 5 " />
+						已关闭
+						<else />
+						已关闭
+						</if>
+                        <input type="button" onclick="dayin('{$v.flo_id}')" value="打印订单">
+						</td>
+                    </eq>
+                </tr>
+                <php>$_j++;</php>
+                </volist>
+		  </table>
+        </div>
+		</volist>
+    </div>
+	<!-- 分页 -->
+	       <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                </div>
+            </if>
+<script type="text/javascript">
+function dayin(oid){
+	if (confirm("确认要打印这个订单吗?")) {
+		$.post("{:U('/Sales/printFlOrder', '', true)}", {oid:oid}, function( data ) {
+			if(data == 1){
+				alert('操作成功');
+			}else{
+				alert('操作失败');
+			}
+		})
+	}
+}
+function Operation(type,status,oid,buttons){
+	if(!type && !status && !oid){
+		alert('参数错误');return false;
+	}
+	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
+		return false;
+	}
+	$.post("{:U('rebateOperation')}",{'type':type,'status':status,'o_id':oid},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+
+	});
+}
+
+function SendOrder( oid )
+{
+	if( !oid ) { alert("确认完成"); return false; }	
+	
+	if( confirm("此订单确认要完成吗")==false ) return false;
+	
+	$.post("{:U('sendOrder')}",{'o_id':oid},function(result){
+		if(result==1)window.location.reload();
+		if(result==0)alert('操作错误');
+	});
+}
+
+
+</script>
+</div>
+</block>

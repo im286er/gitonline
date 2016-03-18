@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="AdAdd()">添加广告</span>
+        <a href="{:U('/Advertisement/adsList', array('type'=>1))}" <eq name="Think.get.type" value="1">class="on"</eq> style="margin-left:15px;">帝鼠OS广告列表</a>
+        <a href="{:U('/Advertisement/adsList', array('type'=>2))}" <eq name="Think.get.type" value="2">class="on"</eq> style="margin-left:15px;">返利广告列表</a>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+            	<label>模糊搜索：</label>
+                <eq name="Think.get.type" value="1">
+                	<input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：广告标题/商家名称" style="width:180px;" value="{$Think.get.keyword}" name="keyword" />
+                <else/>
+                	<input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：广告标题" style="width:180px;" value="{$Think.get.keyword}" name="keyword" />
+                </eq>
+                <input type="submit" value="搜索" class="button fl" name="search" />
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr>
+                        <th width="40"><input type="checkbox" id="checkbox" onclick="selectAll('bid[]');"></th>
+                        <th width="10%">广告标题</th>
+                        <th width="15%">连接地址</th>
+                        <th>图片路径</th>
+                        <th width="10%">广告所属</th>
+                        <eq name="Think.get.type" value="1">
+                        <th width="10%">所属商家</th>
+                        </eq>
+                        <th width="10%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="adslist" id="vo">
+                        <tr id="TR_AD_{$vo.bid}">
+                            <td><input type="checkbox" name="bid[]" value="{$vo.bid}"></td>
+                            <td>{$vo.btitle}</td>
+                            <td>{$vo.burl}</td>
+                            <td>{$vo.bimg}</td>
+                            <td>
+                            	<if condition="$vo['btype'] eq '1'">
+                                	系统添加
+                                <elseif condition="$vo['btype'] eq '2'"/>
+                                	代理商添加
+                                <elseif condition="$vo['btype'] eq '3'"/>
+                                	商家添加
+                                <else/>-</if>
+                            </td>
+                            <eq name="Think.get.type" value="1">
+                            <td>{$vo.mnickname}</td>
+                            </eq>
+                            <td>
+                                <a href="javascript:void(0);" onclick="AdPriv('{$vo.bimg}')">查看</a> |
+                                <a href="javascript:void(0);" onclick="AdEdit('{$vo.bid}')">修改</a> |
+                                <a href="javascript:void(0);" onclick="AdDel('{$vo.bid}', 'get')">删除</a>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="AdDel(0, 'post')" value=" 删除 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var KindeditorDialog = null;
+//添加广告
+function AdAdd() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 350,
+		title : '添加广告',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Advertisement/adAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//删除商户
+function AdDel( bid, type ) {
+	if( type=='post') {
+		$("input[name='bid[]']").each(function(index, element) { if($(this).is(":checked")) bid = bid+','+$(this).val(); });
+	}
+    if( !bid ) { alert('参数出现错误'); return false; }
+	if( !confirm('删除数据有一定风险，确实要删除吗？') ) return false;
+    $.get("{:U('/Advertisement/adDel', '', true)}", {bid:bid}, function( data ) {
+        if( parseInt(data)==1 ) $.each(bid.split(','), function(key, value) { $("#TR_AD_"+value).hide(600); })
+    })  
+}
+
+//修改广告
+function AdEdit( bid ) {
+	if( !bid ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 500,
+		height: 350,
+		title : '修改广告',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Advertisement/adEdit/bid/'+bid+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+function AdPriv( url ) {
+	if( url ) {
+		KindeditorDialog=KindEditor.dialog({
+			width:500, height:300, title:'预览广告', body :'<div><img src="'+url+'" width="500" height="300" /></div>',
+			closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); } }
+		});	
+	}	
+}
+
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+</script>
+</body>
+</html>

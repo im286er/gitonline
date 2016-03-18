@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="main-body">
+    <div class="subnav">
+        <span class="on" onclick="addMerchant()">添加商户</span><span style="margin-left:15px;font-size:12px;line-height:38px;border-bottom-color:red;" id="SearchOpen">商户列表</span>
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">&nbsp;&nbsp;
+                <select name="status" class="fl">
+                    <option value="" <if condition="!isset($_GET['status']) or $_GET['status']==''">selected="selected"</if>>全部</option>
+                    <option value="0" <if condition="isset($_GET['status']) && $_GET['status']=='0'">selected="selected"</if>>禁用</option>
+                    <option value="1" <if condition="isset($_GET['status']) && $_GET['status']=='1'">selected="selected"</if>>正常</option>
+                </select>&nbsp;&nbsp;
+                <input autocomplete="off" type="text" class="user_input fl" placeholder="搜索：商家全称/法人名称/代理商名称/商户账号/法人电话" style="width:300px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />  
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+		<form onsubmit="return false;" name="form" id="form" method="post">
+		    <table class="table-list">
+		        <thead>
+		            <tr id="TR_MER_0">
+                        <th width="6%"><input type="checkbox" id="checkbox" onclick="selectAll('jid[]');"></th>
+                        <th width="10%">商家全称</th>
+                        <th width="8%">所属代理商</th>
+                        <th width="8%">所属行业</th>
+                        <th width="8%">法人名称</th>
+                        <th width="8%">法人电话</th>
+                        <th width="8%">入驻日期</th>
+                        <th width="10%" style="text-align:left;">所在城市</th>
+						<th width="8%">账号</th> 
+						<th width="3%">支付</th>
+                        <th width="3%">状态</th>
+                        <th width="17%">操作</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+                    <volist name="merchantsList" id="vo">
+                        <tr id="TR_MER_{$vo.jid}">
+                            <td><input type="checkbox" name="jid[]" value="{$vo.jid}"></td>
+                            <td>{$vo.mnickname}</td>
+                            <td>{$vo.anickname}</td>
+                            <td>{$vo.vname}</td>
+                            <td>{$vo.mlpname}</td>
+                            <td>{$vo.mlptel}</td>
+                            <td>{$vo.mregdate}</td> 
+                            <td style="text-align:left;">{$vo.mcity|get_address_byid}</td>
+							<td>{$vo.mname}</td>
+							<td style="cursor:pointer;" onclick="alipayMerchant(this)" id="ALIPAY_STATUS_{$vo.jid}" data-value='{$alipays[$vo["jid"]]==1?1:0}' data-id='{$vo.jid}' title="点击开启商家定义支付或关闭商家定义支付"><img src="__PUBLIC__/Images/status_{$alipays[$vo['jid']]==1?1:0}.gif" /></td>
+                            <td style="cursor:pointer;" onclick="hosMerchant(this)" id="TD_MER_STATUS_{$vo.jid}" data-value='{$vo.mstatus}' data-id='{$vo.jid}' title="点击禁用或解禁商家"><img src="__PUBLIC__/Images/status_{$vo.mstatus}.gif" /></td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="addShop('{$vo.jid}')">添加分店</a> |
+                                <a href="{:U('/Merchant/shopsList', array('jid'=>$vo[jid]), true)}">店铺列表</a> | 
+                                <a href="javascript:void(0);" onclick="editMerchant('{$vo.jid}')">修改</a>
+						
+								<if condition="$vo['mpwd']=='ff92a240d11b05ebd392348c35f781b2'"> 
+                          			<a href="javascript:void(0);" style="color:#ccc;">| 已重置</a> |
+         						<else />
+                                	<a href="javascript:void(0);" onclick="hosmAgent(this)" id="{$vo.mid}" data-id="{$vo.mid}">| 重置</a> |
+								</if>
+                                
+                                <eq name="groupid" value="10">
+                                <a href="javascript:void(0);" onclick="CdelAgent('{$vo.jid}', '{$vo.mid}')">回收</a>
+                                </eq>
+                            </td>
+                        </tr>
+                    </volist>
+		        </tbody>
+		    </table>
+            <div class="btn">
+		    	<label style="float:left;" for="checkbox">全选/取消</label>
+		        <input type="button" onclick="delMerchant('')" value=" 禁用 " name="dosubmit" class="button" />
+		    </div>
+		    <div id="pages"> {$pages} </div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+var KindeditorDialog = null;
+//添加商户
+function addMerchant() {
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 370,
+		title : '添加商户',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/merchantAdd", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});
+}
+
+//批量禁用商户
+function delMerchant( jid ) {
+	$("input[name='jid[]']").each(function(index, element) { if($(this).is(":checked")) jid = $(this).val()+','+jid; });
+    if( !jid ) { alert('参数出现错误'); return false; } jid = jid.substring(0, jid.length-1);
+	if( !confirm('确实要禁用所选商家吗？') ) return false;
+    $.get("{:U('/Merchant/merchantDel', '', true)}", {jid:jid, status:'1'}, function( data ) {
+        if( parseInt(data)==1 ) $.each(jid.split(','), function(key, value) { 
+			document.getElementById("TD_MER_STATUS_"+value).getElementsByTagName("img").item(0).src="/Public/Images/status_0.gif"; 
+        	$("#TD_MER_STATUS_"+value).attr("data-value", "0");
+		})
+		$("input[type='checkbox']").each(function() { this.checked=false; });
+    })  
+}
+
+//单个禁用或解禁商户
+function hosMerchant( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	if( confirm(dataValue=='1' ? '确实要禁用此商家吗？' : '确实要解禁此商家吗？') ) {
+		$.get("{:U('/Merchant/merchantDel', '', true)}", {jid:dataId, status:dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}
+}
+
+//单个开启或者关闭商家自定支付功能
+function alipayMerchant( obj ) {
+	var dataValue=$(obj).attr('data-value'), dataId=$(obj).attr('data-id');
+	if( !dataId ) return false;
+	if( confirm(dataValue=='1' ? '确实要关闭此商家的自定义支付功能吗？' : '确实要开启此商家的自定义支付功能吗？') ) {
+		$.post("{:U(null, '', true)}", {jid:dataId, 'alipay_status':dataValue}, function(data) {
+			if(parseInt(data)==0) return false;
+			if(dataValue=='1') {
+				$(obj).attr('data-value', '0'); $(obj).children('img').attr('src', '/Public/Images/status_0.gif');
+			} else {
+				$(obj).attr('data-value', '1'); $(obj).children('img').attr('src', '/Public/Images/status_1.gif');
+			}
+		})
+	}
+}
+
+
+//修改商户
+function editMerchant( id ) {
+	if( !id ) { alert('参数出现错误'); return false; }
+	KindeditorDialog = KindEditor.dialog({
+		width : 700,
+		height: 540,
+		title : '修改商户',
+		body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/merchantEdit/id/'+id+'", "", true)}"></iframe>',
+		closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+	});	
+}
+
+//添加分店
+function addShop(jid) {
+    KindeditorDialog = KindEditor.dialog({
+        width : 700,
+        height: 380,
+        title : '添加分店',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/Merchant/shopAdd/jid/'+jid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });
+}
+//重置密码
+function hosmAgent( obj ) {
+    var dataId=$(obj).attr('data-id');  
+    if( !dataId ) return false;
+    if( confirm('确实要重置代理商的账户密码，一旦重置 此代理商的密码将回到初始值 000000 ') ) {  
+        $.get("/Agent/agentMpwd", {mid:dataId}, function(data) {       
+            if(parseInt(data)==0) {alert("修改失败");}    
+			if(parseInt(data)==1){alert("密码重置成功!默认：000000");$(obj).css("color","#ccc");$(obj).html("已重置");}  
+           
+        })
+    }
+}
+function selectAll( name ) {
+    if ($("#checkbox").is(":checked")==false) {
+        $("input[name='"+name+"']").each(function() { this.checked=false; });
+    } else {
+        $("input[name='"+name+"']").each(function() { this.checked=true; });
+    }
+}
+
+//彻底删除商家
+function CdelAgent( id, mid ) {
+	if( !id || !mid ) return false;
+	if( !confirm('确实要清除此商家吗') ) return false;
+	$.post("{:U('/Merchant/truncateAgent', '', true)}", {jid:id, mid:mid}, function(data) {
+		if( parseInt(data)==1 ) $("#TR_MER_"+id).remove();
+	})
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&nbsp;</title>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link href="__PUBLIC__/Css/acommon.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+#CountInfo {
+	background:#DDD; height:40px; line-height:40px; margin-bottom:10px; color:#06F
+}
+</style>
+</head>
+
+<body>
+<div id="main-body">
+    <div class="subnav">
+        
+        <if condition="isset($_GET['puserid'])">
+        <a href="javascript:window.history.go(-1)" style="margin-left:15px;" class="on">返回上一步</a>
+        </if>
+    </div>
+    <div id="CountInfo" style="padding-left:10px;">
+        会员总量：{$count} &#12288;&#12288;&#12288;&#12288;
+        今日注册量：{$tcount} &#12288;&#12288;&#12288;&#12288;
+        昨日注册量：{$ycount} &#12288;&#12288;&#12288;&#12288;
+        本周注册量：{$wcount}
+    </div>
+    <div class="search_list" id="SearchForm">
+        <form method="get" action="__ACTION__" name="searchform">
+        	<input type="hidden" value="{$Think.get.type}" name="type" />
+            <div class="explain-col">
+                <label class="fl">注册时间：</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" readonly="readonly" size="10" value="{$Think.get.endtime}" id="endtime" name="endtime">
+
+                <input type="text" autocomplete="off" class="user_input fl" placeholder="搜索：会员昵称" style="width:280px;" value="{$Think.get.keyword}" name="keyword" />
+                <input type="submit" value="搜索" class="button fl" name="search" />  
+            </div>
+        </form>
+    </div>
+	<div class="main-body">
+        <table class="table-list">
+            <thead>
+                <tr>
+                	<th width="5%">会员ID</th>
+                    <th width="9%">会员昵称</th>
+                    <th width="9%">会员头像</th>
+                    <th width="9%">会员来源</th>
+                    <th width="9%">会员手机号</th>
+                    <th width="9%">是否V会员</th>
+                    <th width="10%">开通时间</th>
+                    <th width="10%">所属商家</th>
+                    <th width="10%">所属代理</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="usersList" id="u">
+                    <tr>
+                       	<td>{$u.flu_userid}</td>
+                        <td>{$u.flu_nickname}</td>
+                        <td>
+                        	<if condition="$u['flu_avatar']">
+                        	<img src="{$u.flu_avatar}" width="18" height="18" />
+                            </if>
+                        </td>
+                        <td>
+                        	<if condition="$u['flu_source']==1">
+                            	QQ
+                            <elseif condition="$u['flu_source']==2"/>
+                            	新浪
+                            <elseif condition="$u['flu_source']==3"/>
+                            	微信
+                            <else/>
+                            	系统注册
+                            </if>
+                        </td>
+                        <td>{$u.flu_phone}</td>
+                        <td>
+                        	<img src="/Public/Images/status_{$u.flu_usertype|default=0}.gif" />
+                        	
+                        </td>
+                        <td>{$u.flu_regtime}</td>
+                        <td>{$u.mnickname|default='-'}</td>
+                        <td>{$u.anickname|default='-'}</td>
+                        <td>
+                        	<a href="javascript:void(0);" onclick="SetUserInfo('{$u.flu_userid}')">绑定账号</a> |
+                            <a href="javascript:void(0);" onclick="LookUserInfo('{$u.flu_userid}')">账号详情</a> |
+                            <a href="javascript:void(0);" onclick="LookConsumption('{$u.flu_userid}')">消费记录</a> |
+                            <a href="{:U('/User/vusersList', array('puserid'=>$u['flu_userid']))}">推广账号</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div id="pages"> {$pages} </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+var KindeditorDialog = null;
+//绑定账号（绑定商家和代理商）
+function SetUserInfo( uid ) {
+	if( !uid ) { alert('请选择要绑定的会员'); return false; }
+	
+	if(confirm('温馨提示：你确定此会员为商家或代理商')) {
+		KindeditorDialog = KindEditor.dialog({
+			width : 600,
+			height: 260,
+			title : '绑定会员',
+			body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/User/setUserInfo/uid/'+uid+'", "", true)}"></iframe>',
+			closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+		});	
+	}
+}
+
+//查看会员信息
+function LookUserInfo( uid ) {
+	if( !uid ) { alert('请选择要接收的会员'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 800,
+        height: 400,
+        title : '查看会员信息',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/User/vusersInfo/uid/'+uid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });	
+}
+
+//查看会员消息记录
+function LookConsumption( uid ) {
+	if( !uid ) { alert('请选择要接收的会员'); return false; }
+    KindeditorDialog = KindEditor.dialog({
+        width : 900,
+        height: 500,
+        title : '查看消息记录',
+        body  : '<iframe frameborder="0" class="iframeDialog" src="{:U("/User/vconsumption/uid/'+uid+'", "", true)}"></iframe>',
+        closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+    });	
+}
+
+</script>
+</body>
+</html>
