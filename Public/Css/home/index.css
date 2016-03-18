@@ -1,0 +1,72 @@
+*{
+	padding:0;
+	margin:0;
+	list-style: none;
+}
+
+html,body{
+	width:100%;
+	height:100%;
+	color:#fff;
+	background: #ccc; 
+}
+body{ overflow:hidden}
+html{
+	background: url(about:black) fixed;
+}
+#nav{
+	height:50px;
+	width:100%;
+	text-align: center;
+	font-size: 30px;
+	line-height: 50px;
+	border-bottom:1px solid gray;
+	position: fixed;
+	_position:absolute;
+	z-index: 999;
+	_top:expression(eval(document.documentElement.scrollTop));
+}
+#content{
+	height: 100%;
+	width: 100%; 
+}
+#content li{
+	height: 100%;
+	width: 100%;
+}
+#content .one{ background:url(../../Images/home/bg1.jpg) no-repeat; background-size:100%
+}
+#content .two{
+	background:#FFA422;
+}
+#content .three{
+	background:#F05183;
+}
+#content .four{
+	background:#6CD5E2;
+}
+#content .five{
+	background:#43155E;
+}
+#content .six{
+	background:#1C232B;
+}
+#back{
+	color:#fff;
+	font-size: 30px;
+	width:60px;
+	height: 60px;
+	border:2px solid #ccc;
+    background: #ccc;
+    cursor: pointer;
+    position: fixed;
+    bottom: 50px;
+    right: 60px;
+    text-align: center;
+    line-height: 50px;
+    display: none;
+    _position:absolute;
+    _right:50px;
+    _top:expression(eval(document.documentElement.clientHeight-this.offsetHeight-50+document.documentElement.scrollTop));
+    z-index: 999;
+}

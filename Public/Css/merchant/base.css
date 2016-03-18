@@ -1,0 +1,62 @@
+/*
+ *基本的样式文件
+*/
+html {font-family: '宋体';-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%}
+body{font-size: 12px;}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {margin: 0;padding: 0;border: 0;outline: 0;vertical-align: baseline;background: transparent}
+img{border: 0;max-width: 100%;}
+li{list-style: none;}
+a{background: transparent;text-decoration: none;color:#333;}
+a:hover,a:active,a:focus {outline: 0}
+a:hover,a:focus {color: #6dafbb;text-decorati}
+a:focus {outline: thin dotted;outline: 5px auto -webkit-focus-ring-color;outline-offset: -2px;}
+button,input,select,textarea {font-family: inherit;margin: 0}
+button,input{line-height: normal;outline: none;}
+button,select{text-transform: none}
+button,html input[type="button"],input[type="reset"],input[type="submit"] {-webkit-appearance: button;cursor: pointer;}
+button[disabled],html input[disabled] {cursor: default}
+input[type="checkbox"],input[type="radio"] {box-sizing: border-box;padding: 0}
+button::-moz-focus-inner,input::-moz-focus-inner {border: 0;padding: 0}
+textarea{overflow: auto;vertical-align: top}
+table{border-collapse: collapse;border-spacing: 0}
+.pull-right {float: right !important;}
+.pull-left {float: left !important;}
+.center-block {display: block;margin-right: auto;margin-left: auto;}
+.text-center{text-align: center;}
+.text-rigth{text-align: right}
+/*清除浮动*/
+.clearfix:before,.clearfix:after{display: table;content:" ";}
+.clearfix:after{clear: both;}
+
+.modal{background:rgba(255,255,255,0.7);filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#8FFFFFFF,endColorStr=#8FFFFFFF);position:fixed;left:0px;top:0px;width:100%;height:100%;display: none;}
+.reveal-modal{width: 465px;background: #fff;border:1px solid #e7e7eb;position: relative;left: 50%;top:0;margin-left: -232px;overflow: hidden;}
+.reveal-modal>h3{background: #f2f2f2;height: 50px;line-height: 50px;font-size: 14px;font-weight: normal;padding-left: 10px;border-bottom:1px solid #e7e7eb;}
+.reveal-modal>h3>span.close{float: right;display: inline-block;margin-right: 10px;cursor: pointer;}
+.modal-content{padding: 10px 0px;}
+.modal-content .set>input[type='text']{width: 175px;padding-left: 5px;height: 26px;line-height: 26px;border:1px solid #e7e7eb;}
+.order_ulleft li{
+
+float:left; 
+margin-left:37px;
+
+}
+
+.order_ulleft li  img{
+
+width:50px;
+height:50px;
+
+}
+.fendian{
+position:absolute;
+left:10px;
+top:70px;
+width:300px;
+height:269px;
+border:1px solid #ccc;
+
+}
+.buttonfendian{
+text-align:center;background:#3dc;color:#fff;font-size:12px;font-weight:800;width:285px;margin-left:15px;cursor:pointer;height:30px; 
+
+}

@@ -1,0 +1,57 @@
+/* CSS Document */
+body{ padding:0; margin:0;}
+div,p{ padding:0; margin:0}
+
+#bodybg{ background-color:#0099cc;width:100%}
+.page{ width:662px;  height:761px; position:absolute; top:50%; left:50%; margin-left:-331px; margin-top:-430px; background:url(../Images/login/icon.png) no-repeat; background-size:100%; padding-bottom:50px}
+.logo{ width:375px; margin:auto;}
+.logo img{ padding-top:206px}
+.fromgroup{ width:346px; margin:auto}
+.heightline{line-height:68px; height:68px;}
+input.name{ width:100%; margin-bottom:12px;  padding-left: 25px}
+.top{ margin-top:50px}
+.ridus{  border:1px solid #fff; border-radius:10px;-moz- border-radius:10px; -ms- border-radius:10px; -o- border-radius:10px; -webkit- border-radius:10px;}
+.fontsize{font-size:16px; font-family:"微软雅黑";}
+.btn{ width:371px; background:#006699; color:#fff; border:none; display:block; cursor:pointer }
+.code{ overflow:hidden;_zoom:1; width:375px; margin-bottom:10px}
+.codepic{ float:right; width:120px;}
+.h48 img{ width:120px; height:48px; overflow:hidden}
+.h68 img{ width:120px;height:68px; overflow:hidden}
+.codetxt{ width:195px; float:left; padding:0 25px}
+
+.yunduo{ background:url(../Images/login/yunduo.png) no-repeat; background-size:100%; background-position:bottom}
+.center{ width:1080px; overflow:hidden;_zoom:1; height:496px; position:absolute; top:50%; left:50%; margin-left:-540px; margin-top:-248px;}
+.center .left{ width:708px; float:left}
+.center .right{ background:#fff; padding-bottom:0; height:460px}
+.center .right .logoblue{ width:343px; margin:auto; padding:30px 0 30px 0} 
+.fromgroup_1{ width:343px; margin:auto;}
+.inputwidth{ width:293px; margin-left:25px}
+.vbottom{ border:none; margin-top:2px}
+.btn_1{ background:#0099cc; border:none; box-shadow:none; color:#fff; width:343px;}
+.combine{ margin-bottom:10px;border-radius:10px;-moz- border-radius:10px; -ms- border-radius:10px; -o- border-radius:10px; -webkit- border-radius:10px; border:1px solid #a6a6a6; box-shadow:inset 1px 2px 1px #e5e5e5; -moz-box-shadow:inset 1px 2px 1px #e5e5e5;-ms-box-shadow:inset 1px 2px 1px #e5e5e5; -o-box-shadow:inset 1px 1px 1px #e5e5e5;-webkit-box-shadow:inset 1px 2px 1px #e5e5e5}
+.border0{ border:none}
+.line48{line-height:48px; height:48px;}
+.linelist{ height:1px; border-bottom:1px solid #ccc;}
+.code1{ overflow:hidden;_zoom:1; width:343px; margin-bottom:10px}
+.codetxt1{ width:163px; float:left; padding:0 25px}
+.rig_dl{ width:368px; float:right;}
+
+#bodybgone{ background:url(../Images/login/bg.jpg) no-repeat;width:100%}
+.hand{ position:fixed; bottom:0; left:0; width:48%}
+.hand img{ width:100%}
+.rig{ width:1080px; height:659px; position:absolute; top:50%;  margin-top:-329px; left:50%; margin-left:-540px; overflow:hidden;_zoom:1 }
+.rig .rig_con{ float:right; width:533px }
+.load{background-color:rgba(255,255,255,0.5); border-radius:10px;}
+.top1{ padding:30px 0;}
+.width375{ width:375px; margin:auto}
+.txt{ margin-top:50px}
+.yunduo img{ width:100%; position:fixed; bottom:0}
+.fff{ background:#fff}
+
+.not{ background:#ff6633; color:#fff; text-align:center; border-radius:10px;-moz- border-radius:10px; -ms- border-radius:10px; -o- border-radius:10px; -webkit- border-radius:10px;; line-height:36px}
+.jt{ width:12px; margin:0 auto 10px;}
+.width343{ width:368px}
+.alert{margin-bottom:-6px; z-index:9999; position:relative; height:42px}
+.font12{ font-size:14px}
+.rig_dl{ height:496px;}
+.width_sh{ width:375px; margin:0 auto -6px}

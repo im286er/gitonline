@@ -1,0 +1,52 @@
+/*最大盒子宽*/
+.container { position: relative; margin: 0 auto; width:100% }
+body { background: #ebebeb; }
+
+/*头部*/
+.header { background: #00bae7; border-bottom:1px solid #00a7d1; width: 100%; height:88px; color:#FFF; min-width:1400px;}
+.logo { display: block; height:88px; float: left; line-height:88px; }
+.navbar{ padding:30px 30px 0 0;}
+.navbar>a { display: inline-block; margin: 0px 2px;color:#FFF}
+.navbar>a .brandlogo{ width:28px; height:28px; overflow:hidden; border-radius:14px; display:inline-block; margin-right:10px;vertical-align:middle}
+.navbar>a:hover{ color:#82e6ff; text-decoration:underline}
+.menulist{ float:left}
+.menulist li{ width:88px; height:88px; float:left; text-align:center; }
+.menulist li>a{ display:block; height:88px; text-align:center;color:#fff}
+.menulist li>a:hover,.menulist li.current>a{ background:#00a7d1; border-left:1px solid #26c6ee; border-right:1px solid #26c6ee}
+.menulist li>a .icon{ width:40px; height:40px; display:inline-block; background:url(../../Images/merchant/icon_menu.png) no-repeat; margin:14px auto 4px;}
+.menulist li>a .icon.setting{ background-position:0 0}
+.menulist li>a .icon.myorder{ background-position:0 -40px;}
+.menulist li>a .icon.message{ background-position:0 -80px;}
+.menulist li>a .icon.finance{ background-position:0 -120px;}
+.menulist li>a .icon.member{ background-position:0 -160px;}
+.menulist li>a .icon.wifi{ background-position:0 -200px;}
+.menulist li>a .icon.special{ background-position:0 -240px;}
+
+/*底部*/
+.fooder { height: 66px; line-height: 66px; text-align: center; background: #bababa; color: #fff; }
+.fooder>span { display: inline-block; margin: 0px 15px; }
+.fooder>a { color: #fff }
+
+/*主体*/
+.main { background: #fff;/* border: 1px solid #e7e7eb;margin: 20px 0px; min-width:1400px;*/ overflow:hidden;}
+.sideBar_a { float: left; width: 210px; border-right: 1px solid #e7e7eb; background:#323c3e;font-size: 14px;margin-bottom:-9999px;padding-bottom:9999px;}
+.sideBar_a .title { width: 100%; height: 34px; line-height: 34px; color: #fff; text-align: center; background: #00bae7 }
+.sideBar_a .title>a { text-align: center; color: #fff; }
+.sideBar_nav { /*border-top: 1px solid #e7e7eb; padding: 10px 0px;*/ }
+.new-sideBar_nav { border: 0px; padding: 0px; }
+.sideBar_nav>h3 { font-size: 14px; color: #909397; font-weight: normal; padding: 0px 0px 0px 75px; margin: 5px 0px; }
+.sideBar_nav>h3>i { display: inline-block; }
+.sideBar_nav>ul>li { line-height: 35px; }
+.sideBar_nav>ul>li>a { font-size: 14px; display: inline-block; padding-left: 75px;color: #fff }
+.sideBar_nav>ul>li.curr { width: 100%; height: 34px; line-height: 34px; background: #516367; color: #fff }
+.sideBar_nav>ul>li.curr>a { color: #fff; display:block; }
+.funicon { background: url(../../Images/merchant/funicon.png) 40px center no-repeat; }
+.shopping { background: url(../../Images/merchant/shoppingicon.png) 40px center no-repeat; }
+.hornicon { background: url(../../Images/merchant/horn.png) 40px center no-repeat; }
+.fileicon { background: url(../../Images/merchant/fileicon.png) 40px center no-repeat; }
+.shopicon { background: url(../../Images/merchant/shopicon.png) 40px center no-repeat; }
+
+/*右侧*/
+.sideBar_b { margin-left:211px;overflow: hidden; }
+.sideBar_a .sideBar_nav ul li a:hover {display: block; background: #516367; color: #fff }
+.sideBar_a .sideBar_nav ul li.curr a:hover { display:block;background: #516367; color: #fff}

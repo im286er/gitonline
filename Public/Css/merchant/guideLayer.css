@@ -1,0 +1,26 @@
+.guide-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	display: none;
+}
+.guide-mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: #4b545b;
+	opacity: .8;
+	filter: alpha(opacity=80);
+	z-index: 1000;
+}
+.guide-wrapper {
+	width: 1048px;
+	margin: 0 auto;
+	position: relative;
+	z-index: 1001;
+}
