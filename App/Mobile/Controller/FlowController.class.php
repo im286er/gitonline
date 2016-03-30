@@ -52,7 +52,24 @@ class FlowController extends MobileController {
 				}
 			}
 		}
-		
+		//洗衣的价格运算
+		if($this->jid == '438'){
+			//判断是否特级会员
+			$privilege   = M('FlUser')->where(array('flu_userid'=>$this->mid))->getField('flu_privilege');
+			if ( $privilege ) {
+				//文件路径
+				$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
+				//获取特权参数
+				$parammsg    = 1; 
+				file_exists($path.'ParamMsg.php') && $parammsg=file_get_contents($path.'ParamMsg.php');
+				//计算价格
+				$total_price = $total_number * $parammsg;
+			}else{
+				$total_price = $total_price + 18 - 50;
+				$total_price = ($total_price > 18) ? $total_price : 18;
+			}
+		}
+
 		//查询我的优惠券
 		$coupon_user = M('voucher_user');
 		$opt = array(

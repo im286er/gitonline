@@ -27,7 +27,11 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 						<th width="100px">会员昵称</th>
 						<th width="100px">手机</th>
 						<th width="100px">来源</th>
-						<th width="100px">是否VIP</th>
+						<?php if(in_array("$jid",$MEMBER_B)):?>
+							<th width="100px">是否特权会员</th>
+						<?php else:?>
+							<th width="100px">是否VIP</th>
+						<?php endif;?>
 						<th>注册时间</th>
 						<th>最后登录</th>
 					</tr>
@@ -44,13 +48,19 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 						</if>
 						</td>
 						<td>
-						
-						<if condition="$v[flu_usertype] eq 1">
-						VIP会员
-						<else />
-						普通会员
-						</if>
-						
+						<?php if(in_array("$jid",$MEMBER_B)):?>
+							<if condition="$v[flu_privilege] eq 1">
+								<img src="__PUBLIC__/Images/onSuccess.gif" class="status-{$v['flu_userid']} change-status" id="status_1" fid="{$v['flu_userid']}">
+							<else />
+								<img src="__PUBLIC__/Images/status_0.gif" class="status-{$v['flu_userid']} change-status" id="status_0" fid="{$v['flu_userid']}">
+							</if>
+						<?php else:?>
+							<if condition="$v[flu_usertype] eq 1">
+								VIP会员
+							<else />
+								普通会员
+							</if>
+						<?php endif;?>
 						</td>
 						<td>{$v.flu_regtime}</td>
 						<td>{$v.flu_lasttime}</td>
@@ -66,4 +76,34 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 			</div>
 		</div>
 	</div>
+
+<script type="text/javascript">
+	/**
+	 * 修改特级会员状态
+	 */
+	$('.change-status').click(function(){
+		var status    = 'status_0';
+		var privilege = 0;
+		var flu_userid= $(this).attr('fid');
+		var src       = "__PUBLIC__/Images/status_0.gif";
+		
+		if ($(this).attr('id') == 'status_0'){
+			src       = "__PUBLIC__/Images/onSuccess.gif";
+			privilege = 1;
+			status    = 'status_1';
+		}
+
+		$.post("{:U('User/changePrivilege')}" , {'privilege':privilege , 'flu_userid':flu_userid} , function(data){
+			if (data){
+				$('.status-'+flu_userid).attr('src',src);
+				$('.status-'+flu_userid).attr('id',status);
+				return true;
+			}else{
+				alert("修改失败");
+				return false;
+			}
+		});
+		
+	})
+</script>
 </block>

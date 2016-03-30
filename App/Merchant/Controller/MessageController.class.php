@@ -26,6 +26,8 @@ class MessageController extends MerchantController {
 		}
 	}
 
+
+
 	//接受站内消息
 	public function notice(){
 	  $merchant = M('Merchant')->alias('AS mt')->join('__AGENT__ as agent ON mt.magent=agent.id', 'left')->where(array('mt.jid'=>$this->jid))->find();
@@ -88,6 +90,8 @@ class MessageController extends MerchantController {
 		$this->assign('pages', $page->show());
 		$this->display();	
 	}
+
+
 	
 	//删除消息列表
 	public function delsmsg() {
@@ -99,6 +103,86 @@ class MessageController extends MerchantController {
 			$this->success('操作成功', U('/Message/listmsg', '', true));	
 		} else { $this->error('操作失败'); }
 	}
+
+
+	/**
+	 * 留言列表
+	 */
+	public function commentmsg(){
+		$where = array('jid'=>$this->jid);
+		
+		$page  = new \Common\Org\Page(M('Comments')->where($where)->count(), 6);
+
+		$commentList = M('Comments')->where($where)->order('id desc')->limit($page->firstRow.','.$page->listRows)->select();
+		
+		$this->assign('commentList' , $commentList);
+		$this->assign('pages' , $page->show());
+		$this->display();
+	}
+
+
+
+	/**
+	 * 添加留言信息
+	 */
+	public function editComment(){
+		if ( IS_POST ) {
+			$opt = array(
+					'jid'         => $this->jid,
+					'phone'       => I('post.phone'),
+					'content'     => I('post.pcontent'),
+					'create_time' => date('Y-m-d'),
+				);
+			if ($re = M('Comments')->add($opt)) {
+				$this->success('添加成功', U('/Message/commentmsg', '', true));
+			}else{
+				$this->error('操作失败');
+			}
+		}
+		$this->display();
+	}
+
+
+	/**
+	 * 删除留言信息
+	 */
+	public function delComment(){
+		//获取ID
+		$id  = I('get.id' , 0 , 'intval');
+
+		//删除操作
+		if (M('Comments')->where(array('id'=>$id))->delete()){
+			$this->success('操作成功', U('/Message/commentmsg', '', true));
+		}else{
+			$this->error('操作失败'); 
+		}
+	}
+
+
+
+	/**
+	 * 特权价格
+	 */
+	public function parammsg(){
+		//文件路径
+		$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
+		
+		if ( IS_POST ){
+			$param = I('post.param');
+			//保存参数到文件
+			if (file_put_contents($path.'ParamMsg.php', $param)){
+				$this->success('操作成功', U('/Message/parammsg', '', true));
+			}else{
+				$this->error('操作失败');
+			}
+		}
+		//从文件查询参数
+		file_exists($path.'ParamMsg.php') && $parammsg=file_get_contents($path.'ParamMsg.php');
+
+		$this->assign('parammsg',$parammsg);
+		$this->display();
+	}
+
 	
     //最新活动
     public function hdlist() {

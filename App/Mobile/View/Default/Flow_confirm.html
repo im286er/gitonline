@@ -83,13 +83,13 @@ $(document).ready(function(){
 	getAddress();
     $('.flow_sub').click(function(){
     	saveAddress();
-    	
+
     		if(mid > 0){
     			submitChoose();
     		}else{
     			location.href = linkurl;
     		}
-    	
+
     });
     $('.btn-go').click(function(){
     	location.href = "{:U('Mobile/User/myorder',array('jid'=>$jid,'jump'=>1))}";
@@ -102,7 +102,7 @@ $(document).ready(function(){
     });
 });
 function submitChoose(){
-	
+
 	if (Pullrefresh1 == null){
 		Pullrefresh1 = new Date().getTime();
 	}else{
@@ -114,10 +114,10 @@ function submitChoose(){
 			Pullrefresh1 = Pullrefresh2;
 		}
 	}
-	
-	var re = /^1\d{10}$/;	  
+
+	var re = /^1\d{10}$/;
 	var msg = '';
-	
+
 	var  o_seat    = $("#o_seat").val();
 	var  o_address = $("#o_address").val();
 	var  o_remarks = $("#o_remarks").val();
@@ -126,7 +126,7 @@ function submitChoose(){
 		var o_phone   = $("#o_phone").val();
 		if(o_name == ''){
 			msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
-		    msg.show(); 
+		    msg.show();
 		    return false;
 		}
 		if(o_phone == ''){
@@ -137,7 +137,7 @@ function submitChoose(){
 			msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
 		    msg.show(); return false;
 		}
-		if(sarr != ''){		
+		if(sarr != ''){
 			if(o_seat == 0){
 				msg = dialog({title: '提示',content: '店内消费请选择座位号',id: 'm1'});
 	  		    msg.show();
@@ -147,7 +147,7 @@ function submitChoose(){
 	}else{
 		var o_name    = $("#op_name").val();
 		var o_phone   = $("#op_phone").val();
-		
+
 			if(o_name == ''){
 				msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
 			    msg.show(); return false;
@@ -165,11 +165,11 @@ function submitChoose(){
 	  		    msg.show();
 	  		  	return false;
 			}
-		
+
 	}
-	$.ajax( {    
-		    url:reqUrl,   
-		    data:{    
+	$.ajax( {
+		    url:reqUrl,
+		    data:{
 		    	used_coupon : used_coupon,
 				paytype : paytype,
 				o_xftype : xftype,
@@ -178,11 +178,11 @@ function submitChoose(){
 				o_phone : o_phone,
 				o_address : o_address,
 				o_remarks : o_remarks,
-		    },    
-		    type:'post',    
-		    cache:false,    
-		    dataType:'json',    
-		    success:function(data) {   
+		    },
+		    type:'post',
+		    cache:false,
+		    dataType:'json',
+		    success:function(data) {
 				if(data.msg =="pay"){
 					location.href = data.url;
 				}else if(data.msg =="yspay"){
@@ -262,12 +262,12 @@ function msgopen( type )
 			<div class="sec-body">
 				<ul>
 					<volist name="coupon_list" id="vo">
-						
+
 					<li>
 						<p>{$vo.vu_name}-减免<font color="red" id="price_{$vo.uvid}">{$vo.vu_price}</font>元</p>
 						<i class="ico ico-select ico-coupon" pid="{$vo.uvid}"></i>
 					</li>
-					
+
 					</volist>
 				</ul>
 			</div>
@@ -334,7 +334,7 @@ function msgopen( type )
 				<?php endif;?>
 
 				<?php if($setting['consume_type']==2): ?>
-					
+
 						<form <if condition='$receivingid gt 0'>class="active"</if> id="dianwai-div" <eq name="setting.consume_type==2">style="display: block;"</eq>>
 							<div>
 								<label for="">姓名：</label>
@@ -353,7 +353,7 @@ function msgopen( type )
 								<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
 							</div>
 						</form>
-					
+
 				<?php endif;?>
 
 				<?php if($setting['consume_type']==3): ?>
@@ -366,20 +366,20 @@ function msgopen( type )
 							<label for="">手机：</label>
 							<input type="number" value="{$user_info.flu_phone}" id="o_phone" name="o_phone" placeholder="请输入手机号码">
 						</div>
-						
+
 						<if condition="$sarr">
 						<div>
 							<a class="seat-info" id="js_seat" href="javascript:;">请选择您的座位号<i class="ico ico-right"></i></a>
 						</div>
 						</if>
 						<input type="hidden" name="o_seat" id="o_seat" value="" />
-						
+
 						<div>
 							<label for="">备注：</label>
 							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
 						</div>
 					</form>
-					
+
 						<form <if condition='$receivingid gt 0'>class="active"</if> id="dianwai-div">
 							<div>
 								<label for="">姓名：</label>
@@ -398,7 +398,7 @@ function msgopen( type )
 								<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
 							</div>
 						</form>
-					
+
 				<?php endif;?>
 			</div>
 		</section>
@@ -519,7 +519,7 @@ function msgopen( type )
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 详情选择框 -->
 	<div class="modal modal-seat" id="seatModal" style="display:none;">
 		<div class="modal-backdrop"></div>
@@ -545,7 +545,7 @@ function msgopen( type )
 			</div>
 		</div>
 	</div>
-	
+
 	<script>
 		$(".ico-coupon").click(function(event) {
 			var _this = $(this);
@@ -590,7 +590,7 @@ function msgopen( type )
 			}
 			$(this).addClass("checked").siblings("li").removeClass("checked");
 		});
-	
+
 		// 选择座位弹出框
 		var seatModal = $("#seatModal");
 		var swiper_index = 0;
@@ -612,7 +612,7 @@ function msgopen( type )
 			$("#js_seat").html(ss);
 			$("#o_seat").val(ss);
 			swiper_index = seatModal.find('.swiper-slide-active').index();
-		});	
+		});
 		var option = {
 			direction: 'vertical',
 			slidesPerView: 3,

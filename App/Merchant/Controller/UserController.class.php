@@ -102,7 +102,21 @@ class UserController extends MerchantController {
 		$this->assign('userlist', D('fl_user')->order('flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
 		$this->assign('pages', $page->show());
 		$this->assign('type',$this->type);
+		$this->assign('jid',$this->jid);
+		$this->assign('MEMBER_B',C('MEMBER_B'));
 		$this->display();
+	}
+
+
+	/**
+	 * 更改特权会员状态
+	 */
+	public function changePrivilege(){
+		$flu_userid = I('post.flu_userid');
+		$privilege  = I('post.privilege');
+		
+		$result = M('FlUser')->where(array('flu_userid'=>$flu_userid))->setField('flu_privilege',$privilege);
+		exit($result?'1':'0');
 	}
 
 }
