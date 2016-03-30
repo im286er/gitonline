@@ -1,0 +1,32 @@
+<extend name="Public:common"/>
+<block name="body">
+<link href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" type="text/css" rel="stylesheet">
+<div class="wrapper">
+    <h2 class="title"><!--新建群发消息-->
+        <p class="returnMenu">
+            <a href="{:U('/Message/parammsg', '', true)}" class="curr">管理特权价格</a>
+        </p>
+    </h2>
+    <div class="mian padding">
+        <form action="__ACTION__" method="post">
+            <div class="set">
+                <b>特权价格：</b>
+                <input type="text" name="param" class="input-title" placeholder="请输入价格" value="{$parammsg}">元/件
+            </div>
+            <div class="set">
+                <input type="submit" value="确认" class="btn btn-pwd">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+KindEditor.ready(function(K) {
+    K.create('textarea[name="pcontent"]', {
+        width:580, height:150, allowFileManager:false,
+        uploadJson:"/Public/kindeditorUpload.html",
+        items:['fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline','removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+    });
+});
+</script>
+</block>

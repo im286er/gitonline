@@ -1,0 +1,30 @@
+<extend name="Public:common"/>
+<block name="body">
+<div class="wrapper">
+    <h2 class="title"><!--群发消息列表-->
+        <p class="returnMenu">
+            <a href="{:U('/Message/editComment', '', true)}">添加留言</a>
+            <a href="{:U('/Message/commentmsg', '', true)}" class="curr">留言列表</a>
+        </p>
+    </h2>
+    <div class="mian padding">
+        <volist name="commentList" id="msg">
+             <div class="content_b sentList sent_a">
+             <if condition="isset($msg['pimg'])"><div class="sentImg"><img src="{$msg.pimg}" alt="" style="height:80px; width:80px;"></div></if>
+             <div class="sentwidth">{$msg.content|msubstr=0,20,'utf-8'}</div>
+                            <span>发送成功</span>
+                            <span>{$msg.create_time}</span>
+                            <a href="{:U('/Message/delComment', array('id'=>$msg['id']), true)}" class="c-5da3ea">删除</a>
+             </div>
+        </volist>
+        <if condition="$pages">
+            <div class="page clearfix">
+                <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+            </div>
+        </if>
+        <div class="border-b"></div>
+    </div>
+</div>
+ <!--right over--> 
+</block>

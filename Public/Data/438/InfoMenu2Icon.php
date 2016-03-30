@@ -1,0 +1,1 @@
+/Public/Mobile/xiyi/img/icon02.png

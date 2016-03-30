@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>订单确定</title>
+<link rel="stylesheet" href="css/tianhuxiyi.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/xiyi/css/tianhuxiyi.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/orderpay.css">
+<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<script>
+var reqUrl = "{:U('Mobile/Flow/submit',array('jid'=>$jid,'sid'=>$sid))}";
+var total = {$total_price};
+var used_coupon = '';
+//支付方式
+<if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype')">
+var paytype = 'weixin';
+<php> $weixinpay = true;</php>
+<else/>
+<if condition="$setting['pay_type']==1">
+var paytype = 'alipay';
+<else/>
+var paytype = 'alipay';
+</if>
+</if>
+<if condition="$setting['consume_type']==1">
+var xftype = 1;
+<elseif condition="$setting['consume_type']==2"/>
+var xftype = 2;
+<else/>
+var xftype = "<if condition='$receivingid eq 0'>1<else/>2</if>";
+</if>
+
+var msg_title_1 = "{$setting.consume_title_1}";
+var msg_title_2 = "{$setting.consume_title_2}";
+
+var sarr = "{$sarr}";
+var isApp = "{$isApp}";
+var mid = "{$mid}";
+var linkurl = "{$linkurl}";
+var Pullrefresh1 = null;
+function usedCoupon(pid){
+	var price = $("#price_"+pid).html();
+	var new_total = total - price;
+	if(new_total < 0){
+		new_total = 0;
+	}
+	$(".order-pice").html(new_total);
+	used_coupon = pid;
+}
+function unusedCoupon(){
+	used_coupon = '';
+	$(".order-pice").html(total);
+}
+function ch_address(){
+	changeAddress(linkurl);
+}
+function saveAddress(){
+	var o_name    = $("#o_name").val();
+	var o_phone   = $("#o_phone").val();
+	//var op_name    = $("#op_name").val();
+	//var op_phone   = $("#op_phone").val();
+	//var o_address = $("#o_address").val();
+	var addr = {
+			o_name:o_name,
+			o_phone:o_phone,
+			//op_name:op_name,
+			//op_phone:op_phone,
+			//o_address:o_address
+	};
+	$.cookie("addr", JSON.stringify(addr),{path:'/'});
+}
+function getAddress(){
+	var addr = eval('('+ $.cookie("addr") +')');
+	if(addr != undefined){
+		$("#o_name").val(addr.o_name);
+		$("#o_phone").val(addr.o_phone);
+		//$("#op_name").val(addr.op_name);
+		//$("#op_phone").val(addr.op_phone);
+		//$("#o_address").val(addr.o_address);
+	}
+}
+$(document).ready(function(){
+	getAddress();
+    $('.flow_sub').click(function(){
+    	saveAddress();
+
+    		if(mid > 0){
+    			submitChoose();
+    		}else{
+    			location.href = linkurl;
+    		}
+
+    });
+    $('.btn-go').click(function(){
+    	location.href = "{:U('Mobile/User/myorder',array('jid'=>$jid,'jump'=>1))}";
+    });
+    document.addEventListener('touchmove', function(event) {
+        //判断条件,条件成立才阻止背景页面滚动,其他情况不会再影响到页面滚动
+        if(!$("#seatModal").is(":hidden")){
+            event.preventDefault();
+        }
+    });
+});
+function submitChoose(){
+
+	if (Pullrefresh1 == null){
+		Pullrefresh1 = new Date().getTime();
+	}else{
+		var Pullrefresh2 = new Date().getTime();
+		if(Pullrefresh2 - Pullrefresh1 < 2000){
+			Pullrefresh1 = Pullrefresh2;
+			return false;
+		}else{
+			Pullrefresh1 = Pullrefresh2;
+		}
+	}
+
+	var re = /^1\d{10}$/;
+	var msg = '';
+
+	var  o_seat    = $("#o_seat").val();
+	var  o_address = $("#o_address").val();
+	var  o_remarks = $("#o_remarks").val();
+	if(xftype == '1'){
+		var o_name    = $("#o_name").val();
+		var o_phone   = $("#o_phone").val();
+		if(o_name == ''){
+			msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
+		    msg.show();
+		    return false;
+		}
+		if(o_phone == ''){
+			msg = dialog({title: '提示',content: '请输入您的手机号',id: 'm1'});
+		    msg.show(); return false;
+		}
+		if(!re.test(o_phone)){
+			msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
+		    msg.show(); return false;
+		}
+		if(sarr != ''){
+			if(o_seat == 0){
+				msg = dialog({title: '提示',content: '店内消费请选择座位号',id: 'm1'});
+	  		    msg.show();
+	  		  	return false;
+			}
+		}
+	}else{
+		var o_name    = $("#op_name").val();
+		var o_phone   = $("#op_phone").val();
+
+			if(o_name == ''){
+				msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(o_phone == ''){
+				msg = dialog({title: '提示',content: '请输入您的手机号',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(!re.test(o_phone)){
+				msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
+			    msg.show(); return false;
+			}
+			if(o_address == ''){
+				msg = dialog({title: '提示',content: '请输入您的收货地址',id: 'm1'});
+	  		    msg.show();
+	  		  	return false;
+			}
+
+	}
+	$.ajax( {
+		    url:reqUrl,
+		    data:{
+		    	used_coupon : used_coupon,
+				paytype : paytype,
+				o_xftype : xftype,
+				o_seat : o_seat,
+				o_name : o_name,
+				o_phone : o_phone,
+				o_address : o_address,
+				o_remarks : o_remarks,
+		    },
+		    type:'post',
+		    cache:false,
+		    dataType:'json',
+		    success:function(data) {
+				if(data.msg =="pay"){
+					location.href = data.url;
+				}else if(data.msg =="yspay"){
+					payOrder(paytype,data.oid);
+				}else if(data.msg =="true" ){
+		        	$(".modal-ss").show();
+		        }else{
+		        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
+		  		    msg.show();
+		        }
+		     },
+		     error:function(XMLHttpRequest, textStatus, errorThrown){
+			    	//alert(JSON.stringify(XMLHttpRequest));
+			    	if(XMLHttpRequest.status == '200'){
+			    		var data = eval('('+ XMLHttpRequest.responseText +')');
+			    		if(data.msg =="pay"){
+							location.href = data.url;
+						}else if(data.msg =="yspay"){
+							payOrder(paytype,data.oid);
+						}else if(data.msg =="true" ){
+				        	$(".modal-ss").show();
+				        }else{
+				        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
+				  		    msg.show();
+				        }
+			    	}
+			 }
+	});
+}
+
+
+function msgopen( type )
+{
+	var msg = null;
+	switch( type)
+	{
+		case 1:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“到店支付”, 敬请期待！',id: 'm1'});
+		break;
+
+		case 2:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“支付宝支付”, 敬请期待！',id: 'm1'});
+		break;
+		case 3:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_2+'”, 敬请期待！',id: 'm1'});
+		break;
+		case 4:
+			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_1+'”, 敬请期待！',id: 'm1'});
+		break;
+	}
+	msg.show();
+}
+</script>
+
+</head>
+<body class="ios">
+<header class="header tianhuxiyi-header">
+	<h1>订单确定</h1>
+	<a href="javascript:history.go(-1);" class="ico header-back"></a>
+</header>
+<div class="main container p-t" id="submitOrder">
+		<section class="orderlist wavebottom">
+			<div class="sec-body">
+				<ul>
+					<volist name="goods_list" id="vo">
+					<li>
+						<div class="order-dishname" style="white-space:nowrap;overflow:hidden">{$vo.gname}</div>
+						<div class="order-num">x{$vo.number}</div>
+						<div class="order-price">
+							<span class="order-price-new">￥{$vo.gprice}</span>
+							<!--<span class="order-price-old">￥{$vo.t_price}</span>-->
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="mycoupon">
+			<div class="sec-title"><h3>我的优惠</h3></div>
+			<div class="sec-body">
+				<ul>
+					<volist name="coupon_list" id="vo">
+
+					<li>
+						<p>{$vo.vu_name}-减免<font color="red" id="price_{$vo.uvid}">{$vo.vu_price}</font>元</p>
+						<i class="ico ico-select ico-coupon" pid="{$vo.uvid}"></i>
+					</li>
+
+					</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="consumeway">
+		<div class="sec-title"><h3>取件地址</h3></div>
+			<div class="sec-body">
+				<form class="active">
+					<div>
+							<label for="">姓名：</label>
+							<input type="text" id="o_name" name="o_name" placeholder="请输入姓名">
+						</div>
+						<div>
+							<label for="">手机：</label>
+							<input type="number" id="o_phone" name="o_phone" placeholder="请输入手机号码">
+						</div>
+						<div>
+							<label for="">地址：</label>
+							<input type="text" id="o_address" name="o_address" placeholder="请输入地址">
+						</div>
+						<div>
+							<label for="">备注：</label>
+							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
+						</div>
+				</form>
+			</div>
+		</section>
+		<section class="payments">
+			<div class="sec-title"><h3>支付方式</h3></div>
+			<div class="sec-body">
+				<ul>
+					<li class="checked">
+						<img src="__PUBLIC__/Mobile/xiyi/img/ico_alipay.png" alt="">
+						<div>
+							<h6>支付宝</h6>
+							<p></p>
+						</div>
+						<i class="ico ico-select ico-pay" paytype="alipay"></i>
+					</li>
+
+					<li>
+						<img src="__PUBLIC__/Mobile/xiyi/img/ico_card.png" alt="">
+						<div>
+							<h6>微信支付</h6>
+							<p>推荐微信用户使用</p>
+						</div>
+						<i class="ico ico-select ico-pay" paytype="weixin"></i>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<section class="agreement">
+			<div class="sec-body">
+				<ul>
+					<li class="checked">
+						<p>同意<a id="js_agreement" class="agmt_more" href="javascript:;">用户协议</a></p>
+						<i class="ico ico-select"></i>
+					</li>
+				</ul>
+			</div>
+		</section>
+		
+	</div>
+	<div class="bottomBar">
+		<div class="container clearfix">
+			<div class="cart clearfix">
+			<div class="cart-price">共￥<span>{$total_price}</span></div>
+			<div class="cart-freight">(运费￥<span>18</span>)</div>
+		</div>
+		<a class="btn btn-primary flow_sub" href="javascript:void(0);">立即下单</a>
+		</div>
+	</div>
+	<div class="modal modal-ss" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title">订单已提交</h6>
+					<p class="modal-p">结账可通过门店所提供的现金/刷卡等支付方式</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-yes btn-go" href="javascript:;" style="width:100%;">是</a>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="modal" id="agreement" style="display:none;">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title">洗衣协议</h6>
+					<p class="agreement-txt">
+						1.快递小哥上门收送清点衣物需当面点清。<br>
+						2.衣物情况以拆包视频为准。<br>
+						3.以免带来不便，衣物损坏处请自行备注。<br>
+						4.最高赔偿额度1000元.<br>
+						5.为人民服务请求谅解。
+					</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn-no js_no" href="javascript:;">取消</a>
+					<a class="btn-yes js_no" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	// 	var aIcoSelect = $(".ico-select");
+	// 	var aSelectLi = aIcoSelect.parent('li');
+	// 	aSelectLi.click(function() {
+	// 		select($(this));
+	// 	});
+	// 	function select(_this) {
+	// 		// var _this = $(this);
+	// 		if(_this.siblings('li').length == 0) {
+	// 			if(_this.hasClass('checked')) {
+	// 				_this.removeClass('checked');
+	// 			} else {
+	// 				_this.addClass('checked');
+	// 			}
+	// 		} else {
+	// 			_this.siblings('li').removeClass('checked');
+	// 			_this.addClass('checked');
+	// 		}
+	// 	}
+	// // 协议弹出框
+
+	// 	var agreementModal = $("#agreement");
+	// 	var $body = $("body");
+	// 	$("#js_agreement").click(function(ev) {
+	// 		$body.css("overflow","hidden");
+	// 		agreementModal.show(0, swiper);
+	// 	});
+	// 	$(".modal-body").click(function(ev) {
+	// 		ev.stopPropagation();
+	// 	});
+	// 	$(".modal-dialog").click(function(ev) {
+	// 		$(".modal").hide();
+	// 		$body.css("overflow","auto");
+	// 	});
+	// 	$(".js_no").click(function(event) {
+	// 		$(".modal").hide();
+	// 		$body.css("overflow","auto");
+	// 	});
+	// 	var option = {
+	// 		direction: 'vertical',
+	// 		slidesPerView: 3,
+	// 		centeredSlides: true,
+	// 		onSlideChangeEnd: function() {
+	// 			// 滚动后执行的动作
+	// 		}
+	// 	}
+	// 	var swiper = function() {
+	// 		var addrSelector = new Swiper ('#selector', option);
+	// 	}	
+
+
+
+		$(".ico-coupon").click(function(event) {
+			var _this = $(this);
+			var pid = $(this).attr('pid');
+			var _thisLi = _this.parents('li');
+			var s = _thisLi.hasClass('checked');
+			$(".ico-coupon").parents('li').removeClass('checked');
+			if(s) {
+				_thisLi.removeClass('checked');
+				unusedCoupon();
+			} else {
+				_thisLi.addClass('checked');
+				usedCoupon(pid);
+			}
+		});
+		$(".ico-pay").click(function(event) {
+			var _this = $(this);
+			var type = $(this).attr('paytype');
+			var _thisLi = _this.parents('li');
+			var s = _thisLi.hasClass('checked');
+			$(".ico-pay").parents('li').removeClass('checked');
+			if(s) {
+				//_thisLi.removeClass('checked');
+				//unusedCoupon();
+				_thisLi.addClass('checked');
+			} else {
+				_thisLi.addClass('checked');
+				paytype = type;
+			}
+		});
+		$(".ico-xf").click(function(event) {
+			var _this = $(this);
+			var type = $(this).attr('xftype');
+			if(type == '1'){
+				xftype = '1';
+				$("#dianwai-div").hide();
+				$("#diannei-div").show();
+			}else{
+				xftype = '2';
+				$("#diannei-div").hide();
+				$("#dianwai-div").show();
+			}
+			$(this).addClass("checked").siblings("li").removeClass("checked");
+		});	
+
+</script>
+</body>
+</html>

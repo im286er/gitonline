@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>下单须知</title>
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/xpull.css">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/xiyi/css/tianhuxiyi.css">
+<script>
+//10px 1rem;
+!function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+</head>
+<body class="ios">
+<header class="header tianhuxiyi-header">
+	<h1>下单须知</h1>
+	<a href="javascript:history.go(-1);" class="ico header-back"></a>
+</header>
+<div class="container tianhuxiyi p-t main" id="container">
+	<div>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_01.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_02.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_03.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_04.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_05.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_06.gif" width="100%"></p>
+		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_07.gif" width="100%"></p>
+	</div>
+</div>
+<footer>
+	<ul class="footer-menu">
+		<li class="current"> <a href="{:U('Index/index',array('jid'=>$jid))}"><span class="icon-menu home"></span>
+			<p>首页</p>
+			</a> </li>
+		<li>
+        	<if condition="$mid">
+                <a href="javascript:void(0);"  onclick="baichuanIM('{$jid}','{$mid}');"><span class="icon-menu msg"></span><p>客服</p></a>
+            <else/>
+                <a href="{:U('User/login')}?returnurl=<php>echo urlencode(U());</php>"><span class="icon-menu msg"></span><p>客服</p></a>
+            </if>
+        </li>
+        <li <if condition="CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index' ">class="current"</if>>
+            <a href="{:U('User/index')}"><span class="icon-menu my"></span><p>我的</p></a>
+        </li>     
+	</ul>
+</footer>
+<script src="__PUBLIC__/Mobile/default/Js/jquery-2.1.3.min.js"></script>
+</body>
+</html>
