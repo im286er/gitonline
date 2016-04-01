@@ -337,4 +337,23 @@ class FlowController extends MobileController {
 		
 		$this->ajaxReturn($data);
 	}
+
+
+
+	//测试
+	public function test(){
+		//判断是否发快递
+		if (in_array(I('jid'), C('EXPRESS_JID'))){
+			// 导入快递
+			vendor('Express.SF.OrderService#class');
+			$tpl  = new \OrderService();
+			$info = $tpl->xmlservice('1603301057388106' , 'join' , '13021992467' , '山西省大同市城区同享大饭店' , '杭州天湖洗衣' , '李平' , '13958173174' , '杭州市江干区丁桥镇天鹤路318号');
+
+			print_r($info);
+		}else return false;
+	}
+
+
+
+
 }

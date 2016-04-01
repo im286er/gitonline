@@ -1300,8 +1300,9 @@ class SalesController extends MerchantController {
 			if( !$user_phone ) $user_phone = $userInfo['flu_phone'];
 			if( $user_phone ) {
 				//获取商家的名称
-				$jia_name = \Common\Org\Cookie::get('mnickname');
-				$content = $content.'【'.($jia_name ? $jia_name : '阿宅订').'】';
+				//$jia_name = \Common\Org\Cookie::get('mnickname');
+				//$content = $content.'【'.($jia_name ? $jia_name : '阿宅订').'】';
+				$content = $content.' 订单号:' . $orderid ;
 				return sendmsg( $user_phone,  $content ) ? true : false;
 			}
 			return false;

@@ -94,6 +94,11 @@ class MerchantController extends ManagerController {
 		session('menucode',$menucode);
 		$tt = C('TOP_MENU');
 		$nextmenu = $tt[$menucode]['next'];
+		//洗衣信息模块
+		if ($tt[$menucode]['code'] == 'message' && $this->jid == 438){
+			$nu = C('MESSAGE_B');
+			$nextmenu = $nu['next'];
+		}
 		
 		$this->assign('menucode',$menucode);
 		$this->assign('nextmenu',$nextmenu);

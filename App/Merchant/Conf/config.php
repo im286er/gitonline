@@ -23,14 +23,18 @@ return array(
 	),
 
 	//商家评论
-	'COMMENT_M'			=> array(
-			'jid'	=> 438,
-	),
+	'COMMENT_M'			=> array(438),
 
 	//特权会员
-	'MEMBER_B'			=> array(
-			'jid'	=> 438,
-	),
+	'MEMBER_B'			=> array(438),
+
+
+	//洗衣信息模块
+	'MESSAGE_B' => array('type'=>0,'code'=>'message','name'=>'信息管理','url'=>'/Message/pushmsg.html?menucode=message','next'=>array(
+				    array('type'=>0,'id'=>'Messagepushmsg','name'=>'群发消息','url'=>'/Message/pushmsg.html'),
+				    array('type'=>0,'id'=>'Messagecommentmsg','name'=>'留言管理','url'=>'/Message/commentmsg.html'),
+				    array('type'=>0,'id'=>'Messageparammsg','name'=>'特权价格','url'=>'/Message/parammsg.html'),
+		)),
 	
 	'TOP_MENU' => array(
 		'setting' =>    array('type'=>0,'code'=>'setting','name'=>'店铺设置','url'=>'/Index/index.html?menucode=setting','next'=>array(
@@ -53,8 +57,8 @@ return array(
 		)),
 		'message'=>	array('type'=>0,'code'=>'message','name'=>'信息管理','url'=>'/Message/pushmsg.html?menucode=message','next'=>array(
 				    array('type'=>0,'id'=>'Messagepushmsg','name'=>'群发消息','url'=>'/Message/pushmsg.html'),
-				    array('type'=>0,'id'=>'Messagecommentmsg','name'=>'留言管理','url'=>'/Message/commentmsg.html'),
-				    array('type'=>0,'id'=>'Messageparammsg','name'=>'特权价格','url'=>'/Message/parammsg.html'),
+				    // array('type'=>0,'id'=>'Messagecommentmsg','name'=>'留言管理','url'=>'/Message/commentmsg.html'),
+				    // array('type'=>0,'id'=>'Messageparammsg','name'=>'特权价格','url'=>'/Message/parammsg.html'),
 		)),
 		'finance' =>	array('type'=>1,'code'=>'finance','name'=>'财务管理','url'=>'/Manage/finance/type/0.html?menucode=finance','next'=>array(
 				    array('type'=>0,'id'=>'Managefinance','name'=>'财务明细','url'=>'/Manage/finance/type/0.html'),

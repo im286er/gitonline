@@ -19,9 +19,13 @@ class Route {
         $depr   =   C('URL_PATHINFO_DEPR');
         $regx   =   preg_replace('/\.'.__EXT__.'$/i','',trim($_SERVER['PATH_INFO'],$depr));
         // 分隔符替换 确保路由定义使用统一的分隔符
+        
         if('/' != $depr){
             $regx = str_replace($depr,'/',$regx);
         }
+
+        $regx = str_replace('-', '/', $regx);
+
         // URL映射定义（静态路由）
         $maps   =   C('URL_MAP_RULES');
         if(isset($maps[$regx])) {
@@ -31,8 +35,14 @@ class Route {
         }        
         // 动态路由处理
         $routes =   C('URL_ROUTE_RULES');
+
+
         if(!empty($routes)) {
             foreach ($routes as $rule=>$route){
+
+                $rule = str_replace('-', '/', $rule);
+
+
                 if(is_numeric($rule)){
                     // 支持 array('rule','adddress',...) 定义路由
                     $rule   =   array_shift($route);
@@ -44,7 +54,7 @@ class Route {
                         // URL后缀检测
                         continue;
                     }
-                    if(isset($options['method']) && REQUEST_METHOD != strtoupper($options['method'])){
+                    if(isset($options['method']) && REQUEST_METHOD != $options['method']){
                         // 请求类型检测
                         continue;
                     }

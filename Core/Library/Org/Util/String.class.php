@@ -240,8 +240,7 @@ class String {
                     unset($string[$key]);
             }
             return $string;
-        }
-        else {
+        } else {
             return $string;
         }
     }

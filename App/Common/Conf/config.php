@@ -75,6 +75,9 @@ return array(
 	
 	//下订单返现比例
 	'ORDER_RETURN_GRADE' 	=> array(60, 7, 7, 7, 7),//按百分比, 自己/邀请人/父邀请人/业务员/商家所在的代理商， 其余是OS
+
+	//发送快递用户
+	'EXPRESS_JID'			=> array(438),
 	
 );
 

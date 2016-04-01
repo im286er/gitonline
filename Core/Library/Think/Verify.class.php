@@ -111,6 +111,7 @@ class Verify {
      * @return void
      */
     public function entry($id = '') {
+
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length*$this->fontSize*1.5 + $this->length*$this->fontSize/2; 
         // 图片高(px)
@@ -174,7 +175,8 @@ class Verify {
         $secode['verify_code'] = $code; // 把校验码保存到session
         $secode['verify_time'] = NOW_TIME;  // 验证码创建时间
         session($key.$id, $secode);
-                        
+		
+		ob_clean();
         header('Cache-Control: private, max-age=0, no-store, no-cache, must-revalidate');
         header('Cache-Control: post-check=0, pre-check=0', false);		
         header('Pragma: no-cache');

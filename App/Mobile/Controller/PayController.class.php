@@ -159,7 +159,7 @@ class PayController extends Controller {
 		$order_info = M('order')->where(array('o_id'=>$pay_info['out_trade_no']))->find();
 		if(!$order_info)return false;
 		if($order_info['o_pstatus']>0)return true;
-		$orderdata = array('o_pstatus' => '1','o_pstime'=>date("Y-m-d H:i:s"));
+		$orderdata = array('o_pstatus' => '1','o_dstatus'=>3,'o_pstime'=>date("Y-m-d H:i:s"));
 		M('order')->where(array('o_id'=>$pay_info['out_trade_no']))->save($orderdata);
 		if($order_info['o_pstatus'] == '0'){
 			$logdata =array();
@@ -178,6 +178,14 @@ class PayController extends Controller {
 				$merchant = M('merchant')->where(array('jid'=>$order_info['o_jid']))->find();
 				M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
 			}
+			//判断是否发快递
+			if (in_array($order_info['o_jid'], C('EXPRESS_JID'))){
+				// 导入快递
+				vendor('Express.SF.OrderService#class');
+				$tpl  = new \OrderService();
+				$tpl->orderservice($pay_info['out_trade_no'] , $order_info['o_name'] , $order_info['o_phone'] , $order_info['o_address'] , '');
+			}
+			
 			return true;
 		}else return false;
 	}
@@ -186,4 +194,10 @@ class PayController extends Controller {
 	public function merchant(){
 		$this->error('支付失败',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
 	}
+
+
+
+	
+
+
 }

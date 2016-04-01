@@ -62,7 +62,9 @@ function sendmsg($phone, $content, $foottxt = '【阿宅订】',$verify=true) {
 	if(  is_numeric($content) ) {
 		$data = "msg=您的验证码为：".$content."【阿宅订】";
 	} else {
-		$data = "msg=".iconv('UTF-8', 'GB2312', $data)."【阿宅订】";
+		$data = "msg=".$content;
+		$data = iconv('UTF-8', 'GB2312', $data);
+		$data = $data."【阿宅订】";
 	}
 	$ch = curl_init($url);
 	//curl_setopt($ch, CURLOPT_ENCODING , 'gbk');
@@ -82,7 +84,9 @@ function flsendmsg($phone, $content) {
 	if(  is_numeric($content) ) {
 		$data = "msg=您的验证码为：".$content."【全民返利】";
 	} else {
-		$data = "msg=".iconv('UTF-8', 'GB2312', $data)."【全民返利】";
+		$data = "msg=".$content;
+		$data = iconv('UTF-8', 'GB2312', $data);
+		$data = $data . "【全民返利】";
 	}
 	$ch = curl_init($url);
 	//curl_setopt($ch, CURLOPT_ENCODING , 'gbk');
