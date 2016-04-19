@@ -58,14 +58,15 @@ table.wlist .ilist tr.last td { border-bottom:none; }
     	<table class="table-list">
         	<thead>
                 <tr>
-                    <th width="11%">交易号</th>
-                    <th width="12%">所属商家</th>
-                    <th width="11%">收货人姓名</th>
-                    <th width="11%">收货人手机</th>
-                    <th width="12%">下单时间</th>
-                    <th width="11%">订单总价</th>
-                    <th width="11%">订单状态</th>
-                    <th width="11%">支付状态</th>
+                    <th width="10%">交易号</th>
+                    <th width="10%">所属商家</th>
+                    <th width="10%">收货人姓名</th>
+                    <th width="10%">收货人手机</th>
+                    <th width="10%">下单时间</th>
+                    <th width="10%">订单总价</th>
+                    <th width="10%">订单状态</th>
+                    <th width="10%">支付状态</th>
+                    <th width="10%">支付方式</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -99,8 +100,22 @@ table.wlist .ilist tr.last td { border-bottom:none; }
                         </if>
                     </td>
                     <td>
+                   
+                    <if condition="$o['o_type'] eq 0">
+                    		线下支付
+                    <elseif condition="$o['o_pway'] eq 'weixin' "/>
+                    	微信支付
+                    	<else/>
+                    	支付宝支付
+                    </if>
+                    </td>
+                    <td>
                     	<?php if( $o['o_dstatus']==5 && $o['o_type']==2 && $o['o_pstatus']==3 ): ?>
+                    		<?php if($o['o_pway'] == 'weixin'): ?>
+                    		<a href="javascript:;" onclick="tuiKuan('{$o['o_id']}');">确认退款</a>
+                    		<?php else:?>
                             <a href="{:U('/Order/agreeCancelOrder', array('oid'=>$o['o_id']))}">退款</a>
+                            <?php endif; ?>
                     	<?php else:?>
                         	-
                         <?php endif; ?>
@@ -134,6 +149,15 @@ function downorder() {
 }
 
 var FirstTimeOuter = true;
+
+function tuiKuan(oid){
+	if(confirm('请确认这笔订单已完成退款操作?')){
+		$.post("{:U('/Order/doTuiKuan', '', true)}", {oid:oid}, function( data ) {
+			if( parseInt(data)==1 )window.location.reload();else alert('操作失败');
+			return false;
+	    })
+	}
+}
 </script>
 </body>
 </html>

@@ -178,6 +178,118 @@ class WechatController extends Controller {
 	public function login(){
 		$openid = $openid->openid;
 	}
+
+
+
+
+
+
+	/***托儿【全民返利】微信支付APP创建订单***/
+	public function dsWxJsPay(){
+		$oid = I('post.oid','','trim');
+		if(!$oid)die(JSON(array('errcode'=>81201,'errmsg'=>'订单号不能为空')));
+		$orderinfo = D('Order')->field('o_id,o_price,o_sid,o_gtype')->where(array('o_id'=>$oid,'o_pstatus'=>'0'))->find();
+		$orderinfo or die(JSON(array('errcode'=>81202,'errmsg'=>'订单不存在')));
+		if($orderinfo)$orderinfo['sname'] = D('Shop')->where(array('sid'=>$orderinfo['o_sid']))->getField('sname');
+		//unset($orderinfo['flo_sid']);
+		switch ($orderinfo['o_gtype']){
+			case '1':
+			 	$orderinfo['title'] = $orderinfo['sname'].'-在线下单';
+				$linkurl = url_param_encrypt(U('Shop/index@mobile',array('sid'=>$orderinfo['o_sid'])),'E');
+			  break;  
+			case '2':
+				$linkurl = url_param_encrypt(U('Shop/index@mobile',array('sid'=>$orderinfo['o_sid'])),'E');
+				$orderinfo['title'] = $orderinfo['sname'].'-在线预约';
+			  break;
+			case '3': 
+				$linkurl = url_param_encrypt(U('Recharge/calls@flapp'),'E');
+				$orderinfo['title'] = '升级VIP';
+			  break;
+			case '4':
+				$linkurl = url_param_encrypt(U('Recharge/calls@flapp'),'E');
+				$orderinfo['title'] = '话费充值';
+			  break;
+			case '5':
+				$linkurl = url_param_encrypt(U('Recharge/calls@flapp'),'E');
+				$orderinfo['title'] = '流量充值';
+			  break;
+			default:
+				$linkurl = url_param_encrypt(U('Recharge/calls@flapp'),'E');
+				$orderinfo['title'] = '在线支付';
+		}
+		if(!$orderinfo['sname'])$orderinfo['sname'] = $orderinfo['title'];
+		vendor("Weixin.JsApiPay");
+		$logHandler= new \CLogFileHandler(\WxPayConfig::Log());
+		$log = \Log::Init($logHandler, 15);
+		$input = new \WxPayUnifiedOrder();
+		$input->SetBody($orderinfo['title']);
+		$input->SetAttach($orderinfo['sname']);
+		$input->SetOut_trade_no($oid);
+		$input->SetTotal_fee($orderinfo['o_price']*100);
+		$input->SetTime_start(date("YmdHis"));
+		$input->SetTime_expire(date("YmdHis", time() + 600));
+		$input->SetGoods_tag($orderinfo['sname']);
+		$input->SetNotify_url(U('Wechat/dsWxNotify@mobile'));
+		$input->SetTrade_type("APP");
+		$order = \WxPayApi::unifiedOrder($input);
+		//print_r($order);
+		$order['timestamp'] = time();
+		$order['oid'] = $oid;
+		$order['errcode'] = 'ok';
+		$order['paykey'] = \WxPayConfig::KEY;
+		$order['errmsg'] = $order['return_msg'];
+		$order['success_url'] = U('User/myorder@mobile',array('returnurl'=>$linkurl));//支付成功返回的url
+		$order['fail_url'] = U('User/myorder@mobile',array('returnurl'=>$linkurl));//支付失败返回的url
+		$order?die(JSON($order)):die(JSON(array('errcode'=>81202,'errmsg'=>'订单号不存在订单!')));
+	}
+
+
+	/***微信支付接受订单***/
+	public function dsWxNotify(){
+		vendor("Weixin.JsApiPay");
+		vendor("Weixin.lib.WxPayNotify");
+		vendor("Weixin.lib.PayNotifyCallBack");
+		$logHandler= new \CLogFileHandler(\WxPayConfig::Log());
+		$log = \Log::Init($logHandler, 15);	
+		\Log::DEBUG("begin notify");
+		$notify = new \PayNotifyCallBack();
+		$notify->Handle(false);
+		$result = $notify->callback;
+		if($result['transaction_id']){ //根据交易号判断支付是否成功，
+			$order_info = M('Order')->where(array('o_id'=>$result['out_trade_no']))->find();
+			$pay_info = array();
+			$pay_info['pay_type'] = 'weixin';
+			$pay_info['trade_no'] = $result['transaction_id'];
+			$pay_info['out_trade_no'] = $result['out_trade_no'];
+			$this->dsWxPaySuccess($pay_info);//支付成功处理
+		}
+	}
+
+
+	/**帝鼠OS支付成功后处理**/
+	public function dsWxPaySuccess($pay_info){
+		$order_info = M('Order')->where(array('o_id'=>$pay_info['out_trade_no']))->find();
+		if(!$order_info)return false;
+		if($order_info['o_pstatus']>0)return true;
+		$orderdata = array('o_pstatus' => '1','o_type'=>'1','o_pway'=>$pay_info['pay_type'],'o_pstime'=>date("Y-m-d H:i:s"));
+		M('Order')->where(array('o_id'=>$pay_info['out_trade_no']))->save($orderdata);
+		if($order_info['o_pstatus'] == '0'){
+			$logdata =array();
+			$logdata['oid'] = $order_info['o_id'];
+			$logdata['uid'] = $order_info['o_uid'];
+			$logdata['pay_type'] = $order_info['o_gtype'];
+			$logdata['pay_price'] = $order_info['o_price'];
+			$logdata['pay_time'] = date('Y-m-d H:i:s');
+			$logdata['pay_way'] = $pay_info['pay_type'];
+			$logdata['pay_trade_no'] = $pay_info['trade_no'];
+			$result = M('Paylog')->add($logdata);
+			if($result && $order_info['o_type']==2){//如果支付款是汇入系统账户，更新商家的账户余额
+				$merchant = M('merchant')->where(array('jid'=>$order_info['o_jid']))->find();
+				if($merchant)M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
+			}
+			return true;
+		}else return false;
+	}
 	
 
 }

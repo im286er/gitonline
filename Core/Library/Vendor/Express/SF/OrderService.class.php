@@ -29,19 +29,39 @@ class OrderService{
  * mailno               运单号
  * */
 
-function xmlservice($orderid,$j_contact,$j_telphone,$j_address,$d_company,$d_contact,$d_telphone,$d_address,$d_province,$d_city,$name) 
+function xmlservice($orderid,$j_contact,$j_telphone,$j_address,$d_company,$d_contact,$d_telphone,$d_address) 
 {
-    $d_deliverycode = $this->citycode($d_province,$d_city);
-	$body = '<?xml version="1.0" encoding="UTF-8" ?><Request service="OrderService" lang="zh-CN"><Head>'.C('EXPRESS_CHECKHEADER')['SF'].'</Head><Body><Order orderid="'.$orderid.'" express_type="1"  j_contact="'.$j_contact.'" j_tel="'.$j_telphone.'" j_address="'.$j_address.'" d_company="'.$d_company.'" d_contact="'.$d_contact.'" d_tel="'.$d_telphone.'" d_address="'.$d_address.'" parcel_quantity="1" pay_method="1" custid="'.C('MONTHLY_NUM').'"  d_deliverycode="'.$d_deliverycode.'"  remark="'.$name.'" need_return_tracking_no="1" /></Order></Body></Request>';    	
-    $newbody = $body.C('EXPRESS_CHECKBODY')['SF'];  	  
+    //$d_deliverycode = $this->citycode($d_province,$d_city);<?xml version="1.0" encoding="UTF-8" 
+	$body = '<Request service="OrderReverseService" lang="zh-CN"><Head>'.C('EXPRESS_CHECKHEADER')['SF'].'</Head><Body><Order orderid="'.$orderid.'" express_type="1"  j_contact="'.$j_contact.'" j_mobile="'.$j_telphone.'" j_address="'.$j_address.'"  d_company="'.$d_company.'" d_contact="'.$d_contact.'" d_mobile="'.$d_telphone.'" d_address="'.$d_address.'" parcel_quantity="1" pay_method="1" custid="'.C('MONTHLY_NUM').'" need_return_tracking_no="1" ><Cargo name="衣服" unit="件" /><AddedService name="INSURE" value="500" /></Order></Body></Request>';
+     
+     $newbody = $body.C('EXPRESS_CHECKWORD')['SF'];
 	$md5 =  md5($newbody,true);  
 	$verifyCode = base64_encode($md5);
 	$url = C('EXPRESS_URL')['SF']; 
 	$fields = array('xml'=>$body,'verifyCode'=>$verifyCode);
 	$parambody =  http_build_query($fields, '', '&'); 
-	$res = $this->post($url,$parambody);     
+	$res = $this->post($url,$parambody); 
 	return $res;
 }
+
+
+
+function xmlserviceback($orderid) 
+{
+    //$d_deliverycode = $this->citycode($d_province,$d_city);<?xml version="1.0" encoding="UTF-8" 
+     $body = '<Request service="OrderRvsCancelService" lang="zh-CN"><Head>'.C('EXPRESS_CHECKHEADER')['SF'].'</Head><Body><Order orderid="'.$orderid.'"  ></Order></Body></Request>';
+     
+     $newbody = $body.C('EXPRESS_CHECKWORD')['SF'];
+     $md5 =  md5($newbody,true);  print_r($newbody);die;
+     $verifyCode = base64_encode($md5);
+     $url = C('EXPRESS_URL')['SF']; 
+     $fields = array('xml'=>$body,'verifyCode'=>$verifyCode);
+     $parambody =  http_build_query($fields, '', '&'); 
+     $res = $this->post($url,$parambody); 
+     return $res;
+}
+
+
 
 
 /**
@@ -81,6 +101,7 @@ function post($url,$body)
      // } 
 	return $res;
 }
+
 
 
 

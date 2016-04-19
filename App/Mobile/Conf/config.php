@@ -24,4 +24,20 @@ return array(
 		'alipaywap',
 		'alipaypc',
 	),
+
+	// 微信
+	'WECHAT'				=> array(
+				'appid' => 'wxced84b44ef1a07bd',
+				'appsecret' => '5e7acbb329e9320ecd3dba07d53f7e23',
+				'apptoken' => 'tuoer',
+	),
+
+	'EXPRESS_JID'			=> array(
+		'438'	=> array(
+				'd_company'  => '杭州天湖洗衣',
+				'd_contact'  => '李平',
+				'd_telphone' => '13958173174',
+				'd_address'  => '杭州市江干区丁桥镇天鹤路318号',
+		),
+	),
 );

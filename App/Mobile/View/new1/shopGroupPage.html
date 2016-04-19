@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no, address=no">
+		<link rel="stylesheet" href="css/shopGroupStyle.css" />
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/shopGroupHandler.js"></script>
+		<script src="js/homeHandler.js"></script>
+		<script>
+			$(document).ready(function(){
+				setDiv();
+				initHomePage();
+			})
+		</script>
+		
+	</head>
+	<body>
+		<div class="shopGroupTitle">
+			<label class="shopGroupTitleLabel">购物车</label>
+			<label class="shopGroupEdit">编辑</label>
+		</div>
+		<div class="foodListDiv">
+			
+			<!--一个食物-->
+			<div class="foodListStyle">
+				<div id="reSignDiv1" class="reSignDiv">
+					<img id="reSignImg1" class="reSignImg" src="img/reSign.png" />
+				</div>
+				
+				<img class="shopGroupFoodImg" src="img/cai.png"/>
+				
+				<label class="shopGroupLabel">椒盐排骨</label>
+				
+				<label class="moneySign">￥</label>
+				<label id="moneyLabel1" class="money">20</label>
+				
+				<div class="choseNumDiv">
+					<img id="jian1" src="img/jian.png" class="jianBtn">
+					<label id="numLabel1" class="numLabel">1</label>
+					<img id="jia1" src="img/addImg.png" class="addBtn">
+				</div>						
+			</div>
+			
+			<!--两个食物-->
+			<div class="foodListStyle">
+				<div id="reSignDiv2" class="reSignDiv">
+					<img id="reSignImg2" class="reSignImg" src="img/reSign.png" />
+				</div>
+				
+				<img class="shopGroupFoodImg" src="img/cai.png"/>
+				
+				<label class="shopGroupLabel">椒盐排骨</label>
+				
+				<label class="moneySign">￥</label>
+				<label id="moneyLabel2" class="money">5</label>
+				
+				<div class="choseNumDiv">
+					<img id="jian2" src="img/jian.png" class="jianBtn">
+					<label id="numLabel2" class="numLabel">1</label>
+					<img id="jia2" src="img/addImg.png" class="addBtn">
+				</div>						
+			</div>
+			
+			<!--两个食物-->
+			<div class="foodListStyle">
+				<div id="reSignDiv3" class="reSignDiv">
+					<img id="reSignImg3" class="reSignImg" src="img/reSign.png" />
+				</div>
+				
+				<img class="shopGroupFoodImg" src="img/cai.png"/>
+				
+				<label class="shopGroupLabel">椒盐里脊</label>
+				
+				<label class="moneySign">￥</label>
+				<label id="moneyLabel3" class="money">15</label>
+				
+				<div class="choseNumDiv">
+					<img id="jian3" src="img/jian.png" class="jianBtn">
+					<label id="numLabel3" class="numLabel">1</label>
+					<img id="jia3" src="img/addImg.png" class="addBtn">
+				</div>						
+			</div>
+			
+			<!--两个食物-->
+			<div class="foodListStyle">
+				<div id="reSignDiv4" class="reSignDiv">
+					<img id="reSignImg4" class="reSignImg" src="img/reSign.png" />
+				</div>
+				
+				<img class="shopGroupFoodImg" src="img/cai.png"/>
+				
+				<label class="shopGroupLabel">椒盐里脊</label>
+				
+				<label class="moneySign">￥</label>
+				<label id="moneyLabel4" class="money">18</label>
+				
+				<div class="choseNumDiv">
+					<img id="jian4" src="img/jian.png" class="jianBtn">
+					<label id="numLabel4" class="numLabel">1</label>
+					<img id="jia4" src="img/addImg.png" class="addBtn">
+				</div>						
+			</div>
+			
+			
+		</div>
+		<div id="jiesuanDiv" class="shopGroupBottom" id="buyAllBtn">
+			<div class="shopGroupLeft">
+				<div class="allReSignDiv">
+					<img class="allReSignImg" src="img/reSign.png" />
+				</div>
+				
+				<label class="shopGroupSignMsg">全选</label>
+				
+				<label class="shopGroupCost">合计￥0</label>
+			</div>
+			
+			<div class="shopGroupRight">
+				<label>去结算</label>
+			</div>
+		</div>
+		
+		<div id="shanchuDiv" class="shopGroupBottom" style="display: none;">
+			<div class="shopGroupLeft">
+				<div class="allReSignDiv">
+					<img class="allReSignImg" src="img/reSign.png" />
+				</div>
+				
+				<label class="shopGroupSignMsg">全选</label>
+			</div>
+			
+			<div class="shopGroupRight" id="deleteAllBtn">
+				<label>删除</label>
+			</div>
+		</div>
+		
+		
+		
+		<div id='bottomDiv' class="bottomDiv">
+			<table>
+				<tr>
+					<td id="homeBtn"><img src="img/homeA.png"></td>
+					<td id="shopGroupBtn"><img src="img/shopGroupB.png"><div class="roundBG"><label></label></div></td>
+					<td id="downloadBtn"><img src="img/downloadA.png"></td>
+					<td id="mineBtn"><img src="img/mineA.png"></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

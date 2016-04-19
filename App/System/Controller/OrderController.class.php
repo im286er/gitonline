@@ -521,4 +521,13 @@ class OrderController extends ManagerController{
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');		
 	}
+	
+	public function doTuiKuan(){
+		$oid = I('oid',0);
+		if($oid){
+			M('order')->where(array('o_id'=>$oid))->save(array('o_pstatus'=>2));
+			die('1');
+		}
+		die('0');
+	}
 }

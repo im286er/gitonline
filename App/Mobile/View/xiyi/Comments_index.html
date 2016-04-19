@@ -39,7 +39,8 @@
 		<div class="formbox">
 			<div class="inputbox">
 				<input type="hidden" name="jid" id="jid" value="{$jid}" />
-				<textarea name="content" id="content" placeholder="您如果有什么好的建议或意见，欢迎反馈给我们。"></textarea>
+				<input type="hidden" name="mid" id="mid" value="{$mid}" />
+				<textarea name="content" id="content" placeholder="您如果有什么好的建议或意见，欢迎反馈给我们。" required="required"></textarea>
 			</div>
 			<div class="div-a">
 				<a class="btn btn-block btn-lg btn-primary sub-comment" href="javascript:;">提交</a>
@@ -50,7 +51,18 @@
 <script>
 $('.sub-comment').click(function(){
 	var jid = $('#jid').val();
+	var mid = $('#mid').val();
 	var content = $('#content').val();
+	//检查登录状态
+	if (mid == 0) {
+		alert("请先登录！");
+		return false;
+	}
+	//检查评论内容
+	if (content == '') {
+		alert('请填写评论内容！');
+		return false;
+	}
 
 	$.get("{:U('Comments/edit')}" , {'jid':jid , 'content':content} ,function(data){
 		history.go(0);

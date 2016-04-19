@@ -13,10 +13,6 @@ class ChooseController extends MobileController {
 	*
 	* */
 	public function index(){
-		
-
-
-
 		$shop = M("shop");
 		$opt = array(
 				'jid' => $this->jid,
@@ -77,7 +73,7 @@ class ChooseController extends MobileController {
 		}
 		$this->assign('page_url',$page_url);
 		$default_cid = isset($category_list[0]['cid']) ? $category_list[0]['cid'] : 0;
-		
+		//print_r($category_list);die;
 		$this->assign('rcid',cookie($this->jid.'_rcid_'.$this->sid));
 		$this->assign('mid',$this->mid);
 		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$this->sid) > 0 ? cookie($this->jid.'_rcid_'.$this->sid) : $default_cid);
@@ -118,15 +114,10 @@ class ChooseController extends MobileController {
 	* */
 	public function search(){
 		$cid = I('post.cid');
-		$key = I('post.key'); 
-
-
+		$key = I('post.key');
 		//获取商品列表 start
-
         $sid=I('get.sid');
-
 		$goods = M('goods');
-
 		$opt = array(
 			'g.sid'    =>$sid,
 			'g.gtype' => 0,
@@ -135,16 +126,12 @@ class ChooseController extends MobileController {
 			'g.gstock' => array('neq', 0),
 			'c.ctype' => 1,
 			'c.status' => 1,
-
 		);
-		
 		$pro_list_a = $goods->alias('g')->join('azd_class c on g.cid=c.cid')->where($opt)->order('g.gorder')->select();
-
 		if($cid){
 			$opt['g.cid'] = $cid;
 		}
 		$goods_list = $goods->alias('g')->join('azd_class c on g.cid=c.cid')->where($opt)->order('g.gorder')->select();
-		
 		$result_list = array();
 		$pro_list   = array();
 		foreach($goods_list as $k=>$v){
@@ -162,18 +149,14 @@ class ChooseController extends MobileController {
 			}
 			//$pro_list[$v['gid']] = $v;
 		}
-		
 		foreach($pro_list_a as $s=>$vv){
 			$pro_list[$vv['gid']] = $vv;
 		}
-		
 		//print_r($pro_list);exit;
-		
 		//获取商品列表 end
 		$this->assign('result_list',$result_list);
 		cookie($this->jid.'_rcid_'.$this->sid,null);
 		cookie($this->jid.'_rcid_'.$this->sid,$cid);
-		
 		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
 		$content = $this->theme($tpl_name)->fetch('Choose_goods');
 		$data = array(
@@ -181,7 +164,6 @@ class ChooseController extends MobileController {
 			'content' => $content,
 			'product' => json_encode($pro_list)
 		);
-		
 		$this->ajaxReturn($data);
 	}
 	//搜索框
@@ -225,5 +207,56 @@ class ChooseController extends MobileController {
         if(empty($proData)){$proData[]['msg']="抱歉！没有找到你要搜的东西！";}
       echo json_encode($proData); 
      }
+
+
+	public function new1(){
+		$shop = M("shop");
+		$opt = array(
+			'jid' => $this->jid,
+			'status' => '1',
+			'is_show' => 1
+		);
+		$shop_count = $shop->where($opt)->count();
+		$sid		= $shop->where($opt)->getField('sid');
+		//判断是否有多家分店 start
+		if($this->sid == 0){
+			//如果有多家 跳转到门店列表页
+			if($shop_count == 1){
+				//单一门店直接显示
+				$sid = $shop->where($opt)->getField('sid');
+				$this->sid = $sid > 0 ? $sid : 0;
+				$this->assign('sid',$this->sid);
+			}else{
+				$this->redirect('Shop/index', array('jid' => $this->jid,'mod'=>'Choose'));
+				exit;
+			}
+		}
+		//判断是否有多家分店 end
+		//判断是全民返利过来的就从回到全民返利网页部分
+		if(cookie('opentype')=='flapp'){
+			$this->redirect('Flow/order@flapp', array('jid' => $this->jid,'sid'=>$this->sid));
+			exit;
+		}
+		//商品分类列表   start
+		$category = M('class');
+		$category_list = $category->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$this->sid, 'ctype'=>1))->order('corder asc,cid asc')->select();
+		//商品分类列表   end
+		if($shop_count == 1){
+			$page_url = U('Index/index',array('jid'=>$this->jid));
+		}else{
+			$page_url = U('Shop/index', array('jid' => $this->jid,'mod'=>'Choose'));
+		}
+		$this->assign('page_url',$page_url);
+		$default_cid = isset($category_list[0]['cid']) ? $category_list[0]['cid'] : 0;
+		//商品列表
+		$goods_list = M('goods')->where(array('sid'=>$sid))->select();
+
+		$this->assign('goods_list',$goods_list);
+		$this->assign('rcid',cookie($this->jid.'_rcid_'.$this->sid));
+		$this->assign('mid',$this->mid);
+		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$this->sid) > 0 ? cookie($this->jid.'_rcid_'.$this->sid) : $default_cid);
+		$this->assign('category_list',$category_list);
+		$this->mydisplay();
+	}
 	
 }

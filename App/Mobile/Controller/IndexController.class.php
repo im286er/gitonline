@@ -284,4 +284,153 @@ class IndexController extends MobileController {
 
 	}
 
+
+	/**
+	 * 获取轮播图
+	 * @return mixed
+	 */
+	public function banner(){
+		//广告图片 start
+		$banner = M('banner');
+		$opt = array(
+			'jid' => $this->jid,
+		);
+		$banner_list = $banner->where($opt)->order('bid asc')->select();
+		foreach($banner_list as $k=>$v){
+			$banner_list[$k]['burl'] = 'http://'.ltrim($v['burl'],'http://');
+			$banner_list[$k]['burl']  = $banner_list[$k]['burl'] == 'http://' ? '' : $banner_list[$k]['burl'];
+		}
+		//广告图片 end
+		$this->assign('banner_list',$banner_list);
+	}
+
+
+	/**
+	 * 获取活动列表
+	 * @return mixed
+	 */
+	public function active(){
+		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
+
+		//首页显示的活动 start
+		$active = M('active');
+		$opt = array(
+			'av_jid'    => $this->jid,
+			'av_status' => 1
+		);
+		if($tpl_name == 'yshs'  || $tpl_name == 'clothes' || $tpl_name == 'fruit' || $tpl_name == 'tonghui' || $tpl_name == 'netbar'){
+			$avnum = 3;
+		}elseif($tpl_name=='coffee' || $tpl_name == 'market') {
+			$avnum = 6;
+		}elseif( $tpl_name == 'zyg' || $tpl_name=='njl' || $tpl_name=='jshs'){
+			$avnum = 4;
+		}elseif($tpl_name=='qiye'){
+			$avnum = 8;
+		}else{
+			$avnum = 2;
+		}
+		$active_list = $active->where($opt)->order('av_id desc')->limit($avnum)->select();
+		$this->assign('active_list',$active_list);
+		//首页显示的活动 end
+	}
+
+
+	/**
+	 * 显示资讯
+	 * @return mixed
+	 */
+	public function news(){
+		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
+		//首页显示的资讯 start
+		$news = M('new');
+		$opt = array(
+			'new_jid'    => $this->jid,
+			'new_status' => 1
+		);
+		if($tpl_name == 'yshs' || $tpl_name == 'clothes' || $tpl_name == 'market' || $tpl_name == 'netbar'){
+			$newsnum = 3;
+		}elseif($tpl_name == 'fruit' || $tpl_name=='coffee' || $tpl_name=='njl'){
+			$newsnum = 6;
+		}elseif($tpl_name=='shouji' || $tpl_name='hunsha' || $tpl_name=='jshs'){
+			$newsnum = 9;
+		}elseif($tpl_name=='qiye'){
+			$newsnum = 4;
+		}else{
+			$newsnum = 2;
+		}
+		$news_list = $news->where($opt)->order('new_id desc')->limit( $newsnum )->select();
+		$this->assign('news_list',$news_list);
+		//首页显示的资讯 end
+	}
+
+
+	/**
+	 * 获取优惠券列表
+	 * @return mixed
+	 */
+	public function coupon(){
+		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
+		//首页显示的优惠券 start
+		$coupon = M('voucher');
+		$opt = array(
+			'v.vu_jid'    => $this->jid,
+			'v.vu_status' => 1,
+			'v.vu_etime' => array('egt',date("Y-m-d H:i:s")),
+		);
+
+		$NEW_COUPON_NUMBER = C('NEW_COUPON_NUMBER');
+		if( $tpl_name=='shouji' ) $NEW_COUPON_NUMBER = 3;
+		$coupon_list = $coupon->alias('v')->field('v.*, (v.vu_cum - (SELECT count(*) FROM azd_voucher_user where vu_id=v.vu_id)) as vu_sum')->where($opt)->having('vu_sum>0')->order('v.vu_id desc')->limit( $NEW_COUPON_NUMBER )->select();
+		$this->assign('coupon_list',$coupon_list);
+		//首页显示的优惠券 end
+	}
+
+
+	/**
+	 * 显示视频数量
+	 * @return int
+	 */
+	public function video(){
+		//显示视频数量  start
+		$category = M('class');
+		$opt = array(
+			'jid' => $this->jid,
+			//'sid' => $this->sid,
+			'ctype' => 3,
+			'status' => 1
+		);
+		$category_list = $category->where($opt)->order('corder')->select();
+
+		$re = array();
+		foreach($category_list as $k=>$v){
+			$re[] = $v['cid'];
+		}
+		$video = M('video');
+		$opt = array(
+			'gstatus' => 1
+		);
+		if($re){
+			$opt['cid'] = array('in',join(',',$re));
+			$video_count = $video->where($opt)->count();
+		}else{
+			$video_count =0;
+		}
+		$this->assign('video_count',video_count);
+		//显示视频数量  end
+	}
+
+
+	public function new1(){
+		//获取活动
+		$this->active();
+		//获取轮播图
+		$this->banner();
+		//获取优惠券
+		$this->coupon();
+
+		$this->mydisplay();
+	}
+
+
+
 }

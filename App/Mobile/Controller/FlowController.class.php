@@ -342,12 +342,28 @@ class FlowController extends MobileController {
 
 	//测试
 	public function test(){
+		$jid   = I('jid');
+		$data  = C('EXPRESS_JID')[$jid];
 		//判断是否发快递
-		if (in_array(I('jid'), C('EXPRESS_JID'))){
+		if (in_array($jid, array_keys(C('EXPRESS_JID')))){
 			// 导入快递
 			vendor('Express.SF.OrderService#class');
 			$tpl  = new \OrderService();
-			$info = $tpl->xmlservice('1603301057388106' , 'join' , '13021992467' , '山西省大同市城区同享大饭店' , '杭州天湖洗衣' , '李平' , '13958173174' , '杭州市江干区丁桥镇天鹤路318号');
+			$info = $tpl->xmlservice('1603301057388103' , 'join' , '13021992467' , '广东省清远市清城区' , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
+
+			print_r($info);
+		}else return false;
+	}
+
+
+	public function test_back(){
+		$jid   = I('jid');
+		//判断是否发快递
+		if (in_array($jid, array_keys(C('EXPRESS_JID')))){
+			// 导入快递
+			vendor('Express.SF.OrderService#class');
+			$tpl  = new \OrderService();
+			$info = $tpl->xmlserviceback('1603301057388101');
 
 			print_r($info);
 		}else return false;

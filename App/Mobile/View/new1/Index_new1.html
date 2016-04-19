@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no, address=no">
+		<link rel="stylesheet" href="__PUBLIC__/Mobile/new1/css/eventPage.css" />
+		<script src="__PUBLIC__/Mobile/new1/js/jquery-1.11.3.min.js"></script>
+		<script src="__PUBLIC__/Mobile/new1/js/homeHandler.js"></script>
+		<script src="__PUBLIC__/Mobile/new1/js/indexHandler.js"></script>
+		<script>
+			$(document).ready(function(){
+				initIndex();
+			})
+		</script>
+	</head>
+	<body>
+		<div class="topDIV">
+			<empty name="banner_list">
+				<img src="__PUBLIC__/Mobile/new1/img/topBG.png" class="topBG" onload="initIndex()">
+			<else/>
+				<img src="{$banner_list[0]['bimg']}" class="topBG" onload="initIndex()">
+			</empty>
+
+			<div class="logoBG">
+				<div class="logoDiv">
+					<img id="logoImg" class="logoImg" src="__PUBLIC__/Mobile/new1/img/logo.png" />
+				</div>
+			</div>
+			
+			<div class="secondDiv">
+				<div class="labelDiv">
+					<label class="labelText">总店</label>
+					<img class="signImg" src="__PUBLIC__/Mobile/new1/img/sign.png" />
+				</div>
+				
+				<div class="searchDiv">
+					<img class="searchImg" src="__PUBLIC__/Mobile/new1/img/search.png" />
+				</div>
+				
+				<div class="shareDiv">
+					<img class="shareImg" src="__PUBLIC__/Mobile/new1/img/share.png" />
+				</div>
+			</div>
+			
+			<div class='thirdDiv'>
+				<label id="shopAddress" class="shopAddress">星巴克茶餐厅（杭行路）</label>
+				<label class="workTime">预定中，08:00-22:00</label>
+			</div>
+			<div class='messageDiv'>
+				<img src="__PUBLIC__/Mobile/new1/img/horn.png" class="hornImg" />
+				<label class="hornLabel">在线满20减8元满30减10元/25元起送/3元配送费/30分钟送达</label>
+			</div>
+			
+			<div class="tabDiv">
+				<table class="tabBtn">
+					<tr>
+						<td id=""><a href="{:U('Choose/new1')}"><img class="unChose" src="__PUBLIC__/Mobile/new1/img/foodA.png"><div class="lineDiv"></div></a></td>
+						<td id=""><a href="{:U('Comments/index')}"><img class="unChose" src="__PUBLIC__/Mobile/new1/img/commentA.png"><div class="lineDiv"></div></a></td>
+						<td id=""><a href="{:U('News/index')}"><img class="unChose" src="__PUBLIC__/Mobile/new1/img/shopA.png"><div class="lineDiv"></div></a></td>
+						<td id=""><a href="{:U('Index/new1')}"><img class="unChose" src="__PUBLIC__/Mobile/new1/img/eventA.png"><div class="lineDiv"  style="display: block;"></div></a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id='contentDiv' class="contentDiv">
+			<div class="bigDiv">
+			<div class='eventRoom' id='newEvent'>
+				<div class='newEvent'>
+					<label class="eventTitle">最新活动</label>
+					<img class="eventMoreImg" src="__PUBLIC__/Mobile/new1/img/more.png"/>
+					<a href="{:U('Mobile/Active/index', array('jid'=>$jid))}"><label class="eventMore">更多</label></a>
+				</div>
+				<volist name="active_list" id="vo" >
+					<div id="oneDiv1" class="oneDivStyle">
+						<img id="oneImg1" src="{$vo.av_img}" class="oneImgStyle">
+						<div id="midDiv1" class="midDivStyle">
+							<label id="bigLabel1" class="bigLabelStyle">{$vo.av_title}</label>
+							<img id="signImg1" src="__PUBLIC__/Mobile/new1/img/newSign.png" class="newSignImgStyle">
+						</div>
+					</div>
+				</volist>
+			</div>
+			
+			<div class='eventRoom' id='coupon'>
+				<div class='coupon'>
+					<label class="eventTitle">优惠券</label>
+					<img class="eventMoreImg" src="__PUBLIC__/Mobile/new1/img/more.png"/>
+					<a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}"><label class="eventMore">更多</label></a>
+				</div>
+				
+				<table class="chipDiv">
+					<tr>
+						<volist name="coupon_list" id="vo" >
+							<td><a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}"><img src="{$vo.vu_img}" class="chipImg"/></a></td>
+						</volist>
+					</tr>
+				</table>
+			</div>
+				
+			<div class='eventRoom' id='luckDraw'>
+				<div class='luckDraw'>
+					<label class="eventTitle">玩转大转盘</label>
+					<img class="eventMoreImg" src="__PUBLIC__/Mobile/new1/img/more.png"/>
+				</div>
+			</div>
+			
+			<div class='eventRoom'></div>
+		</div>
+			
+		</div>
+		
+		<div id='bottomDiv' class="bottomDiv">
+			<table>
+				<tr>
+					<td id="homeBtn"><img src="__PUBLIC__/Mobile/new1/img/homeB.png"></td>
+					<td id="shopGroupBtn"><img src="__PUBLIC__/Mobile/new1/img/shopGroupA.png"><div class="roundBG"><label></label></div></td>
+					<td id="downloadBtn"><img src="__PUBLIC__/Mobile/new1/img/downloadA.png"></td>
+					<td id="mineBtn"><img src="__PUBLIC__/Mobile/new1/img/mineA.png"></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

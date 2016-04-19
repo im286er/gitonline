@@ -50,7 +50,7 @@ class ViewModel extends \Think\Model\ViewModel {
 		),
 		
 		'order'		=> array(
-			'Orders'		=> array('o_id', 'o_name', 'o_phone', 'o_dstime', 'o_price', 'o_dstatus', 'o_pstatus', 'o_close', 'o_type', '_table'=> "__ORDER__", '_type'=>'INNER'),
+			'Orders'		=> array('o_id', 'o_name', 'o_phone', 'o_dstime','o_pway', 'o_price', 'o_dstatus', 'o_pstatus', 'o_close', 'o_type', '_table'=> "__ORDER__", '_type'=>'INNER'),
 			'Merchant'		=> array('mnickname'=>'j_name', '_on'=>'Orders.o_jid=Merchant.jid', '_type'=>'LEFT'),
 			'Shop'			=> array('sname'=>'s_name', '_on'=>'Orders.o_sid=Shop.sid', '_type'=>'INNER')
 		),

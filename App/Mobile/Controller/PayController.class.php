@@ -179,12 +179,14 @@ class PayController extends Controller {
 				M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
 			}
 			//判断是否发快递
-			if (in_array($order_info['o_jid'], C('EXPRESS_JID'))){
-				// 导入快递
-				vendor('Express.SF.OrderService#class');
-				$tpl  = new \OrderService();
-				$tpl->orderservice($pay_info['out_trade_no'] , $order_info['o_name'] , $order_info['o_phone'] , $order_info['o_address'] , '');
-			}
+//			if (in_array($order_info['o_jid'], array_keys(C('EXPRESS_JID')))){
+//				$jid   = $order_info['o_jid'];
+//				$data  = C('EXPRESS_JID')[$jid];
+//				// 导入快递
+//				vendor('Express.SF.OrderService#class');
+//				$tpl  = new \OrderService();
+//				$tpl->orderservice($pay_info['out_trade_no'] , $order_info['o_name'] , $order_info['o_phone'] , $order_info['o_address'] , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
+//			}
 			
 			return true;
 		}else return false;
@@ -197,6 +199,8 @@ class PayController extends Controller {
 
 
 
+
+	
 	
 
 
