@@ -258,5 +258,11 @@ class ChooseController extends MobileController {
 		$this->assign('category_list',$category_list);
 		$this->mydisplay();
 	}
+
+
+
+	public function shopCart(){
+		$this->mydisplay();
+	}
 	
 }
