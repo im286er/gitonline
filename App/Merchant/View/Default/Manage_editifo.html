@@ -1,9 +1,11 @@
 <extend name="Public:common"/>
 <block name="body">
-<div class="modal" id="setModal" style="display:block;">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<div class="wrapper">
+<div class="mian padding">
 <form action="{:U('/Manage/setbdzh')}" method="post">
-    <div class="reveal-modal" style="border:none;margin-left:-233px;">
-        <h3>操作提示 <span class="close" id="DialogClose">×</span></h3>
+   <div class="content_a top">
+        
         <div class="modal-content">
             <div class="set">
                 <label>支付宝账户</label> <input type="text" id="MbdzhInfoY" value="" placeholder="请输入注册支付宝的帐号">
@@ -34,6 +36,7 @@
         </div>
     </div>
 </form>
+</div>
 </div>
 <script type="text/javascript">
 $(function() {
@@ -99,11 +102,8 @@ $(function() {
 
 		$.post('__ACTION__', {ac:MbdzhInfoY, bc:MbdzhInfoQ, cc:MzhxmInfo, dc:MbdsjInfo, ec:SendCode}, function(data) {
 			if( parseInt(data) == 1 ) {
-				var PwindowObj = window.parent.document.getElementById('MyBdzhInfo');
-				$(PwindowObj).html( MbdzhInfoY );
-				
-				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
-				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				alert("修改成功");
+				location.reload();
 			} else if( parseInt(data) == 2 ) { 
 				alert("验证码输入失败!"); 
 			} else {

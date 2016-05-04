@@ -1,6 +1,10 @@
 <extend name="Public:common"/>
 <block name="body">
 <style type="text/css">
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
 .lists li{float:left; width:300px;line-height:30px;border-right:1px solid #eee;text-align:center;} 
 .lists{width:602px;border:1px solid #eee;margin-left:6%;margin-top:5%;}
 </style>
@@ -31,7 +35,13 @@ function init() {
 }
 </script>
 <div class="wrapper">
-    <h2 class="title">我的店铺</h2>
+   <h2 class="shops">选择门店：
+	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
+	</volist>
+</h2>
     <div class="mian">
         <div class="content_a">
             <h3>账户明细<!--<eq name="type" value="1"><input type="button" value="提现" onclick="alert('可提现金额为0.00');"></eq>--></h3>
@@ -44,62 +54,6 @@ function init() {
 			
         </div>
         
-        <div class="content_b top">
-            <label>APP名称</label>
-            <div class="width">{$mtapp.appname} <if condition="$sname"> {$sname}</if></div>
-            <a href="{:U('/Index/userinfo', '', true)}" class="c-5da3ea">修改信息</a>
-        </div>
-        
-        <div class="content_b">
-            <label>APP icon</label>
-            <div class="width"><img src="{$mtapp.applogo}" alt=""><span style="padding-left:20px;font-size:12px;">建议尺寸：180*180</span></div>
-            <!--<eq name="type" value="1"><a href="{:U('/Index/setlogo', '', true)}" class="c-5da3ea">修改头像</a></eq>-->
-        </div>
-        
-        <div class="content_b">
-            <label>预览地址</label>
-            <div class="width"><input onChange="clip.setText(this.value)" type="text" id="TextCopy" name="text1" value="http://yd.dishuos.com/Index/index/jid/<?php echo \Common\Org\Cookie::get(C('USER_COOKIE_JID'));?>.html" readonly></div>
-           <a href="javascript:void(0);" id="TextCopyButton" class="c-5da3ea" >复制链接</a>
-        </div>
-        <style>
-		.content_b .qrcode{float:right;font-size:12px;}
-		.content_b .qrcode li{line-height:150%;}
-		.content_b .qrcode .qrcodelist li{float:right;width:100%;}
-		.content_b .qrcode .qrcodelist a{float:right;}
-		</style>
-        <div class="content_b">
-            <label>APP二维码（8cm）</label>
-            <div class="width noborder" style="width:200px;"><img src="{$qrcodefile}" alt=""></div>
-			<div class="qrcode">
-            <li id="qrcode"><a href="javascript:void(0);" onclick="document.getElementById('qrcodelist').style.display='block';" class="c-5da3ea">下载二维码</a></li>
-			<div id="qrcodelist" class="qrcodelist" style="display:none;">
-				<li><a href="{:U('/Index/wxdown',array('size'=>5), true)}" target="_blank" class="c-5da3ea">2CM</a></li>
-				<li><a href="{:U('/Index/wxdown',array('size'=>10), true)}" target="_blank" class="c-5da3ea">4CM</a></li>
-				<li><a href="{:U('/Index/wxdown',array('size'=>20), true)}" target="_blank" class="c-5da3ea">8CM</a></li>
-			</div>
-			</div>
-        </div>
-        <eq name="type" value="1">
-            <div class="content_b" style="border:none;">
-                <label>微服务列表</label>
-                <div>
-				  <volist name="splist" id="v">
-                    <ul class="lists" >
-                      
-                        <li >{$v.sname}</li>
-						<li >服务电话：{$v.mservetel}</li>
-                       <div style="clear:both;"></div>
-                    </ul>
-					 </volist>
-                </div>
-				 <if condition="$pages"> 
-                <div class="page clearfix">
-                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a> 
-                    <input type="text" onBlur="document.getElementById('btnpre').href='?page='+this.value">{$pages}
-                </div>
-            </if>
-            </div>
-        </eq>
         
     </div>
 </div>

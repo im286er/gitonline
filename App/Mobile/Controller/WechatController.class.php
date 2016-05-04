@@ -1,5 +1,5 @@
 <?php
-namespace Capper\Controller;
+namespace Mobile\Controller;
 use Think\Controller;
 //$AccessToken = $wechat->checkAuth();获取全局变量
 //$this->wechat->valid();验证部分
@@ -184,7 +184,7 @@ class WechatController extends Controller {
 
 
 
-	/***托儿【全民返利】微信支付APP创建订单***/
+	/***地鼠微信支付APP创建订单***/
 	public function dsWxJsPay(){
 		$oid = I('post.oid','','trim');
 		if(!$oid)die(JSON(array('errcode'=>81201,'errmsg'=>'订单号不能为空')));

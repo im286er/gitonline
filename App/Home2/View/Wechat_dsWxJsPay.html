@@ -1,0 +1,97 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    <title>订单支付</title>
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/normalize.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/main.css">
+	<script>
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+    </script>
+    <script type="text/javascript">
+	//调用微信JS api 支付
+	function jsApiCall()
+	{
+		WeixinJSBridge.invoke(
+			'getBrandWCPayRequest',
+			<?php echo $jsApiParameters; ?>,
+			function(res){
+				WeixinJSBridge.log(res.err_msg);
+				//alert(res.err_code+res.err_desc+res.err_msg);
+				if(res.err_code=='OK'){
+					//alert('支付成功');
+					window.location.href="<?php echo $returnurl;?>"; 
+				}else{
+					//alert('支付失败');
+					window.location.href="<?php echo $returnurl;?>"; 
+				}
+				
+			}
+		);
+	}
+
+	function callpay()
+	{
+		if (typeof WeixinJSBridge == "undefined"){
+		    if( document.addEventListener ){
+		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		    }else if (document.attachEvent){
+		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		    }
+		}else{
+		    jsApiCall();
+		}
+	}
+	</script>
+	<script type="text/javascript">
+	//获取共享地址
+	function editAddress()
+	{
+		WeixinJSBridge.invoke(
+			'editAddress',
+			<?php echo $editAddress; ?>,
+			function(res){
+				var value1 = res.proviceFirstStageName;
+				var value2 = res.addressCitySecondStageName;
+				var value3 = res.addressCountiesThirdStageName;
+				var value4 = res.addressDetailInfo;
+				var tel = res.telNumber;
+				
+				alert('222222222:'+value1 + value2 + value3 + value4 + ":" + tel);
+			}
+		);
+	}
+	
+	window.onload = function(){
+		if (typeof WeixinJSBridge == "undefined"){
+		    if( document.addEventListener ){
+		        document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+		    }else if (document.attachEvent){
+		        document.attachEvent('WeixinJSBridgeReady', editAddress); 
+		        document.attachEvent('onWeixinJSBridgeReady', editAddress);
+		    }
+		}else{
+			editAddress();
+		}
+	};
+	
+	</script>
+</head>
+<body>
+	<header class="header header-white">
+		<a href="{:U('Flow/confirm@yd',array('jid'=>$order_info['o_jid']))}"><i class="ico header-back header-back-d"></i></a>
+        <h1>订单支付</h1>
+	</header>
+    <div class="payDetail">
+    	<ul class="pay_info_list">
+        	<li><span>商品名</span>{$order_info.o_title}</li>
+        	<li><span>订单号</span>{$order_info.o_id}</li>
+        	<li><span>创建时间</span>{$order_info.o_price}</li>
+        </ul>
+        <div class="pay_price">￥{$order_info.o_price}元</div>
+        <div class="pay_button" onclick="callpay()" ><span>立即支付</span></div>
+    </div>
+</body>
+</html>

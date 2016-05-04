@@ -1,0 +1,68 @@
+*{padding: 0px;margin: 0px;}
+/**头**/
+.topDIV{position: relative;width:100%;height:auto;float:left;display: block;top: 0px;left: 0px;}
+
+.contentDiv{position: relative;width: 100%;height: auto;float: left;border: 0px;display: block;overflow: hidden;}
+
+.topBG{width: 100%;height: auto;float:left;}
+
+.logoBG{position: absolute;width:100%;top: 17px;left: 0px;}
+
+.logoDiv{position: relative;display: block;width: 54px;height: 54px;overflow: hidden;border-radius: 27px;margin-left:auto;margin-right:auto;border: 0px;}
+
+.logoImg{width: 100%;height: auto;border: 0px;}
+
+.secondDiv{width: 94%;height: 25px;margin-left: 3%;margin-right: 3%;position: absolute;top: 20px;}
+
+.labelDiv{width: auto;height: 25px;border: 0px;float: left;}
+
+.labelText{color: #ffffff;font-family: helvetica;font-size: 18px;line-height: 25px;vertical-align: bottom;width: auto;float: left;}
+
+.signImg{width: auto;height: 5px;display: block;float: left;padding-top: 16px}
+
+.searchDiv{width: auto;height: 25px;border: 0px;float: right;}
+
+.shareDiv{width: auto;height: 25px;border: 0px;float: right;margin-right:5% ;}
+
+
+.searchImg{height: 21px;width: auto;}
+
+
+.shareImg{height: 21px;width: auto;}
+
+
+.thirdDiv{position: absolute;width: 100%; bottom: 69px;}
+
+.shopAddress{display: block; color: #ffffff;font-family: helvetica;font-size: 18px;width: 100%;text-align: center;}
+
+.workTime{display: block; color: #ffffff;font-family: helvetica;font-size: 12px;width: 100%;text-align: center;}
+
+.tabBtn{marign:0px;padding:0px;border-collapse:collapse;width: 100%;height:40px;background-color: #ffffff;}
+
+.tabBtn tr{width: 100%;height:100%;}
+
+.tabBtn tr td{width:25%;height:100%;border: 1px solid #dddddd;border-top: 0px;text-align:center;vertical-align: middle;position: relative;}
+
+.messageDiv{width: 100%;height: 26px;display: block;background-color: #fff7d6;position: relative;float: left;overflow: hidden;}
+
+.hornImg{width: auto;height: 14px;display: block;border: 0px;float: left;margin-top: 6px;}
+
+.hornLabel{width: auto;text-align: left;font-family: helvetica;font-size: 11px;line-height: 26px;color: #a2a2a2;}
+
+.unChose{width: 50px;height: auto;}
+
+.lineDiv{width: 100%;height: 3px;position: absolute;bottom: 0px;display: none;background-color: #3492e9;}
+
+/**底部btn*/
+.bottomDiv{width: 100%;height: 50px;overflow: hidden;display: block;border-top: 1px solid #DDDDDD;position: fixed;bottom: 0px;left: 0px;background-color: #f9f9f9;}
+
+.bottomDiv table{width: 100%;text-align:center;vertical-align: middle;}
+
+.bottomDiv td{position: relative;}
+
+
+.bottomDiv table img{height: 40px;width: auto;padding-top: 5px;}
+
+.roundBG{position: absolute;border-radius: 7px;height: 14px;width: 14px;background-color: #ff3939;top: 0px;right: 30px;display: none;}
+
+.roundBG label{font-family: helvetica;font-size: 10px;color: #ffffff;line-height: 14px;display: block;}

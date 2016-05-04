@@ -5,7 +5,7 @@ return array(
 	'USER_AUTH_ON'			=> false,
 	'NEW_ACTIVE_NUMBER'     => 2,  //首页展示的活动数量
 	'NEW_COUPON_NUMBER'     => 2,  //首页展示的优惠券数量
-	'WXCONFIGPATH' => 'tuoer', //微信公众号的配置，包含微信支付的配置目录
+	'WXCONFIGPATH' => 'xiyiapp', //微信公众号的配置，包含微信支付的配置目录
 	//腾讯QQ登录配置
 	'THINK_SDK_QQ' => array(
 		'APP_KEY'    => '101201335', //应用注册成功后分配的 APP ID
@@ -27,10 +27,11 @@ return array(
 
 	// 微信
 	'WECHAT'				=> array(
-				'appid' => 'wxced84b44ef1a07bd',
-				'appsecret' => '5e7acbb329e9320ecd3dba07d53f7e23',
-				'apptoken' => 'tuoer',
+				'appid' => 'wx78d413885fae28e4',
+				'appsecret' => '4faea72dd3685e06ba94aac2f9fdfe0e',
+				'apptoken' => 'LUYixUo6NewPWjOnDRjmgmDQllGGhYAilTX-PgqKQWRGUU7M0vg940M-zIULmWj0yvOR0DuOp0oJJ5P7ZAzh0ZhR8G3W9Pzn1XvBGVuIECILQ2fqGCzXSP-zA9Xh4lCpYTNfAGAEZT',
 	),
+
 
 	'EXPRESS_JID'			=> array(
 		'438'	=> array(
@@ -40,4 +41,20 @@ return array(
 				'd_address'  => '杭州市江干区丁桥镇天鹤路318号',
 		),
 	),
+
+
+	/* 快递参数设置 */
+    'EXPRESS_CHECKHEADER'   =>  array(      //客户卡号,校验码
+        'SF'    => '5713519013',    //AZS
+    ),
+
+    'EXPRESS_CHECKWORD'   =>  array(      //checkword 秘钥
+        'SF'    => 'mv30QsuGvxWigY9Fdv6TN4aMdIi95xE9',      // ////qYiwqrF1nvPc
+    ),
+
+    'EXPRESS_URL'           =>  array(      //快递类服务接口url
+        'SF'    => 'http://bsp-oisp.sf-express.com/bsp-oisp/sfexpressService',    //http://218.17.248.244:11080/bsp-oisp/sfexpressService//http://bsp-ois.sf-express.com/bsp-ois/sfexpressService
+    ),
+
+    'MONTHLY_NUM'           => '5713519013',
 );

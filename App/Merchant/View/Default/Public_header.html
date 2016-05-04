@@ -4,14 +4,14 @@
         <ul class="menulist">
         	
             <foreach name="top_menu" item="vo" >
-        <if condition="$type == 1 || $vo['type'] == 0">    	<li <if condition="$vo[code] eq $menucode">class="current"</if> ><a href="{$vo.url}" target="_self"><em class="icon {$vo.code}"></em><p>{$vo.name}</p></a></li> </if>
+           	<li <if condition="$vo[code] eq $menucode">class="current"</if> ><a href="{$vo.url}" target="_self"><em class="icon {$vo.code}"></em><p>{$vo.name}</p></a></li>
             </foreach>
         </ul>
         <p class="pull-right navbar">
 			<a href="/Message/notice.html"></a>
             <a href="/Index/index.html"><em class="brandlogo"><img src="{$mtapp2.applogo}"></em>{$mnickname}</a>
-            <a href="/Index/bindtel.html">绑定手机</a> <span>|</span>
-            <a href="/Index/editpwd.html">修改密码</a> <span>|</span>
+           <!--   <a href="/Index/bindtel.html">绑定手机</a> <span>|</span>
+            <a href="/Index/editpwd.html">修改密码</a> <span>|</span>-->
             <a href="/Public/logout.html" target="_top">退出</a>
         </p>
     </div>

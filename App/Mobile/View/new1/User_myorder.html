@@ -1,0 +1,371 @@
+﻿<extend name="Public:common"/>
+<block name="style">style="background: #3492E9" </block>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/myorder.css">
+    <script>
+    var reqUrl = "{:U('Pay/request_alipay')}";
+    var o_id  = "";
+    var ctype = 1;
+    var isApp = "{$isApp}";
+    function send_qet(reqUrl,qet_data){
+    	$.ajax( {    
+    	    url:reqUrl,   
+    	    data:qet_data,
+    	    type:'post',    
+    	    cache:false,    
+    	    dataType:'json',    
+    	    success:function(data) {    
+    	        if(data.msg =="true" ){
+    	        	$("#play-success").show();
+    	        	//window.location.reload();
+    	        }
+    	     },
+    	     error:function(XMLHttpRequest, textStatus, errorThrown){
+    		    	if(XMLHttpRequest.status == '200'){
+    		    		var data = eval('('+ XMLHttpRequest.responseText +')');
+    		    		if(data.msg =="true" ){
+    		    			$("#play-success").show();
+    		    			//window.location.reload();
+    			        }
+    		    	}
+    		 }
+    	});
+    }
+    function ch_paytype(oid,o_type){
+    	var reqUrl = "{:U('Mobile/User/changeOrder')}";
+    	var qet_data = {
+    			type  : 'paytype',
+    			o_id  : oid,
+    			o_type: o_type
+    	};
+    	send_qet(reqUrl,qet_data);
+    }
+    function ch_dtype(oid,ct){  	
+    	o_id  = oid;
+        ctype = ct;
+    	if(ctype == 1){
+    		$("#con-qx").show();
+    	}else if(ctype == 2){
+    		$("#con-qx-2").show();
+    	}else if(ctype == 3){
+    		$("#con-qx-3").show();
+    	}
+    }
+    function ch_pay(oid){
+    	if(isApp > 0){
+    		payOrder('alipay',oid);
+    	}else{
+    		location.href = reqUrl + "?o_id=" + oid;
+    	}
+    }
+    $(document).ready(function(){
+        
+        $('.play-success-yes').click(function(){
+        	window.location.reload();
+        });
+        
+        $('.btn-qx-no').click(function(){
+        	$(".con-qx").hide();
+        });
+        
+        $('.btn-qx-yes').click(function(){
+        	var reqUrl = "{:U('Mobile/User/changeOrder')}";
+        	var qx_reason = '';
+        	if(ctype == 3){
+        		qx_reason = $("#qx-reason").val();
+        		if(qx_reason == ''){
+        			//return false;
+        		}
+        	}
+        	var qet_data = {
+        			type  : 'dtype',
+        			o_id  : o_id,
+        			ctype : ctype,
+        			qx_reason : qx_reason,
+        	};
+        	$(".con-qx").hide();
+        	send_qet(reqUrl,qet_data);
+        });
+    }); 
+    </script>
+	<div class="tab-nav nav-myorder">
+		<div class="container">
+			<ul class="li-4 clearfix tab-myorder">
+				<li class="active"><a href="javascript:;">全部</a></li>
+				<li><a href="javascript:;">待付款</a></li>
+				<li><a href="javascript:;">待处理</a></li>
+				<li><a href="javascript:;">待完成</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-92">
+		<div class="tab-content active">
+			<volist name="order" id="vo" >
+			<section class="myorder-list">
+				<div class="myorder-title">
+					<p class="myorder-no">订单号：{$vo.o_id}</p>
+					<p class="myorder-time">下单时间：<php>echo date('Y-m-d H:i',strtotime($vo['o_dstime']))</php></p>
+					<div class="myorder-seat">
+						<if condition="$vo['o_seat']">座位号:{$vo.o_seat}<elseif condition="$vo['o_xftype'] eq 1"/>店内消费<else />外卖订单</if>
+					</div>
+				</div>
+				<div class="myorder-body">
+					<div class="myorder-status">
+						<p>支付状态：<span>{$vo.paytype_name}</span></p>
+						<p>订单状态：<span>{$vo.dtype_name}</span></p>
+					</div>
+					<ul class="clearfix">
+						<php>$goodsCount=0;</php>
+						<volist name="vo.ogoods" id="value" key="keys">
+						<li>
+							<span class="myorder-name">{$value.sp_name}</span>
+							<span class="myorder-price">￥{$value.sp_gdprice}</span>
+							<span class="myorder-num">X{$value.sp_number}</span>
+						</li>
+						<php>
+							$goodsCount+=$value['sp_number'];
+						</php>
+						</volist>
+					</ul>
+					<if condition="is_array($vo['used_vprice']) && !empty($vo['used_vprice'])">
+					<ul class="clearfix">
+						<volist name="vo.used_vprice" id="value" key="keys">
+						<li>
+							<span class="myorder-name">{$value.vu_name}</span>
+							<span class="myorder-price">- ￥{$value.o_price}</span>
+						</li>
+						</volist>
+					</ul>
+					</if>
+
+					<div class="myorder-sum clearfix">
+						<p class="fl-r">共{$goodsCount}件商品,合计：<strong>{$vo.o_price}元</strong></p>
+					</div>
+					<div class="myorder-sum clearfix">
+						<p class="fl-r"><strong>{$vo.close_name}</strong></p>
+					</div>
+				</div>
+				<div class="myorder-footer">
+				<if condition="$vo['paytype_name'] eq '待付款' && $vo['o_dstatus'] neq 5">
+					<!-- <a class="btn btn-o" href="javascript:;" onclick="ch_paytype('{$vo.o_id}',0);">线下支付</a>-->
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}');">付款</a>
+				<elseif condition="$vo['o_dstatus'] eq 1 && ($vo['paytype_name'] eq '线下支付' or $vo['paytype_name'] eq '线上已付')"/>
+					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+					<!-- <if condition="$vo['paytype_name'] eq '线下支付'"><a class="btn btn-o" href="javascript:;" onclick="ch_paytype('{$vo.o_id}',2);">线上支付</a></if>-->
+				<elseif condition="$vo['o_dstatus'] eq 3"/>
+					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+					<!-- <if condition="$vo['paytype_name'] eq '线下支付'"><a class="btn btn-o" href="javascript:;" onclick="ch_paytype('{$vo.o_id}',2);">线上支付</a></if> -->
+				<else />
+					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
+				</if>
+				</div>
+			</section>
+			</volist>
+		</div>
+		<div class="tab-content">
+			<volist name="order" id="vo" >
+			<if condition="$vo['paytype_name'] eq '待付款' && $vo['o_dstatus'] neq 5">
+			<section class="myorder-list">
+				<div class="myorder-title">
+					<p class="myorder-no">订单号：{$vo.o_id}</p>
+					<p class="myorder-time">下单时间：<php>echo date('Y-m-d H:i',strtotime($vo['o_dstime']))</php></p>
+					<div class="myorder-seat"><if condition="$vo['o_seat']">座位号:{$vo.o_seat}<elseif condition="$vo['o_xftype'] eq 1"/>店内消费<else />外卖订单</if></div>
+				</div>
+				<div class="myorder-body">
+					<div class="myorder-status">
+						<p>支付状态：<span>{$vo.paytype_name}</span></p>
+						<p>订单状态：<span>{$vo.dtype_name}</span></p>
+					</div>
+					<ul class="clearfix">
+					<php>$goodsCount=0;</php>
+						<volist name="vo.ogoods" id="value" key="keys">
+						<li>
+							<span class="myorder-name">{$value.sp_name}</span>
+							<span class="myorder-price">￥{$value.sp_gdprice}</span>
+							<span class="myorder-num">X{$value.sp_number}</span>
+						</li>
+						<php>
+						$goodsCount+=$value['sp_number'];
+					</php>
+						</volist>
+					</ul>
+					<div class="myorder-sum clearfix">
+						<p class="fl-l">{$vo.used_vprice}</p>
+						<p class="fl-r">共{$goodsCount}件商品,合计：<strong>{$vo.o_price}元</strong></p>
+					</div>
+					<div class="myorder-sum clearfix">
+						<p class="fl-r"><strong>{$vo.close_name}</strong></p>
+					</div>
+				</div>
+				<div class="myorder-footer">
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"><a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}');">付款</a>
+				</div>
+			</section>
+			</if>
+			</volist>
+		</div>
+		<div class="tab-content">
+			<volist name="order" id="vo" >
+			<if condition="$vo['o_dstatus'] eq 1 && ($vo['paytype_name'] eq '线下支付' or $vo['paytype_name'] eq '线上已付')">
+			<section class="myorder-list">
+				<div class="myorder-title">
+					<p class="myorder-no">订单号：{$vo.o_id}</p>
+					<p class="myorder-time">下单时间：<php>echo date('Y-m-d H:i',strtotime($vo['o_dstime']))</php></p>
+					<div class="myorder-seat"><if condition="$vo['o_seat']">座位号:{$vo.o_seat}<elseif condition="$vo['o_xftype'] eq 1"/>店内消费<else />外卖订单</if></div>
+				</div>
+				<div class="myorder-body">
+					<div class="myorder-status">
+						<p>支付状态：<span>{$vo.paytype_name}</span></p>
+						<p>订单状态：<span>{$vo.dtype_name}</span></p>
+					</div>
+					<ul class="clearfix">
+					<php>$goodsCount=0;</php>
+						<volist name="vo.ogoods" id="value" key="keys">
+						<li>
+							<span class="myorder-name">{$value.sp_name}</span>
+							<span class="myorder-price">￥{$value.sp_gdprice}</span>
+							<span class="myorder-num">X{$value.sp_number}</span>
+						</li>
+						<php>
+						$goodsCount+=$value['sp_number'];
+					</php>
+						</volist>
+					</ul>
+					<div class="myorder-sum clearfix">
+						<p class="fl-l">{$vo.used_vprice}</p>
+						<p class="fl-r">共{$goodsCount}件商品,合计：<strong>{$vo.o_price}元</strong></p>
+					</div>
+					<div class="myorder-sum clearfix">
+						<p class="fl-r"><strong>{$vo.close_name}</strong></p>
+					</div>
+				</div>
+				<div class="myorder-footer">
+					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"><a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+				</div>
+			</section>
+			</if>
+			</volist>
+		</div>
+		<div class="tab-content">
+			<volist name="order" id="vo">
+			<if condition="$vo['o_dstatus'] eq 3">
+			<section class="myorder-list">
+				<div class="myorder-title">
+					<p class="myorder-no">订单号：{$vo.o_id}</p>
+					<p class="myorder-time">下单时间：<php>echo date('Y-m-d H:i',strtotime($vo['o_dstime']))</php></p>
+					<div class="myorder-seat"><if condition="$vo['o_seat']">座位号:{$vo.o_seat}<elseif condition="$vo['o_xftype'] eq 1"/>店内消费<else />外卖订单</if></div>
+				</div>
+				<div class="myorder-body">
+					<div class="myorder-status">
+						<p>支付状态：<span>{$vo.paytype_name}</span></p>
+						<p>订单状态：<span>{$vo.dtype_name}</span></p>
+					</div>
+					<ul class="clearfix">
+					<php>$goodsCount=0;</php>
+						<volist name="vo.ogoods" id="value" key="keys">
+						<li>
+							<span class="myorder-name">{$value.sp_name}</span>
+							<span class="myorder-price">￥{$value.sp_gdprice}</span>
+							<span class="myorder-num">X{$value.sp_number}</span>
+						</li>
+						<php>
+						$goodsCount+=$value['sp_number'];
+					</php>
+						</volist>
+					</ul>
+					<div class="myorder-sum clearfix">
+						<p class="fl-l">{$vo.used_vprice}</p>
+						<p class="fl-r">共{$goodsCount}件商品,合计：<strong>{$vo.o_price}元</strong></p>
+					</div>
+					<div class="myorder-sum clearfix">
+						<p class="fl-r"><strong>{$vo.close_name}</strong></p>
+					</div>
+				</div>
+				<div class="myorder-footer">
+					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
+					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"><a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+					<!-- <if condition="$vo['paytype_name'] eq '线下支付'"><a class="btn btn-o" href="javascript:;" onclick="ch_paytype('{$vo.o_id}',2);">线上支付</a></if> -->
+				</div>
+			</section>
+			</if>
+			</volist>
+		</div>
+	</div>
+	
+	<div class="modal" id="play-success">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">操作成功</h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-yes play-success-yes" href="javascript:;" style="width:100%;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal con-qx" id="con-qx">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">确定要取消该笔订单吗?</h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-qx-no" href="javascript:;">返回</a><a class="btn-qx-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal con-qx" id="con-qx-2">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single"><input type="text" value="" id="qx-reason-xxx" placeholder="点击输入取消订单的原因"/></h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-qx-no" href="javascript:;">返回</a><a class="btn-qx-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal con-qx" id="con-qx-3">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+				
+					<h6 class="modal-title">确定要提交退单申请吗?</h6>
+					<!-- <p class="modal-p">您好！由于您的订单商户已受理，取消订单请先联系商户，由商户确认后为您关闭订单，谢谢！</p> -->
+					<p class="modal-p">退单原因:<input type="text" value="" id="qx-reason" placeholder="点击输入"/></p>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-qx-no" href="javascript:;">返回</a><a class="btn-qx-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		var aTabNavLi = $(".tab-nav li");
+		var aTabContent = $(".tab-content");
+		aTabNavLi.click(function() {
+			var _this = $(this);
+			var index = _this.index();
+			aTabNavLi.removeClass('active');
+			_this.addClass('active');
+			aTabContent.removeClass('active');
+			aTabContent.eq(index).addClass('active');
+		});
+	</script>
+</block>

@@ -1,0 +1,307 @@
+.yh18{font-family: "微软雅黑";font-size: 18px;}
+
+.yh16{font-family: "微软雅黑";font-size: 16px;}
+
+.yh14{font-family: "微软雅黑";font-size: 14px;}
+
+.border-1s000{border: 1px solid #000;}
+
+.border-1sDDD{border: 1px solid #DDD;}
+
+.mLeft10{margin-left: 10px;};
+
+
+/*主容器和左右容器开始*/
+.phoneWapper{padding: 20px 0px;overflow: hidden;min-height: 750px;min-width: 923px;display: block;background: #eee;border: 0px;}
+
+.middlePhone{width: 73%;min-width: 423px;height: 100%;display: block;float: left;position: relative;background-color: #dedee6;}
+
+.rightChouse{width: 27%;height: 100%;display: block;background-color: #f3f3f3;float: right;}
+/*主容器和左右容器结束*/
+
+/**手机模拟器容器开始*/
+.top-RightBtn{position: absolute;top: 10px;right: 20px;z-index: 999;}
+
+.top-RightBtn-div{height: 33px;width: 73px;background-color: #fff;display: block;border-radius: 5px;float: left;margin: 0 5px;}
+
+.top-RightBtn-div label{line-height: 35px;text-align: center;width: 100%;display: block;cursor: pointer;}
+
+.top-RightBtn-saveBtn{height: 35px;width: 75px;border: 0px;background-color: #00bbe8;border-radius: 5px;float: left;margin: 0 5px;}
+
+.top-RightBtn-saveBtn label{color: #fff;line-height: 35px;text-align: center;width: 100%;display: block;cursor: pointer;}
+
+/*.bottom-RightBtn{position: absolute;top: 600px;left: 841px;}
+
+.bottom-RightBtn-div{height: 35px;width: 75px;background-color: #aaa;display: block;margin: 5px 0;border-top-right-radius: 5px;border-bottom-right-radius: 5px;}
+
+.bottom-RightBtn-div label{line-height: 35px;text-align: center;width: 100%;font-family: "微软雅黑";font-size: 18px;display: block;cursor: pointer;}
+
+.bottom-RightBtn-saveBtn{border: 0px;background-color: #00A7D1;border-top-right-radius: 5px;border-bottom-right-radius: 5px;border: 0px;}
+
+.bottom-RightBtn-saveBtn label{color: #fff;line-height: 35px;text-align: center;width: 100%;font-family: "微软雅黑";font-size: 18px;display: block;cursor: pointer;}*/
+
+/**手机模拟器容器结束*/
+
+
+
+
+/**模版选项内容开始*/
+.moban-div-content{float: left;}
+
+.rightChoseTabBtn{width: 100%;height: 50px;display: block;float: left;background-color: #949494;}
+
+.rightChoseTabBtn div{margin-top: 10px;}
+
+.rightChoseTabBtn-moban{width: 30%;height: 40px;display: block;margin-left: 5%;float: left;border: 0px;border-top-right-radius:5px ;border-top-left-radius:5px ;overflow: hidden;}
+
+.moban-label{line-height: 40px;text-align: center;width: 100%;display: block;cursor: pointer;background-color: #f3f3f3;}
+
+.moban-label-white{line-height: 40px;text-align: center;width: 100%;display: block;cursor: pointer;color: #ffffff;}
+
+.rightChoseTabBtn-lanmu{width: 30%;height: 40px;display: block;float: left;border: 0px;border-top-right-radius:5px ;border-top-left-radius:5px ;overflow: hidden;}
+
+.rightChoseTabBtn-gongneng{width: 30%;height: 40px;display: block;float: left;border: 0px;border-top-right-radius:5px ;border-top-left-radius:5px ;overflow: hidden;}
+
+.gray{width: 100%;height: 15px;display: block;background-color: #f3f3f3;float: left;}
+
+.whiteBg{width: 100%;height: 50px;display: block;background-color: #FFFFFF;float: left;}
+
+.borderBottom{border-bottom: 1px solid #d4d4d4;}
+
+.moban-kindA{width: 40%;height: 30px; border-radius: 2px;float:left;margin-top: 10px;margin-left:5%;}
+
+.moban-kindB{width: 40%;height: 30px; border-radius: 2px;float:right;margin-top: 10px;margin-right:5%;}
+
+.moban-kind-label{cursor: pointer;width: 100%;line-height: 30px;text-align: center;color: #000000;display: block;}
+
+.typeKindDiv{margin-right: 10px;float: left;}
+
+.UlWhiteBg{width: 100%;float: left;display: block;background-color: #FFFFFF;padding-bottom: 10px;}
+
+.typeListUl{list-style: none;float: left;}
+
+.typeListUl li{float: left;width: 60px;height: 30px;display: block;margin-left: 10px;margin-bottom: 10px;}
+
+.typeListUl li label{cursor: pointer;float: left;width: 100%;line-height: 30px;/*color: #000000;*/text-align: center;display: block;/*background-color: #00bbe8;*/}
+
+.mobanListDiv{padding: 10px 2%;width: 96%;height: 100%;display: block;float: left;background-color: #f3f3f3;overflow-y: auto;}
+
+.moban-List-Ul{list-style: none;float: left;}
+
+.moban-List-Ul li{float: left;display: block;margin-right: 1.5%;margin-bottom: 2%;width: 47%;}
+
+.moban-liImg{width: 100%;height: auto;display: block;text-align: center;box-shadow:0 0 10px #444;overflow: hidden;}
+
+.moban-liImg img{width: 100%;height: auto;display: block;cursor: pointer;}
+/**模版选项内容结束*/
+
+
+/*栏目选项内容开始*/
+.lanmu-div-content{float: left;width: 100%;display: none;background-color: #f3f3f3;}
+
+.lm-choseBtn{width: 28%;height: 30px; border-radius: 2px;float:left;margin-top: 10px;margin-left:3.6%;}
+
+.lanmuListDiv{padding: 10px 0;padding-right: 4%;width: 96%;height: 100%;display: block;float: left;overflow: hidden;}
+
+.lanmu-List-Ul{list-style: none;float: left;}
+
+.lanmu-List-Ul li{float: left;display: block;width: 96%;margin-right: 4%;}
+
+.add-lmBtn{float: left;width:100%;position: relative;}
+
+.addStyle{width: 54px;height: 54px;display: block;margin: 10px auto;cursor: pointer;}
+
+.add-lmBtn label{width: 80px;line-height:30px;display: block;text-align: center;margin: 10px auto;}
+
+
+/**栏目列表块样式开始*/
+.lm-kind-div{position: relative;width: 100%;height: 90px;display: block;background-color: #FFFFFF;border: 1px solid #d4d4d4;margin-top: 10px;}
+
+.lm-kind-div:hover{background-color: #00BBE8;color: #FFFFFF;}
+
+.lm-kind-div:hover .rightMargin-copy{background: url(copyLMB.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div:hover .rightMargin-edit{background: url(editLMB.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div:hover .rightMargin-delete{background: url(deleteLMB.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div:hover .leftSign{background: url(leftSignB.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div:hover .rightMargin-setTop{background: url(setTopB.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div:hover .leftSign-zixun{background: url(zixunB.png) no-repeat;background-size: 22px 22px;}
+
+.leftSign{height: 22px;width: 22px;display: block;float: left;margin-top: 34px;background: url(leftSignA.png) no-repeat;background-size: 22px 22px;}
+
+.leftSign-zixun{height: 22px;width: 22px;display: block;float: left;margin-top: 34px;background: url(zixunA.png) no-repeat;background-size: 22px 22px;}
+
+.lm-kind-div label{width: auto;line-height: 90px;float: left;margin-left: 20px;padding-right: 20px;}
+
+.checkDiv{position: absolute;top: 0;left: 0;width: 100%;height: 0;z-index: 1;}
+
+.checkDiv div{position: relative;width: 100%;height: 100%;float: left;}
+
+.checkDiv input{cursor: pointer;width: 20px;height: 20px;display: block;margin: 0 auto;margin-top: 35px;}
+
+.rightMargin-copy{height: 22px;width: 22px;background: url(copyLMA.png) no-repeat;background-size: 22px 22px;display: block;float: right;margin-top: 34px;margin-right: 10px;cursor: pointer;}
+
+.rightMargin-edit{height: 22px;width: 22px;background: url(editLMA.png) no-repeat;background-size: 22px 22px;display: block;float: right;margin-top: 34px;margin-right: 10px;cursor: pointer;}
+
+.rightMargin-delete{height: 22px;width: 22px;background: url(deleteLMA.png) no-repeat;background-size: 22px 22px;display: block;float: right;margin-top: 34px;margin-right: 10px;cursor: pointer;}
+
+.rightMargin-setTop{height: 22px;width: 22px;display: block;background: url(setTopA.png) no-repeat;background-size: 22px 22px;float: right;margin-top: 34px;margin-right: 10px;cursor: pointer;}
+/**栏目列表块样式结束*/
+/**栏目选项内容结束*/
+
+/**系统功能选项内容开始*/
+.gongneng-div-content{float: left;width: 100%;display: none;background-color: #f3f3f3;}
+
+.gongneng-grayBg{padding:20px 0 ;margin-left: 2%;border-bottom: 1px dashed #d2d2d2;float: left;width: 98%;}
+
+.gongneng-systemBtn{margin-left: 15px;float: left;}
+
+.gongneng-systemBtn li{margin-right: 15px;margin-bottom: 10px;width: 90px;height: 40px;float: left;}
+
+.gongneng-systemBtn li div{width: 100%;height: 100%;float: left;}
+
+.gongneng-systemBtnLabel{cursor: pointer;width: 100%;line-height: 40px;text-align: center;display: block;float: left;}
+
+
+
+/*基础功能*/
+.gongneng-base{width: 98%;margin-left: 2%;float: left;display: block;}
+
+.gongneng-nameDiv{width: 100%;margin-top: 30px;float: left;height: 34px;}
+
+.gongneng-nameDiv label{width: auto;float: left;line-height: 34px;}
+
+.gongneng-nameInput{width: 70%;line-height: 30px;height: 30px;border: 1px solid #DDDDDD;border-radius: 4px;margin-left: 10px;}
+
+
+.gongneng-logoDiv{width: 100%;margin-top: 30px;float: left;}
+
+.gongneng-logoDiv label{width: auto;float: left;line-height: 34px;}
+
+.gongneng-logoBg{width: 80px;height: 60px;display: block;background-color: #d7d7d7;float: left;margin-left: 10px;}
+
+.gongneng-logo{width: 60px;height: 60px;margin-left: 10px;display: block;border: 0;}
+
+.gongneng-rightDiv{width:42%;height: 60px;display: block;float: left;margin-left: 2%;}
+
+.gongneng-rightDiv-right{width: 100%;height: 50%;display: block;float: left;}
+
+.gongneng-rightDiv-bottom{width: 100%;height: 50%;display: block;float: left;}
+
+.gongneng-rightDiv-bottom div{width: 50%;height: 95%;display: block;float: left;margin-top: 5%;}
+
+.gongneng-rightDiv-bottom input{cursor: pointer;}
+
+.gongnengNomal{width: 100%;float: left;margin-top: 30px;height: 34px;}
+
+.gongnengNomal label{width: auto;float: left;line-height: 34px;}
+
+.gongnengBtn{cursor: pointer;line-height: 18px;width: 45px;height: 18px;margin-top: 8px;display: block;float: left;border: 1px solid #a8a8a8;background-color: #e6e6e6;border-radius: 3px;text-align: center;}
+
+.gongneng-check{margin-left: 10px;height: 100%;float: left;line-height: 34px;}
+
+.gongneng-check input{cursor: pointer;}
+
+.gongneng-save{width: 100%;position: relative;display: block;float: left;margin-top: 30px;}
+
+.gongneng-save div{cursor: pointer;width: 80px;height: 40px;display: block;background-color: #00BBE8;text-align: center;line-height: 40px;color: #FFFFFF;border-radius: 4px;margin: 0 auto;}
+
+/*营销*/
+.gongneng-marketingList{display: none;padding: 10px 0;padding-right: 4%;width: 96%;height: 100%;float: left;overflow: hidden;}
+
+.gongneng-marketing-Ul{list-style: none;float: left;}
+
+.gongneng-marketing-Ul li{float: left;display: block;width: 96%;margin-right: 4%;}
+
+.marketing-kind-div{position: relative;width: 100%;height: 90px;display: block;background-color: #FFFFFF;border: 1px solid #d4d4d4;margin-top: 10px;}
+
+.marketing-kind-label{line-height: 90px;display: block;float: left;margin-left: 20px;}
+
+.marketing-check{cursor: pointer;width: 20px;height: 20px;margin-left: 30px;margin-top: 35px;float: left;}
+
+.gongneng-marketingBtnA{display: none;cursor: pointer;line-height: 18px;width: 45px;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 1px solid #a8a8a8;background-color: #e6e6e6;border-radius: 3px;text-align: center;}
+
+.gongneng-marketingBtnB{display: none;cursor: pointer;line-height: 18px;width: 45px;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 0px;background-color: #00BBE8;color: #FFFFFF;border-radius: 3px;text-align: center;}
+
+
+/*交易*/
+.gongneng-dealList{padding: 10px 0;/*padding-right: 4%;*/width: 100%;height: 100%;display: none;float: left;overflow: hidden;}
+
+.dealStyle-div{margin-top: 15px;background-color: #FFFFFF;width: 100%;height: auto;border-bottom: 1px solid #d4d4d4;border-top:1px solid #d4d4d4;padding-bottom: 15px;box-shadow: 0 3px 3px #ccc;}
+
+.dealStyle{line-height: 40px;margin-left: 20px;}
+
+.dealStyle-kind{height: 30px;width: 100%;display: block;line-height: 30px;}
+
+.dealStyle-check{cursor: pointer;width: 20px;height: 20px;margin-left: 30px;margin-top: 4px;float: left;}
+
+.dealStyle-kind-label{display: block;width: auto;float: left;margin-left: 5px;}
+
+
+/*互动*/
+
+.gongneng-interactList{display: none;padding: 10px 0;padding-right: 4%;width: 96%;height: 100%;float: left;overflow: hidden;}
+
+.gongneng-interact-Ul{list-style: none;float: left;}
+
+.gongneng-interact-Ul li{float: left;display: block;width: 96%;margin-right: 4%;}
+
+.interact-kind-div{position: relative;width: 100%;height: 90px;display: block;background-color: #FFFFFF;border: 1px solid #d4d4d4;margin-top: 10px;}
+
+.interact-kind-label{line-height: 90px;display: block;float: left;margin-left: 20px;}
+
+.interact-check{cursor: pointer;width: 20px;height: 20px;margin-left: 30px;margin-top: 35px;float: left;}
+
+.gongneng-interactBtnA{display: none;cursor: pointer;line-height: 18px;width: 45px;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 1px solid #a8a8a8;background-color: #e6e6e6;border-radius: 3px;text-align: center;}
+
+.gongneng-interactBtnB{display: none;cursor: pointer;line-height: 18px;width: auto;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 0px;text-align: center;}
+
+
+/*推广吸粉*/
+
+.gongneng-extensionList{display: none;padding: 10px 0;padding-right: 4%;width: 96%;height: 100%;float: left;overflow: hidden;}
+
+.gongneng-extension-Ul{list-style: none;float: left;}
+
+.gongneng-extension-Ul li{float: left;display: block;width: 96%;margin-right: 4%;}
+
+.extension-kind-div{position: relative;width: 100%;height: 90px;display: block;background-color: #FFFFFF;border: 1px solid #d4d4d4;margin-top: 10px;}
+
+.extension-kind-label{line-height: 90px;display: block;float: left;margin-left: 20px;}
+
+.extension-check{cursor: pointer;width: 20px;height: 20px;margin-left: 30px;margin-top: 35px;float: left;}
+
+.gongneng-extensionBtnA{display: none;cursor: pointer;line-height: 18px;width: 45px;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 1px solid #a8a8a8;background-color: #e6e6e6;border-radius: 3px;text-align: center;}
+
+.gongneng-extensionBtnB{display: none;cursor: pointer;line-height: 18px;width: auto;height: 18px;float: right;margin-right: 30px;margin-top: 36px;border: 0px;text-align: center;}
+
+/*二维码*/
+
+.gongneng-QRcodeBg{display: none;width: 100%;height: 100%;position: relative;float: left;margin-top: 30px;}
+
+.QRcodeDiv{width: 200px;height: 200px;border: 1px solid #D4D4D4;position: relative;display: block;margin:  0 auto;}
+
+.qrImg{width: 176px;height: 176px;display: block;margin: 12px 12px;}
+
+.QRLabel{width: 130px;line-height: 30px;background-color: #00BBE8;color: #FFFFFF;display: block;text-align: center;border-radius: 3px;cursor: pointer;margin: 20px auto;}
+
+.QRUseLabel{width: 270px;line-height: 30px;display: block;text-align: center;border-radius: 3px;color: #015165;margin: 0 auto;}
+
+.QRUseTabel{width: 280px;display: block;text-align: center;vertical-align: middle;margin: 0 auto;}
+
+.QRUseTabel tr td{float: left;}
+
+.QRUseTabel tr td img{display: block;width: 100%;height: 100%;}
+
+/**系统功能选项内容结束*/
+
+
+.bdr3{border-radius: 3px;border: 1px solid #d4d4d4;background-color: #FFFFFF;}
+
+.blueWhite{color: #FFFFFF;background-color: #00BBE8;border-color: #00BBE8;}
+
+.blockOrNo{display: block;}

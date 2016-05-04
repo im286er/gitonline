@@ -71,7 +71,7 @@ class ManageController extends MerchantController {
 
 	//APP模版选择
 	public function template(){
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		$merchant=M('merchant')->where(array('jid'=>$this->jid))->find();
 		$this->assign('merchant',$merchant);
 		//行业列表
@@ -263,8 +263,8 @@ class ManageController extends MerchantController {
 
 	public function finance() 
 	{
-		$shopwhere = $this->jid?array('jid'=>$this->jid, "status"=>'1'):array('sid'=>$this->sid, "status"=>'1');
-		$shops = D('Shop')->where($shopwhere)->cache(true)->getField('sid,sname');
+		
+		$shops = D('auth')->getAuthShops($this->mid);
 		$this->assign('shops', $shops);
 		$sp_oid = $resource_gdprice = $resource_gdprice_array = array();
 
@@ -314,6 +314,9 @@ class ManageController extends MerchantController {
 
 	public function _after_finance()
 	{
+		if(intval($_GET['type'])==4){
+			$this->assign('CurrentUrl', 'Managefinance4');
+		}
 		$this->display( intval($_GET['type'])==4 ? 'Manage_expend' : 'Manage_finance' );
 	}
 
@@ -465,7 +468,8 @@ class ManageController extends MerchantController {
 	//提现申请
 	public function carryapply(){
 		$Bookkeeping = D('Common/Bookkeeping');
-		$member = M('member')->where(array('mid'=>$this->mid))->find();
+		$mid = M('merchant')->where(array('jid'=>$this->jid))->getField('mid');
+		$member = M('member')->where(array('mid'=>$mid))->find();
 		
 
 		if(I('get.action')=='calculate'){
@@ -494,6 +498,7 @@ class ManageController extends MerchantController {
 				$this->ajaxReturn(array('status'=>1,'msg'=>'提现申请成功！'));
 			}else $this->ajaxReturn(array('status'=>0,'msg'=>'提现申请失败！'));
 		} else {
+			$this->assign('CurrentUrl', 'Managecarryapply2');
 			$this->assign('member', $member);
 			$this->display();	
 		}
@@ -519,4 +524,52 @@ class ManageController extends MerchantController {
 		session('SendSms', $content);
 		exit(sendmsg( $tpl, $content) ? "1" : "0");		
 	}
+
+
+
+	// 模板管理
+	public function mobileTheme(){
+		//if( $this->type != 1 ) E('你无权查看当前页面');
+		$merchant=M('merchant')->where(array('jid'=>$this->jid))->find();
+		$this->assign('merchant',$merchant);
+		//行业列表
+		$vocation = M('vocation')->where(array('v_pid'=>0))->select();
+		$this->assign('vocation',$vocation);
+		if( IS_POST ) {
+			$t_sign = I('post.t_sign', '');
+			$result = M('merchant')->where(array('jid'=>$this->jid))->setField('theme',$t_sign);
+			if($result)
+				$this->ajaxReturn(array('status'=>1,'msg'=>'修改成功'));
+			else
+				$this->ajaxReturn(array('status'=>0,'msg'=>'修改失败'));
+		}
+		//$v_id = I('v_id',0);
+		$t_price = I('t_price',0);
+		if($t_price == 1){
+			$where = " t_status=1 AND t_price = 0 ";
+		}elseif($t_price == 2){
+			$where = " t_status=1 AND t_price > 0 ";
+		}else{
+			$where = " t_status=1 ";
+		}
+		$this->assign('t_price',$t_price);
+		
+		$page = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
+		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
+		$this->assign('pages', $page->show());
+		$this->assign('themes',$themes);
+		$this->display();	
+	}
+
+
+
+	/**
+	 * 后台编辑模板
+	 */
+	public function ctheme(){
+		C('TMPL_FILE_DEPR','');
+		$this->display('/ct/index');
+	}
+
+
 }

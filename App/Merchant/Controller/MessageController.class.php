@@ -7,21 +7,27 @@ class MessageController extends MerchantController {
 	//群发消息
 	public function pushmsg() {
 		if( IS_POST ) {
-			$data['ptitle'] = I('post.ptitle', '');
+			
 			$data['pcontent'] = $_POST['pcontent'];
 			$data['putype'] = 1;
 			$data['pmid'] = $this->mid;
 
 			if( $pid=M('pushContent')->add($data) ) {
-				$info['title'] = $data['ptitle'];
-				$info['time'] = date('Y-m-d H:i:s');
-				$info['content'] = trim(strip_tags( str_replace(array("\r\n", "\r", "\n", "\t", "&nbsp;"), "", $data['pcontent']) ));
-				$info['pid'] = $pid;
-				$data['pcontent'] = JSON($info);
-				$this->_IGtPushMessageToCidTrans( $data );
+				$user = M('fl_user')->where(array('flu_sjid'=>$this->jid))->field('flu_phone')->select();
+				$user_str = array();
+				foreach($user as $k=>$v){
+					if($v['flu_phone']){
+						$user_str[] = $v['flu_phone'];
+					}
+				}
+				$user_str2 = join(',',$user_str);
+				if($user_str2){
+					sendmsg($user_str2, $data['pcontent']);
+				}
 				$this->success('推送成功', U('/Message/listmsg', '', true));
 			} else { $this->error('推送失败'); }			
 		} else {
+			$this->assign('CurrentUrl', 'Messagepushmsg2');
 			$this->display();	
 		}
 	}
@@ -75,20 +81,15 @@ class MessageController extends MerchantController {
 	
 	//消息列表
 	public function listmsg() {
-		$where = $this->type == 1 ? array('tjid'=>$this->jid) : array('tsid'=>$this->tsid);
+		$where = array('tjid'=>$this->jid);
 		foreach( M('merchantUser')->where($where)->field('tmid')->select() as $mid ) $midlist[] = $mid['tmid'];
 		@array_unique($midlist); $midlist = @implode(",", $midlist);
 		
 		$page = new \Common\Org\Page(M('pushContent')->where(array('pmid'=>array('in', $midlist)))->count(), 6);
 		$listmsg = M('pushContent')->where(array('pmid'=>array('in', $midlist)))->order('ptime desc')->limit($page->firstRow.','.$page->listRows)->select();
-		foreach($listmsg as $_key=>$_msg) {
-			preg_match("/src\s*=\s*([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\1/i", $_msg['pcontent'], $match);
-			if( $match[2] ) $listmsg[$_key]['pimg'] = $match[2];
-			$listmsg[$_key]['pcones'] = strip_tags( $_msg['pcontent'] );
-		}
 		$this->assign('listmsg', $listmsg);
 		$this->assign('pages', $page->show());
-		$this->display();	
+		$this->display();
 	}
 
 

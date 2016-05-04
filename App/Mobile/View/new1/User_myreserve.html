@@ -1,0 +1,33 @@
+﻿<extend name="Public:common"/>
+<block name="style">style="background: #3492E9" </block>
+<block name="body">
+<div class="main container p-tb" id="bookSeat">
+	<ul class="book-list">
+	<if condition="!empty($order)">
+		<volist name="order" id="vo">
+		<li class="success">
+				<div class="sec-title">
+					<h3>{$vo.o_dstime}</h3>
+					<span class="book-status">{$vo.sname}</span>
+				</div>
+                <div class="sec-title">
+					<h3>预定人：{$vo.o_name}</h3>
+					<span class="book-status">手机号：{$vo.o_phone}</span>
+				</div>
+				<div class="sec-title">
+					<h3>最低消费：{$vo.o_price}元</h3>
+				</div>
+				<div class="sec-body">
+					<p class="book-detail"><volist name="vo.ogoods" id="value" key="keys"><egt name="keys" value="2">、</egt>{$value.sp_name}</volist></p>
+				</div>
+                <div class="myorder-footer" style="text-align:right;padding:10px;">
+					<a class="btn btn-o" style="display: inline-block;width:auto;padding:0px 10px;">{$vo.status_name}</a>
+				</div>
+		</li>
+		</volist>
+		<else />
+		<div style="width:50%;margin:10% auto;font-size:16px;color:#666;text-align:center;">暂时没有预订！</div>
+		</if>
+	</ul>
+</div>
+</block>

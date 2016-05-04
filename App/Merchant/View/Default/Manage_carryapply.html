@@ -1,10 +1,12 @@
 
-<extend name="Public:partial"/>
+<extend name="Public:common"/>
 <block name="body">
-<div class="modal" id="setModal" style="display:block;">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<div class="wrapper">
+<div class="mian padding">
 <form action="__ACTION__" method="post">
-    <div class="reveal-modal" style="border:none;margin-left:-233px;">
-        <h3>申请提现 <span class="close" id="DialogClose">×</span></h3>
+     <div class="content_a top">
+        
         <div class="modal-content">
         	<div class="set" style="text-align:center; font-weight:bold;">
         		<p style="color:red;">温馨提示：提现金额的最低数为100元</p>
@@ -34,6 +36,7 @@
         </div>
     </div>
 </form>
+</div>
 </div>
 <script type="text/javascript">
 $(function() {

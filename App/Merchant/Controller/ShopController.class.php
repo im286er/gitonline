@@ -5,14 +5,14 @@ class ShopController extends MerchantController {
 	private $_AddressList = array();
 	//分店列表
 	public function index() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
-		if( $this->type == 1 ) {
-			file_exists($this->path.'ShopName.php') && $modulename=file_get_contents($this->path.'ShopName.php');
-			file_exists($this->path.'ShopIcon.php') && $moduleicon=file_get_contents($this->path.'ShopIcon.php');
-			$this->assign('modulename', $modulename ? $modulename : '');
-			$this->assign('moduleicon', $moduleicon ? $moduleicon : '');
-			$this->assign('modulelink', 'http://yd.dishuos.com/Shop/index/mod/Choose/jid/'.$this->jid.'.html');
-		}
+		//if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type == 1 ) {
+			//file_exists($this->path.'ShopName.php') && $modulename=file_get_contents($this->path.'ShopName.php');
+			//file_exists($this->path.'ShopIcon.php') && $moduleicon=file_get_contents($this->path.'ShopIcon.php');
+			//$this->assign('modulename', $modulename ? $modulename : '');
+			//$this->assign('moduleicon', $moduleicon ? $moduleicon : '');
+			//$this->assign('modulelink', 'http://yd.dishuos.com/Shop/index/mod/Choose/jid/'.$this->jid.'.html');
+		//}
 		$where = array('jid'=>$this->jid, 'status'=>'1');
 		$page = new \Common\Org\Page(M('shop')->where($where)->count(), 9);
 		$this->assign('shopsList', M('shop')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
@@ -22,7 +22,7 @@ class ShopController extends MerchantController {
 	
 	//添加分店
 	public function addShop() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
@@ -83,7 +83,7 @@ class ShopController extends MerchantController {
 	
 	//删除分店
 	public function delShop() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		
 		$sid = I('get.sid', ''); if(!$sid) E('你无权对此进行操作');
 		$tmid=M("merchant_user")->where("tsid=$sid")->find();
@@ -95,7 +95,7 @@ class ShopController extends MerchantController {
 	
 	//隐藏分店
 	public function hidShop() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 	
 		$sid = I('get.sid', '');
 		$is_show = I('get.is_show', 0);
@@ -109,7 +109,7 @@ class ShopController extends MerchantController {
 	
 	//修改分店
 	public function editShop() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
@@ -157,7 +157,7 @@ class ShopController extends MerchantController {
 
 	//查看详情
 	public function infoShop() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		
 		$shop = M('shop')->where(array('sid'=>I('get.sid', 0, 'intval'), 'jid'=>$this->jid))->find();
 		if(!is_array($shop) || empty($shop)) { E('你无权操作此页面'); }
@@ -185,7 +185,7 @@ class ShopController extends MerchantController {
 
 	//设置分店模块ICON
 	public function resetPass() {
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		//if( $this->type != 1 ) E('你无权查看当前页面');
 		$sid = I('post.sid', '');
 		$mid = I('post.mid', '');
 		if(!$sid)exit('0');

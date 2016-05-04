@@ -1,0 +1,62 @@
+*{padding: 0;margin: 0;-moz-user-select:none;-webkit-user-select:none;}
+
+body{background-color: #EEEEEE;}
+
+.mineBG{position: absolute;top: 0;left: 0;height: 144px;width: 100%;}
+
+.mineBGTopDiv{width: 100%;background-color: #EEEEEE;float: left;}
+
+.topDiv{width: 100%;height: 144px;display: block;position:relative;float: left;}
+
+.login-end{width: 100%;height: 144px;display: block;position:relative;float: left;display: none;}
+
+.login-ready{width: 100%;height: 144px;display: block;position:relative;float: left;}
+
+
+
+.login{border: 1px solid #FFFFFF;border-radius: 6px;width: 90px;height: 30px;display: block;}
+
+.login label{line-height: 30px;color: #ffffff;width: 100%;text-align: center;display: block;}
+
+.loginLabel{width: 100%;line-height: 30px;font-size: 14px;color: #FFFFFF;text-align: center;display: block;position: absolute;top: 32px;left: 0;}
+
+.floatDivA{width: 60px;height: 60px;display: block;margin: 0 auto;margin-top: 42px;background-color: #FF6000;border-radius: 30px;overflow: hidden;}
+
+.floatDivB{width: 92px;height: 32px;display: block;margin: 0 auto;margin-top: 65px;overflow: hidden;/*box-shadow: 0px 0px 5px #3190e8;*/}
+
+.floatImg{width: 100%;height: 100%;display: block;}
+
+.floatLabel{width: 100%;line-height: 30px;font-size: 14px;color: #FFFFFF;text-align: center;display: block;}
+
+.secondBottomDiv{width: 100%;height: 100%;display: block;background-color: #FFFFFF;float: left;}
+
+.secondBottomDiv2{width: 100%;height: 100%;display: block;background-color: #FFFFFF;float: left;}
+
+.bottomBorder{width: 97%;height: 40px;margin-left: 3%;border-bottom: 1px solid #DDDDDD;}
+
+.bottomBorder2{width: 97%;height: 40px;margin-left: 3%;}
+
+.icon{height: 20px;width: auto;margin-top: 10px;float: left;}
+
+.fontBlack14{margin-left: 10px;float: left;font-size: 14px;line-height: 40px;}
+
+.moreImg{height: 12px;width: auto;margin-top:14px;margin-right: 15px;float: right;}
+
+/*.kongDiv{width: 100%;height: 15px;display: block;background-color: #EEEEEE;float: left;}*/
+
+.kongDiv{margin-top: 15px;}
+
+
+/**底部btn*/
+.bottomDiv{width: 100%;height: 50px;overflow: hidden;display: block;border-top: 1px solid #DDDDDD;position: fixed;bottom: 0px;left: 0px;background-color: #f9f9f9;}
+
+.bottomDiv table{width: 100%;text-align:center;vertical-align: middle;}
+
+.bottomDiv td{position: relative;}
+
+
+.bottomDiv table img{height: 40px;width: auto;padding-top: 5px;}
+
+.roundBG{position: absolute;border-radius: 7px;height: 14px;width: 14px;background-color: #ff3939;top: 0px;right: 30px;display: none;}
+
+.roundBG label{font-family: helvetica;font-size: 10px;color: #ffffff;line-height: 14px;display: block;}

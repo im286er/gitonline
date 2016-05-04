@@ -1,0 +1,39 @@
+*{padding: 0;margin: 0;}
+
+body{background-color: #EEEEEE;font-family: helvetica;}
+
+.header{width: 100%;height: 52px;background-color: #3492E9;position: fixed;top: 0;z-index: 10;}
+
+.header h1{font-size: 18px;color: #fff;line-height: 52px;text-align: center;font-weight: normal;}
+
+.ico{position: absolute;bottom: 0;background: 0 0 no-repeat;background-size: 100% 100%}
+
+.header-back{display: block;width: 52px;height: 52px;left: 0;background-image: url("../img/ico_back.png");}
+
+.whiteBgDiv{margin-top: 62px;padding:0 2%;width: 96%;border-bottom: 1px solid #DDDDDD;border-top: 1px solid #DDDDDD;background-color: #FFFFFF;}
+
+.bottomBorder{width: 100%;height: 40px;display: block;border-bottom: 1px solid #DDDDDD;}
+
+.bottomBigBorder{overflow: hidden;width: 100%;min-height: 80px;display: block;/*border-bottom: 1px solid #DDDDDD;*/}
+
+.titlelb{width: 30%;height: 40px;display: block;float: left;}
+
+.titlelb label{font-size: 14px;line-height: 40px;text-align: left;}
+
+.inputDiv{width: 70%;height: 40px;display: block;float: right;}
+
+.inputLabel{width: 100%;border: 0px;text-align: left;line-height: 40px;font-size: 14px;}
+
+.inputBigDiv{width: 70%;min-height: 80px;display: block;float: right;overflow: hidden;}
+
+.inputBigDiv textarea{width: 100%;min-height: 80px;line-height: 25px;border: 0px;text-align: left;font-size: 14px;resize: none;}
+
+.checkBox{width: 16px;height: 16px;margin-top: 12px;border: 0px;border-radius: 8px;background-color: #EEEEEE;overflow: hidden;float: left;}
+
+.man{font-size: 14px;width: auto;line-height: 40px;float: left;display: block;}
+
+.woman{font-size: 14px;width: auto;line-height: 40px;float: left;display: block;}
+
+.confirmBtn{width: 90%;height: 40px;border-radius: 5px;border: 0px;background-color: #3492E9;display: block;margin: 0 5%;margin-top: 15px;}
+
+.confirmBtn label{width: 100%;line-height: 40px;font-size: 18px;color: #FFFFFF;text-align: center;display: block;}

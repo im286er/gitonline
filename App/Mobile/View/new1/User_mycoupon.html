@@ -1,0 +1,89 @@
+﻿<extend name="Public:common"/>
+<block name="style">style="background: #3492E9" </block>
+<block name="body">
+<div class="tab-nav tab-fixed">
+		<div class="container">
+			<ul class="clearfix li-3">
+				<li class="active">未使用</li>
+				<li>已使用</li>
+				<li>已过期</li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-tb-2">
+		<section class="tab-content coupon active">
+			<div class="sec-body">
+				<ul>
+				 <volist name="hadcoupon" id="vo" empty="暂无未使用优惠券">
+					<li>
+						<a class="bg-block {$key%2==0?'coupon-red':'coupon-yellow'}" href="#">
+							<div class="coupon-left">
+								<h5>{$vo.vu_name}</h5>
+								<p>{$vo.vu_description|msubstr=###,0,30}</p>
+							</div>
+							<div class="coupon-right">
+								<h5>立即使用</h5>
+								<p class="coupon-validity">有效期至：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p>
+							</div>
+						</a>
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="tab-content coupon">
+			<div class="sec-body">
+				<ul>
+				 <volist name="unusedcoupon" id="vo" empty="暂无已使用优惠券">
+					<li>
+						<a class="bg-block coupon-gray" href="#">
+							<div class="coupon-left">
+								<h5>{$vo.vu_name}/h5>
+								<p>{$vo.vu_description}</p>
+							</div>
+							<div class="coupon-right">
+								<h5>已使用</h5>
+								<p class="coupon-validity">使用时间：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p>
+							</div>
+						</a>
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+		<section class="tab-content coupon">
+			<div class="sec-body">
+				<ul>
+				 <volist name="pastcoupon" id="vo" empty="暂无已过期优惠券">
+					<li>
+					   <a class="bg-block coupon-gray" href="#">
+							<div class="coupon-left">
+								<h5>{$vo.vu_name}/h5>
+								<p>{$vo.vu_description}</p>
+							</div>
+							<div class="coupon-right">
+								<h5>已过期</h5>
+								<p class="coupon-validity">过期时间：<br><php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></p>
+							</div>
+						</a>
+					</li>
+				</volist>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<script>
+		$(function() {
+			var aTabNav = $(".tab-nav li");
+			var aTabContent = $(".tab-content");
+			aTabNav.click(function() {
+				var _this = $(this);
+				var index  = _this.index();
+				aTabNav.removeClass('active');
+				_this.addClass('active');
+				aTabContent.removeClass('active');
+				aTabContent.eq(index).addClass('active');
+			})
+		});
+	</script>
+</block>

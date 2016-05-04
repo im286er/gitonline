@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>新增地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no, address=no">
+		<link rel="stylesheet" href="__PUBLIC__/Mobile/new1/css/addressStyle.css"/>
+		<script src="__PUBLIC__/Mobile/new1/js/addressHandler.js"></script>
+		<script src="__PUBLIC__/Mobile/new1/js/jquery-1.11.3.min.js"></script>
+		<script>
+//			window.onload = function(){
+//				setCheckBox();
+//			}
+		</script>
+		<script>
+			function check_sub(){
+				var name     = $("input[name='name']").val();
+				var phone    = $("input[name='phone']").val();
+				var address  = $("input[name='address']").val();
+				var maddress = $("#maddress").val();
+
+				if(name ==""){
+//					$(".msg").html("姓名不能为空！");
+					$("input[name='name']").attr('placeholder',"姓名不能为空！");
+					$("input[name='name']").focus();
+					return false;
+				}
+				if(!name.match(/^[\u4e00-\u9fa5]{1,10}$/)){
+					$("input[name='name']").attr('placeholder',"姓名格式不正确！");
+					$("input[name='name']").focus();
+					return false;
+				}
+
+				if(phone == ""){
+					$("input[name='phone']").attr('placeholder',"手机号不能为空！");
+					$("input[name='phone']").focus();
+					return false;
+				}
+
+				if (!phone.match(/^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/)) {
+					$("input[name='phone']").attr('placeholder',"手机号码格式不正确！");
+					$("input[name='phone']").focus();
+					return false;
+				}
+
+				if (address == ''){
+					$("input[name='address']").attr('placeholder',"地址不能为空！");
+					$("input[name='address']").focus();
+					return false;
+				}
+
+				if (maddress == ''){
+					$("#maddress").attr('placeholder',"详细地址不能为空！");
+					$("#maddress").focus();
+					return false;
+				}
+
+				$("form").submit();
+				return true;
+
+			}
+
+		</script>
+	</head>
+	<body>
+		<header class="header">
+            <h1>新增地址</h1>
+            <a href="javascript:history.back(-1);" class="ico header-back"></a>
+		</header>
+		<form action="{:U('addressEdit')}" method="post">
+		<div class="whiteBgDiv">
+			<!--联系人-->
+			<div class="bottomBorder">
+				<div class="titlelb">
+					<label>联系人</label>
+				</div>
+				<div class="inputDiv">
+					<input class="inputLabel" placeholder='你的姓名' name="name" value="{$info['name']}"/>
+					<input type="hidden" name="receivingid" value="{$info['receivingid']}">
+				</div>
+			</div>
+			
+			<!--性别-->
+			<!--<div class="bottomBorder">-->
+				<!--<div class="inputDiv">-->
+					<!--<div id="man" class="checkBox">-->
+						<!--<img src="__PUBLIC__/Mobile/new1/img/gou.png" />-->
+					<!--</div>-->
+					<!--<label class="man">先生</label>-->
+					<!---->
+					<!--<div style="width:20px;height:100%;display: block;margin-left: 20px;float: left;"></div>-->
+					<!--<div id="woman" class="checkBox">-->
+						<!--<img src="__PUBLIC__/Mobile/new1/img/gou.png" />-->
+					<!--</div>-->
+					<!--<label class="woman">女士</label>-->
+				<!--</div>-->
+			<!--</div>-->
+			
+			<!--联系电话-->
+			<div class="bottomBorder">
+				<div class="titlelb">
+					<label class="connect">联系电话</label>
+				</div>
+				<div class="inputDiv">
+					<input class="inputLabel" placeholder='你的手机号码' name="phone" value="{$info['phone']}"/>
+				</div>
+			</div>
+			
+			<!--收货地址-->
+			<div class="bottomBorder">
+				<div class="titlelb">
+					<label class="connect">收货地址</label>
+				</div>
+				<div class="inputDiv">
+					<input class="inputLabel" placeholder='小区/写字楼/学校等' name="address" value="{$info['address']}"/>
+				</div>
+			</div>
+			
+			<!--详细地址-->
+			<div class="bottomBigBorder">
+				<div class="inputBigDiv">
+					<textarea placeholder='详细地址(如门牌号等)' name="maddress" id="maddress">{$info['maddress']}</textarea>
+				</div>
+			</div>
+			<!--收货地址-->
+			<div class="bottomBorder">
+				<div class="titlelb">
+					<label class="msg" style="color: red;text-align:center"></label>
+				</div>
+			</div>
+		</div>
+			<div class="confirmBtn" onclick="check_sub()">
+				<label>确定</label>
+			</div>
+		</form>
+	</body>
+</html>

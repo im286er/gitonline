@@ -15,127 +15,201 @@
 <script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
 <link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
 <script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script src="__PUBLIC__/Js/Mobile/interactive.js?v=1"></script>
+<script src="__PUBLIC__/Js/Mobile/demo.js?v=1"></script>
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+
 <script>
 //10px 1rem;
 !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
 </script>
 <script>
-var reqUrl = "{:U('Mobile/Flow/submit',array('jid'=>$jid,'sid'=>$sid))}";
-var total = {$total_price};
-var used_coupon = '';
-//支付方式
-<if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype')">
-var paytype = 'weixin';
-<php> $weixinpay = true;</php>
-<else/>
-<if condition="$setting['pay_type']==1">
-var paytype = 'alipay';
-<else/>
-var paytype = 'alipay';
-</if>
-</if>
-<if condition="$setting['consume_type']==1">
-var xftype = 1;
-<elseif condition="$setting['consume_type']==2"/>
-var xftype = 2;
-<else/>
-var xftype = "<if condition='$receivingid eq 0'>1<else/>2</if>";
-</if>
+    var reqUrl  = "{:U('Flow/submit',array('jid'=>$jid,'sid'=>$sid))}";
+    var paytype = 'alipay';
+    var userid = "{$userid}";
+    var msystem = "{$msystem}";
+    var linkurl = "{$linkurl}";
+    var is_vip  = "{$is_vip}";
+    
+    var cart_str = "{$goods_list}";
+    var old_cart = cart_str;   
+    var cart     = cart_str;
+    var v2p = "{$v2p}";
+    var org = "{$org}";
+    var used_coupon = '';
 
-var msg_title_1 = "{$setting.consume_title_1}";
-var msg_title_2 = "{$setting.consume_title_2}";
+    var total = {$total_price};
 
-var sarr = "{$sarr}";
-var isApp = "{$isApp}";
-var mid = "{$mid}";
-var linkurl = "{$linkurl}";
-var Pullrefresh1 = null;
-function usedCoupon(pid){
-	var price = $("#price_"+pid).html();
-	var new_total = total - price;
-	if(new_total < 0){
-		new_total = 0;
-	}
-	$(".order-pice").html(new_total);
-	used_coupon = pid;
-}
-function unusedCoupon(){
-	used_coupon = '';
-	$(".order-pice").html(total);
-}
-function ch_address(){
-	changeAddress(linkurl);
-}
-function saveAddress(){
-	var o_name    = $("#o_name").val();
-	var o_phone   = $("#o_phone").val();
-	//var op_name    = $("#op_name").val();
-	//var op_phone   = $("#op_phone").val();
-	//var o_address = $("#o_address").val();
-	var addr = {
-			o_name:o_name,
-			o_phone:o_phone,
-			//op_name:op_name,
-			//op_phone:op_phone,
-			//o_address:o_address
-	};
-	$.cookie("addr", JSON.stringify(addr),{path:'/'});
-}
-function getAddress(){
-	var addr = eval('('+ $.cookie("addr") +')');
-	if(addr != undefined){
-		$("#o_name").val(addr.o_name);
-		$("#o_phone").val(addr.o_phone);
-		//$("#op_name").val(addr.op_name);
-		//$("#op_phone").val(addr.op_phone);
-		//$("#o_address").val(addr.o_address);
-	}
-}
-$(document).ready(function(){
-	getAddress();
-    $('.flow_sub').click(function(){
-    	saveAddress();
-
-    		if(mid > 0){
-    			submitChoose();
-    		}else{
-    			location.href = linkurl;
-    		}
-
-    });
-    $('.btn-go').click(function(){
-    	location.href = "{:U('Mobile/User/myorder',array('jid'=>$jid,'jump'=>1))}";
-    });
-    document.addEventListener('touchmove', function(event) {
-        //判断条件,条件成立才阻止背景页面滚动,其他情况不会再影响到页面滚动
-        if(!$("#seatModal").is(":hidden")){
-            event.preventDefault();
-        }
-    });
-});
-function submitChoose(){
-
-	if (Pullrefresh1 == null){
-		Pullrefresh1 = new Date().getTime();
-	}else{
-		var Pullrefresh2 = new Date().getTime();
-		if(Pullrefresh2 - Pullrefresh1 < 2000){
-			Pullrefresh1 = Pullrefresh2;
-			return false;
-		}else{
-			Pullrefresh1 = Pullrefresh2;
+    function usedCoupon(pid){
+		var price = $("#price_"+pid).html();
+		var new_total = total - price;
+		if(new_total < 0){
+			new_total = 0;
 		}
+		$(".order-pice").html(new_total);
+		used_coupon = pid;
+	}
+	function unusedCoupon(){
+		used_coupon = '';
+		$(".order-pice").html(total);
+	}
+	    
+$(document).ready(function(){
+    	
+    $(".btn_left").click(function(){
+		var goods_id = $(this).attr('gid');		
+		var old_number = $(".gnum_"+goods_id).html();
+				
+		if(old_number > 0){
+			old_number--;
+		}else{
+			return false;
+		}
+		$(".gnum_"+goods_id).html(old_number);
+		
+		updateCart(goods_id,old_number);
+	});
+	
+	$(".btn_right").click(function(){
+		var goods_id = $(this).attr('gid');	
+		var	old_number = $(".gnum_"+goods_id).html();
+		
+		if(old_cart[goods_id].gstock != '-1' && old_number >= parseInt(old_cart[goods_id].gstock)){
+			return false;
+		}
+		
+		old_number++;
+		
+		$(".gnum_"+goods_id).html(old_number);
+		
+		updateCart(goods_id,old_number);
+	});
+	
+	$('.flow_sub').click(function(){  	
+    	submitChoose();  	
+    });
+	
+	$('.btn-yes').click(function(){
+    	location.href = "{:U('My/order')}";
+    });
+	
+	$('.btn-login-no').click(function(){
+		$("#unlogin").hide();
+    });
+	$('.btn-login-yes').click(function(){
+		$("#unlogin").hide();
+    })
+});
+    function updateCart(goods_id,number){
+		if(!(goods_id in cart) ){
+			cart[goods_id] = old_cart[goods_id];
+			cart[goods_id].number = 1;
+		}else{
+			
+			if(number == 0){
+				delete cart[goods_id];
+			}else{
+				cart[goods_id].number = number;	
+			}
+		}
+		
+		 var cartNumber = 0;
+		 var cartPrice = 0;
+		 var cartyPrice = 0;
+		 var vip_fl = 0;
+		 var p_fl = 0;
+		 $.each(cart,function(index,o){
+			 cartNumber  += parseInt(o.number);
+			 cartPrice   += parseFloat(o.number*o.gprice);
+			 cartyPrice  += parseFloat(o.number*o.yprice);
+			 vip_fl      += parseFloat(o.number*o.gprice*o.gvrebate*org);
+		 })
+		 vip_fl = new Number(vip_fl/100).toFixed(2);	
+		 p_fl   = new Number(vip_fl*v2p).toFixed(2);
+		 
+		 $(".cartNumber").html(cartNumber);
+		 $(".cartPrice").html(cartPrice);
+		 $(".cartyPrice").html(cartyPrice);
+		 $("#p_fl").html(p_fl);
+		 $("#vip_fl").html(vip_fl);
+		 if(is_vip == '1'){
+			 $("#d_fl").html(vip_fl);
+		 }else{
+			 $("#d_fl").html(p_fl);
+		 }
+		
+		 $.cookie("cart", JSON.stringify(cart),{path:'/'});
 	}
 
-	var re = /^1\d{10}$/;
-	var msg = '';
 
-	var  o_seat    = $("#o_seat").val();
-	var  o_address = $("#o_address").val();
-	var  o_remarks = $("#o_remarks").val();
-	if(xftype == '1'){
+    function submitChoose(){
+    	$ch = checkcheck();
+    	if(!$ch){
+    		return false;
+    	}
+		layer.open({type: 2,shade: true,time: 20,content: '订单创建中…'});
+    	//checkLogin(linkurl,'submitOrder(1)');
+    	//submitOrder('123');
+
+    	var remarks = $("#remarks").val();
+	 	var o_name    = $("#o_name").val();
+		var o_phone   = $("#o_phone").val();
+		var  o_address = $("#o_address").val();
+		// $ch = checkcheck();
+  //   	if(!$ch){
+  //   		return false;
+  //   	}
+   
+		$.post(reqUrl, {used_coupon:used_coupon,paytype:paytype,o_xftype:1,o_seat:1,remarks:remarks,o_name:o_name,o_phone:o_phone,o_address:o_address},function(data){
+			layer.closeAll();
+
+			if(data.msg =="pay"){
+				//location.href = data.url;
+				payOrder(paytype,data.oid);
+			}else if(data.msg =="yspay"){
+				var oid = data.oid;
+				payOrder(paytype,oid);
+			}else if(data.msg =="true" ){
+	        	$(".modal-ss").show();
+	        }else{
+	        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
+	  		    msg.show();
+	        }
+		},"json");
+    }
+
+	function submitOrder(utoken){
+	 	var remarks   = $("#remarks").val();
+	 	var o_name    = $("#o_name").val();
+		var o_phone   = $("#o_phone").val();
+		var o_address = $("#o_address").val();
+		$ch = checkcheck();
+   
+		$.post(reqUrl, {used_coupon:used_coupon,paytype:paytype,remarks:remarks,utoken:utoken,o_name:o_name,o_phone:o_phone,o_address:o_address},function(data){
+				layer.closeAll();
+				if(data.msg =="true" ){
+					payOrder(paytype,data.oid);
+    	        }else if(data.msg =="nogoods"){
+    	        	location.href = data.u;
+    	        }else{
+					layer.open({content: data.content,time: 2});
+				}
+		},"json");
+	}
+	function ch_address(){
+		changeAddress(linkurl);
+	}
+	function checkcheck(){
 		var o_name    = $("#o_name").val();
 		var o_phone   = $("#o_phone").val();
+		var o_address = $("#o_address").val();
+		var re = /^1\d{10}$/;
+		var msg = '';
+		if(o_name == '' || o_phone == '' || o_address == ''){
+		    layer.closeAll();
+			layer.open({content: '请先选择收货地址',time: 2});
+    		return false;
+		}
 		if(o_name == ''){
 			msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
 		    msg.show();
@@ -149,105 +223,9 @@ function submitChoose(){
 			msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
 		    msg.show(); return false;
 		}
-		if(sarr != ''){
-			if(o_seat == 0){
-				msg = dialog({title: '提示',content: '店内消费请选择座位号',id: 'm1'});
-	  		    msg.show();
-	  		  	return false;
-			}
-		}
-	}else{
-		var o_name    = $("#op_name").val();
-		var o_phone   = $("#op_phone").val();
-
-			if(o_name == ''){
-				msg = dialog({title: '提示',content: '请输入您的姓名',id: 'm1'});
-			    msg.show(); return false;
-			}
-			if(o_phone == ''){
-				msg = dialog({title: '提示',content: '请输入您的手机号',id: 'm1'});
-			    msg.show(); return false;
-			}
-			if(!re.test(o_phone)){
-				msg = dialog({title: '提示',content: '手机号格式不正确',id: 'm1'});
-			    msg.show(); return false;
-			}
-			if(o_address == ''){
-				msg = dialog({title: '提示',content: '请输入您的收货地址',id: 'm1'});
-	  		    msg.show();
-	  		  	return false;
-			}
-
+		return true;
 	}
-	$.ajax( {
-		    url:reqUrl,
-		    data:{
-		    	used_coupon : used_coupon,
-				paytype : paytype,
-				o_xftype : xftype,
-				o_seat : o_seat,
-				o_name : o_name,
-				o_phone : o_phone,
-				o_address : o_address,
-				o_remarks : o_remarks,
-		    },
-		    type:'post',
-		    cache:false,
-		    dataType:'json',
-		    success:function(data) {
-				if(data.msg =="pay"){
-					location.href = data.url;
-				}else if(data.msg =="yspay"){
-					payOrder(paytype,data.oid);
-				}else if(data.msg =="true" ){
-		        	$(".modal-ss").show();
-		        }else{
-		        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
-		  		    msg.show();
-		        }
-		     },
-		     error:function(XMLHttpRequest, textStatus, errorThrown){
-			    	//alert(JSON.stringify(XMLHttpRequest));
-			    	if(XMLHttpRequest.status == '200'){
-			    		var data = eval('('+ XMLHttpRequest.responseText +')');
-			    		if(data.msg =="pay"){
-							location.href = data.url;
-						}else if(data.msg =="yspay"){
-							payOrder(paytype,data.oid);
-						}else if(data.msg =="true" ){
-				        	$(".modal-ss").show();
-				        }else{
-				        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
-				  		    msg.show();
-				        }
-			    	}
-			 }
-	});
-}
-
-
-function msgopen( type )
-{
-	var msg = null;
-	switch( type)
-	{
-		case 1:
-			msg = dialog({title: '提示', content: '温馨提示：暂未开通“到店支付”, 敬请期待！',id: 'm1'});
-		break;
-
-		case 2:
-			msg = dialog({title: '提示', content: '温馨提示：暂未开通“支付宝支付”, 敬请期待！',id: 'm1'});
-		break;
-		case 3:
-			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_2+'”, 敬请期待！',id: 'm1'});
-		break;
-		case 4:
-			msg = dialog({title: '提示', content: '温馨提示：暂未开通“'+msg_title_1+'”, 敬请期待！',id: 'm1'});
-		break;
-	}
-	msg.show();
-}
-</script>
+    </script>
 
 </head>
 <body class="ios">
@@ -385,60 +363,60 @@ function msgopen( type )
 				</div>
 				<div class="modal-footer">
 					<a class="btn-no js_no" href="javascript:;">取消</a>
-					<a class="btn-yes js_no" href="javascript:;">确定</a>
+					<a class="btn-no js_no" href="javascript:;">确定</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
-	// 	var aIcoSelect = $(".ico-select");
-	// 	var aSelectLi = aIcoSelect.parent('li');
-	// 	aSelectLi.click(function() {
-	// 		select($(this));
-	// 	});
-	// 	function select(_this) {
-	// 		// var _this = $(this);
-	// 		if(_this.siblings('li').length == 0) {
-	// 			if(_this.hasClass('checked')) {
-	// 				_this.removeClass('checked');
-	// 			} else {
-	// 				_this.addClass('checked');
-	// 			}
-	// 		} else {
-	// 			_this.siblings('li').removeClass('checked');
-	// 			_this.addClass('checked');
-	// 		}
-	// 	}
+		var aIcoSelect = $(".ico-select");
+		var aSelectLi = aIcoSelect.parent('li');
+		aSelectLi.click(function() {
+			select($(this));
+		});
+		function select(_this) {
+			// var _this = $(this);
+			if(_this.siblings('li').length == 0) {
+				if(_this.hasClass('checked')) {
+					_this.removeClass('checked');
+				} else {
+					_this.addClass('checked');
+				}
+			} else {
+				_this.siblings('li').removeClass('checked');
+				_this.addClass('checked');
+			}
+		}
 	// // 协议弹出框
 
-	// 	var agreementModal = $("#agreement");
-	// 	var $body = $("body");
-	// 	$("#js_agreement").click(function(ev) {
-	// 		$body.css("overflow","hidden");
-	// 		agreementModal.show(0, swiper);
-	// 	});
-	// 	$(".modal-body").click(function(ev) {
-	// 		ev.stopPropagation();
-	// 	});
-	// 	$(".modal-dialog").click(function(ev) {
-	// 		$(".modal").hide();
-	// 		$body.css("overflow","auto");
-	// 	});
-	// 	$(".js_no").click(function(event) {
-	// 		$(".modal").hide();
-	// 		$body.css("overflow","auto");
-	// 	});
-	// 	var option = {
-	// 		direction: 'vertical',
-	// 		slidesPerView: 3,
-	// 		centeredSlides: true,
-	// 		onSlideChangeEnd: function() {
-	// 			// 滚动后执行的动作
-	// 		}
-	// 	}
-	// 	var swiper = function() {
-	// 		var addrSelector = new Swiper ('#selector', option);
-	// 	}	
+		var agreementModal = $("#agreement");
+		var $body = $("body");
+		$("#js_agreement").click(function(ev) {
+			$body.css("overflow","hidden");
+			agreementModal.show(0, swiper);
+		});
+		$(".modal-body").click(function(ev) {
+			ev.stopPropagation();
+		});
+		$(".modal-dialog").click(function(ev) {
+			$(".modal").hide();
+			$body.css("overflow","auto");
+		});
+		$(".js_no").click(function(event) {
+			$(".modal").hide();
+			$body.css("overflow","auto");
+		});
+		var option = {
+			direction: 'vertical',
+			slidesPerView: 3,
+			centeredSlides: true,
+			onSlideChangeEnd: function() {
+				// 滚动后执行的动作
+			}
+		}
+		var swiper = function() {
+			var addrSelector = new Swiper ('#selector', option);
+		}	
 
 
 

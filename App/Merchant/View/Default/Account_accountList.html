@@ -1,0 +1,59 @@
+<extend name="Public:common"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+.table td, .table th { border-top:none; }
+select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
+</style>
+	<div class="wrapper">	
+		<h2 class="title">账号管理<span style="float:right;margin-right:100px;"><a href="add.html">新增员工</a></span></h2>	
+		<div class="mian padding">
+			<div class="content_a top">
+				<table class="table border-b">
+					<tr>
+						<th width="15%">账号</th>
+						<th width="10%">姓名</th>
+						<th width="25%">职务</th>
+						<th width="10%">手机</th>
+						<th width="15%">状态</th>
+						<th width="25%">操作</th>
+					</tr>
+					<volist name="account_list" id="v">
+					<tr>
+					<td>{$v.mname}</td>
+					<td>{$v.tname}</td>
+					<td>{$v.job}</td>
+					<td>{$v.tphone}</td>
+					<td><if condition="$v.mstatus eq 1">正常<else />禁止</if></td>
+					<td>
+					<a href="edit/tmid/{$v.tmid}.html">编辑</a>
+					<if condition="$v.mstatus eq 1"><a href="javascript:;" onclick="jinyong({$v.tmid},0)">禁用</a><else /><a href="javascript:;" onclick="jinyong({$v.tmid},1)">启用</a></if>
+					</td>
+					</tr>
+					</volist>
+				</table>
+				<if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='<php>$get=I('get.');unset($get['page']);echo U().'?'.http_build_query($get);</php>&page='+this.value">{$pages}
+                    </div>
+                </if>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	function jinyong(mid,type){
+		if(confirm('确定要禁用此账号吗?')){
+			$.post("{:U('/Account/jinyong', '', true)}", {tmid:mid,type:type}, function( data ) {
+				if(data == 1){
+					alert('操作成功');
+					location.reload();
+				}else{
+					alert('操作失败');
+				}
+			})
+		}
+	}
+	</script>
+</block>

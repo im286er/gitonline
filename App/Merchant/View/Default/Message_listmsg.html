@@ -2,16 +2,12 @@
 <block name="body">
 <div class="wrapper">
     <h2 class="title"><!--群发消息列表-->
-        <p class="returnMenu">
-            <a href="{:U('/Message/pushmsg', '', true)}">新建群发消息</a>
-            <a href="{:U('/Message/listmsg', '', true)}" class="curr">已发送列表</a>
-        </p>
+       已发送列表
     </h2>
     <div class="mian padding">
     	<volist name="listmsg" id="msg">
              <div class="content_b sentList sent_a">
-             <if condition="isset($msg['pimg'])"><div class="sentImg"><img src="{$msg.pimg}" alt="" style="height:80px; width:80px;"></div></if>
-             <div class="sentwidth"><if condition="isset($msg['pimg'])">[图文消息]</if>{$msg.ptitle|msubstr=0,20,'utf-8'}</div>
+             <div class="sentwidth">{$msg.pcontent}</div>
                             <span>发送成功</span>
                             <span>{$msg.ptime}</span>
                             <a href="{:U('/Message/delsmsg', array('pid'=>$msg['pid']), true)}" class="c-5da3ea">删除</a>

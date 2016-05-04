@@ -1,0 +1,156 @@
+﻿<extend name="Public:common"/>
+<block name="style">style="background: #3492E9" </block>
+<block name="body">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/myorder.css">
+	<script>
+		var reqUrl = "{:U('Pay/request_alipay')}";
+		var o_id  = "";
+		var ctype = 1;
+		var isApp = "{$isApp}";
+		function send_qet(reqUrl,qet_data){
+			$.ajax( {
+				url:reqUrl,
+				data:qet_data,
+				type:'post',
+				cache:false,
+				dataType:'json',
+				success:function(data) {
+					if(data.msg =="true" ){
+						$("#play-success").show();
+					}
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrown){
+					if(XMLHttpRequest.status == '200'){
+						var data = eval('('+ XMLHttpRequest.responseText +')');
+						if(data.msg =="true" ){
+							$("#play-success").show();
+							//window.location.reload();
+						}
+					}
+				}
+			});
+		}
+		function ch_paytype(oid,o_type){
+			var reqUrl = "{:U('Mobile/User/changeOrder')}";
+			var qet_data = {
+				type  : 'paytype',
+				o_id  : oid,
+				o_type: o_type
+			};
+			send_qet(reqUrl,qet_data);
+		}
+		function ch_dtype(oid,ct){
+			o_id  = oid;
+			ctype = ct;
+			if(ctype == 1){
+				$("#con-qx").show();
+			}else if(ctype == 2){
+				$("#con-qx-2").show();
+			}else if(ctype == 3){
+				$("#con-qx-3").show();
+			}
+		}
+		function ch_pay(oid){
+			if(isApp > 0){
+				payOrder('alipay',oid);
+			}else{
+				location.href = reqUrl + "?o_id=" + oid;
+			}
+		}
+		$(document).ready(function(){
+
+			$('.play-success-yes').click(function(){
+				window.location.reload();
+			});
+
+			$('.btn-qx-no').click(function(){
+				$(".con-qx").hide();
+			});
+
+			$('.btn-qx-yes').click(function(){
+				var reqUrl = "{:U('Mobile/User/addressDel')}";
+				var qx_reason = '';
+				if(ctype == 3){
+					qx_reason = $("#qx-reason").val();
+					if(qx_reason == ''){
+						//return false;
+					}
+				}
+				var qet_data = {
+					type  : 'dtype',
+					receivingid  : o_id,
+					ctype : ctype,
+					qx_reason : qx_reason,
+				};
+				$(".con-qx").hide();
+				send_qet(reqUrl,qet_data);
+			});
+		});
+	</script>
+	<div class="tab-nav nav-myorder">
+		<div class="container">
+			<ul class="li-4 clearfix tab-myorder">
+				<li class="active" style="float: right;"><a href="{:U('User/addressEdit')}" style="color: #3492E9">新增地址</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main container p-92">
+		<div class="tab-content active">
+			<volist name="address_list" id="vo">
+				<section class="myorder-list">
+					<div class="myorder-title">
+						<p class="myorder-no">{$vo.name}&nbsp;&nbsp;{$vo.phone}</p>
+						<p class="myorder-time">{$vo.address}</p>
+						<div class="myorder-seat">
+						</div>
+					</div>
+					<div class="myorder-footer">
+						<a class="btn btn-o" href="{:U('User/addressEdit',array('receivingid'=>$vo['receivingid']))}">编辑</a>
+						<a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.receivingid}',1);">删除</a>
+					</div>
+				</section>
+			</volist>
+		</div>
+	</div>
+
+	<div class="modal" id="play-success">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">操作成功</h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-yes play-success-yes" href="javascript:;" style="width:100%;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal con-qx" id="con-qx">
+		<div class="modal-backdrop"></div>
+		<div class="modal-dialog modal-s">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h6 class="modal-title modal-title-single">确定要删除该地址吗?</h6>
+				</div>
+				<div class="modal-footer modal-footer">
+					<a class="btn-qx-no" href="javascript:;">返回</a><a class="btn-qx-yes" href="javascript:;">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var aTabNavLi = $(".tab-nav li");
+		var aTabContent = $(".tab-content");
+		aTabNavLi.click(function() {
+			var _this = $(this);
+			var index = _this.index();
+			aTabNavLi.removeClass('active');
+			_this.addClass('active');
+			aTabContent.removeClass('active');
+			aTabContent.eq(index).addClass('active');
+		});
+	</script>
+</block>

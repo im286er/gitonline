@@ -38,7 +38,11 @@ $(document).ready(function(){
 			<div class="cart-price">共<span class="cartPrice">0</span></div>
 		</div>
 		<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了</a>
-		<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		<if condition="$mid">
+			<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		<else/>
+			<a class="btn btn-primary showbox3" id="subBtn" href="{:U('User/login')}?returnurl=<php>echo urlencode(U());</php>" style="display:none;">提交订单</a>
+		</if>
 		</div>
 	</footer>
     <div class="cart-modal" id="cartModal" style='display:none;'>

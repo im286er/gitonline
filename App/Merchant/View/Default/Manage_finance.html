@@ -11,33 +11,23 @@
 </style>
 <div class="wrapper">
     <h2 class="title">财务管理</h2>
-    <div class="prompt-div txt-infro clearfix">
-    	<i class="prompticon"></i><span id="MyBdzhInfo">1.可提现总额=商户版线上订单交易额+全民返利线上交易额<br/>  
-2.【复制】按钮功能说明：点击订单号右侧的复制按钮，可以在【订单管理】中搜索查看订单详情<br/>
-3.温馨提示：申请提现后1-2个工作日内到账，非工作日顺延</span>
-    </div>
-    <div class="prompt-div green clearfix">
-    	<i class="prompticon set-user"></i><b id="MyBdzhInfo">{$member.mbdzh|default='尚未设置提现账户'}</b>
-        <input type="button" class="no-bak pull-right" value="设置"  id="btnUser" onClick="DialogFrameFun(465, 405, '{:U('Manage/editifo')}')">
-    </div>
-
+    
 <div class="border-b"></div>
-<eq name="type" value="1">
+
 <h2 class="shops">选择门店：
-	<span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span>
+	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
 	<volist name="shops" id="vo">
 		
 		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
 	</volist>
 </h2>
-</eq>
+
     <div class="mian padding">
         <div class="content_a">
             <h3>
                 账户明细
                 <span class="c_a2a2a6">申请提现后1-2个工作日内到账，非工作日顺延</span>
-                <input name="" class="jl-white" value="提现记录" type="button" onclick="window.location.href='{:U('Manage/finance@sj', array('type'=>4), true, true)}'" />
-                <input type="button" value="提现" onClick="<empty name="member.mbdzh">alert('请先设置提现账户');<else/>DialogFrameFun(465, 405, '{:U('Manage/carryapply')}')</empty>">
+                <input type="button" value="提现" onclick="location='/Manage/carryapply.html'">
             </h3>
             <ul class="clearfix ul-cell">
                 <li><p>{$count_a|default='0.00'}</p>线下总收入</li>
@@ -136,6 +126,12 @@
             </if>
         </div>
     </div>
+    <div class="prompt-div txt-infro clearfix">
+    	<i class="prompticon"></i><span id="MyBdzhInfo">1.可提现总额=商户版线上订单交易额+全民返利线上交易额<br/>  
+2.【复制】按钮功能说明：点击订单号右侧的复制按钮，可以在【订单管理】中搜索查看订单详情<br/>
+3.温馨提示：申请提现后1-2个工作日内到账，非工作日顺延</span>
+    </div>
+    
 </div>
 
 <div class="modal" id="DialogFrameModel">

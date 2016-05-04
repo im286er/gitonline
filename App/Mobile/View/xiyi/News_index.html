@@ -29,6 +29,29 @@
 		<p><img src="__PUBLIC__/Mobile/xiyi/img/xdxz/xdxz_07.gif" width="100%"></p>
 	</div>
 </div>
+	<script src="__PUBLIC__/Js/Mobile/interactive.js"></script>
+    <script src="__PUBLIC__/Mobile/default/Js/fastclick.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function(){
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        $.post("{:U('User/location')}",{'longitude':position.coords.longitude,'latitude':position.coords.latitude},function(data){ });
+                    },function(errorObject){
+
+                    },{
+                        enableHighAccuracy : true,
+                        timeout    : 3000,
+                        maximumAge : 60000
+                    }
+                );
+    });
+    </script>
+    <script>
+        $(function() {
+            //fastclick,使移动端点击没有延迟
+            FastClick.attach(document.body);
+        });
+    </script>
 <footer>
 	<ul class="footer-menu">
 		<li class="current"> <a href="{:U('Index/index',array('jid'=>$jid))}"><span class="icon-menu home"></span>

@@ -7,7 +7,8 @@ class IndexController extends MerchantController {
 	public function index() {
 		$stime = date('Y-m-d');
 		$etime = date('Y-m-d',strtotime('+1 day'));
-		$where = $this->type == 1 ? array('o_jid'=>$this->jid) : array('o_sid'=>$this->tsid);
+		$sid = I('sid',0);
+		$where = $sid > 0 ? array('o_sid'=>$sid) : array('o_jid'=>$this->jid);
 		$this->assign('corder', M('order')->where(array_merge($where, array('o_dstatus'=>array('egt', '1'), 'o_dstime'=>array(array('egt', $stime), array('elt', $etime), 'and'))))->count());
 		$this->assign('iorder', M('order')->where(array_merge($where, array('o_pstatus'=>'1', 'o_pstime'=>array(array('egt', $stime), array('elt', $etime), 'and'))))->sum('o_price'));
 		$this->assign('sumprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1')) ))->sum('o_price'));
@@ -16,15 +17,14 @@ class IndexController extends MerchantController {
 		$this->assign('merchant', $merchant);
 		$this->assign('member', $member);
 		$this->assign('mnickname', $merchant['mnickname']);
-		if( $this->type==2  ) {
-			$this->assign('sname', M('shop')->where(array('sid'=>$this->tsid, 'jid'=>$this->jid))->getField('sname'));
-		}
-		$mtapp = M('merchantApp')->where(array('jid'=>$this->jid))->find();
-		$this->assign('mtapp', $mtapp);
-		if($this->type==1)$page = new \Common\Org\Page(M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->count(), 3); 
-		$this->assign('splist', M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->field('sname,mservetel')->select());
-		if($this->type==1)$this->assign("pages",$page->show()); 
-		$this->assign('qrcodefile',$this->createQrCode($mtapp));
+		$shops = D('auth')->getAuthShops($this->mid);
+		$this->assign('shops', $shops);
+		//$mtapp = M('merchantApp')->where(array('jid'=>$this->jid))->find();
+		//$this->assign('mtapp', $mtapp);
+		//if($this->type==1)$page = new \Common\Org\Page(M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->count(), 3); 
+		//$this->assign('splist', M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->field('sname,mservetel')->select());
+		//if($this->type==1)$this->assign("pages",$page->show()); 
+		//$this->assign('qrcodefile',$this->createQrCode($mtapp));
 		$this->display();
 	}
 

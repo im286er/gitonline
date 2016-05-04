@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no, address=no">
+		<link rel="stylesheet" href="__PUBLIC__/Mobile/new1/css/mineStyle.css" />
+		<script src="__PUBLIC__/Mobile/new1/js/jquery-1.11.3.min.js"></script>
+		<script src="__PUBLIC__/Mobile/new1/js/homeHandler.js"></script>
+		<script>
+			$(document).ready(function(){
+				initHomePage();
+			})
+		</script>
+	</head>
+	<body>
+		<img src="__PUBLIC__/Mobile/new1/img/mineBG.png" class="mineBG"/>
+		<div class="topDiv">
+			<empty name="member">
+				<label class="loginLabel">您还未登录哦!</label>
+				<div class="floatDivB">
+					<div class="login">
+						<a class="btn" style="text-decoration:none;" href="{:U('login')}"><label>登录/注册</label></a>
+					</div>
+				</div>
+			<else />
+				<div class="floatDivA">
+					<empty name="member.u_avatar"><img src="__PUBLIC__/Mobile/default/img/avatar.png" alt="" class="floatImg"><else /><img class="floatImg" src="{$member.flu_avatar}"/></empty>
+				</div>
+				<label class="floatLabel">{$member['flu_nickname']?$member['flu_nickname']:$member['flu_username']}</label>
+			</empty>
+		</div>
+		
+		
+		<div class="mineBGTopDiv">
+			
+			<div class="secondBottomDiv kongDiv">
+				<a style="color: black" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myaccount'),'E')))}<else />{:U('myaccount')}</empty>">
+					<div class="bottomBorder">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/person.png"/>
+						<label class="fontBlack14">我的资料</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+
+				<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myaccount'),'E')))}<else />{:U('addressList')}</empty>" style="color: black">
+					<div class="bottomBorder">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/position.png"/>
+						<label class="fontBlack14">收货地址</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+
+				<a style="color: black" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>">
+					<div class="bottomBorder">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/orderList.png"/>
+						<label class="fontBlack14">我的订单</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+
+				<a style="color: black" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('mycoupon'),'E')))}<else />{:U('mycoupon')}</empty>">
+					<div class="bottomBorder">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/youHui.png"/>
+						<label class="fontBlack14">我的优惠券</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+
+				<a style="color: black" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve')}</empty>">
+					<div class="bottomBorder2">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/yuDing.png"/>
+						<label class="fontBlack14">我的预定</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+			</div>
+			
+			<!--<div class="kongDiv"></div>-->
+			
+			<div class="secondBottomDiv2 kongDiv">
+				<a href="{:U('aboutus')}" style="color: black">
+					<div class="bottomBorder2">
+						<img class="icon" src="__PUBLIC__/Mobile/new1/img/fanKui.png"/>
+						<label class="fontBlack14">意见反馈</label>
+						<img class="moreImg" src="__PUBLIC__/Mobile/new1/img/more.png">
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<include file="Public:bottom" />
+	</body>
+</html>

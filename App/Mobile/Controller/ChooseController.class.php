@@ -209,6 +209,9 @@ class ChooseController extends MobileController {
      }
 
 
+	/**
+	 * 新版首页显示
+	 */
 	public function new1(){
 		$shop = M("shop");
 		$opt = array(
@@ -232,11 +235,7 @@ class ChooseController extends MobileController {
 			}
 		}
 		//判断是否有多家分店 end
-		//判断是全民返利过来的就从回到全民返利网页部分
-		if(cookie('opentype')=='flapp'){
-			$this->redirect('Flow/order@flapp', array('jid' => $this->jid,'sid'=>$this->sid));
-			exit;
-		}
+
 		//商品分类列表   start
 		$category = M('class');
 		$category_list = $category->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$this->sid, 'ctype'=>1))->order('corder asc,cid asc')->select();
@@ -251,7 +250,7 @@ class ChooseController extends MobileController {
 		//商品列表
 		$goods_list = M('goods')->where(array('sid'=>$sid))->select();
 
-		$this->assign('goods_list',$goods_list);
+		$this->assign('goods_info',$goods_list);
 		$this->assign('rcid',cookie($this->jid.'_rcid_'.$this->sid));
 		$this->assign('mid',$this->mid);
 		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$this->sid) > 0 ? cookie($this->jid.'_rcid_'.$this->sid) : $default_cid);
@@ -260,8 +259,61 @@ class ChooseController extends MobileController {
 	}
 
 
-
+	/**
+	 * 购物车
+	 */
 	public function shopCart(){
+		$shop = M("shop");
+		$opt = array(
+			'jid' => $this->jid,
+			'status' => '1',
+			'is_show' => 1
+		);
+		$sid		= $shop->where($opt)->getField('sid');
+
+		$cart = $_COOKIE['ProductList'];
+
+		if(!$cart || $cart == ''){
+			$this->redirect('Choose/new1', array('jid' => $this->jid,'sid'=>$sid));
+		}
+		$cart_arr2 = explode('|', $cart);
+		$cart_key = array();
+		foreach($cart_arr2 as $k1=>$v1){
+			if(!empty($v1)){
+				$temp = explode('_', $v1);
+				$cart_key[] = $temp[0];
+			}
+		}
+
+		$opt = array(
+			'gid' => array('in',join(',',$cart_key))
+		);
+		$goods_list = M('goods')->where($opt)->select();
+
+		$total_number = 0;
+		$total_price  = 0;
+		$cart_arr = array();
+		foreach($cart_arr2 as $k=>$v){
+			$temp2 = explode('_', $v);
+			foreach($goods_list as $kk=>$vv){
+				if($temp2[0] == $vv['gid']){
+					$cart_arr[$k]['gname']  =  $vv['gname'];
+					$cart_arr[$k]['gprice'] = $vv['gdprice']>0 ? $vv['gdprice'] : $vv['goprice'] ;
+					$cart_arr[$k]['number'] = $temp2[1] ;
+					$cart_arr[$k]['gid']    = $vv['gid'];
+					$cart_arr[$k]['gimg']    = $vv['gimg'];
+					$total_number += $temp2[1];
+					$total_price  += $temp2[1] * $cart_arr[$k]['gprice'];
+				}
+			}
+		}
+
+		$this->assign('sid',$sid);
+		$this->assign('cart_arr',$cart_arr);
+		$this->assign('total_number',$total_number);
+		$this->assign('total_price',$total_price);
+		$this->assign('page_name','购物车');
+		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$sid) > 0 ? cookie($this->jid.'_rcid_'.$sid) : 0);
 		$this->mydisplay();
 	}
 	

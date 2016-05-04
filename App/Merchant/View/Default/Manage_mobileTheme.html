@@ -1,0 +1,721 @@
+<extend name="Public:common"/>
+<block name="body">
+<script src="__PUBLIC__/Js/Merchant/zhuangxiuHandler.js"></script>
+<script src="__PUBLIC__/Js/layer/layer.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/Merchant/nanoscroller.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/Merchant/phoneShopFix.css" />
+<link rel="stylesheet" href="__PUBLIC__/Css/Merchant/devices.min.css" />
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style>
+.btn-prv{background: #00bae7;}
+.ta-c {text-align: center;}
+.ta-c .btn {margin: 0 10px;}
+.applied {color: #a2a2a6;}
+.applied .btn {background: #ccc;}
+.ss-modal {width: 100%;height: 100%;position: fixed;left: 0;top: 0; display: none;}
+.ss-modal-drop {width: 100%;height:100%;position: absolute;left: 0;top: 0;background:#000;opacity:.5;filter:alpha(opacity=50);z-index: 100;}
+.ss-modal-dialog {width: 350px;height: 624px;position: absolute;left: 50%;top: 50%;margin-left: -175px;margin-top: -312px;z-index: 101;}
+.ss-modal-dialog div {width: 350px;height: 624px;overflow: hidden;}
+.ss-modal-dialog div img {width: 100%;}
+.ss-modal-close {display: block;width: 72px; height: 72px; background: url("__PUBLIC__/Images/modal_close.png") 0 0 no-repeat; position: absolute; left: 50%; top: 50px; margin-left: 277px;z-index: 101;}
+h4.hy-style{font-size:12px;font-weight:normal;margin-bottom:15px}
+.hy-style select{width:100px;height:30px;line-height:30px;margin-left:10px}
+.hy-style select option{height:20px;line-height:20px;}
+</style>
+<script type="text/javascript">
+function lookinfo( srcing ) {
+	if( !srcing ) { alert('信息出错'); return false; }
+	document.getElementById("DialogImage").src = srcing;
+	$("#previewModal").show();
+}
+
+$(document).ready(function(e) {
+	$("#CloseMenuImage").click(function() {
+		$("#DialogFrameImage").children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+	$(".ss-modal-close,.ss-modal-drop").click(function() {
+		$("#previewModal").hide();
+	});
+});
+
+function Operation(t_sign,t_name){
+	if(!t_sign){ alert('参数错误');return false; }
+	if(confirm("确定要更改模版更改"+t_name+"吗？")==false){
+		return false;
+	}
+	$.post("{:U('Manage/template')}",{'t_sign':t_sign},function(result){
+		var data = eval(result);
+		if(data.status==1)window.location.reload();
+		alert(data.msg);
+	});
+}
+
+
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+//上传图片
+function UploadImage(){
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, clickFn:function(url, title, width, height, border, align) {
+				$('#ModuleIcon').attr("src", url); editor.hideDialog();
+			}
+		});
+	});
+}
+
+$(".guide-layer").click(function(event) {
+	$(".guide-layer").hide();
+});
+</script>
+
+	<!--左边功能内容-->
+	<div class="sideBar_b">
+            <div class="phoneWapper">
+            	<div class="middlePhone">
+            		<div class="marvel-device iphone6 silver">
+					    <div class="top-bar"></div>
+					    <div class="sleep"></div>
+					    <div class="volume"></div>
+					    <div class="camera"></div>
+					    <div class="sensor"></div>
+					    <div class="speaker"></div>
+					    <div class="screen">
+					        <iframe src="{:U('ctheme')}" scrolling="yes" style=" overflow:scroll; height:100% ; width:100%;"></iframe>
+					    </div>
+					    <div class="home"></div>
+					    <div class="bottom-bar"></div>
+					</div>
+					<div class="top-RightBtn yh18">
+						<div class="top-RightBtn-saveBtn"><label>保存</label></div>
+						<div class="top-RightBtn-div border-1s000"><label>预览</label></div>
+						<div class="top-RightBtn-div border-1s000"><label>应用</label></div>
+					</div>
+					
+					
+					<!--<div class="bottom-RightBtn">
+						<div class="bottom-RightBtn-saveBtn"><label>保存</label></div>
+						<div class="bottom-RightBtn-div"><label>预览</label></div>
+						<div class="bottom-RightBtn-div"><label>应用</label></div>
+					</div>-->
+            	</div>
+            	
+            	<div class="rightChouse">
+            		<div class="rightChoseTabBtn yh18">
+            			<div class="rightChoseTabBtn-moban"><label id="mobanBtn" class="moban-label">模版</label></div>
+						<div class="rightChoseTabBtn-lanmu"><label id="lanMuBtn" class="moban-label-white">栏目</label></div>
+						<div class="rightChoseTabBtn-gongneng"><label id="gongNengBtn" class="moban-label-white">系统功能</label></div>
+            		</div>
+            		
+            		<div class="gray"></div>
+            		
+            		<!--模版选项-->
+            		<div class="moban-div-content">
+            				<div class="whiteBg">
+		            			<div class="moban-kindA border-1s000 vocation" value="{:U('Manage/mobileTheme',array('t_price'=>1))}">
+		            				<label class="moban-kind-label yh16">免费模版</label>
+		            			</div>
+		            			
+		            			<div class="moban-kindB border-1s000 vocation" value="{:U('Manage/mobileTheme',array('t_price'=>2))}">
+		            				<label class="moban-kind-label yh16">收费模版</label>
+		            			</div>
+		            		</div>
+		            		
+		            		<div class="UlWhiteBg borderBottom">
+		            			<div class="typeKindDiv mLeft10">
+		            				<ul class="typeListUl">
+		            					<volist name="vocation" id="vo">
+		            						<li style="width: 80px;" value="{$vo.v_id}"><label class="yh16">{$vo.v_title}</label></li>
+		            					</volist>
+		            					<!-- <li><label class="yh16 blueWhite">旅游</label></li> -->
+		            				</ul>
+		            			</div>
+		            		</div>
+		            		
+		            		<div class="mobanListDiv nano">
+		            			<ul class="moban-List-Ul nano-content">
+		            				<!-- <volist name="themes" id="vo">
+		            				<li>
+		            					<div class="moban-liImg">
+		            						<img src="{$vo.t_img}" alt="" width="146" height="251">
+		            					</div>
+		            				</li>
+		            				</volist> -->
+		            			</ul>
+		            		</div>
+		            		
+		            	</div>
+            		
+            		<!--栏目选项-->
+            		<div class="lanmu-div-content">
+            			<div class="whiteBg borderBottom">
+		            		<div id="lm-name" class='lm-choseBtn border-1s000'>
+		            			<label class="moban-kind-label yh16">栏目名称</label>
+		            		</div>
+		            			
+		            		<div id="lm-open" class='lm-choseBtn border-1s000'>
+		            			<label class="moban-kind-label yh16">开启栏目</label>
+		            		</div>
+		            			
+		            		<div id="lm-setting" class='lm-choseBtn border-1s000'>
+		            			<label class="moban-kind-label yh16">操作</label>
+		            		</div>
+		            	</div>
+		            	
+		            	<div class="lanmuListDiv  nano">
+		            		<!--<div class="lanmuList nano-content">-->
+		            		<ul class="lanmu-List-Ul nano-content">
+		            			<!--首页栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			<div class="leftSign mLeft10"></div>
+				            			<label>首页</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            		</div>
+		            			</li>
+		            			
+		            			<!--新品推荐栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			<div class="leftSign mLeft10"></div>
+				            			<label>新品推荐</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--关于我们栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<div class="leftSign mLeft10"></div>
+				            			
+				            			<label>关于我们</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--活动栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<div class="leftSign mLeft10"></div>
+				            			
+				            			<label>活动</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--评价栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<div class="leftSign mLeft10"></div>
+				            			
+				            			<label>评价</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--优惠券栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<div class="leftSign mLeft10"></div>
+				            			
+				            			<label>优惠券</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--大转盘栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<div class="leftSign mLeft10"></div>
+				            			
+				            			<label>大转盘</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			<!--最新资讯栏目-->
+		            			<li>
+		            				<div class="lm-kind-div yh16">
+				            			<div class="checkDiv">
+				            				<div>
+				            					<input type="checkbox" />
+				            				</div>
+				            			</div>
+				            			
+				            			<!--<img class="leftSign-zixun mLeft10" src="__PUBLIC__/zixun.png" />-->
+				            			
+				            			<div class="leftSign-zixun mLeft10"></div>
+				            			
+				            			<label>最新资讯</label>
+				            			<div class="rightMargin-delete" Title="删除栏目"></div>
+				            			<div class="rightMargin-copy" Title="复制栏目"></div>
+				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
+				            			<div id="setLmTop" class="rightMargin-setTop" Title="上移一位"></div>
+				            			
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<li>
+		            				<div class="add-lmBtn yh16">
+				            			<img id="addNewLMBtn" src="__PUBLIC__/Images/merchant/template/addLMBtn.png" class="addStyle">
+				            				
+				            			<label>新增栏目</label>
+				            		</div>
+		            			</li>
+		            		</ul>
+		            			
+		            		
+		            		</div>
+		            		
+		            	</div>
+            		
+            		<!--系统功能选项-->
+            		<div class="gongneng-div-content">
+            			<div class="gongneng-grayBg">
+            				<ul class="gongneng-systemBtn">
+            					<li>
+            						<div class="bdr3 blueWhite gongneng-systemBtnLabel yh16">基础功能</div>
+            					</li>
+            					
+            					<li>
+            						<div class="bdr3 gongneng-systemBtnLabel yh16">营销</div>
+            					</li>
+            					
+            					<li>
+            						<div class="bdr3 gongneng-systemBtnLabel yh16">交易支付</div>
+            					</li>
+            					
+            					<li>
+            						<div class="bdr3 gongneng-systemBtnLabel yh16">互动</div>
+            					</li>
+            					
+            					<li>
+            						<div class="bdr3 gongneng-systemBtnLabel yh16">推广吸粉</div>
+            					</li>
+            					
+            					<li>
+            						<div class="bdr3 gongneng-systemBtnLabel yh16">二维码</div>
+            					</li>
+            				</ul>
+            				
+            			</div>
+            			<!--基础功能-->
+            			<div class="gongneng-base">
+            				<div class="gongneng-nameDiv">
+            					<label class="yh16">网站名称:</label>
+            					<input class="gongneng-nameInput yh14"/>
+            				</div>
+            				
+            				<div class="gongneng-logoDiv">
+            					<label class="yh16">网站LOGO:</label>
+            					<div class="gongneng-logoBg">
+            						<img class="gongneng-logo" src="{$moduleicon|default='/Public/Images/merchant/noperson_1.gif'}" id="ModuleIcon" />
+            					</div>
+            					
+            					<div class="gongneng-rightDiv">
+            						<div class="gongnengBtn yh14" id="" onclick="UploadImage()">
+            							<div>修改</div>
+            						</div>
+            						
+            						<div class="gongneng-rightDiv-bottom yh14">
+            							<div><input type="radio" name="logoToggleBtn" value="logoToggleBtn" checked> 显示</div>
+            							<div><input type="radio" name="logoToggleBtn" value="logoToggleBtn"> 隐藏</div>
+            						</div>
+            					</div>
+            				</div>
+            				
+            				<div class="gongnengNomal">
+            					<label class="yh16">网站横幅:</label>
+            					
+            					<div class="gongnengBtn yh14 mLeft10">
+            							<div>修改</div>
+            					</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn" checked> 单张</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn"> 多张</div>
+            					
+            				</div>
+            				
+            				<div class="gongnengNomal">
+            					<label class="yh16">背景音乐:</label>
+            					
+            					<div class="gongnengBtn yh14 mLeft10">
+            							<div>修改</div>
+            					</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="bgMusicBtn" checked>开启</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="bgMusicBtn">关闭</div>
+            					
+            				</div>
+            				
+            				<div class="gongnengNomal">
+            					<label class="yh16">视频上传:</label>
+            					
+            					<div class="gongnengBtn yh14 mLeft10">
+            							<div>修改</div>
+            					</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="uploadVideoBtn" checked>开启</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="uploadVideoBtn">关闭</div>
+            					
+            				</div>
+            				
+            				
+            				
+            				<div class="gongnengNomal">
+            					<label class="yh16">底部文字:</label>
+            					
+            					<div class="gongnengBtn yh14 mLeft10">
+            						<div>修改</div>
+            					</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="btmTextBtn" checked>显示</div>
+            					
+            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="btmTextBtn">隐藏</div>
+            					
+            				</div>
+            				
+            				<div class="gongneng-save">
+            					<div class="yh18">保存</div>
+            				</div>
+            			</div>
+            		
+            		
+            			<!--营销-->
+            			<div class="gongneng-marketingList nano">
+            				<ul class="gongneng-marketing-Ul nano-content">
+		            			<!--活动-->
+		            			<li>
+		            				<div class="marketing-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="marketing-check"/>
+		            					
+		            					<label class="marketing-kind-label">活动</label>
+		            					
+		            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-marketingBtnB yh14">
+            								<div>升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<!--优惠券-->
+		            			<li>
+		            				<div class="marketing-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="marketing-check"/>
+		            					
+		            					<label class="marketing-kind-label">优惠券</label>
+		            					
+		            					<div class="gongneng-marketingBtnA yh14">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-marketingBtnB yh14 blockOrNo">
+            								<div>升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            		</ul>
+            			</div>
+            			
+            			
+            			
+            			<!--交易-->
+            			<div class="gongneng-dealList  yh16">
+            				<div class="dealStyle-div">
+            					<label class="dealStyle">选择以下支付方式</label>
+            				
+	            				<div class="dealStyle-kind">
+	            					<input type="checkbox" class="dealStyle-check"/>
+			            					
+			            			<label class="dealStyle-kind-label">到店支付</label>
+	            				</div>
+	            				
+	            				<div class="dealStyle-kind">
+	            					<input type="checkbox" class="dealStyle-check"/>
+			            					
+			            			<label class="dealStyle-kind-label">支付宝支付</label>
+	            				</div>
+	            				
+	            				<div class="dealStyle-kind">
+	            					<input type="checkbox" class="dealStyle-check"/>
+			            					
+			            			<label class="dealStyle-kind-label">微信支付</label>
+	            				</div>
+            				</div>
+            				
+            				
+            				
+            				<div class="dealStyle-div">
+            					<label class="dealStyle">选择以下消费方式</label>
+            				
+	            				<div class="dealStyle-kind">
+	            					<input type="checkbox" class="dealStyle-check"/>
+			            					
+			            			<label class="dealStyle-kind-label">到店消费</label>
+	            				</div>
+	            				
+	            				<div class="dealStyle-kind">
+	            					<input type="checkbox" class="dealStyle-check"/>
+			            					
+			            			<label class="dealStyle-kind-label">外送上门</label>
+	            				</div>
+            				</div>
+            			</div>
+            		
+            		
+            		
+            		
+            			<!--互动-->
+            			<div class="gongneng-interactList nano">
+            				<ul class="gongneng-interact-Ul nano-content">
+		            			<!--预约上架-->
+		            			<li>
+		            				<div class="interact-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="interact-check"/>
+		            					
+		            					<label class="interact-kind-label">预约上架</label>
+		            					
+		            					<div class="gongneng-interactBtnA yh14 blockOrNo">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-interactBtnB yh14">
+            								<div>功能升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<!--电话-->
+		            			<li>
+		            				<div class="interact-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="interact-check"/>
+		            					
+		            					<label class="interact-kind-label">电话</label>
+		            					
+		            					<div class="gongneng-interactBtnA yh14">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-interactBtnB yh14 blockOrNo">
+            								<div>功能升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            		</ul>
+            			</div>
+            		
+            			
+            			<!--推广吸粉-->
+            			<div class="gongneng-extensionList nano">
+            				<ul class="gongneng-extension-Ul nano-content">
+		            			<!--分享-->
+		            			<li>
+		            				<div class="extension-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="extension-check"/>
+		            					
+		            					<label class="extension-kind-label">分享</label>
+		            					
+		            					<div class="gongneng-extensionBtnA yh14 blockOrNo">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-extensionBtnB yh14">
+            								<div>功能升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<!--三级会员推广-->
+		            			<li>
+		            				<div class="extension-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="extension-check"/>
+		            					
+		            					<label class="extension-kind-label">三级会员推广</label>
+		            					
+		            					<div class="gongneng-extensionBtnA yh14 blockOrNo">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-extensionBtnB yh14">
+            								<div>功能升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<!--移动百度优化-->
+		            			<li>
+		            				<div class="extension-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="extension-check"/>
+		            					
+		            					<label class="extension-kind-label">移动百度优化</label>
+		            					
+		            					<div class="gongneng-extensionBtnA yh14">
+            								<div>设置</div>
+            							</div>
+            							
+            							<div class="gongneng-extensionBtnB yh14 blockOrNo">
+            								<div>功能升级中</div>
+            							</div>
+				            		</div>
+		            			</li>
+		            		</ul>
+            			</div>
+            		
+            		
+            			<!--二维码-->
+            			<div class="gongneng-QRcodeBg">
+            				<div class="QRcodeDiv">
+            					<img class="qrImg" src="__PUBLIC__/Images/merchant/template/qrImg.png" />
+            				</div>
+            				
+            				<label class="QRLabel yh16">下载二维码</label>
+            				
+            				
+            				<label class="QRUseLabel yh14">———— 二维码可用于以下场景 ————</label>
+            				
+            				<table class="QRUseTabel">
+            					<tr>
+            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
+            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
+            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
+            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
+            					</tr>
+            				</table>
+            			</div>
+            		
+            		</div>
+            		
+            		
+            	</div>
+            </div>
+		</div>
+	</div>
+   
+   	<div class="ss-modal" id="previewModal" style="display: none;">
+        <div class="ss-modal-drop"></div>
+        <div class="ss-modal-dialog">
+            <div>
+                <img src="__PUBLIC__/Images/merchant/template/558108dcc02c6.jpg" id="DialogImage" alt="">
+            </div>
+        </div>
+        <a class="ss-modal-close" href="javascript:void(0);"></a>
+    </div>
+    <script>
+    	$(document).ready(function(e) {
+    		
+    		setPage();
+//			$('.phoneWapper').height($(window).height())
+			$('.phoneWapper').height(880)
+			
+			var lmHeight = $('.phoneWapper').height() - 135
+			
+			$('.lanmuListDiv').height(lmHeight)
+			
+			var mbHeight = $('.phoneWapper').height() - 135 - $('.UlWhiteBg').height()
+			
+			$('.mobanListDiv').height(mbHeight)
+			
+			 
+			var marketIngHeight = $('.phoneWapper').height() - 206;
+			
+			$('.gongneng-marketingList').height(marketIngHeight)
+			
+			$('.gongneng-dealList').height(marketIngHeight)
+			
+			$('.gongneng-interactList').height(marketIngHeight)
+
+			$('.gongneng-extensionList').height(marketIngHeight)
+			
+		});
+
+    </script>
+
+    <script type="text/javascript">
+		$('.vocation').click(function(){
+			var t_price = $(this).attr('value');
+			location.href = t_price;
+		})
+	</script>
+</block>

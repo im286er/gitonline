@@ -683,4 +683,66 @@ class UserController extends MobileController {
 		$data = array("msg" => "true");
 		$this->ajaxReturn($data);
 	}
+
+
+	/**
+	 * 收货地址列表
+	 */
+	public function addressList(){
+		//查询地址列表
+		$address_list = D('Address')->getAddressList($this->mid);
+		$page_name = '收货地址';
+
+		$this->assign('page_name',$page_name);
+		$this->assign('address_list',$address_list);
+		$this->mydisplay();
+	}
+
+
+	/**
+	 * 删除订单操作
+	 * @return array     结果
+	 */
+	public function addressDel(){
+		$data = array('msg'=>'error');
+		$receivingid     = I('receivingid');
+		//删除
+		$r = D('Address')->Address_del($this->mid,$receivingid);
+		//操作判断
+		if ($r){
+			$data = array('msg'=>'true');
+		}
+		$this->ajaxReturn($data);
+	}
+
+
+	/**
+	 * 编辑地址
+	 */
+	public function addressEdit(){
+		$receivingid  = I('receivingid');
+		if (IS_POST){
+			$post_data = $_POST;
+			$opt = array(
+				'userid' => $this->mid,
+				'name'   => $post_data['name'],
+				'phone'  => $post_data['phone'],
+				'address' => $post_data['address'],
+				'maddress' => $post_data['maddress'],
+			);
+			//编辑数据
+			if ($receivingid == ''){
+				$r = D('Address')->Address_add($opt);
+			}else{
+				$r = D('Address')->Address_edit($this->mid,$receivingid,$opt);
+			}
+			$this->redirect('addressList');
+		}else{
+			//通过主键查询信息
+			$info = D('Address')->getAddressInfo($receivingid);
+			$this->assign('info',$info);
+			$this->mydisplay();
+		}
+	}
+
 }

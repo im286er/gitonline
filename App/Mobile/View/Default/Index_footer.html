@@ -73,9 +73,10 @@
 						shadeClose: false,
 						yes: function(){
 							if (Msystem=='ios') {
-								$('#Pullrefresh').attr("href",Iosupgradeurl);
-								document.getElementById("Pullrefresh").click();
-								layer.closeAll();
+								//$('#Pullrefresh').attr("href",Iosupgradeurl);
+								//$('#Pullrefresh').click();		
+								//layer.closeAll();
+								window.location.href=Iosupgradeurl;
 							}else if(Msystem=='android') {
 								window.location.href=result.url;
 							}else{

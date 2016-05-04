@@ -3,10 +3,9 @@ namespace Merchant\Controller;
 use Common\Controller\ManagerController;
 
 class MerchantController extends ManagerController {
-    protected $jid, $mid, $path, $type, $tsid, $sidlist=array();
+    protected $jid, $mid, $path, $type, $tsid, $sidlist=array(),$role;
 
 	public function _initialize() {
-		
 		//parent::_initialize();
 		$this->jid = \Common\Org\Cookie::get(C('USER_COOKIE_JID'));	
 		$this->mid = \Common\Org\Cookie::get('mid');
@@ -29,30 +28,33 @@ class MerchantController extends ManagerController {
 		}
 		
 		//判断此账号是商家还是门店
-		$this->tsid = \Common\Org\Cookie::get( C('USER_COOKIE_SID') );
-		$this->type = \Common\Org\Cookie::get( C('USER_COOKIE_TPE') );
-		$this->type = $this->tsid==0 && $this->type==1 ? 1 : 2;	
+		//$this->tsid = \Common\Org\Cookie::get( C('USER_COOKIE_SID') );
+		//$this->type = \Common\Org\Cookie::get( C('USER_COOKIE_TPE') );
+		//$this->type = $this->tsid==0 && $this->type==1 ? 1 : 2;	
 
-		if( $this->type==1 ) { 
-			$_splist=$this->sidlist; $shopinfo=array_shift($_splist);
-			if( isset($shopinfo['sid']) && is_numeric($shopinfo['sid']) && $this->tsid != $shopinfo['sid'] ) {
-				$this->tsid = $shopinfo['sid'];
-			}
-		}
+		//if( $this->type==1 ) { 
+			//$_splist=$this->sidlist; $shopinfo=array_shift($_splist);
+			//if( isset($shopinfo['sid']) && is_numeric($shopinfo['sid']) && $this->tsid != $shopinfo['sid'] ) {
+				//$this->tsid = $shopinfo['sid'];
+			//}
+		//}
 		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+		
+		$this->role = M('merchant_user')->where(array('tmid'=>$this->mid))->getField('role');
+		$this->assign('role',$this->role);
 		$this->assign('modules', D('MerchantModule')->getMerchantModule($merchant['modules']));
 		//print_r(D('MerchantModule')->getMerchantModule($merchant['modules']));
 
 		$this->assign('mnickname', $merchant['mnickname']);
 		\Common\Org\Cookie::set('mnickname', $merchant['mnickname']);
 		
-		if( $this->type == 2 ) {
-			$this->assign('sname', M('shop')->where(array('sid'=>$this->tsid, 'jid'=>$this->jid))->getField('sname'));
-		}
+		//if( $this->type == 2 ) {
+			//$this->assign('sname', M('shop')->where(array('sid'=>$this->tsid, 'jid'=>$this->jid))->getField('sname'));
+		//}
 		$this->assign('CurrentUrl', CONTROLLER_NAME.ACTION_NAME);	
-		$this->assign('type', $this->type);	
+		//$this->assign('type', $this->type);	
 		$this->assign('jid', $this->jid);
-		
+	/*	
 		//第一步判断绑定手机是否已验证
 		$md_arr = array('Index.bindtel','Index.sendsms');
 		if( ( empty($merchant['mlptel']) || $merchant['mlptel_verified'] == 0) && !in_array(CONTROLLER_NAME.'.'.ACTION_NAME,$md_arr) && strtolower(CONTROLLER_NAME) != 'scene'){
@@ -86,13 +88,13 @@ class MerchantController extends ManagerController {
 		$shop_count = M('shop')->where(array('jid'=>$this->jid))->count();
 		if($shop_count == 0 && !in_array(CONTROLLER_NAME.'.'.ACTION_NAME,$md_arr) && strtolower(CONTROLLER_NAME) != 'scene'){
 			$this->redirect('Shop/addShop', array('guide'=>1));
-		}
+		}*/
 		
 		$tm = I('menucode');
 		$menucode = empty($tm) ? session('menucode') : $tm;
-		$menucode = empty($menucode) ? 'setting' : $menucode;
+		$menucode = empty($menucode) ? 'shop' : $menucode;
 		session('menucode',$menucode);
-		$tt = C('TOP_MENU');
+		$tt = D('Auth')->getUserMenu($this->mid);
 		$nextmenu = $tt[$menucode]['next'];
 		//洗衣信息模块
 		if ($tt[$menucode]['code'] == 'message' && $this->jid == 438){
@@ -102,7 +104,8 @@ class MerchantController extends ManagerController {
 		
 		$this->assign('menucode',$menucode);
 		$this->assign('nextmenu',$nextmenu);
-		$this->assign('top_menu',C('TOP_MENU'));
+		$this->assign('top_menu',$tt);
+		
 		$mtapp2 = M('merchantApp')->where(array('jid'=>$this->jid))->find();
 		$this->assign('mtapp2', $mtapp2);
 		

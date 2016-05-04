@@ -1,0 +1,171 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<style type="text/css">
+#ssr{height:40px;width:330px}
+.authdiv{margin-left:120px;margin-top:20px;padding:20px;border:1px solid;height:40px;display:none}
+.sauthdiv{margin-left:120px;margin-top:20px;padding:20px;border:1px solid;height:40px;display:none}
+input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; line-height:32px; padding-left:8px; width:320px; }
+</style>
+<div class="wrapper">
+    <h2 class="title">员工添加</h2>
+    <div class="mian padding">
+        <form action="__ACTION__" method="post" onsubmit="return check();">
+           <div class="set">
+                <label>账号</label> <input type="text" name="mname" value="" id="mname">
+            </div>
+            <div class="set">
+                <label>姓名</label> <input type="text" name="tname" value="" id="tname">
+            </div>
+            <div class="set">
+                <label>密码</label> <input type="password" name="mpwd" value="" id="mpwd">
+            </div>
+            <div class="set">
+                <label>确认密码</label> <input type="password" name="cpwd" value="" id="cpwd">
+            </div>
+             <div class="set">
+                <label>角色</label> <select name="role" id="ssr"><option value="2">普通管理员</option><option value="1">超级管理员</option></select>
+                    注:超级管理员不需要设置权限
+            </div>
+             <div class="set" style="margin-top:30px;">
+                <label>权限</label>
+                <foreach name="top_menu" item="vo" >
+                <span style="margin:10px"><input class="ck" code="{$vo.code}" type="checkbox" name="top[]" value="{$vo.code}">{$vo.name}</span>
+                </foreach>
+                <foreach name="top_menu" item="vo" >
+                 <div id="auth_{$vo.code}" class="authdiv">
+                <foreach name="vo.next" item="voo" >
+               
+                <span style="margin:10px"><input type="checkbox" name="next[]" value="{$voo.id}">{$voo.name}</span>
+               
+                </foreach>
+                 </div>
+                </foreach>
+            </div>
+            
+            <div class="set" style="margin-top:30px;">
+                <label>分店管理权限</label>
+                <foreach name="shopList" item="va" >
+                <span style="margin:10px"><input class="ak" type="checkbox" name="shopauth[]" value="{$va.sid}">{$va.sname}</span>
+                </foreach>     
+            </div>
+            
+            <div class="set" style="margin-top:30px;">
+                <label>班次</label>
+                
+                <span style="margin:10px"><input checked type="radio" name="shift" value="1">全天</span>
+                <span style="margin:10px"><input type="radio" name="shift" value="2">白班</span>
+                <span style="margin:10px"><input type="radio" name="shift" value="3">晚班</span>
+                  
+            </div>
+         
+            <div class="set">
+                <label>职务</label> <input type="text" name="job" value="" id="job">
+            </div>
+            <div class="set">
+                <label>手机</label> <input type="text" name="tphone" value="" id="tphone">
+            </div>
+            <div class="set">
+                <label>性别</label> <input checked type="radio" name="sex" value="男" id="sex">男 
+                					<input type="radio" name="sex" value="女" id="sex">女
+            </div>
+            <div class="set">
+                <label>生日</label> <input type="text" readonly="readonly" value="" id="birthday" name="birthday">
+            </div>
+            <div class="set">
+                <label>籍贯</label> <input type="text" name="address" value="" id="address">
+            </div>
+            <div class="set">
+                <label>身份证</label> <input type="text" name="idcard" value="" id="idcard">
+            </div>
+            <div class="set">
+                <label></label> <input type="submit" value="确认" class="btn btn-pwd">
+                <input type="button" value="返回" class="btn btn-pwd" onClick="window.history.go(-1);">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+<script type="text/javascript">
+var authmobile = "{$linkmobile}";
+var guide = "{$guide}";
+Calendar.setup({ inputField:"birthday", trigger:"birthday", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+$(function(){
+	$(document).ready(function(){
+		if(guide == 1){
+			//遮罩
+			var wHeight = $(document).height();
+			$(".guide-layer").css('height', wHeight);
+			$(".layer-2").show();
+		}
+	});
+	$(".guide-layer").click(function(event) {
+		$(".guide-layer").hide();
+	});
+});
+function check(){
+	var mname  = $("#mname").val();
+	var tname  = $("#tname").val();
+	var mpwd  = $("#mpwd").val();
+	var cpwd  = $("#cpwd").val();
+	var job  = $("#job").val();
+	var tphone  = $("#tphone").val();
+	var birthday  = $("#birthday").val();
+	var address  = $("#address").val();
+	var idcard  = $("#idcard").val();
+	if(mname == ''){
+		alert('请输入账号');
+		return false;
+	}
+	if(tname == ''){
+		alert('请输入姓名');
+		return false;
+	}
+	if(mpwd == ''){
+		alert('请输入密码');
+		return false;
+	}
+	if(mpwd.length < 6){
+		alert('密码至少需要6位');
+		return false;
+	}
+	if(cpwd == ''){
+		alert('请输入确认密码');
+		return false;
+	}
+	if(mpwd != cpwd){
+		alert('密码不一致');
+		return false;
+	}
+	if(job == ''){
+		alert('请输入职务');
+		return false;
+	}
+	
+	var re = /^1[0-9]{10}$/;
+	if(re.test(tphone) === false){
+		alert('手机号码格式不正确');
+		return false;
+	}
+	if(birthday == ''){
+		alert('请输入生日');
+		return false;
+	}
+	if(address == ''){
+		alert('请输入籍贯');
+		return false;
+	}
+	var re2 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/; 
+	if(re2.test(idcard) === false){
+		alert('身份证格式不正确');
+		return false;
+	}
+	return true;
+}
+$('.ck').click(function(){
+  $(".authdiv").hide();
+  var code = $(this).attr('code');
+  $("#auth_"+code).show();
+});  
+</script>
+</block>

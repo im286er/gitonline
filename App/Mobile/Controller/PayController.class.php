@@ -73,9 +73,11 @@ class PayController extends Controller {
 			$pay->seller_email = $extend['alipay_email'];//支付宝商户号
 			$pay->key = $extend['alipay_key'];//支付宝密匙
 		}
+		
 		$verify_result = $pay->verifyNotify();
 		if($verify_result) {//验证成功
 				$trade_status = I('post.trade_status');
+				$pay->success();
 				($trade_status=='TRADE_SUCCESS' || $trade_status=='TRADE_FINISHED') or die('success');//交易成功，否则直接退回，返回接受数据成功
 				if($pay_type=='alipaypc'){
 					$pay_info['pay_type'] = $pay_type;
@@ -141,7 +143,7 @@ class PayController extends Controller {
 				}
 			}elseif($pay_type=='alipaywap'){
 				if($get['result']=='success') {
-					$this->pay_success($pay_info);//支付成功处理
+					$re = $this->pay_success($pay_info);//支付成功处理
 					$this->success('支付成功',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
 				}else{
 					$this->error('支付失败',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
@@ -178,18 +180,10 @@ class PayController extends Controller {
 				$merchant = M('merchant')->where(array('jid'=>$order_info['o_jid']))->find();
 				M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
 			}
-			//判断是否发快递
-//			if (in_array($order_info['o_jid'], array_keys(C('EXPRESS_JID')))){
-//				$jid   = $order_info['o_jid'];
-//				$data  = C('EXPRESS_JID')[$jid];
-//				// 导入快递
-//				vendor('Express.SF.OrderService#class');
-//				$tpl  = new \OrderService();
-//				$tpl->orderservice($pay_info['out_trade_no'] , $order_info['o_name'] , $order_info['o_phone'] , $order_info['o_address'] , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
-//			}
+			D('Order')->where(array('o_id'=>$order_info['o_id']))->setField(array('o_seat'=>2));
 			
-			return true;
-		}else return false;
+				return true;
+			}else return false;
 	}
 			
 	//支付取消中断

@@ -1,0 +1,4 @@
+#design .editbox{ border:1px dotted #999; position:relative;}
+#design div.editmenu{   position:absolute; top:0px; right:5px; height:20px; line-height:20px; z-index:100000; width:60px; text-align:center; color:#FFF; cursor:pointer; background:url(iconGearBg16_31689.png) #069 no-repeat 5px center; background-size:10px 10px; padding-left:10px; border-radius:0 0 5px 5px;}
+#design div.delmenu{   position:absolute; top:20px; right:5px; height:20px; line-height:20px; z-index:100000; width:60px; text-align:center; color:#FFF; cursor:pointer;  background:url(iconDeleteBg16_24038.png) #C33 no-repeat 5px center; background-size:10px 10px;padding-left:10px; border-radius:0 0 5px 5px;}
+

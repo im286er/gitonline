@@ -4,7 +4,7 @@ namespace Merchant\Controller;
 class PluginController extends MerchantController {
 	//支付宝支付设置
 	public function setalipay(){
-		if( $this->type != 1 ) E('你无权查看当前页面');
+		
 		$linkmobile = M('merchant')->where(array('jid'=>$this->jid))->getField('mlptel');
 		$extend = M('merchant_extend')->find($this->jid);
 		$this->assign('linkmobile', $linkmobile);

@@ -1,0 +1,235 @@
+﻿<extend name="Public:common"/>
+<block name="header">
+<eq name="isApp" value="1"><script src="__PUBLIC__/Js/Mobile/interactive.js"></script></eq>
+<script>
+	var msystem = "{$msystem}";
+    //10px 1rem;
+    !function(){function a(){if(document.documentElement.clientWidth<600){document.documentElement.style.fontSize=document.documentElement.clientWidth/32+"px"}else{document.documentElement.style.fontSize="16.875px"}}var b=null;window.addEventListener("resize",function(){clearTimeout(b),b=setTimeout(a,300)},!1),a()}(window);
+</script>
+<!-- 有些页面是不要 header 的，比如，消息的内容页 -->
+<empty name="isheader">
+    <header class="header" <notempty name="head_style">style="{$head_style}"</notempty>>
+        <empty name="page_name">
+            <h1>{$merchant.mabbreviation}</h1>
+        <else />
+            <h1>{$page_name}</h1>
+        </empty>
+
+    </header>
+
+</empty>
+
+</block>
+<block name="body">
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+<div class="main container p-tb" id="mine">
+		<div class="avatar" style="background-image: url('__PUBLIC__/Mobile/default/img/avatar_bg.jpg');">
+			<div class="avatar-mask"></div>
+			<empty name="member">
+			<div class="notlogged" style="display:block;"><p>您还没有登录噢~</p><a class="btn" href="{:U('login')}">登录</a></div>
+			<else />
+			<div class="logged">
+				<div class="avatar-img"><empty name="member.u_avatar"><img src="__PUBLIC__/Mobile/default/img/avatar.png" alt=""><else /><img src="{$member.flu_avatar}"/></empty></div>
+				<p>{$member['flu_nickname']?$member['flu_nickname']:$member['flu_username']}</p>
+			</div>
+			</empty>
+		</div>
+		<section class="sec-list">
+			<div class="sec-body">
+				<ul class="">
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myaccount'),'E')))}<else />{:U('myaccount')}</empty>">
+							<i class="ico ico-person"></i>
+							<span>我的资料</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>">
+							<i class="ico ico-cart-s"></i>
+							<span>我的订单</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('mycoupon'),'E')))}<else />{:U('mycoupon')}</empty>">
+							<i class="ico ico-ticket"></i>
+							<span>我的优惠券</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+					<li>
+						<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve')}</empty>">
+							<i class="ico ico-clock"></i>
+							<span>我的预定</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<section class="sec-list">
+			<div class="sec-body">
+				<ul class="">
+				<eq name="Think.cookie.opentype" value="app">
+					<li>
+						<a class="" href="javascript:void(0);" onclick="is_versions();">
+							<i class="ico ico-refresh"></i>
+							<span>更新检测</span><span id="Versionid" style="float:right;padding-right:3rem;color:#c0c0c0;display:none;"></span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</eq>
+					<li>
+						<a class="" href="{:U('aboutus')}">
+							<i class="ico ico-i"></i>
+							<span>关于我们</span>
+							<i class="ico ico-right"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		 <notempty name="member"><div class="div-a"><a class="btn btn-block btn-primary btn-lg" href="{:U('logout')}" style="background-color: #bf242a;">退出当前账号</a></div></notempty>
+	</div>
+<eq name="Think.cookie.opentype" value="app">
+<a id="iosVersions" href="{:U('Index/appdown@yd',array('jid'=>$jid),false)}?iosversions={$merchantapp.iosversions}" target="IFRAME" style="display:none;"></a>
+<a id="iosNowVersions" href="{:U('Index/appdown@yd',array('jid'=>$jid),false)}?uid={$member.u_id}" target="IFRAME" style="display:none;"></a>
+<iframe id="IFRAME" src="" style="display:none;">{$member.u_id}</iframe>
+<script type="text/javascript">
+	var Versions;//当前版本类型
+	var Msystem;//系统类型
+	function connectWebViewJavascriptBridge(callback) {
+		if (window.WebViewJavascriptBridge) {
+			callback(WebViewJavascriptBridge)
+		} else {
+			document.addEventListener('WebViewJavascriptBridgeReady', function() {
+				callback(WebViewJavascriptBridge)
+			}, false)
+		}
+	}
+	connectWebViewJavascriptBridge(function(bridge) {
+		bridge.init(function(message, responseCallback) {
+		});
+		var data = 'get version number';
+		bridge.send(data, function(responseData) {
+			$('#Versionid').html('v'+responseData).show();
+			Versions = responseData;
+			Msystem = 'ios';
+		});
+	});
+
+
+	$(document).ready(function(){
+		if(window._WebView_JS_Info != undefined){
+			$('#Versionid').html('v'+window._WebView_JS_Info.VersionName()).show();
+			Versions = window._WebView_JS_Info.VersionName();
+			Msystem = 'android';
+		}
+	});
+
+	function is_versions() {
+			checkVersions();
+	}
+	function checkVersions(){
+		layer.open({type: 2,shade: true,time: 10,content: '检测更新中…'});
+		$.post("{:U('User/is_update')}",{'appversions':Versions,'msystem':Msystem},function(result){
+			layer.closeAll();
+			if(result.status==0 && result.msg)
+				layer.open({content:result.msg, time: 1});
+			else if(result.status==1 && result.msg){
+				layer.open({
+					content: result.msg,
+					style: 'width:100%; ',
+					btn: ['立即下载', '取消下载'],
+					shadeClose: false,
+					yes: function(){
+						if (Msystem=='ios') {
+							document.getElementById("iosVersions").click();
+							layer.closeAll();
+						}else if(Msystem=='android') {
+							window.location.href=result.url;
+						}else{
+							layer.closeAll();
+						}
+					}, no: function(){
+						layer.closeAll();	
+					}
+				});
+			}
+		});
+	}
+
+</script>
+<empty name="member">
+<script type="text/javascript">
+$(document).ready(function(){
+	$.post("{:U('is_login')}",{},function(result){
+		if(result.u_ename){
+			var uhtml = '';
+			uhtml +='<div class="avatar-mask"></div>';
+			uhtml +='<div class="logged">';
+			uhtml +='<div class="avatar-img"><img src="'+result.u_avatar+'"></div>';
+			uhtml +='<p>'+result.u_ename+'</p>';
+			uhtml +='</div>';
+			$('.avatar').html(uhtml);
+		}
+	});
+});
+</script>
+<else />
+
+</empty>
+</eq>
+
+<!-- footer -->
+<link rel="stylesheet" href="__PUBLIC__/Mobile/xiyi/css/tianhuxiyi.css">
+
+<script type="text/javascript">
+ $(document).ready(function(){
+  			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$.post("{:U('User/location')}",{'longitude':position.coords.longitude,'latitude':position.coords.latitude},function(data){ });
+				},function(errorObject){
+
+				},{
+					enableHighAccuracy : true,
+					timeout    : 3000,
+					maximumAge : 60000
+				}
+			);
+});
+</script>
+
+	<script src="__PUBLIC__/Mobile/default/Js/fastclick.js"></script>
+	<script>
+		$(function() {
+			//fastclick,使移动端点击没有延迟
+			FastClick.attach(document.body);
+		});
+	</script>
+
+
+
+<if condition="(CONTROLLER_NAME eq 'Index') OR (CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index') ">
+<script src="__PUBLIC__/Js/Mobile/interactive.js"></script>
+	<footer>
+    	<ul class="footer-menu">
+            <li <if condition="CONTROLLER_NAME eq 'Index'">class="current"</if>>
+            	<a href="{:U('Index/index')}"><span class="icon-menu home"></span><p>首页</p></a>
+            </li>
+            <li>
+			<if condition="$mid">
+            	<a href="javascript:void(0);"  onclick="baichuanIM('{$jid}','{$mid}');"><span class="icon-menu msg"></span><p>客服</p></a>
+			<else/>
+				<a href="{:U('User/login')}?returnurl=<php>echo urlencode(U());</php>"><span class="icon-menu msg"></span><p>客服</p></a>
+			</if>
+            </li>
+            <li <if condition="CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index' ">class="current"</if>>
+            	<a href="{:U('User/index')}"><span class="icon-menu my"></span><p>我的</p></a>
+            </li>
+        </ul>
+    </footer>
+</if>
+
+</block>

@@ -7,7 +7,7 @@
 </script>
 <!-- 有些页面是不要 header 的，比如，消息的内容页 -->
 <empty name="isheader">
-    <header class="header" <notempty name="head_style">style="{$head_style}"</notempty>>
+    <header <block name="style"></block> class="header" <notempty name="head_style">style="{$head_style}"</notempty>>
         <empty name="page_name">
             <h1>{$merchant.mabbreviation}</h1>
         <else />

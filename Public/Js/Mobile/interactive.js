@@ -16,7 +16,11 @@ function interactive(requestData,needMethod){
 	if(msystem == 'ios'){
 		connectWebViewJavascriptBridge(function(bridge) {
 			bridge.send(requestData, function(response) {
-				if(needMethod){eval(needMethod); }else{return response;}
+				if(needMethod){
+					eval(needMethod); 
+				}else{
+					return response;
+				}
 			});
 		})
 	}else if(window._WebView_JS_Common){
@@ -28,13 +32,14 @@ function interactive(requestData,needMethod){
 //登录
 function checkLogin(u,needMethod){
 	var utoken = interactive('{"type":"login","linkurl":"'+u+'"}',needMethod);
-	if(!needMethod){
-		return utoken;
-	}
+	// if(!needMethod){
+	// 	return utoken;
+	// }
 }
 
 //支付
 function payOrder(pay_type,order_id){
+	
 	var result = interactive('{"type":"pay","pay_type":"'+pay_type+'","order_id":"'+order_id+'"}');
 	return result;
 }

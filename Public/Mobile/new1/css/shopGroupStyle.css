@@ -1,0 +1,64 @@
+*{font-family: helvetica;padding: 0;margin: 0;-moz-user-select:none;-webkit-user-select:none;}
+
+.shopGroupTitle{width: 100%;height: 60px;display: block;font-size: 18px;color: #FFFFFF;background-color: #3492E9;position: relative;}
+
+.shopGroupTitleLabel{width: 100%;display: block;float: left;text-align: center;line-height: 60px;}
+
+.shopGroupEdit{width: auto;position: absolute;line-height: 50px;right: 15px;bottom: 0px;}
+
+.foodListDiv{float: left;width: 100%;background-color: #EEEEEE;overflow-y: auto;}
+
+.foodListStyle{position: relative;float: left;width: 97%;height: 80px;background-color: #FFFFFF;padding-left: 3%;border-bottom: 1px solid #DDDDDD;}
+
+.reSignDiv{float: left;width: 20px;height: 20px;display: none;border-radius: 10px;margin-top:30px;margin-bottom: 30px;border: 1px solid;border-color: #DDDDDD;}
+
+.reSignImg{width: 20px;height: 20px;display: none;}
+
+.shopGroupFoodImg{width: 60px;height: 60px;margin-top: 10px;display: block;float: left;margin-left: 3%;}
+
+.shopGroupLabel{font-size: 15px;line-height: 80px;width: auto;margin-left: 3%;}
+
+.moneySign{font-size: 10px;width: auto;color: #FF6000;line-height: 80px;margin-left: 3%;}
+
+.money{font-size: 15px;width: auto;color: #FF6000;line-height: 80px;}
+
+.choseNumDiv{height: 80px; float:right;position: absolute;top: 0;right: 0;}
+
+.addBtn{height: 30px;width: 35px;display: block;float: right;padding-top: 30px;padding-bottom: 20px;}
+
+.jianBtn{height: 30px;width: 35px;display: block;float: left;padding-top: 30px;padding-bottom: 20px;display: block;}
+
+.numLabel{font-size: 15px;float: left;line-height: 80px;padding:0 10px;}
+
+.shopGroupBottom{width: 100%;height: 40px;float: left;}
+
+.shopGroupLeft{border-top: 1px solid #DDDDDD;width: 75%;height: 100%;background-color: #FFFFFF;display: block;line-height: 39px;font-size: 18px;float: left;}
+
+.shopGroupLeft label{line-height: 39px;font-size: 18px;}
+
+.shopGroupRight{width: 25%;height: 100%;background-color: #3492E9;display: block;float: left;}
+
+.shopGroupRight label{width: 100%;line-height: 40px;font-size: 18px;color: #FFFFFF;text-align: center;display: block;}
+
+.allReSignDiv{float: left;width: 20px;height: 20px;display: block;border-radius: 10px;margin-top:9px;margin-bottom: 10px;border: 1px solid;border-color: #DDDDDD;margin-left: 4%;}
+
+.allReSignImg{width: 20px;height: 20px;display: none;}
+
+.shopGroupSignMsg{width: 60px;line-height: 39px;font-size: 18px;margin-left: 3%;}
+
+.shopGroupCost{width: auto;line-height: 39px;font-size: 18px;color: #3492E9;margin-right: 6%;float: right;}
+
+
+/**底部btn*/
+.bottomDiv{width: 100%;height: 50px;overflow: hidden;display: block;border-top: 1px solid #DDDDDD;position: fixed;bottom: 0px;left: 0px;background-color: #f9f9f9;}
+
+.bottomDiv table{width: 100%;text-align:center;vertical-align: middle;}
+
+.bottomDiv td{position: relative;}
+
+
+.bottomDiv table img{height: 40px;width: auto;padding-top: 5px;}
+
+.roundBG{position: absolute;border-radius: 7px;height: 14px;width: 14px;background-color: #ff3939;top: 0px;right: 30px;display: none;}
+
+.roundBG label{font-family: helvetica;font-size: 10px;color: #ffffff;line-height: 14px;display: block;}

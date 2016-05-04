@@ -4,7 +4,15 @@
             <div class="sideBar_nav">
                 <ul>
 				 	<foreach name="nextmenu" item="vo" >
-          <if condition="$type == 1 || $vo['type'] == 0">  	<li <if condition="$vo[id] eq $CurrentUrl">class="curr"</if>><a href="{$vo.url}" target="_self">{$vo.name}</a></li> </if>
+           	<li><a <if condition="$vo[id] eq $CurrentUrl">class='childCurr'</if> href="{$vo.url}" target="_self">{$vo.name}</a>
+           		<div class="childddd">
+           			<foreach name="vo.next" item="voo" >
+           			<label><a class="childuuu <if condition='$voo[id] eq $CurrentUrl'>childCurr</if>" href="{$voo.url}" target="_self">·{$voo.name}</a></label>
+           			</foreach>
+           		</div>
+           		
+           	</li>
+           	
             </foreach>
             
 	

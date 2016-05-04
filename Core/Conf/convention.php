@@ -169,15 +169,15 @@ return  array(
 
     /* 快递参数设置 */
     'EXPRESS_CHECKHEADER'   =>  array(      //客户卡号,校验码
-        'SF'    => 'AZS',    //AZS
+        'SF'    => '5713519013',    //AZS
     ),
 
     'EXPRESS_CHECKWORD'   =>  array(      //checkword 秘钥
-        'SF'    => 'qYiwqrF1nvPc',      //qYiwqrF1nvPc
+        'SF'    => 'mv30QsuGvxWigY9Fdv6TN4aMdIi95xE9',      // ////qYiwqrF1nvPc
     ),
 
     'EXPRESS_URL'           =>  array(      //快递类服务接口url
-        'SF'    => 'http://218.17.248.244:11080/bsp-oisp/sfexpressService',    //http://218.17.248.244:11080/bsp-oisp/ws/sfexpressService?wsdl
+        'SF'    => 'http://bsp-oisp.sf-express.com/bsp-oisp/sfexpressService',    //http://218.17.248.244:11080/bsp-oisp/sfexpressService//http://bsp-ois.sf-express.com/bsp-ois/sfexpressService
     ),
 
     'MONTHLY_NUM'           => '5713519013',

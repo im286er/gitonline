@@ -112,6 +112,8 @@ class MobileController extends Controller {
 		}else{
 			$this->isApp = 0;
 		}
+		$this->assign('action_name',ACTION_NAME);
+		$this->assign('controller_name');
 		$this->assign('isApp',$this->isApp);
 		$this->assign('mid',$this->mid);
 	}

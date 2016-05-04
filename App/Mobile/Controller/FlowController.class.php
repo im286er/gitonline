@@ -53,7 +53,7 @@ class FlowController extends MobileController {
 			}
 		}
 		//洗衣的价格运算
-		if($this->jid == '438'){
+		if(in_array($this->jid, array_keys(C('EXPRESS_JID')))){
 			//判断是否特级会员
 			$privilege   = M('FlUser')->where(array('flu_userid'=>$this->mid))->getField('flu_privilege');
 			if ( $privilege ) {
@@ -68,7 +68,10 @@ class FlowController extends MobileController {
 				$total_price = $total_price + 18 - 50;
 				$total_price = ($total_price > 18) ? $total_price : 18;
 			}
+
+			cookie('price'.$this->mid , $total_price);
 		}
+
 
 		//查询我的优惠券
 		$coupon_user = M('voucher_user');
@@ -106,6 +109,10 @@ class FlowController extends MobileController {
 		$this->assign('address_info',$address_info);
 		
 		$linkurl = U('User/login',array('jid'=>$this->jid,'backurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'),'returnurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E')));
+		if ($this->jid == 438){
+			$linkurl = url_param_encrypt(U('Flow/confirm@Mobile',array('jid'=>$this->jid,'sid'=>$this->sid)),'E');
+		}
+		
 		$this->assign('linkurl',$linkurl);
 		
 		$this->assign('page_name','订单确认');
@@ -189,6 +196,10 @@ class FlowController extends MobileController {
 			$total_price += $g_price*$g_number;
 			$goods_list[$k]["gnum"] = $g_number;
 		}
+
+		if(in_array($this->jid, array_keys(C('EXPRESS_JID')))){
+			$total_price = cookie('price'.$this->mid);
+		}
 		
 		$oprice = $total_price;
 		
@@ -216,7 +227,7 @@ class FlowController extends MobileController {
 		$o_address = I("o_address");
 		$o_remarks = I("o_remarks");
 
-		if($o_xftype == 1){
+		if($o_xftype == 1 && !in_array($this->jid, array_keys(C('EXPRESS_JID')))){
 			$o_address = '';
 		}else{
 			$o_seat = '';
@@ -325,13 +336,15 @@ class FlowController extends MobileController {
 			if($this->isApp){
 				$data = array('msg' => 'yspay','oid' => $oid);
 			}else{
-				$data = array('msg' => 'pay','url' => U('Pay/request_alipay',array('o_id'=>$oid,'jump'=>1)));
+				//$data = array('msg' => 'pay','url' => U('Pay/request_alipay',array('o_id'=>$oid,'jump'=>1)));
+				$data = array('msg' => 'yspay','oid' => $oid);
 			}
 		}elseif(I('post.paytype')=='weixin' && $oprice > 0){
 			if($this->isApp){
 				$data = array('msg' => 'yspay','oid' => $oid);
 			}else{
-				$data = array('msg' => 'pay','url' => U('/Home/Wechat/dsWxJsPay@www').'?o_id='.$oid.'&jump=1');
+				//$data = array('msg' => 'pay','url' => U('/Home/Wechat/dsWxJsPay@www').'?o_id='.$oid.'&jump=1');
+				$data = array('msg' => 'yspay','oid' => $oid);
 			}
 		}
 		
@@ -341,33 +354,33 @@ class FlowController extends MobileController {
 
 
 	//测试
-	public function test(){
-		$jid   = I('jid');
-		$data  = C('EXPRESS_JID')[$jid];
-		//判断是否发快递
-		if (in_array($jid, array_keys(C('EXPRESS_JID')))){
-			// 导入快递
-			vendor('Express.SF.OrderService#class');
-			$tpl  = new \OrderService();
-			$info = $tpl->xmlservice('1603301057388103' , 'join' , '13021992467' , '广东省清远市清城区' , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
+	// public function test(){
+	// 	$jid   = I('jid');
+	// 	$data  = C('EXPRESS_JID')[$jid];
+	// 	//判断是否发快递
+	// 	if (in_array($jid, array_keys(C('EXPRESS_JID')))){
+	// 		// 导入快递
+	// 		vendor('Express.SF.OrderService#class');
+	// 		$tpl  = new \OrderService();
+	// 		$info = $tpl->xmlservice('1603301057388121' , 'join' , '13021992467' , '浙江省杭州市拱墅区上塘路41号' , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
 
-			print_r($info);
-		}else return false;
-	}
+	// 		print_r($info);
+	// 	}else return false;
+	// }
 
 
-	public function test_back(){
-		$jid   = I('jid');
-		//判断是否发快递
-		if (in_array($jid, array_keys(C('EXPRESS_JID')))){
-			// 导入快递
-			vendor('Express.SF.OrderService#class');
-			$tpl  = new \OrderService();
-			$info = $tpl->xmlserviceback('1603301057388101');
+	// public function test_back(){
+	// 	$jid   = I('jid');
+	// 	//判断是否发快递
+	// 	if (in_array($jid, array_keys(C('EXPRESS_JID')))){
+	// 		// 导入快递
+	// 		vendor('Express.SF.OrderService#class');
+	// 		$tpl  = new \OrderService();
+	// 		$info = $tpl->xmlserviceback('1605040904027132');
 
-			print_r($info);
-		}else return false;
-	}
+	// 		print_r($info);
+	// 	}else return false;
+	// }
 
 
 

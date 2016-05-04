@@ -37,7 +37,7 @@ class PublicController extends Controller {
 
 							 ->join('__MERCHANT__ AS j ON j.jid=u.tjid')
 
-							 ->field('m.mid,m.mname,m.mpwd,m.mstatus,j.jid,u.tsid,u.type')->find();
+							 ->field('m.mid,m.mname,m.mpwd,m.mstatus,j.jid')->find();
 
 		
 	
@@ -63,9 +63,9 @@ class PublicController extends Controller {
 
 			\Common\Org\Cookie::set(C('USER_COOKIE_JID'), $member['jid']);
 
-			\Common\Org\Cookie::set(C('USER_COOKIE_SID'), $member['tsid']);
+			//\Common\Org\Cookie::set(C('USER_COOKIE_SID'), $member['tsid']);
 
-			\Common\Org\Cookie::set(C('USER_COOKIE_TPE'), $member['type']);
+			//\Common\Org\Cookie::set(C('USER_COOKIE_TPE'), $member['type']);
 
 			
 
@@ -111,7 +111,7 @@ class PublicController extends Controller {
 
     public function kindeditorUpload() {
 
-		if(stripos($_SERVER['HTTP_REFERER'], 'dishuos.com') === false ) E('你无权进行此操作');
+		//if(stripos($_SERVER['HTTP_REFERER'], 'dishuos.com') === false ) E('你无权进行此操作');
 
 		$uploadROOT = realpath(THINK_PATH.'../Public/');//上传地址的根目录
 
