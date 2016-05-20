@@ -18,7 +18,7 @@ class UserController extends MobileController {
 		$page_name = $merchant['mabbreviation'];
 		$this->assign('page_url','banreturn');
 		$this->assign('page_name',$page_name);
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 
 	//系统更新检测
@@ -315,10 +315,15 @@ class UserController extends MobileController {
 		$this->assign('page_name',$page_name);
 		
 		//把所有的分店的电话获取出来
-		$shop_tel = M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->field('sname,mservetel')->select();
+		$shop_tel  = M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->field('sname,mservetel')->select();
+		//店铺信息
+		$sid       = $this->sid == '0' ? I('sid','95') : $this->sid;
+		$shop_info = M('shop')->where(array('sid'=>$sid, 'status'=>'1'))->find();
+
+		$this->funcMenu();
 		$this->assign('shop_tel', $shop_tel);
-		
-		$this->mydisplay();
+		$this->assign('shop_info', $shop_info);
+		$this->newdisplay();
 	}
 
 	//登录

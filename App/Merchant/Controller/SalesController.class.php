@@ -8,9 +8,29 @@ class SalesController extends MerchantController {
 		!$_GET['dstatus'] && $_GET['dstatus']=0;
 		
 		//如果是品牌登录，则显示所有门店，如果是店长登录，只显示自己的门店订单
-		$this->type == 1 ? $where['o_jid']=$this->jid : $where['o_sid']=$this->tsid;
+		$sid = I('sid',0);
+		if($this->role == 1){
+			$sid > 0 ? $where['o_sid']=$sid : $where['o_jid']=$this->jid;
+		}else{
+			$where['o_sid']=$sid;
+		}
+			
+		if($this->role != 1 && $sid > 0){
+			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
+			if($this->shift == 2){
+				if($sinfo['bb_stime'] != '' && $sinfo['bb_etime'] != ''){
+					$where['o_dstime'] = array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime']);
+				}
+			}elseif($this->shift == 3){
+				if($sinfo['wb_stime'] != '' && $sinfo['wb_etime'] != ''){
+					$where['o_dstime'] = array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime']);
+				}
+			}
+		}
 		
 		$where['o_gtype'] = 'Choose';//订单类型 
+		
+		$shops = D('auth')->getAuthShops($this->mid);
 		
 		//搜索
 		if( I('get.o_id') != '' ) 
@@ -24,6 +44,10 @@ class SalesController extends MerchantController {
 		if( I('get.o_pstatus') != '' ) 
 		{
 			$where['o_pstatus'] = I('get.o_pstatus');
+		}
+		if( I('get.o_seat') != '' )
+		{
+			$where['o_seat'] = I('get.o_seat');
 		}
 
 		if( I('get.statime', '') && I('get.statime', '') ) {
@@ -51,8 +75,6 @@ class SalesController extends MerchantController {
 				//$userids[] = $_value['o_uid'];
 			}
 		}
-		$shops = M('shop')->where(array('jid'=>$this->jid))->getField('sid,sname');
-		//if($userids) $users = M('user')->where(array('u_id'=>array('in',$userids)))->getField('u_id,u_name,u_ename,u_phone');
 		
 		
 		//支付类型
@@ -80,7 +102,11 @@ class SalesController extends MerchantController {
 			5=>'<span style="color:#ff9900;">已关闭</span>'
 		);
 		$this->assign('order_dstatus', $order_dstatus);
-
+		
+		$o_seat = M('table')->where(array('sid'=>$sid))->select();
+		$this->assign('o_seat',$o_seat);
+		$this->assign('sid',$sid);
+		
 		$this->assign('countOrder', $this->countOrder(1));
 		//$this->assign('users', $users);
 		$this->assign('shops', $shops);
@@ -328,7 +354,7 @@ class SalesController extends MerchantController {
 
 	//在线消费、远程预订、本地视频
 	public function goods() {
-		$ctype=I('get.ctype', 0, 'intval'); if( !$ctype || !in_array($ctype, array('1', '2', '3')) ) E('你无权查看当前页面');
+		//$ctype=I('get.ctype', 0, 'intval'); if( !$ctype || !in_array($ctype, array('1', '2', '3')) ) E('你无权查看当前页面');
 		if( $this->type == 1 ) {
 			file_exists($this->path.'InfoMenu'.$ctype.'Name.php') && $modulename=file_get_contents($this->path.'InfoMenu'.$ctype.'Name.php');
 			file_exists($this->path.'InfoMenu'.$ctype.'Icon.php') && $moduleicon=file_get_contents($this->path.'InfoMenu'.$ctype.'Icon.php');
@@ -336,32 +362,80 @@ class SalesController extends MerchantController {
 			$this->assign('moduleicon', $moduleicon ? $moduleicon : '');
 			$this->assign('modulelink', $ctype==1 ? 'http://yd.dishuos.com/Shop/index/mod/Choose/jid/'.$this->jid.'.html' : 'http://yd.dishuos.com/Shop/index/mod/Seat/jid/'.$this->jid.'.html');
 		}
+		$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+		$sid = I('get.sid', key($shops), 'intval');
+		// $classlist = M('class')->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid, 'ctype'=>$ctype))->order('corder asc')->select();
+		$classlist = M('category')->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid,'model'=>'goods'))->order('corder asc')->select();
+		
 
-		$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-		$classlist = M('class')->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid, 'ctype'=>$ctype))->order('corder asc')->select();
-	
-		if($classlist)foreach($classlist as $k=>$v){
-			$classlist[$k]['corder'] = ($k*2)+10;
-			M('class')->where(array('cid'=>$v['cid']))->setField('corder',($k*2)+10);
-		}
 		if( is_array($classlist) && !empty($classlist) ) {
 			
 			$this->assign('classlist', $classlist);
-			$cid = isset( $_GET['cid'] ) && intval( $_GET['cid'] ) ? intval($_GET['cid']) : $classlist[0]['cid'];
+			$cid = isset( $_GET['cid'] ) && intval( $_GET['cid'] ) ? intval($_GET['cid']) : 0;//$classlist[0]['id']
 			B('Common\\Behavior\\CheckMerchantCid', '', $cid);
 
 			$MinfoModel = $ctype==3 ? M("video") : M('goods');
-			$count = $MinfoModel->where(array('cid'=>$cid, 'sid'=>$sid, 'gstatus'=>array('in',array('1','2')) ))->count();
-
+			//查询条件
+			$opt   = array(
+					'sid'=>$sid,
+					'gstatus'=>array('in',array('1','2')),
+					'gtype'=>0,
+				);  
+			//判断是否有分类ID
+			if ($cid != 0) $opt['cid'] = $cid;
+			//分页和查询
+			$count = $MinfoModel->where($opt)->count();
 			$page = new \Common\Org\Page( $count, 5);
-			$infolist = $MinfoModel->where(array('cid'=>$cid, 'sid'=>$sid, 'gstatus'=>array('in',array('1','2')) ))->order("gstatus asc,gorder asc,gid desc")->limit($page->firstRow.','.$page->listRows)->select();
-			$this->assign( 'infolist',  $infolist);
+			$infolist = $MinfoModel->where($opt)->order("gstatus asc,gorder asc,gid desc")->limit($page->firstRow.','.$page->listRows)->select();
+			for ($i=0; $i <count($classlist) ; $i++) { 
+				for ($j=0; $j <count($infolist) ; $j++) { 
+					if ($classlist[$i]['id'] == $infolist[$j]['cid']) {
+						$infolist[$j]['cname'] = $classlist[$i]['cname'];
+					}
+				}
+			}
 
+			$this->assign( 'infolist',  $infolist);
 			$this->assign('page', $page->show());
 			$this->assign('cid', $cid);
 		}
+		$this->assign('classlist', $classlist);
+		$this->assign('shops', $shops);
+		$this->assign('sid', $sid);
+		$this->assign('tfs', ($this->type==1 && $sid!=0) || $this->type!=1 ? '0' : '1');
+		$this->assign('ptitle', $ctype==1 ? '商品上架' : ($ctype==2 ? '预约上架' : '视频上架'));
+		$this->assign('guide',I('guide'));
+		$this->display();
+	}
 
-		$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+
+	//商品分类列表
+	public function classList(){
+		$ctype=I('get.ctype', 0, 'intval'); if( !$ctype || !in_array($ctype, array('1', '2', '3')) ) E('你无权查看当前页面');
+
+		$shops = D('auth')->getAuthShops($this->mid);
+
+		$sid = I('get.sid',0);
+		
+		$where = array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid,'model'=>'goods');
+		
+		$count = M('category')->where($where)->count();
+		$page = new \Common\Org\Page( $count, 10);
+		$classlist = M('category')->where($where)->order('corder asc')->limit($page->firstRow.','.$page->listRows)->select();
+		$this->assign('page', $page->show());
+
+		// if($classlist)foreach($classlist as $k=>$v){
+		// 	$classlist[$k]['corder'] = ($k*2)+10;
+		// 	M('category')->where(array('id'=>$v['cid']))->setField('corder',($k*2)+10);
+		// }
+
+		//if( is_array($classlist) && !empty($classlist) ) {
+			$this->assign('classlist', $classlist);
+			//$cid = isset( $_GET['cid'] ) && intval( $_GET['cid'] ) ? intval($_GET['cid']) : $classlist[0]['cid'];
+			//B('Common\\Behavior\\CheckMerchantCid', '', $cid);
+			//$this->assign('cid', $cid);
+		//}
+
 		$this->assign('shops', $shops);
 		$this->assign('sid', $sid);
 		$this->assign('tfs', ($this->type==1 && $sid!=0) || $this->type!=1 ? '0' : '1');
@@ -389,21 +463,28 @@ class SalesController extends MerchantController {
 	//添加分类信息
 	public function addClass() {
 		if( IS_POST ) {
-			if( !$_POST['cname'] || !intval($_POST['ctype']) ) exit('0');
+			if( !$_POST['cname'] ) exit('0');
 			if(is_array(I('post.print_id'))){
 				$print_id = join(',',I('post.print_id'));
 			}else{
 				$print_id = '';
 			}
-			exit( M("class")->add(array('print_id'=>$print_id,'jid'=>$this->jid, 'sid'=>$this->type==1 ? I('post.sid', 0, 'intval') : $this->tsid, 'cname'=>I('post.cname', ''), 'ctype'=>I('post.ctype', '', 'intval'))) ? '1' : '0' );
+			exit( M("category")->add(array('cimg'=>I('post.cimg', ''),'model'=>I('post.module', ''),'print_id'=>$print_id,'jid'=>$this->jid, 'corder'=>I('post.corder', ''), 'sid'=>I('post.sid', 0, 'intval'), 'cname'=>I('post.cname', ''))));
 		} else {
-			$print_list = array();
-			$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-			if($sid > 0){
-				$print_list = M('print')->where(array('print_sid'=>$sid,'print_status'=>1))->select();
-			}
+			$sid = I('sid',0);
+			$sp  = I('sp',0);
 			
-			$this->assign('print_list',$print_list);
+			$ml = array();
+			if($sp){
+				$ml = M('merchant_module')->alias('m')->join('azd_module b on m.module_sign=b.module_sign')->where(array('m.jid'=>$this->jid,'b.module_status'=>1))->field('b.module_sign,b.module_name')->select();
+			}
+			$cid=I('cid', 0, 'intval');
+			$class_info = array();
+			if($cid){
+				$class_info = M('category')->where(array('id'=>$cid))->find();
+			}
+			$this->assign('class_info',$class_info);
+			$this->assign('ml',$ml);
 			$this->assign('sid', $sid);
 			$this->display();
 		}
@@ -413,8 +494,17 @@ class SalesController extends MerchantController {
 	public function delClass() {
 		if( !IS_POST || !$_POST['cid'] ) exit('0');
 		B('Common\\Behavior\\CheckMerchantCid', '', $_POST['cid']);
-		$r = M('class')->where(array('cid'=>I('post.cid')))->save(array('status'=>0));
-		M('goods')->where(array('cid'=>I('post.cid')))->save(array('gstatus'=>0));		
+		$sid = M('category')->where(array('id'=>I('post.cid')))->getField('sid');
+		$r = M('category')->where(array('id'=>I('post.cid')))->delete();
+		M('goods')->where(array('sid'=>$sid,'cid'=>I('post.cid')))->delete();		
+		exit( $r !== false ? '1' : '0' );
+	}
+	
+	public function cateSta() {
+		if( !IS_POST || !$_POST['cid'] ) exit('0');
+		B('Common\\Behavior\\CheckMerchantCid', '', $_POST['cid']);
+		$status = I('status',0);
+		$r = M('category')->where(array('id'=>I('post.cid')))->save(array('status'=>$status));
 		exit( $r !== false ? '1' : '0' );
 	}
 
@@ -429,15 +519,16 @@ class SalesController extends MerchantController {
 			}else{
 				$print_id = '';
 			}
-			exit( M("class")->save(array('cname'=>I('post.cname', ''),'print_id'=>$print_id, 'cid'=>I('post.cid', 0, 'intval'))) ? '1' : '0' );
+			exit( M("category")->save(array('cimg'=>I('post.cimg', ''),'cname'=>I('post.cname', ''),'corder'=>I('post.corder', ''),'print_id'=>$print_id, 'id'=>I('post.cid', 0, 'intval'))) ? '1' : '0' );
 		} else {
-			$class_info = M('class')->where(array('cid'=>$cid))->find();
+			$class_info = M('category')->where(array('id'=>$cid))->find();
 			$print_list = array();
 			$sid = $class_info['sid'];
 			if($sid > 0){
 				$print_list = M('print')->where(array('print_sid'=>$sid,'print_status'=>1))->select();
 			}
 			$print_id = explode(',', $class_info['print_id']);
+			
 			$this->assign('print_id',$print_id);
 			$this->assign('print_list',$print_list);
 			$this->assign('class', $class_info);
@@ -447,27 +538,29 @@ class SalesController extends MerchantController {
 
     //ajax重新加载
 	public function ajaxClass() {
-		$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-		$classList = M('class')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1, 'ctype'=>I('get.ctype', 0, 'intval')))->order('corder')->select();
-		if($classlist)foreach($classlist as $k=>$v){
+		$sid = $shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+		$sid = I('get.sid', key($shops), 'intval');
+		$where = array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid,'model'=>'goods');
+		$classList = M('category')->where($where = array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid,'model'=>'goods'))->order('corder')->select();
+		if($classList)foreach($classList as $k=>$v){
 			$classlist[$k]['corder'] = ($k*2)+10;
-			M('class')->where(array('cid'=>$v['cid']))->setField('corder',($k*2)+10);
+			M('category')->where(array('id'=>$v['cid']))->setField('corder',($k*2)+10);
 		}
 		$countclass = count($classList);
 		$html = "";
 		if(is_array($classList) && !empty($classList)) {
 			foreach($classList as $key => $class) {
-				$html .= '<li data-id="'.$class['cid'].'" data-order="'.$class['corder'].'" class="">';
-				$html .= '	<a href="/Sales/goods/ctype/'.I('get.ctype', 0, 'intval').'/sid/'.$sid.'/cid/'.$class['cid'].'.html">'.$class['cname'].'</a>';
+				$html .= '<li data-id="'.$class['id'].'" data-order="'.$class['corder'].'" class="" style="width: 100%">';
+				$html .= '	<a href="/Sales/goods/ctype/'.I('get.ctype', 0, 'intval').'/sid/'.$sid.'/cid/'.$class['id'].'.html">'.$class['cname'].'</a>';
 				$html .= '	<b class="pull-right" style="display:none;">';
 				if($key!=0){
-					$html .= "<i class='upicon' onClick=\"OrderMenu('{$class['cid']}','{$class[corder]}','up')\" ></i>";
+					$html .= "<i class='upicon' onClick=\"OrderMenu('{$class['id']}','{$class[corder]}','up')\" ></i>";
 				}
 				if($key!=($countclass-1)){
-					$html .= "<i class='downicon' onClick=\"OrderMenu('{$class['cid']}','{$class[corder]}','down')\" ></i>";
+					$html .= "<i class='downicon' onClick=\"OrderMenu('{$class['id']}','{$class[corder]}','down')\" ></i>";
 				}
-                $html .= '		<i class="writeicon" onClick="DialogFrameFun(465, 500, \''.U('/Sales/editClass', array('cid'=>$class['cid'], 'sid'=>$sid), true).'\')"></i>';
-                $html .= '		<i onClick="DeleMenu(\''.$class['cid'].'\')" class="deleteicon"></i>';
+                $html .= '		<i class="writeicon" onClick="DialogFrameFun(465, 500, \''.U('/Sales/editClass', array('cid'=>$class['id'], 'sid'=>$sid), true).'\')"></i>';
+                $html .= '		<i onClick="DeleMenu(\''.$class['id'].'\')" class="deleteicon"></i>';
 				$html .= '	</b>';
 				$html .= '</li>';
 			}	
@@ -479,17 +572,18 @@ class SalesController extends MerchantController {
 	public function corderClass() {
 		$cid = I('post.cid');
 		$corder = I('post.corder');
-		$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
+		$sid = $shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+		$sid = I('get.sid', key($shops), 'intval');
 		$type = I('post.type');
 		$ctype = I('post.ctype');
 		if($cid){
 			if($type=='up'){//向上排序减1
-				$min = M('class')->where(array('jid'=>$this->jid,'sid'=>$sid, 'corder' => array('lt',$corder),'status'=>1, 'ctype'=>$ctype))->order('corder desc')->find();
-				$result = M('class')-> where(array('cid'=>$cid))->setField('corder',($min['corder']?$min['corder']:$corder)-1);
+				$min = M('category')->where(array('jid'=>$this->jid,'sid'=>$sid, 'corder' => array('lt',$corder),'status'=>1))->order('corder desc')->find();
+				$result = M('category')-> where(array('id'=>$cid))->setField('corder',($min['corder']?$min['corder']:$corder)-1);
 				exit($result?'1':'0');
 			}elseif($type=='down'){ //向下排序加1
-				$max = M('class')->where(array('jid'=>$this->jid,'sid'=>$sid, 'corder' => array('gt',$corder),'status'=>1, 'ctype'=>$ctype))->order('corder asc')->find();
-				$result = M('class')-> where(array('cid'=>$cid))->setField('corder',($max['corder']?$max['corder']:$corder)+1);
+				$max = M('category')->where(array('jid'=>$this->jid,'sid'=>$sid, 'corder' => array('gt',$corder),'status'=>1))->order('corder asc')->find();
+				$result = M('category')-> where(array('id'=>$cid))->setField('corder',($max['corder']?$max['corder']:$corder)+1);
 				exit($result?'1':'0');
 			}
 		}
@@ -530,30 +624,45 @@ class SalesController extends MerchantController {
 			}
 			exit( json_encode($msg) );
 		} else {
-			$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-			$ctype=I('get.ctype', 0, 'intval') or die('你无权查看当前页面');
-			$this->assign('clist', M('class')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'ctype'=>$ctype, 'status'=>1))->select());
+			$shops = D('auth')->getAuthShops($this->mid);
+			$sid = I('sid', key($shops), 'intval');
+			$ctype=1;
+			$this->assign('clist', M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1,'model'=>'goods'))->select());
 			$this->assign('sid', $sid);
 			
 			if( ($this->type==1 || $this->type==2) && $sid ) {//添加分店的时候，要有打印机
 				$printList = M('print')->where( array("print_sid"=>$sid) )->select();
 				$this->assign('printList', $printList);
-				$this->assign('isprint', 1);
+				//$this->assign('isprint', 1);
 			}
-			$this->assign('CurrentUrl', 'Salesgoods');
-			$this->display( $ctype==3 ? "addVideo" : 'addGoods' );	
+			//$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+			$this->assign('shops', $shops);
+			$this->assign('CurrentUrl', 'SalesaddGoods');
+			$this->assign('cid', I('cid',0));
+			$dtype = I('dtype',1);
+			$this->assign('dtype', $dtype);
+			if ($dtype == 2) {
+				$this->display('addGoods2');
+			}else{
+				$this->display( $ctype==3 ? "addVideo" : 'addGoods' );	
+			}
 		}
 	}
 
     //删除商品\视频
     public function delGoods() {
     	$MinfoModel = isset($_POST['type']) && (intval($_POST['type'])==1 || intval($_POST['type'])==2) ? M('goods') : M('video');
-    	$goods = $MinfoModel->where(array('gid'=>I('post.id')))->find();
+    	$goods = $MinfoModel->where(array('gid'=>I('id')))->find();
 
 		if( !is_array($goods) || empty($goods) ) exit( json_encode(array('msg'=>'你无权删除当前页面')) );
 		B('Common\\Behavior\\CheckMerchantCid', '', $goods['cid']);
 
-		exit( $MinfoModel->where(array('gid'=>I('post.id')))->setField('gstatus', 0) ? '1' : '0' );
+		exit( $MinfoModel->where(array('gid'=>I('id')))->setField('gstatus', 0) ? '1' : '0' );
+    }
+
+    public function deleGoods() {
+    	$re = M('goods')->where(array('gid'=>I('id')))->setField('gstatus', 0) ? '1' : '0';
+		return '$re';
     }
 	
 	//修改商品
@@ -569,7 +678,7 @@ class SalesController extends MerchantController {
 			// 	$_POST['gvrebate'] = '';
 			// }
 			
-			$_POST['gvrebate'] = $_POST['gdprice'] > 0 ? $_POST['gvrebate']/$_POST['gdprice']*100 : $_POST['gvrebate']/$_POST['goprice']*100;
+			//$_POST['gvrebate'] = $_POST['gdprice'] > 0 ? $_POST['gvrebate']/$_POST['gdprice']*100 : $_POST['gvrebate']/$_POST['goprice']*100;
 			$_POST['isboutique'] = isset($_POST['isboutique']) && $_POST['isboutique']==1 ? '1' : '0'; 
 			
 			if(empty($_POST['gstock'])){
@@ -593,23 +702,30 @@ class SalesController extends MerchantController {
 			}
 			exit( json_encode($msg) ); 
 		} else {
-			$ginfo = M('goods')->alias('AS g')->join('__CLASS__ as c ON g.cid=c.cid', 'left')->where(array('c.jid'=>$this->jid, 'gid'=>I('get.gid')))->find();
+			$ginfo = M('goods')->alias('AS g')->join('azd_category as c ON g.cid=c.id', 'left')->where(array('c.jid'=>$this->jid, 'gid'=>I('get.gid')))->find();
 			if( !is_array($ginfo) || empty($ginfo) ) E('你无权查看当前页面');
-			$ginfo['gvrebate'] = $ginfo['gdprice'] > 0 ? $ginfo['gvrebate']*$ginfo['gdprice']/100 : $ginfo['gvrebate']*$ginfo['goprice']/100;
-			$ginfo['gvrebate'] = round($ginfo['gvrebate'],2);
-			$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-			$this->assign('clist', M('class')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'ctype'=>$ginfo['ctype'], 'status'=>1))->select());
+			//$ginfo['gvrebate'] = $ginfo['gdprice'] > 0 ? $ginfo['gvrebate']*$ginfo['gdprice']/100 : $ginfo['gvrebate']*$ginfo['goprice']/100;
+			//$ginfo['gvrebate'] = round($ginfo['gvrebate'],2);
+			$sid = I('get.sid', 0, 'intval');
+			$this->assign('clist', M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1,'model'=>'goods'))->select());
 			$this->assign('ginfo', $ginfo);
 			
 			if( ($this->type==1 || $this->type==2) && $sid ) {//添加分店的时候，要有打印机
 				$printList = M('print')->where( array("print_sid"=>$sid) )->select();
 				$this->assign('printList', $printList);
-				$this->assign('isprint', 1);
+				//$this->assign('isprint', 1);
 				$print_id = explode(',', $ginfo['printid']);
 				$this->assign('print_id',$print_id);
 			}
 			$this->assign('CurrentUrl', 'Salesgoodsctype'.$ginfo['ctype']);
-			$this->display();		
+			$dtype = I('dtype',1);
+			$this->assign('dtype', $dtype);
+			if ($dtype == 2) {
+				$this->display('editGoods2');
+			}else{
+				$this->display();	
+			}
+				
 		}
     }
 
@@ -699,10 +815,15 @@ class SalesController extends MerchantController {
 			$data['vu_description'] = I('post.des', '');
 			$data['vu_money'] = I('post.vu_money', '0.00', 'floatval');
 			if( !$data['vu_name'] ) exit('0');
-			if( $this->type != 1 ) {
-				$data['vu_sid'] =','.$this->tsid.',';
-			} else {
-			 $data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+			if (I('dtype') == 1) {
+				if( $this->type != 1 ) {
+					$data['vu_sid'] =','.$this->tsid.',';
+				} else {
+				 $data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+				}
+			}else{
+				$data['vu_sid'] = I('d', 0, 'intval');
+				$data['vu_cid'] = I('cid', 0, 'intval');
 			}
 			exit( M('voucher')->add($data) ? "1" : "0" );
 		} else {
@@ -715,6 +836,10 @@ class SalesController extends MerchantController {
 				$this->assign('splist', $splist);
 				$this->assign('pagef', $page->show());
 			}
+
+			$this->assign('sid', I('sid', 0));
+			$this->assign('dtype', I('dtype',1));
+			$this->assign('cid', I('cid', 0));
 			$this->display();	
 		}
 	}
@@ -741,11 +866,14 @@ class SalesController extends MerchantController {
 			$data['vu_img'] = I('post.img', '');
 			$data['vu_description'] = I('post.des', '');
 			$data['vu_money'] = I('post.vu_money', '0.00', 'floatval');
-			if( !$data['vu_name'] ) exit('0');
-			if( $this->type != 1 ) {
-				$data['vu_sid'] = ','.$this->tsid.',';
-			} else {
-				$data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+			if (I('dtype') == 1) {
+				if( $this->type != 1 ) {
+					$data['vu_sid'] =','.$this->tsid.',';
+				} else {
+				 $data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+				}
+			}else{
+				$data['vu_sid'] = I('d', 0, 'intval');
 			}
 			exit( M('voucher')->where('vu_id='.I('post.id', 0, 'intval'))->save($data) ? "1" : "0" );
 		} else {
@@ -760,6 +888,8 @@ class SalesController extends MerchantController {
 			$voucher  = M('voucher')->where(array('vu_id'=>I('get.id', 0, 'intval')))->find();
 			if( !is_array($voucher) || empty($voucher) || $voucher['vu_jid'] != $this->jid ) $this->error('你无权查看当前页面');
 			$this->assign('voucher', $voucher);
+			$this->assign('sid', I('sid', 0));
+			$this->assign('dtype', I('dtype',1));
 			$this->display();	
 		}
 	}

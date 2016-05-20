@@ -75,7 +75,7 @@ class MerchantController extends ManagerController {
 			$status_01 = $_POST['info']['mid'] = $muser['tmid'] = $MemberMobel->insert($_POST['member']);
 			$status_02 = $_POST['app']['jid'] = $muser['tjid'] = D('Merchant')->insert($_POST['info']);
 			$status_03 = M('merchantApp')->add($_POST['app']);
-			$status_04 = M('merchantUser')->add(array_merge($muser, array('tsid'=>0, 'type'=>1)));
+			$status_04 = M('merchantUser')->add($muser);
 			$status_05 = \Common\Org\Maxmerchant::SetMerchantDec( $_POST['app']['jid'] );
 			
 			if( $status_01 && $status_02 && $status_03 && $status_04 && $status_05 ) {
@@ -172,7 +172,7 @@ class MerchantController extends ManagerController {
 
 	//店铺列表
 	public function shopsList() {
-		$where = array('mtype'=>2, "status"=>array("neq", '-1'));
+		$where = array("status"=>array("neq", '-1'));
 		if( I('get.jid', 0, 'intval') ) $where['jid'] = I('get.jid', 0, 'intval');
 		if( I('get.statime', '') && I('get.endtime', '') ) {
 			$where['mregdate'] = array(array('egt', date('Y-m-d 00:00:00', strtotime(I('get.statime')))), array('elt', date('Y-m-d 23:59:59', strtotime(I('get.endtime')))), 'and');          					
@@ -196,17 +196,18 @@ class MerchantController extends ManagerController {
 	public function shopAdd() {
 		if(IS_POST) {
 			array_walk($_POST['shop'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
-			$member['mname'] = I('post.mname', '');
-			$member['mpwd'] = md5(md5(I('post.mpwd')));
-			$member['mtype'] = 2;
-			$member['mregdate'] = $member['mlogindate'] = date('Y-m-d H:i:s');
+			//$member['mname'] = I('post.mname', '');
+			//$member['mpwd'] = md5(md5(I('post.mpwd')));
+			//$member['mtype'] = 2;
+			//$member['mregdate'] = $member['mlogindate'] = date('Y-m-d H:i:s');
 			
-			if( ($sid=D('Shop')->insert($_POST['shop'])) && ($mid=D('Member')->insert($member)) ) {
-				if(M('merchantUser')->add(array('tmid'=>$mid, 'tjid'=>intval($_POST['shop']['jid']), 'tsid'=>$sid, 'type'=>2))) $this->display('Jump:success');
+			if( ($sid=D('Shop')->insert($_POST['shop']))  ) {
+				//if(M('merchantUser')->add(array('tmid'=>$mid, 'tjid'=>intval($_POST['shop']['jid']), 'tsid'=>$sid, 'type'=>2))) $this->display('Jump:success');
+				$this->display('Jump:success');
 			} else { 
-				if( $sid ) D('Shop')->where('sid='.$sid)->delete();
-				if( $mid ) D('Member')->where('mid='.$mid)->delete();
-				$this->assign('msg', D('Shop')->getError()." ".D('Member')->getError()); $this->display('Jump:error'); 
+				//if( $sid ) D('Shop')->where('sid='.$sid)->delete();
+				//if( $mid ) D('Member')->where('mid='.$mid)->delete();
+				$this->assign('msg', D('Shop')->getError()); $this->display('Jump:error'); 
 			}						
 		} else {
 			foreach($this->_AddressList as $address) if($address['aid']!=0 && $address['apid']==0) $addressListArr[$address['aid']] = $address['aname'];
@@ -220,8 +221,8 @@ class MerchantController extends ManagerController {
 	//删除店铺
 	public function shopDel() {
 		$sid = I('get.sid', ''); if(!$sid) exit('0'); $status = I('get.status', 0, 'intval') == 1 ? '0' : '1';  
-		$tmid=M("merchant_user")->where("tsid=$sid")->find();
-		$mid=$tmid['tmid'];M('member')->where(array('mid'=>array('in', "$mid")))->save(array('mstatus'=>$status)); 
+		//$tmid=M("merchant_user")->where("tsid=$sid")->find();
+		//$mid=$tmid['tmid'];M('member')->where(array('mid'=>array('in', "$mid")))->save(array('mstatus'=>$status)); 
 		exit(M('shop')->where(array('sid'=>array('in', "$sid")))->save(array('status'=>$status))!== false ? "1" : "0");  
 	}
 
@@ -421,7 +422,14 @@ class MerchantController extends ManagerController {
 	//彻底删除店
 	public function truncateShop() {
 		$sid = I('post.sid') or die('0');
-		
+		$ShopModel = M('shop');
+		$status_01 = $ShopModel->where("sid=".$sid)->setField("status", '-1') !== false ? true : false;
+		if( $status_01  ) {
+				exit('1');
+		} else {
+			 exit('0');
+		}
+		/*
 		//获取所有的门店账号
 		$member_id_list = array();
 		$member_list = M("merchantUser")->where( array("tsid"=>$sid, "type"=>2) )->select();
@@ -437,6 +445,6 @@ class MerchantController extends ManagerController {
 			$ShopModel->commit();	exit('1');
 		} else {
 			$ShopModel->rollback(); exit('0');
-		}
+		}*/
 	}
 } 

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link href="__PUBLIC__/Merchant/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="__PUBLIC__/Merchant/design/template/ct/images/syw.css" rel="stylesheet">
+    
+    <link href="__PUBLIC__/Merchant/design/Images/design.css" rel="stylesheet">
+    
+    
+  </head>
+  <body id="design">
+    <div class="container-fluid" >
+        <div class="row ct-xptj" >
+        	<h3 class="ct-title">{$cname}</h3>
+            <volist name="goods" id="vo">
+                <div class="col-xs-4 editboxitem sales{$vo.gid}" data-type="indexproone" id="{$vo.gid}" data-id="{$vo.gid}" sid="{$sid}">
+                	<img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg">
+                    <div class="ct-proinfo">
+                    	<h5>{$vo.gname}</h5>
+                        <div class="star start-5"></div>
+                        <div class="proinfo-sale">月销{$vo.gsales}份</div>
+                        <div class="proinfo-price">&yen; {$vo.gdprice} <del>&yen; {$vo.goprice}</del></div>
+                        <div class="addtocart">+</div>
+                    </div>
+                </div>
+            </volist>
+            <div class="col-xs-4" >
+                <img id="addNewLMBtn" src="__PUBLIC__/Images/merchant/template/addLMBtn.png" class="img-responsive edititemmenu" data-action="add" data-type="indexproone" id="0" data-id="0">
+            </div>
+        </div>
+        <input type="hidden" name="sid" value="{$sid}" id="sid">
+        <input type="hidden" name="cid" value="{$cid}" id="cid">
+        <div class="nomore text-center">
+        	没有更多的了
+        </div>
+    </div>
+    
+    <footer>
+    	<div class="row">
+        	<a class="col-xs-3 nav-home active">
+            	首页
+            </a>
+            <a class="col-xs-3 nav-car ">
+            	购物车
+            </a>
+            <a class="col-xs-3 nav-down active">
+            	下载
+            </a>
+            <a class="col-xs-3 nav-my ">
+            	我的
+            </a>
+        </div>
+    </footer>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="__PUBLIC__/Merchant/design/Images/design.js"></script>
+    
+    <script type="text/javascript"> 
+	$(function(){ 
+		
+	})
+    </script>
+  </body>
+</html>

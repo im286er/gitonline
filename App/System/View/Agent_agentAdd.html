@@ -128,7 +128,7 @@ function SetAddressValue() {
 	var gtype = $("input[name='info[arank]']:checked").val();
 	$("#SelectScity").show(); $("#SelectHcity").show(); 
 	if( $("#SelectQcity").html() ) $("#SelectQcity").show();
-	/*
+	
 	if( gtype=='p' ) {
 		$("#SelectScity").show(); $("#SelectHcity").hide(); $("#SelectQcity").hide();
 	} else if( gtype=='c' ) {
@@ -137,7 +137,7 @@ function SetAddressValue() {
 		$("#SelectScity").show(); $("#SelectHcity").show(); 
 		if( $("#SelectQcity").html() ) $("#SelectQcity").show();
 	}
-	*/
+	
 	if($("#SelectQcity").is(":visible")) {
 		$("#ShopScity").val( $("#SelectQcity").val() );
 	} else if($("#SelectHcity").is(":visible")) {

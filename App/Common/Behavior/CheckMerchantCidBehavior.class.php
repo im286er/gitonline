@@ -9,10 +9,17 @@ namespace Common\Behavior;
 class CheckMerchantCidBehavior {
 	
 	public function run( &$cid ) {
-		$jid = M('class')->where(array('cid'=>$cid))->getField('jid');
-		if(!$jid || \Common\Org\Cookie::get( C('USER_COOKIE_JID') ) != $jid) {
-			E('你无权查看当前页面'); 
-		}
+
+		// $jid = M('class')->where(array('cid'=>$cid))->getField('jid');
+		// if(!$jid || \Common\Org\Cookie::get( C('USER_COOKIE_JID') ) != $jid) {
+		// 	E('你无权查看当前页面'); 
+		// }
+
+		//$jid = M('class')->where(array('cid'=>$cid))->getField('jid');
+		//if(!$jid || \Common\Org\Cookie::get( C('USER_COOKIE_JID') ) != $jid) {
+			//E('你无权查看当前页面'); 
+		//}
+		return true;
 	}
 		
 }

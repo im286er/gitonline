@@ -2,11 +2,17 @@
 <block name="body">
 <style>.content_a > ul.ul-cell > li { width:150px; } </style>
 <style type="text/css">
+.category_order { height:50px; display:block; line-height:50px; }
+.category_order li { float:left; text-align:center; width:20%; }
+.category_order li a { display:block; width:100%; height:100%; font-size:14px; }
+.category_order li.on { border-bottom:2px solid #0099ff; }
 .modal-content .set > input[type="text"] { width:420px; }
 .shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
 .shops span{margin-left:15px;}
 .shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
 .shops .curr a{color:#ffffff;}
+input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
 .table input[type="button"], .tables input[type="button"] {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;border: 1px solid #e7e7eb;color: #5da3ea;margin-right: 3px;padding: 2px 5px;}
 </style>
 <div class="wrapper">
@@ -22,7 +28,30 @@
 	</volist>
 </h2>
 
+<div class="category_order">
+    	<ul>
+    		<li <eq name="Think.get.sstime" value="0">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>0))}">全部账目</a></li>
+        	<li <eq name="Think.get.sstime" value="1">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>1))}">当日账目</a></li>
+            <li <eq name="Think.get.sstime" value="2">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>2))}">当月账目</a></li>
+            <li <eq name="Think.get.sstime" value="3">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>3))}">当季账目</a></li>
+            <li <eq name="Think.get.sstime" value="4">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>4))}">当年账目</a></li>
+        </ul>
+    </div>
+        
     <div class="mian padding">
+    <div class="content_c">
+            <form action="__ACTION__" method="get">
+            	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
+                <label class="fl mlr5">-</label>
+                <input type="text" class="user_input" placeholder="结束时间" readonly="readonly" size="6" value="{$Think.get.endtime}" id="endtime" name="endtime">&nbsp;&nbsp;
+                               
+                <input type="hidden" name="sid" value="{$sid}" />
+                <input type="hidden" name="type" value="{$_GET['type']}" />
+                <input type="submit" value="开始搜索" class="button">
+            </form>
+        </div>
+        <div style="width:100%;height:15px;"></div>
+        
         <div class="content_a">
             <h3>
                 账户明细
@@ -39,10 +68,10 @@
         </div>
         <div class="tab-meun">
         <p class="returnMenu meun-lef" style="width:675px;">
-            <a href="{:U('Manage/finance@sj', array('type'=>0), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==0">class="curr"</if>>线下收入明细（商）</a>
-            <a href="{:U('Manage/finance@sj', array('type'=>1), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==1">class="curr"</if>>线上收入明细（商）</a>
-            <a href="{:U('Manage/finance@sj', array('type'=>2), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==2">class="curr"</if>>线上收入明细（平）</a>
-            <a href="{:U('Manage/finance@sj', array('type'=>3), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==3">class="curr"</if>>线上收入明细（返）</a>
+            <a href="{:U('Manage/finance@sj', array('type'=>0,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==0">class="curr"</if>>线下收入明细（商）</a>
+            <a href="{:U('Manage/finance@sj', array('type'=>1,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==1">class="curr"</if>>线上收入明细（商）</a>
+            <a href="{:U('Manage/finance@sj', array('type'=>2,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==2">class="curr"</if>>线上收入明细（平）</a>
+            <a href="{:U('Manage/finance@sj', array('type'=>3,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==3">class="curr"</if>>线上收入明细（返）</a>
         </p>
         <input type="button " class="no-bak order-dc" style="cursor:pointer;" value="导出订单" onclick="download('{:U('Manage/download@sj', array('type'=>$_GET['type']), true, true)}')">
         </div>
@@ -141,7 +170,11 @@
 </div>
 
 <!-- 弹出层 -->
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
 <script type="text/javascript">
+Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
 function DialogFrameFun(width, height, src) {
 	document.getElementById('DialogFrame').src = src;
 	document.getElementById('DialogFrame').width = width;

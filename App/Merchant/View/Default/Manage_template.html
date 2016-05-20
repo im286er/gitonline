@@ -48,47 +48,96 @@ function Operation(t_sign,t_name){
             <div class="wrapper">
                 <h2 class="title add_child">店铺装修</h2>
                 <div class="mian padding">
-                <h4 class="hy-style">选择类型
-                <select name="vocation" onchange="location.href=this.value">
-                    <option value="{:U('Manage/template',array('t_price'=>0))}" <if condition="$t_price eq 0">selected</if>>全部模板</option>
-                    <option value="{:U('Manage/template',array('t_price'=>1))}" <if condition="$t_price eq 1">selected</if>>免费模板</option>
-                	<option value="{:U('Manage/template',array('t_price'=>2))}" <if condition="$t_price eq 2">selected</if>>收费模板</option>    
+                <h4 class="hy-style">选择店铺
+                <select name="sid"  class="sid" style="width: 180px;">             	
+                    <volist name="shop" id="vo">
+                        <option value="{$vo.sid}">{$vo.sname}</option>
+                    </volist>    
                 </select></h4>
                     <ul class="tem-list clearfix">
-                        <volist name="themes" id="vo">
                         <li class="b" <eq name="vo.t_sign" value="$merchant[theme]">style="border:1px solid #99cc66"</eq> >
                             <div class="temImg clearfix">
                                 <div class="pull-left">
-                                	<if condition="$vo.t_price eq 0 "><i></i></if>
-                                    <img src="{$vo.t_img}" alt="" width="146" height="251">
+                                    <img src="__PUBLIC__/Merchant/images/shouji.png" alt="" width="146" height="251">
                                 </div>
                                 <div class="temImg-right">
-                                    <p>{$vo.t_name}</p>
-                                    <p>适用行业：通用各行业</p>
-                                    <p>价格:<if condition="$vo.t_price gt 0 ">限时试用<else />免费</if></p>
-                                    <p>简介：{$vo.t_desc}</p>
+                                    <p>手机版装修</p>
+                                    <p>网址：{:U('Index/index@yd',array('jid'=>$jid))}</p>
+                                    <p>当前价格:免费版</p>
                                 </div>
                             </div>
                             <div class="ta-c">
-                                <input type="button" value="预览"  style="background:#00bae7;"  class="btn btn-pwd" onclick="javascript:lookinfo('{$vo.t_img}');">
-                                <eq name="vo.t_sign" value="$merchant[theme]">
-                                    <input style="margin-left:0px;background:#999999;" type="button" value="使用中" class="btn yes-btn-pwd" >
-                                    <neq name="vo.t_adnum" value="0">
-                                    <input style="margin-left:0px;background:#00bae7;" onclick="window.location.href='{:U('Advert/setAdvert', array('tid'=> $vo['t_sign']))}'" type="button" value="设置广告" class="btn yes-btn-pwd" >
-                                    </neq>
-                                <else/>
-                                <input style="margin-left:0px;background:#00bae7;" type="button" value="<if condition="$vo.t_price gt 0 ">试用<else />应用</if>" class="btn btn-pwd" onclick="Operation('{$vo.t_sign}','{$vo.t_name}');">
-                                </eq>
+                                <input type="hidden" value="" id="sid">
+                                <input type="button" value="管理"  style="background:#00bae7;"  class="btn btn-pwd manage-mobile-theme" >
                             </div>
                         </li>
-                        </volist>
+
+                        <li class="b" <eq name="vo.t_sign" value="$merchant[theme]">style="border:1px solid #99cc66"</eq> >
+                            <div class="temImg clearfix">
+                                <div class="pull-left">
+                                    <img src="__PUBLIC__/Merchant/images/weichuan.png" alt="" width="146" height="251">
+                                </div>
+                                <div class="temImg-right">
+                                    <p>微传单</p>
+                                    <p>已创建：3</p>
+                                    <p>已发布: 1</p>
+                                </div>
+                            </div>
+                            <div class="ta-c">
+                                <input type="hidden" value="" id="sid">
+                                <input type="button" value="管理"  style="background:#00bae7;"  class="btn btn-pwd" id="wcd" >
+                            </div>
+                        </li>
+
+                        <li class="b" <eq name="vo.t_sign" value="$merchant[theme]">style="border:1px solid #99cc66"</eq> >
+                            <div class="temImg clearfix">
+                                <div class="pull-left">
+                                    <img src="__PUBLIC__/Merchant/images/diannao.png" alt="" width="146" height="251">
+                                </div>
+                                <div class="temImg-right">
+                                    <p>电脑版装修</p>
+                                    <p>网址：{:U('Index/index@yd',array('jid'=>$jid))}</p>
+                                    <p>当前价格:免费版</p>
+                                </div>
+                            </div>
+                            <div class="ta-c">
+                                <input type="hidden" value="" id="sid">
+                                <input type="button" value="开发中"  style="background:#00bae7;"  class="btn btn-pwd " >
+                            </div>
+                        </li>
+
+                        <li class="b" <eq name="vo.t_sign" value="$merchant[theme]">style="border:1px solid #99cc66"</eq> >
+                            <div class="temImg clearfix">
+                                <div class="pull-left">
+                                    <img src="__PUBLIC__/Merchant/images/mingpian.png" alt="" width="146" height="251">
+                                </div>
+                                <div class="temImg-right">
+                                    <p>个人名片</p>
+                                    <p>已创建:0</p>
+                                    <p>已发布:0</p>
+                                </div>
+                            </div>
+                            <div class="ta-c">
+                                <input type="hidden" value="" id="sid">
+                                <input type="button" value="开发中"  style="background:#00bae7;"  class="btn btn-pwd" >
+                            </div>
+                        </li>
                     </ul>
-                    <if condition="$pages">
+                    <script type="text/javascript">
+                        $('.manage-mobile-theme').click(function(){
+                            var sid = $('.sid').val();
+                            window.location.href = '/Manage/mobileTheme/sid/'+ sid + '.html';
+                        });
+                        $('#wcd').click(function(){
+                            window.location.href = '/Special/splist';
+                        });
+                    </script>
+                    <!-- <if condition="$pages">
                         <div class="page clearfix">
                             <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
                             <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
                         </div>
-                    </if>
+                    </if> -->
                 </div>
             </div>
         

@@ -1,0 +1,45 @@
+<block name="header">
+    <if condition="$dtype eq 2">
+		<div class="container-fluid" >
+        <div class="ct-top" >
+            <div class="row ct-topnav">
+                <div class="col-xs-2 text-center ct-navlist">
+                    <span class="btn btn-link dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding:0px;color:#FFF;">
+                    总店
+                    </span>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <volist name="shop_list" id="vo">
+                            <li><a href="{:U('Index/index',array('sid'=>$vo['sid'], 'jid'=>$jid))}">{$vo.sname}</a></li>
+                        </volist>
+                    </ul>
+                </div>
+                <div class="col-xs-7  ct-notice ">
+                    &nbsp;&nbsp;
+                </div>
+                <div class="col-xs-3 ct-control">
+                     <img src="__PUBLIC__/Merchant/images/ico_search.png" class="img-responsive"> 
+                     <img src="__PUBLIC__/Merchant/images/ico_share.png" class="img-responsive">
+                </div>
+                
+            </div>
+            <div class="row ct-banner">
+                <empty name="backImg">
+                    <img src="__PUBLIC__/Data/73/2016-05-06/572c51778df3f.png" class="img-responsive center-block">
+                <else/>
+                    <img src="{$backImg['img_url']}" class="img-responsive center-block" >
+                </empty>
+            </div>
+        </div>  
+        <div class="row ct-menu">
+             <volist name="category" id="vo">
+                <div class="col-xs-3">
+                    <a href="{$vo.url}">
+                    <img src="{$vo.cimg}" class="img-responsive img-circle center-block" style="width: 50px;height: 50px;">
+                    <h6 class="text-center">{$vo.cname}</h6>
+                    </a>
+                </div>
+            </volist>
+        </div>
+        <br />
+    </if>
+</block>

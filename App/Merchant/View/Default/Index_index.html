@@ -49,12 +49,21 @@ function init() {
                 <li><p>{$corder|default=0}</p>今日下单数</li>
                 <li><p>{$iorder|default='0.00'}</p>今日成交金额</li>
                 <li><p>{$member.money|default='0.00'}</p>可提现金额</li>
-                <li class="last"><p>{$sumprice|default='0.00'}</p>总交易额</li>
+                <li><p>{$sumprice|default='0.00'}</p>总交易额</li>
+                <if condition="$sbwb eq 1">
+                <li><p>{$bprice|default='0.00'}</p>白班金额</li>
+                <li class="last"><p>{$wprice|default='0.00'}</p>晚班金额</li>
+                </if>
             </ul>
 			
         </div>
         
-        
+        <if condition="$is_add eq 1">
+        <div style="margin-top:40px">
+     <a href="/Shop/addShop.html"><input type="button" value="添加店铺" class="btn btn-pwd" /></a>
+        </div>
+        </if>
     </div>
 </div>
 </block>
+      

@@ -4,7 +4,7 @@ namespace Merchant\Controller;
 class PrintController extends MerchantController {
 	//我的打印机列表
 	public function printList() {
-		$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+		$shops = D('auth')->getAuthShops($this->mid);
 		if( !$_GET['sid'] && !empty($shops) ) {
 			$firstShop = array_keys( $shops ); $_GET['sid']=$firstShop[0];
 		}

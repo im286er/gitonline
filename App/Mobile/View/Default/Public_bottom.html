@@ -1,10 +1,10 @@
 <div id='bottomDiv' class="bottomDiv">
     <table>
         <tr>
-            <td><a href="{:U('Choose/new1')}"><if condition="($action_name eq 'new1') or ($controller_name eq 'Comments') or ($controller_name eq 'News')"><img src="__PUBLIC__/Mobile/new1/img/homeB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/homeA.png"></if></a></td>
-            <td><a href="{:U('Choose/shopCart')}"><if condition="$action_name eq 'shopCart'"><img src="__PUBLIC__/Mobile/new1/img/shopGroupB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/shopGroupA.png"></if><div class="roundBG"><label></label></div></a></td>
-            <td><a href="{:U('Index/appdown',array('type'=>'must'))}"><if condition="$action_name eq 'appdown'"><img src="__PUBLIC__/Mobile/new1/img/downloadB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/downloadA.png"></if></a></td>
-            <td><a href="{:U('User/index')}"><if condition="($action_name eq 'index') and ($controller_name eq 'User')"><img src="__PUBLIC__/Mobile/new1/img/mineB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/mineA.png"></if></a></td>
+            <td><a href="{:U('Index/index', array('sid'=>$sid, 'jid'=>$jid))}"><if condition="($action_name eq 'new1') or ($controller_name eq 'Comments') or ($controller_name eq 'News')"><img src="__PUBLIC__/Mobile/new1/img/homeB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/homeA.png"></if></a></td>
+            <td><a href="{:U('Index/shopCart', array('sid'=>$sid, 'jid'=>$jid))}"><if condition="$action_name eq 'shopCart'"><img src="__PUBLIC__/Mobile/new1/img/shopGroupB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/shopGroupA.png"></if><div class="roundBG"><label></label></div></a></td>
+            <td><a href="{$link}"><if condition="$action_name eq 'appdown'"><img src="__PUBLIC__/Mobile/new1/img/downloadB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/downloadA.png"></if></a></td>
+            <td><a href="{:U('User/index', array('sid'=>$sid, 'jid'=>$jid))}"><if condition="($action_name eq 'index') and ($controller_name eq 'User')"><img src="__PUBLIC__/Mobile/new1/img/mineB.png"><else/><img src="__PUBLIC__/Mobile/new1/img/mineA.png"></if></a></td>
         </tr>
     </table>
 </div>

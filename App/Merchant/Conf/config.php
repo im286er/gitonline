@@ -28,6 +28,11 @@ return array(
 	//特权会员
 	'MEMBER_B'			=> array(438),
 
+	//新模板
+	'NEW_THEMES'		=> array(
+			'new1',
+			'new2',
+	),
 
 	//洗衣信息模块
 	'MESSAGE_B' => array('type'=>0,'code'=>'message','name'=>'信息管理','url'=>'/Message/pushmsg.html?menucode=message','next'=>array(
@@ -35,6 +40,18 @@ return array(
 				    array('type'=>0,'id'=>'Messagecommentmsg','name'=>'留言管理','url'=>'/Message/commentmsg.html'),
 				    array('type'=>0,'id'=>'Messageparammsg','name'=>'特权价格','url'=>'/Message/parammsg.html'),
 		)),
+
+
+	//模板功能
+	'FUNC_MENU'	=> array(
+			array('id'=>'1', 'name'=>'测试功能', 'url'=>'/Sales/goods/ctype/1.html?menucode=goods', 'o_url'=>'/Message/hdlist.html'),
+			array('id'=>'2', 'name'=>'活动', 'url'=>'/Design/activity.html', 'o_url'=>'/Message/hdlist.html'),
+			array('id'=>'3', 'name'=>'评价', 'url'=>'/Design/comment.html', 'o_url'=>'/Message/hdlist.html'),
+			// array('id'=>'4', 'name'=>'资讯', 'url'=>'/Sales/goods/ctype/1.html?menucode=goods', 'o_url'=>'/Message/hdlist.html'),
+			// array('id'=>'5', 'name'=>'大转盘', 'url'=>'/Sales/goods/ctype/1.html?menucode=goods', 'o_url'=>'/DaZhuanPan/index.html'),
+			array('id'=>'6', 'name'=>'商品', 'url'=>'/Design/goods.html', 'o_url'=>'/Message/hdlist.html'),
+			array('id'=>'7', 'name'=>'关于我们', 'url'=>'/Design/shop.html', 'o_url'=>'/Message/hdlist.html'),
+		),
 	
 	'TOP_MENU' => array(
 			'shop' =>    array('code'=>'shop','name'=>'店铺管理','url'=>'/Index/index.html?menucode=shop','next'=>array(
@@ -44,14 +61,30 @@ return array(
 					array('id'=>'Functionautoreply','name'=>'消息设置','url'=>'/Function/autoreply/type/1.html'),
 			)),
 			'renovation' =>    array('code'=>'renovation','name'=>'店铺装修','url'=>'/Manage/template.html?menucode=renovation','next'=>array(
-					array('id'=>'mobileTheme','name'=>'手机版装修','url'=>'/Manage/mobileTheme.html','next'=>array(
-						array('id'=>'mobileTheme2','name'=>'系统模板','url'=>'/Manage/mobileTheme.html'),
+					array('id'=>'mobileTheme','name'=>'手机版装修','url'=>'/Manage/template.html','next'=>array(
+						array('id'=>'ManagesysTheme','name'=>'系统模板','url'=>'/Manage/sysTheme.html'),
+						array('id'=>'Managetemplate','name'=>'我的模板','url'=>'/Manage/template.html'),
+					)),
+					array('id'=>'Specialsplist','name'=>'微传单','url'=>'/Special/splist','next'=>array(
+							array('id'=>'Specialsplist','name'=>'系统专题','url'=>'/Special/splist'),
+							array('id'=>'Specialsplistmy','name'=>'我的传单','url'=>'/Special/splist/my'),
+							array('id'=>'Specialsplistmyread','name'=>'推广统计','url'=>'/Special/splist/myread'),
+					)),
+					array('id'=>'','name'=>'电脑版装修','url'=>'','next'=>array(
+							array('id'=>'','name'=>'系统模板','url'=>''),
+							array('id'=>'','name'=>'我的模板','url'=>''),
+					)),
+					array('id'=>'','name'=>'个人名片设计','url'=>'','next'=>array(
+							array('id'=>'','name'=>'名片模板','url'=>''),
+							array('id'=>'','name'=>'我的名片','url'=>''),
 					)),
 			)),
 			'goods' =>    array('code'=>'goods','name'=>'商品管理','url'=>'/Sales/goods/ctype/1.html?menucode=goods','next'=>array(
 					array('id'=>'SalesaddGoods','name'=>'添加商品','url'=>'/Sales/addGoods.html?ctype=1'),
-					array('id'=>'Salesgoods','name'=>'管理店铺','url'=>'/Sales/goods/ctype/1.html'),
-					array('id'=>'PrintprintList','name'=>'打印设置','url'=>'/Print/printList.html'),
+					array('id'=>'Salesgoods','name'=>'商品管理','url'=>'/Sales/goods.html?ctype=1'),
+					array('id'=>'SalesclassList','name'=>'分类管理','url'=>'/Sales/classList.html?ctype=1'),
+					// array('id'=>'Salesgoods','name'=>'管理店铺','url'=>'/Sales/goods/ctype/1.html'),
+					// array('id'=>'PrintprintList','name'=>'打印设置','url'=>'/Print/printList.html'),
 			)),
 			'order' =>    array('code'=>'order','name'=>'订单管理','url'=>'/Sales/myorder.html?menucode=order','next'=>array(
 					array('id'=>'Salesmyorder','name'=>'全部订单','url'=>'/Sales/myorder.html','next'=>array(
@@ -96,5 +129,6 @@ return array(
 					array('id'=>'Accountadd','name'=>'添加账户','url'=>'/Account/add.html'),
 					array('id'=>'AccountaccountList','name'=>'账号管理','url'=>'/Account/accountList.html'),
 			)),
+
 	),
 );

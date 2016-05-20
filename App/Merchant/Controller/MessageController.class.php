@@ -215,12 +215,18 @@ class MessageController extends MerchantController {
 			$data['av_etime'] = isset($_POST['e']) && !empty($_POST['e']) ? strip_tags($_POST['e']) : date('Y-m-d H:i:s', strtotime('+7 days'));
 			$data['av_jid'] = $this->jid;
 			$data['av_mid'] = $this->mid;
-			if(!$data['av_title'] || !$data['av_img'] || !$data['av_jid'] || !$data['av_mid']) exit('0');
-			if( $this->type != 1 ) {
-				$data['av_sid'] = ','.$this->tsid.',';
-			} else {
-				$data['av_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+			$data['av_cid'] = I('cid',0);
+			if (I('dtype') == 1) {
+				if(!$data['av_title'] || !$data['av_img'] || !$data['av_jid'] || !$data['av_mid']) exit('0');
+				if( $this->type != 1 ) {
+					$data['av_sid'] = ','.$this->tsid.',';
+				} else {
+					$data['av_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+				}
+			}else{
+				$data['av_sid'] = I('d',0);
 			}
+			
 			exit( M('active')->add($data) ? "1" : "0" );
 		} else {
 			//如果是 商家登录（品牌），先要判断此商家有没有分店
@@ -229,6 +235,10 @@ class MessageController extends MerchantController {
 				if( !is_array($splist) || empty($splist) ) $this->error('您还没有一个分店，请先添加分店！');
 				$this->assign('splist', $splist);
 			}
+
+			$this->assign('dtype', I('dtype',1,'intval'));
+			$this->assign('sid', I('sid',0));
+			$this->assign('cid', I('cid',0));
 			$this->display();
 		}
 	}
@@ -252,9 +262,12 @@ class MessageController extends MerchantController {
 			$data['av_jid'] = $this->jid;
 			$data['av_mid'] = $this->mid;
 			if(!$data['av_title'] || !$data['av_img'] || !$data['av_jid'] || !$data['av_mid']) exit('0');
-			if( $this->type == 1 ) {
-				$data['av_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+			if (I('dtype') == 1) {
+				if( $this->type == 1 ) {
+					$data['av_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
+				}
 			}
+			
 			exit( M('active')->where(array('av_id'=>I('post.id', 0, 'intval')))->save($data) !== false ? "1" : "0" );
 		} else {
 			//如果是 商家登录（品牌），先要判断此商家有没有分店
@@ -266,6 +279,8 @@ class MessageController extends MerchantController {
 			$acinfo = M('active')->where(array('av_id'=>I('get.id', 0, 'intval')))->find();
 			if( !is_array($acinfo) || empty($acinfo) || $acinfo['av_jid'] != $this->jid ) E('你无权查看当前页面！');
 			$this->assign('avinfo', $acinfo);
+			$this->assign('sid', I('sid',0));
+			$this->assign('dtype', I('dtype',1,'intval'));
 			$this->display();
 		}
 	}

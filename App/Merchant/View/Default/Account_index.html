@@ -20,7 +20,8 @@ input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; 
                 <label>职务</label> <span>{$m_info.job}</span>
             </div>
             <div class="set">
-                <label>手机</label> <input type="text" name="tphone" value="{$m_info.tphone}" id="tphone">
+                <label>手机</label> <input type="text" name="tphone" value="{$m_info.tphone}" id="tphone" disabled>
+                 <input type="button" value="修改" class="btn btn-pwd" onClick="location.href='/Index/bindtel.html'">
             </div>
             <div class="set">
                 <label>性别</label> <input <if condition="$m_info.sex eq '男'">checked</if> type="radio" name="sex" value="男" id="sex">男 

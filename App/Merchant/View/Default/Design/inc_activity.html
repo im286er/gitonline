@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://sj.dishuos.com/Manage/template.html -->
+<html lang="en" ng-app="app" ng-controller="AppCtrl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>网页配置中心</title>
+<link href="__PUBLIC__/Merchant/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<!--[if lt IE 9]>
+  <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]--> 
+</head>
+<body>
+ 
+<div class="container-fluid edit-data" >
+<br />
+<form class="form-horizontal" method="post" action="__ACTION__" enctype='multipart/form-data'>
+    <h3></h3>
+    <div class="form-group">
+        <label for="height" class="col-sm-2 control-label">名称：</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control"  placeholder="名称" value="{$info.cname}" name="cname">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="cid" value="{$cid}" id="cid" />
+            <input type="hidden" name="sid" value="{$sid}" id="sid" />
+            <button type="submit" class="btn btn-default"> 修 改 </button>
+            <button type="button" class="btn btn-default" id="close"> 关 闭 </button>
+        </div>
+    </div>
+</form>
+</div> 
+
+<script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+<script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript"> 
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+function uploadImageFun(id) {
+    editor.loadPlugin('image', function() {
+        editor.plugin.imageDialog({
+            showRemote:false, 
+            clickFn:function(url, title, width, height, border, align) {
+                $('#UPLOAD_'+id+'_VALUE').val(url); editor.hideDialog();
+            }
+        });
+        $(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：180 * 180，图片格式为 jpg,jpeg,png</div>');
+    }); 
+}
+$(function(){ 
+	$("#close").on("click",function(){
+        window.parent.closelayer();  
+    });
+})
+</script>
+</body>
+</html>

@@ -92,7 +92,7 @@ class PrintModel extends Model {
 		//优先使用商品里的打印机设置 ,如果没有使用分类的
 		$goods_info = M('goods')->field("cid,printid")->where(array('gid'=>$gid))->find();
 		if(empty($goods_info['printid'])){
-			$print = M('class')->where(array('cid'=>$goods_info['cid']))->getField('print_id');
+			$print = M('category')->where(array('id'=>$goods_info['cid']))->getField('print_id');
 		}else{
 			$print = $goods_info['printid'];
 		}

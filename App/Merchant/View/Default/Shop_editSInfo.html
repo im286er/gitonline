@@ -1,0 +1,58 @@
+<extend name="Public:partial"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<style type="text/css">.modal-content .set > input[type="text"] { width:260px; }</style>
+<div class="reveal-modal" style="display:block; border:none;">
+    <h3>编辑信息 <span class="close" id="AddMenu_close">×</span></h3>
+    <div class="modal-content">
+        <div class="text-center  Sort">        
+           	电话: <input type="text" value="{$sinfo.mservetel}" style="width:224px;" id="mservetel">   
+        </div>
+        <div class="text-center  Sort">        
+           	QQ: <input type="text" value="{$sinfo.qq}" style="width:224px;" id="qq">    
+        </div>
+        <div class="text-center  Sort">        
+           	微信: <input type="text" value="{$sinfo.weixin_name}" style="width:224px;" id="weixin_name">      
+        </div>       
+        <div class="text-center Sort">
+        <input type="button" value="保存" class="btn btn-pwd" id="AddMenu_Save">
+            <input type="button" value="取消" class="btn btn-hui" id="AddMenu_Cancl">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	
+	
+	//取消或关闭
+	$("#AddMenu_close,#AddMenu_Cancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
+	})
+	
+	//提交信息
+	$("#AddMenu_Save").click(function() {
+		var sid = '{$sinfo.sid}';
+		var mservetel = $('#mservetel').val();
+		var qq  = $('#qq').val();
+		var weixin_name = $('#weixin_name').val();
+		
+		if(mservetel == ''){
+			alert('请输入服务电话');
+			return false;
+		}
+		
+		$.post('__ACTION__', {mservetel:mservetel,qq:qq,weixin_name:weixin_name,sid:sid}, function(data) {
+			if( parseInt(data) != 0 ) {
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				window.parent.document.getElementById('silver').style.display = "block";
+			} else { alert("编辑失败"); }
+		})
+	})
+});
+</script>
+</block>

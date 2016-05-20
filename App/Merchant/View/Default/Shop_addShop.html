@@ -21,58 +21,27 @@ select {
     <div class="mian padding">
          <form action="__ACTION__" method="post" onsubmit="return checkForm();">   
             <div class="set">
-                <label>门店名称</label><input type="text" name="info[sname]" placeholder="请输入门店名称" id="sname">
+                <label><font color="red">*</font>店铺名称</label><input type="text" name="info[sname]" placeholder="请输入店铺名称" id="sname">
             </div>
             <div class="set">
-                <label>联系姓名</label><input type="text" name="info[scontactsname]" placeholder="请输入联系人姓名">
+                <label><font color="red">*</font>logo标志</label>
+                <input type="text" name="info[logo]" id="UPLOAD_LOGO_VALUE" placeholder="请上传logo" readonly="readonly">
+                <input type="button" onclick="uploadImageFun('LOGO')" value="上传logo" class="btn btn-pwd" />
             </div>
             <div class="set">
-                <label>联系电话</label><input type="text" name="info[scontactstel]" placeholder="请输入联系人电话">
+                <label><font color="red">*</font>服务热线</label><input type="text" name="info[mservetel]" placeholder="请输入服务热线">
             </div>
             <div class="set">
-                <label>销售电话</label><input type="text" name="info[msaletel]" placeholder="请输入销售电话">
+                <label>一级域名</label><input type="text" name="info[domain]" placeholder="请输入一级域名" id="domain">
+                <input type="button" onclick="cx();" value="查询" class="btn btn-pwd" />
+                <input type="button" onclick="sq();" value="申请" class="btn btn-pwd" />
+              <font color="red">正确的域名格式为: 名称.后缀 例如:163.com</font>  
             </div>
             <div class="set">
-                <label>客服电话</label><input type="text" name="info[mservetel]" placeholder="请输入客服电话">
-            </div>
-			<div class="set">
-                <label>所在区域</label>
-                <select id="SelectScity" name="info[province]">
-                	<option value="">请选择区域省份</option>
-                    <volist name='addressList' id='vo'>
-                    <if condition="$vo['apid'] eq 0 AND  $vo['aid'] neq 0"><option value="{$vo.aid}">{$vo.aname}</option></if>
-                    </volist>
-                </select>
-            	<select id="SelectHcity" style="display:none;" name="info[city]"></select>
-                <select id="SelectQcity" style="display:none;" name="info[district]"></select>
+                <label><font color="red">*</font>门店地址</label><input type="text" name="info[saddress]" placeholder="请输入门店地址">
             </div>
             <div class="set">
-                <label>门店地址</label><input type="text" name="info[saddress]" placeholder="请输入门店地址">
-            </div>
-            <div class="set">
-                <label>门店门景</label>
-                <input type="text" name="info[exterior]" id="UPLOAD_EXTERIOR_VALUE" placeholder="请上传门店门景图" readonly="readonly">
-                <input type="button" onclick="uploadImageFun()" value="上传门景" class="btn btn-pwd" />
-            </div>
-            <div class="set">
-                <label>店内座位号</label> <input type="text" name="info[seatlist]" placeholder="请输入座位号"><br />
-                <p style="margin-left:44px; color:red;">温馨提示： 多个座位之前以英文","分隔，如： 1号,2号,3号,4号</p>
-            </div>
-            <div class="set">
-                <label>门店简介</label><textarea name="info[mexplain]" placeholder="请输入门店简介" style="width:320px; height:70px; resize:none;"></textarea>
-            </div>
-            <div class="set">
-                <label>登录账号</label><input type="text" name="memb[mname]" placeholder="用于登录管理平台" autocomplete="off" >
-            </div>
-            <div class="set">
-                <label>登录密码</label><input type="text" name="memb[mpwd]" placeholder="用于登录管理平台" autocomplete="off"  onfocus="this.type='password'">
-            </div>
-            <div class="set">
-                <label>APP客服</label><input type="text" value="" name="info[servernum]" placeholder="门店APP客服数量,请填写1-9。"><br />
-                <p style="margin-left:44px; color:red;">填写3,代表3个客服。例如：登录帐号为：dishu,客服帐号为：dishu:1,dishu:2,dishu:3,客服登录商家APP和分店密码相同。</p>
-            </div>
-            <div class="set">
-                <label>门店坐标</label><input type="text" name="coordinates" placeholder="请在下方地图查找标注" autocomplete="off" id="coordinates"  readonly = "readonly" style="background:#eeeeee;">
+                <label><font color="red">*</font>门店坐标</label><input type="text" name="coordinates" placeholder="请在下方地图查找标注" autocomplete="off" id="coordinates"  readonly = "readonly" style="background:#eeeeee;">
             </div>
             <div class="set">
 				<label>您的门店地图</label>
@@ -84,24 +53,77 @@ select {
 			var mapx = '';
 			ShowMap("map1",{ismove:'1',mapx:mapx,piobj:'coordinates'});
 			</script>
+			<div class="set">
+                <label>起送价</label><input type="text" name="info[qsj]" placeholder="请输入起送价">元
+            </div>
+            <div class="set">
+                <label>配送价</label><input type="text" name="info[psj]" placeholder="请输入配送价">元
+            </div>
+            <div class="set">
+                <label>平均配送时间</label><input type="text" name="info[ps_time]" placeholder="请输入平均配送时间">分钟
+            </div>
+             <div class="set">
+                <label>营业时间</label><input type="text" name="info[yy_stime]" id="yy_stime"> - <input type="text" name="info[yy_etime]" id="yy_etime">
+              <font color="red"> 正确的时间格式为:  HH.MM     例如:05.05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>商家信息</label><textarea name="info[mexplain]"></textarea>
+			</div>
+            <div class="set">
+                <label>白班时间</label><input type="text" name="info[bb_stime]" id="bb_stime"> - <input type="text" name="info[bb_etime]" id="bb_etime">
+            <font color="red"> 正确的时间格式为:  HH.MM     例如:05.05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>晚班时间</label><input type="text" name="info[wb_stime]" id="wb_stime"> - <input type="text" name="info[wb_etime]" id="wb_etime">
+            <font color="red"> 正确的时间格式为:  HH.MM     例如:05.05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>营业执照</label><input type="text" name="info[license]" id="UPLOAD_license_VALUE" placeholder="请上传营业执照" readonly="readonly">
+                <input type="button" onclick="uploadImageFun('license')" value="上传营业执照" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>餐饮服务许可证</label><input type="text" name="info[permit]" id="UPLOAD_permit_VALUE" placeholder="请上传餐饮服务许可证" readonly="readonly">
+                <input type="button" onclick="uploadImageFun('permit')" value="上传许可证" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>微信公众号</label><input type="text" name="info[weixin_name]" placeholder="请输入微信公众号">
+            </div>
+            <div class="set">
+                <label>二维码</label><input type="text" name="info[weixin_pic]" id="UPLOAD_weixin_pic_VALUE" placeholder="请上传二维码" readonly="readonly">
+                <input type="button" onclick="uploadImageFun('weixin_pic')" value="上传二维码" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>QQ</label><input type="text" name="info[qq]" placeholder="请输入QQ">
+            </div>
+            <div class="set">
+                <label>状态</label><input type="radio" name="info[is_show]" checked value="1">显示  <input type="radio" name="info[is_show]" value="0">隐藏
+            </div>
+ 
             <div class="set top">
                 <input type="submit" class="btn btn-pwd" value="确认">
                 <input type="button" class="btn btn-hui" value="修改">
             </div>
         </form>
 <script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
 <script type="text/javascript">
+//Calendar.setup({ inputField:"yy_stime", trigger:"yy_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"yy_etime", trigger:"yy_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"bb_stime", trigger:"bb_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"bb_etime", trigger:"bb_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"wb_stime", trigger:"wb_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"wb_etime", trigger:"wb_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
 var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
 
-function uploadImageFun() {
+function uploadImageFun(id) {
 	editor.loadPlugin('image', function() {
 		editor.plugin.imageDialog({
 			showRemote:false, 
 			clickFn:function(url, title, width, height, border, align) {
-				$('#UPLOAD_EXTERIOR_VALUE').val(url); editor.hideDialog();
+				$('#UPLOAD_'+id+'_VALUE').val(url); editor.hideDialog();
 			}
 		});
-		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：640 * 379，图片格式为 jpg,jpeg,png</div>');
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：180 * 180，图片格式为 jpg,jpeg,png</div>');
 	});	
 }
 </script>
@@ -109,61 +131,58 @@ function uploadImageFun() {
 <script type="text/javascript">
 var reg=/^0?1[3|4|5|7|8][0-9]\d{8}$/;
 var filter=/^((0\d{2,3})-)(\d{7,8})$/;
+var ttt = /^(([0-1]\d)|(2[0-4])|([0-9])).[0-5]\d$/;
 function checkForm(){
 	var sname=$("#sname").val();
-	var scontactsname=$("input[name='info[scontactsname]']").val();
-	var scontactstel=$("input[name='info[scontactstel]']").val();
+	var logo=$("input[name='info[logo]']").val();
 	var mservetel=$("input[name='info[mservetel]']").val();
-	var msaletel=$("input[name='info[msaletel]']").val();
 	var saddress=$("input[name='info[saddress]']").val();
-	var mexplain=$("input[name='info[mexplain]']").val();
-	var mname=$("input[name='memb[mname]']").val();
-	var mpwd=$("input[name='memb[mpwd]']").val();
-	var servernum=$("input[name='info[servernum]']").val();
 	var coordinates=$("#coordinates").val();
+	
+	
 	if(sname==""){alert("门店名称不能为空！");return false;}
-	if(scontactsname==""){alert("联系人不能为空！");return false;}
-	if(scontactstel==""){alert("联系电话不能为空！");return false;}
-	 //联系电话格式
-
-	if(reg.test(scontactstel)==false){
-		
-		var ptel=filter.test(scontactstel); 
-		if(ptel==false){
-			//alert("联系电话格式错误");
-			//return false;	   
-		}
-	 }
-
-	if(mservetel==""){alert("销售电话不能为空！");return false;}
- //服务电话格式
-   	if(reg.test(mservetel)==false){
-	    //var ptel=filter.test(mservetel);
-		if(ptel==false){
-			//alert("销售电话格式错误");return false;    
-		}
-		
-	}
-	if(msaletel==""){alert("服务电话不能为空！");return false;}
-	if(msaletel==""){return false;}
- //销售电话格式
-   	 if(reg.test(msaletel)==false){
-		//var ptel=filter.test(msaletel);
-		if(ptel==false){
-				//alert("服务电话格式错误");return false;    
-		}
-		
-	}
-
-	var city = $("#SelectScity").val();
- 	if(city==""){alert("所在区域不能为空！");return false;}	
-
-	if(saddress==""){alert("门店地址不能为空！");return false;}	
-	if(mexplain==""){alert("门店简介不能为空！");return false;}
-	if(mname==""){alert("门店管理账户不能为空！");return false;}
-	if(mpwd==""){alert("门店管理密码不能为空！");return false;}
-	if(servernum != ''){if(servernum>10){alert("客服数量最多为10人！");return false;}}
+	if(logo==""){alert("logo不能为空！");return false;}
+	if(mservetel==""){alert("服务热线不能为空！");return false;}
+	if(saddress==""){alert("门店地址不能为空！");return false;}
 	if(!coordinates){alert("门店地图没有标注哦！");return false;}
+	
+	var yy_stime = $("#yy_stime").val();
+	if(yy_stime){
+		if(!ttt.test(yy_stime)){
+			alert("营业开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var yy_etime = $("#yy_etime").val();
+	if(yy_etime){
+		if(!ttt.test(yy_etime)){
+			alert("营业结束时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var bb_stime = $("#bb_stime").val();
+	if(bb_stime){
+		if(!ttt.test(bb_stime)){
+			alert("白班开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var bb_etime = $("#bb_etime").val();
+	if(bb_etime){
+		if(!ttt.test(bb_etime)){
+			alert("白班结束时间时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var wb_stime = $("#wb_stime").val();
+	if(wb_stime){
+		if(!ttt.test(wb_stime)){
+			alert("晚班开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var wb_etime = $("#wb_etime").val();
+	if(wb_etime){
+		if(!ttt.test(wb_etime)){
+			alert("晚班结束时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	
 	return true;
 }
 var guide = "{$guide}";
@@ -215,6 +234,42 @@ function SetAddressValue() {
 	} else {
 		$("#ShopScity").val($("#SelectScity").val());	
 	}*/
+}
+function cx(){
+	var domain = $("#domain").val();
+	if(domain == ''){
+		alert('请输入要查询的域名');
+		return false;
+	}
+	var strs = new Array();
+	strs = domain.split(".");
+	var root = strs[0];
+	var ext  = '';
+	for (i=1;i<strs.length ;i++ )
+	{
+		ext += '.' + strs[i];
+	}
+	
+	$.post('/Shop/cx.html', {root:root,ext:ext}, function(data) {
+		if(data == '1'){
+			alert('此域名可以申请');
+		}else if(data == '2'){
+			alert('此域名无法申请');
+		}else{
+			alert('查询失败,请检查输入域名是否正确');
+		}
+	})
+	
+}
+
+function sq(){
+	var domain = $("#domain").val();
+	if(domain == ''){
+		alert('请输入要查询的域名');
+		return false;
+	}
+	var url = 'http://ym.azding.net/login.asp?UL=pbuy1.asp_dname='+domain;
+	window.open(url);
 }
 </script>
     </div>

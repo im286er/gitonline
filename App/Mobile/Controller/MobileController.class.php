@@ -3,16 +3,46 @@ namespace Mobile\Controller;
 use Think\Controller;
 
 class MobileController extends Controller {
-	protected $jid, $sid, $mid,$localExamine,$isApp;
+	protected $jid, $sid, $mid,$localExamine,$isApp,$isnewTheme;
 	
 	public function _initialize() {
+		$jid = intval(I('get.jid',0)) > 0 ? intval(I('get.jid',0)) : cookie('jid');
+		$jj  = M("merchant")->where(array('jid'=>$jid))->getField('jid');
+		if($jj){
+			$this->jid = $jid;
+			if($jid != cookie('jid')){
+				cookie('jid',$jid,1000000);
+				cookie('sid',null);
+			}
+		}else{
+			$this->display('Error:404');
+			exit;
+		}
+		$sid = intval(I('get.sid',0)) > 0 ? intval(I('get.sid',0)) : cookie('sid');
+		$ss = M('shop')->where(array('jid'=>$this->jid,'sid'=>$sid))->getField('sid');
+		if(empty($ss) && empty($sid)){
+			$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+			$sid = $ss = key($shops);
+		}
+		if($ss){
+			$this->sid = $sid;
+			if($sid != cookie('sid')){
+				cookie('sid',$sid,1000000);
+				cookie('ProductList',null);
+				session('table',null);
+			}
+		}else{
+			$this->display('Error:404');
+			exit;
+		}
 		
-		//如果不存在 JID 参数，则跳转到官网
-		if(I('get.jid') != cookie('jid') && I('get.jid') && intval(I('get.jid')))
-		cookie('jid',I('get.jid'),1000000);
-		cookie('jid') or redirect("http://www.dishuos.com/");
+		$table = I('table',0);//桌号
+		if($table){
+			session('table',$table);
+		}
 		
-		$this->jid = cookie('jid');
+		//cookie('sid') or redirect("http://www.dishuos.com/");
+		
 		$j = M("merchant")->where(array('jid'=>$this->jid))->find();
 		$this->assign('head_style', $this->head_style_control($j['theme']));
 
@@ -31,16 +61,7 @@ class MobileController extends Controller {
 			file_put_contents($settingpath, serialize( $setting ));
 		}
 		
-
-		//print_r($j);
-		if(!$j){
-			redirect("http://www.dishuos.com/");
-		}
-		
-		
 		cookie('clientid',I('get.clientid'),1000000);
-		
-		$this->sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 		
 		if($this->sid > 0){
 			$s = M('shop')->where(array('sid'=>$this->sid,'status'=>'1'))->find();
@@ -61,7 +82,11 @@ class MobileController extends Controller {
 			}
 		}
 
-
+		if($s['theme']=='new1' || $s['theme']=='new2'){
+			$this->isnewTheme = 1;
+		}else{
+			$this->isnewTheme = 0;
+		}
 
 		//判断是通过全民返利过来的	
 		if(I('get.opentype')=='flapp'){
@@ -112,8 +137,9 @@ class MobileController extends Controller {
 		}else{
 			$this->isApp = 0;
 		}
+		
 		$this->assign('action_name',ACTION_NAME);
-		$this->assign('controller_name');
+		$this->assign('controller_name',CONTROLLER_NAME);
 		$this->assign('isApp',$this->isApp);
 		$this->assign('mid',$this->mid);
 	}
@@ -169,5 +195,51 @@ class MobileController extends Controller {
 		if($list[$theme])return $list[$theme];
 		return false;
 	}
+
+
+	//功能按钮
+	public function funcMenu(){
+		$sid      = I('sid',$this->sid);
+		$theme    = M('shop')->where(array('sid'=>$sid))->getField('theme');
+		$category = M('category')->alias('c')->join('azd_module m on c.model=m.module_sign')->where(array('c.sid'=>$sid, 'c.status'=>1, 'c.jid'=>$this->jid))->field('c.*,m.module_link')->order('c.corder')->select();
+		foreach($category as $k=>$v){
+			$category[$k]['url'] = $v['module_link'].'cid/'.$v['id'].'/sid/'.$sid.'.html';
+		}
+		//背景图
+		// $backImg = M('BackImg')->where(array('b_sid'=>$sid))->find();
+		$backImg = M('shop')->field('img_url,img_height')->where(array('sid'=>$sid))->find();
+		//分类名称
+		$cname   = M('category')->where(array('id'=>I('cid',0), 'status'=>1, 'jid'=>$this->jid))->getField('cname');
+		//客服电话
+		$info = M('shop')->field('qq,mservetel')->where(array('sid'=>$sid))->find();
+		if ($info['qq']) {
+			$link = "http://wpa.qq.com/msgrd?v=3&uin=".$info['qq']."&site=qq&menu=yes";
+		}else{
+			$link = "tel:".$info['mservetel']."";
+		}
+		//商铺列表
+		$shop_list = M('shop')->field('sid,sname')->where(array('jid'=>$this->jid))->select(); 
+
+		$this->assign('shop_list', $shop_list);
+		$this->assign('cname', $cname);
+		$this->assign('link', $link);
+		$this->assign('category', $category);
+		$this->assign('backImg', $backImg);
+	}
+
+
+
+	//新模板渲染
+	public function newdisplay(){
+		$sid     = $this->sid == '0' ? I('sid','95') : $this->sid;
+
+		$tpl_name = M('shop')->where(array('sid'=>$sid))->getField('theme');
+
+		$this->assign('tpl_name', $tpl_name);
+		
+		$this->theme($tpl_name)->display();
+	}
+
+
 	
 }

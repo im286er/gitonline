@@ -1,4 +1,4 @@
-function edit(type,id)
+function edit(type,id,sid,cid)
 {
 	 
 	if(type == "banner")
@@ -10,12 +10,134 @@ function edit(type,id)
 	}else if(type == "indexprolist")
 	{
 		editindexprolist(type,id);
+	}else if(type == "shop"){
+		editshop(type,id);
+	}else if (type == "class") {
+		editclass(type,id,sid,cid);
 	}
+}
+
+
+function edititem(type,id,action,sid,cid)
+{
+	if(type == "indexproone"){
+		/*代码省略,和edit一样，或者直接ajax处理 */
+		if (action == 'edit') {
+			editGoods(type,id,sid);
+		}else if (action == 'add') {
+			addGoods(type,id,sid,cid);
+		}
+	}else if (type == "activity") {
+		if (action == 'edit') {
+			editActivity(type,id,sid);
+		}else if (action == 'add') {
+			addActivity(type,id,sid,cid);
+		}
+	}else if (type == "coupon") {
+		if (action == 'edit') {
+			editCoupon(type,id,sid);
+		}else if (action == 'add') {
+			addCoupon(type,id,sid,cid);
+		}
+	}
+
+	
+}
+
+
+
+var layerid = null;
+
+function editCoupon(type,id,sid){
+	var content = "/Sales/editjq/dtype/2/sid/"+sid+"/id/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改优惠券',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+function addCoupon(type,id,sid,cid){
+	var content = "/Sales/addjq/dtype/2/cid/"+cid+"/sid/"+sid+"/id/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '添加优惠券',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+
+function editActivity(type,id,sid){
+	var content = "/Message/editdh/dtype/2/sid/"+sid+"/id/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改活动',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+function addActivity(type,id,sid,cid){
+	var content = "/Message/addhd/dtype/2/cid/"+cid+"/sid/"+sid+"/id/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '添加活动',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+function editGoods(type,id,sid){
+	var content = "/Sales/editGoods/dtype/2/sid/"+sid+"/gid/"+id+"/pg/.html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改商品',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+function addGoods(type,id,sid,cid){
+	var content = "/Sales/addGoods/dtype/2/sid/"+sid+"/cid/"+cid+"/ctype/1.html";
+	
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改商品',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
 }
 
 function editbanner(type,id)
 {
-	 layer.open({
+	var content = $('#banner_url').val();
+	layerid = layer.open({
         type: 2,
         skin: 'layui-layer-lan',
         title: '修改背景图',
@@ -23,14 +145,15 @@ function editbanner(type,id)
         shadeClose: false,
         maxmin: false,
         area: ['400px', '500px'],
-        content: 'inc_banner.html' 
+        content: content
     });
 
 }
 
 function editmenu(type,id)
 {
-	  layer.open({
+	var content = $('#menu_url').val();
+	layerid =  layer.open({
         type: 2,
         skin: 'layui-layer-lan',
         title: '修改菜单',
@@ -38,14 +161,15 @@ function editmenu(type,id)
         shadeClose: false,
         maxmin: false,
         area: ['800px', '500px'],
-        content: 'inc_menu.html' 
+        content: content
     });
 
 }
 
 function editindexprolist(type,id)
 {
-	  layer.open({
+	var content = $('#prolist_url').val();
+	layerid =  layer.open({
         type: 2,
         skin: 'layui-layer-lan',
         title: '修改首页推荐产品',
@@ -53,15 +177,57 @@ function editindexprolist(type,id)
         shadeClose: false,
         maxmin: false,
         area: ['500px', '500px'],
-        content: 'inc_indexprolist.html' 
+        content: content
     });
 
+}
+
+function editshop(type,id)
+{
+	var content = $('#shop_url').val();
+	layerid =  layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改商家信息',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['500px', '500px'],
+        content: content
+    });
+
+}
+
+function editclass(type,id,sid,cid)
+{
+	// var content = $('#activity_url').val();
+	var content = "/Design/inc_class/sid/"+sid+"/cid/"+cid+".html";
+	layerid =  layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改商家信息',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['500px', '500px'],
+        content: content
+    });
+
+}
+
+function closelayer()
+{
+	if(layerid != null)
+	{
+		layer.close(layerid);
+	}
 }
 
 function setPage()
 {
 	
 	$('#mobanBtn').bind('click',function(){
+		
 		$('#mobanBtn').css({'background-color':'#f1f1f1','color':'#000'})
 		
 		$('#mobanBtn').parent().siblings().children('label').css({'background-color':'#949494','color':'#fff'})
@@ -72,7 +238,9 @@ function setPage()
 		
 		$('.gongneng-div-content').hide()
 			
-		$(".nano").nanoScroller();
+		//$(".nano").nanoScroller();
+		
+		setCookie('defaultpage', 'mobanBtn', 1);
 	})
 	
 	$('#lanMuBtn').bind('click',function(){
@@ -87,7 +255,9 @@ function setPage()
 		
 		$('.gongneng-div-content').hide()
 		
-		$(".nano").nanoScroller();
+		//$(".nano").nanoScroller();
+		
+		setCookie('defaultpage', 'lanMuBtn', 1);
 	})
 	
 	$('#gongNengBtn').bind('click',function(){
@@ -102,7 +272,9 @@ function setPage()
 		
 		$('.gongneng-div-content').show()
 		
-		$(".nano").nanoScroller();
+		//$(".nano").nanoScroller();
+		
+		setCookie('defaultpage', 'gongNengBtn', 1);
 	})
 	
 	

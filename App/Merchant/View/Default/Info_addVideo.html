@@ -58,6 +58,7 @@ $(function() {
 	$("#AddMenu_close,#AddMenu_Cancl").click(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
 	})
 	
 	//上传图片
@@ -111,6 +112,7 @@ $(function() {
 			if( data.msg == '') {
 				InsertVideo(data.info, 'a', 'p'); var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				window.parent.document.getElementById('silver').style.display = "block";
 			} else { alert( data.msg ); }
 		})
 	})

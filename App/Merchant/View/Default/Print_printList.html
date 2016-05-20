@@ -17,11 +17,13 @@ var DeleteInfoUrlPath	= '{:U("/Print/delPrint@sj", "", true, true)}';
     <h2 class="title"><php>echo $shops[$sid]?$shops[$sid]:'';</php></h2> 
     
     <div class="border-b"></div>
-	<eq name="type" value="1">
-        <h2 class="shops">选择门店：
-            <volist name="shops" id="vo"><span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="{:U('print/printList',array('sid'=>$key))}">{$vo}</a></span></volist>
-        </h2>
-	</eq>
+	<h2 class="shops">选择门店：
+	
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
+	</volist>
+</h2>
     <div class="mian padding">
         <div class="border">
             <div class="clearfix border-b">

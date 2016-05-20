@@ -1,7 +1,10 @@
 <extend name="Public:common"/>
 <block name="body">
 <import type='js' file="Js.bdMap" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
 <style type="text/css">
+input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; line-height:32px; padding-left:8px; width:320px; }
 select {
     background: #f9f9f9 none repeat scroll 0 0;
     border-color: #666666 #cccccc #cccccc #666666;
@@ -13,185 +16,184 @@ select {
 	height: 32px;
 }
 </style>
-<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
 <div class="wrapper">
-    <h2 class="title">分店管理/修改门店<input type="button" value="<返回" onClick="window.location.href='{:U('/Shop/index', '', true)}'"></h2>
+    <h2 class="title">分店管理/添加分店<input type="button" value="<返回" onClick="window.location.href='{:U('/Shop/index', '', true)}'"></h2>
     <div class="mian padding">
-            <form action="__ACTION__" method="post" onsubmit="return checkForm();">    
-        	<input type="hidden" value="{$shop.sid}" name="info[sid]">
-			<input type="hidden" value="{$shop.jid}" name="info[jid]">
+         <form action="__ACTION__" method="post" onsubmit="return checkForm();">   
             <div class="set">
-                <label>门店名称</label><input type="text" value="{$shop.sname}" name="info[sname]" placeholder="请输入门店名称">
+                <label><font color="red">*</font>店铺名称</label><input type="text" name="info[sname]" placeholder="请输入店铺名称" id="sname" value="{$shop.sname}">
             </div>
             <div class="set">
-                <label>联系姓名</label><input type="text" value="{$shop.scontactsname}" name="info[scontactsname]" placeholder="请输入联系人姓名">
+                <label><font color="red">*</font>logo标志</label>
+                <input type="text" name="info[logo]" id="UPLOAD_LOGO_VALUE" placeholder="请上传logo" readonly="readonly" value="{$shop.logo}">
+                <input type="button" onclick="uploadImageFun('LOGO')" value="上传logo" class="btn btn-pwd" />
+                <img src="{$shop.logo}" style="width:100px;height:100px;" />
             </div>
             <div class="set">
-                <label>联系电话</label><input type="text" value="{$shop.scontactstel}" name="info[scontactstel]" placeholder="请输入联系人电话">
+                <label><font color="red">*</font>服务热线</label><input type="text" name="info[mservetel]" placeholder="请输入服务热线" value="{$shop.mservetel}">
             </div>
             <div class="set">
-                <label>销售电话</label><input type="text" value="{$shop.msaletel}" name="info[msaletel]" placeholder="请输入销售电话">
+                <label>一级域名</label><input type="text" name="info[domain]" placeholder="请输入一级域名" value="{$shop.domain}">
             </div>
             <div class="set">
-                <label>客服电话</label><input type="text" value="{$shop.mservetel}" name="info[mservetel]" placeholder="请输入客服电话">
+                <label><font color="red">*</font>门店地址</label><input type="text" name="info[saddress]" placeholder="请输入门店地址" value="{$shop.saddress}">
             </div>
             <div class="set">
-                <label>所在区域</label>
-                <select id="SelectScity" name="info[province]">
-                	<option value="">请选择区域省份</option>
-                    <volist name='addressList' id='vo'>
-                    <if condition="$vo['apid'] eq 0 AND  $vo['aid'] neq 0"><option value="{$vo.aid}" <if condition="$vo[aid] eq $shop[province]">selected</if>>{$vo.aname}</option></if>
-                    </volist>
-                </select>
-            	<select id="SelectHcity" name="info[city]">
-            	 <volist name='address1' id='vo1'>
-                    <option value="{$vo1.aid}" <if condition="$vo1[aid] eq $shop[city] || $vo1[aid] eq $shop[district]">selected</if>>{$vo1.aname}</option>
-                    </volist>
-            	</select>
-            	
-                <select id="SelectQcity" <if condition="$address2"><else />style="display:none;"</if>，  name="info[district]">
-                <volist name='address2' id='vo2'>
-                    <option value="{$vo2.aid}" <if condition="$vo2[aid] eq $shop[district]">selected</if>>{$vo2.aname}</option>
-                    </volist>
-                </select>
+                <label><font color="red">*</font>门店坐标</label><input type="text" name="coordinates" placeholder="请在下方地图查找标注" autocomplete="off" id="coordinates"  readonly = "readonly" style="background:#eeeeee;" value="{$shop.lng},{$shop.lat}">
             </div>
             <div class="set">
-                <label>门店地址</label><input type="text" value="{$shop.saddress}" name="info[saddress]" placeholder="请输入门店地址">
-            </div>
-            <div class="set">
-                <label>门店门景</label>
-                <input type="text" value="{$shop.exterior}" name="info[exterior]" id="UPLOAD_EXTERIOR_VALUE" placeholder="请上传门店门景图" readonly="readonly">
-                <input type="button" onclick="uploadImageFun()" value="上传门景" class="btn btn-pwd" />
-            </div>
-            
-            <div class="set">
-                <label>店内座位号</label> <input type="text" name="info[seatlist]" value="{$shop.seatlist}" placeholder="请输入座位号"><br />
-                <p style="margin-left:44px; color:red;">温馨提示： 多个座位之前以英文","分隔，如： 1号,2号,3号,4号</p>
-            </div>
-            
-            <div class="set">
-                <label>门店简介</label><textarea name="info[mexplain]" placeholder="请输入门店简介" style="width:320px; height:70px; resize:none;">{$shop.mexplain}</textarea>
-            </div>
-            <div class="set">
-                <label>APP客服</label><input type="text" value="{$shop.servernum}" name="info[servernum]" placeholder="门店APP客服数量,请填写1-9。"><br />
-                <p style="margin-left:44px; color:red;">填写3,代表3个客服。例如：登录帐号为：dishu,客服帐号为：dishu:1,dishu:2,dishu:3,客服登录商家APP和分店密码相同。</p>
-            </div>
-            <div class="set">
-                <label>门店坐标</label><input type="text" name="coordinates" <if condition="$shop['lng'] && $shop['lat']">value="{$shop.lng},{$shop.lat}"</if> placeholder="请在下方地图查找标注" autocomplete="on" id="coordinates" readonly = "readonly" style="background:#eeeeee;">
-            </div>
-            <div class="set">
-				<label>地址模糊搜索</label>
-				<input type="text" class="dfinput " name="saddress" id="search" value="{$va.saddress}" placeholder="请手动输入方便百度地图更好的查找！" />
+				<label>您的门店地图</label>
+				<input type="text" class="dfinput " name="saddress" id="search" value="{$va.saddress}" placeholder="请手动输入方便百度地图更好的查找！" value="{$shop.saddress}" />
 				<input type="button" value="地图上找"  name="search_api" id="search_api" class="btn btn-pwd"  onClick="sear(document.getElementById('search').value);" >
 			</div>
             <div class="map top"><div id="map1" style="height:350px;width:500px;border:1px solid #bcbcbc;"> </div></div>
 			<script type="text/javascript">
-			var mapx = '<if condition="$shop['lng'] && $shop['lat']">{$shop.lng},{$shop.lat}</if>';
+			var mapx = "{$shop.lng},{$shop.lat}";
 			ShowMap("map1",{ismove:'1',mapx:mapx,piobj:'coordinates'});
 			</script>
+			<div class="set">
+                <label>起送价</label><input type="text" name="info[qsj]" placeholder="请输入起送价" value="{$shop.qsj}">元
+            </div>
+            <div class="set">
+                <label>配送价</label><input type="text" name="info[psj]" placeholder="请输入配送价" value="{$shop.psj}">元
+            </div>
+            <div class="set">
+                <label>平均配送时间</label><input type="text" name="info[ps_time]" placeholder="请输入平均配送时间" value="{$shop.ps_time}">分钟
+            </div>
+             <div class="set">
+                <label>营业时间</label><input type="text" name="info[yy_stime]" id="yy_stime" value="{$shop.yy_stime}"> - <input type="text" name="info[yy_etime]" id="yy_etime" value="{$shop.yy_etime}">
+              <font color="red"> 正确的时间格式为:  HH.MM     例如:05:05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>商家信息</label><textarea name="info[mexplain]"></textarea>
+			</div>
+            <div class="set">
+                <label>白班时间</label><input type="text" name="info[bb_stime]" id="bb_stime" value="{$shop.bb_stime}"> - <input type="text" name="info[bb_etime]" id="bb_etime" value="{$shop.bb_etime}">
+            <font color="red"> 正确的时间格式为:  HH.MM     例如:05:05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>晚班时间</label><input type="text" name="info[wb_stime]" id="wb_stime" value="{$shop.wb_stime}"> - <input type="text" name="info[wb_etime]" id="wb_etime" value="{$shop.wb_etime}">
+            <font color="red"> 正确的时间格式为:  HH.MM     例如:05:05或者14.30 </font>
+            </div>
+            <div class="set">
+                <label>营业执照</label><input type="text" name="info[license]" id="UPLOAD_license_VALUE" placeholder="请上传营业执照" readonly="readonly" value="{$shop.license}">
+                <input type="button" onclick="uploadImageFun('license')" value="上传营业执照" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>餐饮服务许可证</label><input type="text" name="info[permit]" id="UPLOAD_permit_VALUE" placeholder="请上传餐饮服务许可证" readonly="readonly" value="{$shop.permit}">
+                <input type="button" onclick="uploadImageFun('permit')" value="上传许可证" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>微信公众号</label><input type="text" name="info[weixin_name]" placeholder="请输入微信公众号" value="{$shop.weixin_name}">
+            </div>
+            <div class="set">
+                <label>二维码</label><input type="text" name="info[weixin_pic]" id="UPLOAD_weixin_pic_VALUE" placeholder="请上传二维码" readonly="readonly" value="{$shop.weixin_pic}">
+                <input type="button" onclick="uploadImageFun('weixin_pic')" value="上传二维码" class="btn btn-pwd" />
+            </div>
+            <div class="set">
+                <label>QQ</label><input type="text" name="info[qq]" placeholder="请输入QQ" value="{$shop.qq}">
+            </div>
+            <div class="set">
+                <label>状态</label><input type="radio" name="info[is_show]" <if condition="$shop.is_show eq 1">checked</if> value="1">显示  <input type="radio" name="info[is_show]" value="0" <if condition="$shop.is_show eq 0">checked</if>>隐藏
+            </div>
+ 
             <div class="set top">
+            <input type="hidden" name="info[sid]" value="{$shop.sid}" />
                 <input type="submit" class="btn btn-pwd" value="确认">
-                <input type="button" class="btn btn-hui" value="修改"> 
+                <input type="button" class="btn btn-hui" value="修改">
             </div>
         </form>
-        
 <script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
 <script type="text/javascript">
+//Calendar.setup({ inputField:"yy_stime", trigger:"yy_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"yy_etime", trigger:"yy_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"bb_stime", trigger:"bb_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"bb_etime", trigger:"bb_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"wb_stime", trigger:"wb_stime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+//Calendar.setup({ inputField:"wb_etime", trigger:"wb_etime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
 var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
 
-function uploadImageFun() {
+function uploadImageFun(id) {
 	editor.loadPlugin('image', function() {
 		editor.plugin.imageDialog({
 			showRemote:false, 
 			clickFn:function(url, title, width, height, border, align) {
-				$('#UPLOAD_EXTERIOR_VALUE').val(url); editor.hideDialog();
+				$('#UPLOAD_'+id+'_VALUE').val(url); editor.hideDialog();
 			}
 		});
-		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：640 * 379，图片格式为 jpg,jpeg,png</div>');
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：180 * 180，图片格式为 jpg,jpeg,png</div>');
 	});	
 }
 </script>
-        
-        
-        
-		<script>
+
+<script type="text/javascript">
 var reg=/^0?1[3|4|5|7|8][0-9]\d{8}$/;
-var filter=/^(([0\+]\d{2,3}-)?(0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/;
+var filter=/^((0\d{2,3})-)(\d{7,8})$/;
+var ttt = /^(([0-1]\d)|(2[0-4])|([0-9])).[0-5]\d$/;
 function checkForm(){
-var sname=$("input[name='info[sname]']").val(); 
-var scontactsname=$("input[name='info[scontactsname]']").val();
-var scontactstel=$("input[name='info[scontactstel]']").val();
-var mservetel=$("input[name='info[mservetel]']").val();
-var msaletel=$("input[name='info[msaletel]']").val();
-var saddress=$("input[name='info[saddress]']").val();
-var mexplain=$("input[name='info[mexplain]']").val();
-var mname=$("input[name='memb[mname]']").val();
-var mpwd=$("input[name='memb[mpwd]']").val();
-var servernum=$("input[name='info[servernum]']").val();
-var coordinates=$("#coordinates").val();
-if(sname==""){alert("门店名称不能为空！");return false;}
-if(scontactsname==""){alert("联系人不能为空！");return false;}
-if(scontactstel==""){alert("联系电话不能为空！");return false;}
- //联系电话格式
- 
-   	 if(reg.test(scontactstel)==false){
-			
-		   var ptel=filter.test(scontactstel); 
-		   if(ptel==false){
-			//alert("联系电话格式错误");  
-			 // return false; 
-		   }
-		
- }
-if(mservetel==""){alert("服务电话不能为空！");return false;}			
-
- //服务电话格式
-   	 if(reg.test(mservetel)==false){
-			
-		   var ptel=filter.test(mservetel);
-		   if(ptel==false){
-			//alert("服务电话格式错误");  
-			 //  return false;
-		   }
-		
-			 }
-if(msaletel==""){alert("销售电话不能为空！");return false;}
-if(msaletel==""){return false;}
- //销售电话格式
-   	 if(reg.test(msaletel)==false){
-			
-		   var ptel=filter.test(msaletel);
-		   if(ptel==false){
-			//alert("销售电话格式错误");  
-			 // return false; 
-		   }
-		
-			 }
-			 var city = $("#SelectScity").val();
-if(city==""){alert("所在区域不能为空！");return false;}	
-if(saddress==""){alert("门店地址不能为空！");return false;}	
-if(mexplain==""){alert("门店简介不能为空！");return false;}
-if(mname==""){alert("门店管理账户不能为空！");return false;}
-if(mpwd==""){alert("门店管理密码不能为空！");return false;}
-if(servernum != ''){if(servernum>10){alert("客服数量最多为10人！");return false;}}
-if(!coordinates){alert("门店地图没有标注哦！");return false;}
-return true;
+	var sname=$("#sname").val();
+	var logo=$("input[name='info[logo]']").val();
+	var mservetel=$("input[name='info[mservetel]']").val();
+	var saddress=$("input[name='info[saddress]']").val();
+	var coordinates=$("#coordinates").val();
+	
+	
+	if(sname==""){alert("门店名称不能为空！");return false;}
+	if(logo==""){alert("logo不能为空！");return false;}
+	if(mservetel==""){alert("服务热线不能为空！");return false;}
+	if(saddress==""){alert("门店地址不能为空！");return false;}
+	if(!coordinates){alert("门店地图没有标注哦！");return false;}
+	
+	var yy_stime = $("#yy_stime").val();
+	if(yy_stime){
+		if(!ttt.test(yy_stime)){
+			alert("营业开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var yy_etime = $("#yy_etime").val();
+	if(yy_etime){
+		if(!ttt.test(yy_etime)){
+			alert("营业结束时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var bb_stime = $("#bb_stime").val();
+	if(bb_stime){
+		if(!ttt.test(bb_stime)){
+			alert("白班开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var bb_etime = $("#bb_etime").val();
+	if(bb_etime){
+		if(!ttt.test(bb_etime)){
+			alert("白班结束时间时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var wb_stime = $("#wb_stime").val();
+	if(wb_stime){
+		if(!ttt.test(wb_stime)){
+			alert("晚班开始时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	var wb_etime = $("#wb_etime").val();
+	if(wb_etime){
+		if(!ttt.test(wb_etime)){
+			alert("晚班结束时间的格式错误,正确的时间格式为HH:MM");return false;
+		}
+	}
+	
+	return true;
 }
-
-
-$(document).ready(function(e) {
-    $("#UPLOAD_EXTERIOR_VALUE").click(function() {
-		var image_src = $(this).val();
-		if( !image_src ) return false;
-		var KindeditorDialog = KindEditor.dialog({
-			width : 700,
-			height: 370,
-			title : '预览图片',
-			body  : '<img src="'+image_src+'" />',
-			closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
-		});
-	})
-	$("#SelectScity").change(function() {
+var guide = "{$guide}";
+$(function(){
+	$(document).ready(function(){
+		if(guide == 1){
+			//遮罩
+			var wHeight = $(document).height();
+			$(".guide-layer").css('height', wHeight);
+			$(".layer-3").show();
+		}
+		$("#SelectScity").change(function() {
 			var value = $(this).val(); SetAddressValue();
 			if( value ) { $("#SelectQcity,#SelectHcity").hide(); $.get("{:U('/Shop/publicGetaddress', '', true)}", {pid:value}, function( data ) { 
 				if(data) $("#SelectHcity").show(); else $("#SelectHcity").hide(); $("#SelectHcity").html( data ); SetAddressValue(); $.get("{:U('/Shop/publicGetaddress', '', true)}", {pid:$("#SelectHcity").val()}, function( data ) { 
@@ -205,8 +207,32 @@ $(document).ready(function(e) {
 			})}
 		})
 		$("#SelectQcity").change(function() { var value=$(this).val(); if( value ) { $("#ShopScity").val(value); } SetAddressValue(); })
+	});
+	$(".guide-layer").click(function(event) {
+		$(".guide-layer").hide();
+	});
+	
+	$("#UPLOAD_EXTERIOR_VALUE").click(function() {
+		var image_src = $(this).val();
+		if( !image_src ) return false;
+		var KindeditorDialog = KindEditor.dialog({
+			width : 700,
+			height: 370,
+			title : '预览图片',
+			body  : '<img src="'+image_src+'" />',
+			closeBtn : { name:'关闭', click:function(e) { KindeditorDialog.remove(); KindeditorDialog=null; } }
+		});
+	})
 });
 function SetAddressValue() {
+	/*
+	if($("#SelectQcity").is(":visible")) {
+		$("#ShopScity").val($("#SelectQcity").val());
+	} else if($("#SelectHcity").is(":visible")) {
+		$("#ShopScity").val($("#SelectHcity").val());
+	} else {
+		$("#ShopScity").val($("#SelectScity").val());	
+	}*/
 }
 </script>
     </div>

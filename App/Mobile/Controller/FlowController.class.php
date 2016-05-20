@@ -16,7 +16,7 @@ class FlowController extends MobileController {
 		//if(!$this->mid){		
 			//redirect(U('User/login',array('jid'=>$this->jid,'backurl'=>url_param_encrypt(U('Mobile/Choose/index',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'),'returnurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'))));		
 		//}
-		
+	
 		//查询购物车商品
 		$cart = $_COOKIE['ProductList'];
 		
@@ -28,7 +28,7 @@ class FlowController extends MobileController {
 		foreach($cart_arr2 as $k1=>$v1){
 			if(!empty($v1)){
 				$temp = explode('_', $v1);
-				$cart_key[] = $temp[0];
+				$cart_key[] = $this->isnewTheme ? $temp[1] : $temp[0];
 			}
 		}
 				
@@ -40,18 +40,34 @@ class FlowController extends MobileController {
 		$total_number = 0;
 		$total_price  = 0;
 		$cart_arr = array();
-		foreach($cart_arr2 as $k=>$v){
-			$temp2 = explode('_', $v);
-			foreach($goods_list as $kk=>$vv){
-				if($temp2[0] == $vv['gid']){
-					$cart_arr[$k]['gname'] =  $vv['gname'];
-					$cart_arr[$k]['gprice'] = $vv['gdprice']>0 ? $vv['gdprice'] : $vv['goprice'] ;
-					$cart_arr[$k]['number'] = $temp2[1] ;
-					$total_number += $temp2[1];
-					$total_price  += $temp2[1] * $cart_arr[$k]['gprice'];
+		if($this->isnewTheme){
+			foreach($cart_arr2 as $k=>$v){
+				$temp2 = explode('_', $v);
+				foreach($goods_list as $kk=>$vv){
+					if($temp2[1] == $vv['gid']){
+						$cart_arr[$k]['gname'] =  $vv['gname'];
+						$cart_arr[$k]['gprice'] = $vv['gdprice']>0 ? $vv['gdprice'] : $vv['goprice'] ;
+						$cart_arr[$k]['number'] = $temp2[2] ;
+						$total_number += $temp2[2];
+						$total_price  += $temp2[2] * $cart_arr[$k]['gprice'];
+					}
+				}
+			}
+		}else{
+			foreach($cart_arr2 as $k=>$v){
+				$temp2 = explode('_', $v);
+				foreach($goods_list as $kk=>$vv){
+					if($temp2[0] == $vv['gid']){
+						$cart_arr[$k]['gname'] =  $vv['gname'];
+						$cart_arr[$k]['gprice'] = $vv['gdprice']>0 ? $vv['gdprice'] : $vv['goprice'] ;
+						$cart_arr[$k]['number'] = $temp2[1] ;
+						$total_number += $temp2[1];
+						$total_price  += $temp2[1] * $cart_arr[$k]['gprice'];
+					}
 				}
 			}
 		}
+		
 		//洗衣的价格运算
 		if(in_array($this->jid, array_keys(C('EXPRESS_JID')))){
 			//判断是否特级会员
@@ -87,13 +103,13 @@ class FlowController extends MobileController {
 		);
 		$coupon_list = $coupon_user->alias('u')->join('azd_voucher v on u.vu_id=v.vu_id')->where($opt)->field('v.vu_name,u.vu_price,u.uvid')->select();
 		//查询店铺座位信息
-		$sarr = array();
- 		$sinfo = M("shop")->where(array("sid"=>$this->sid))->getField("seatlist");
-		if($sinfo){
-			$sarr = explode(',', $sinfo);
-		}else{
-			$sarr = '';
-		}
+ 		$sarr = M("table")->where(array("sid"=>$this->sid))->field("title")->select();
+ 		$defalte_set = '';
+ 		if(session('table') > 0){
+ 			$defalte_set = M('table')->where(array("sid"=>$this->sid,'id'=>session('table')))->getField('title');
+ 		}
+ 		$this->assign('defalte_set',$defalte_set);
+ 		
 		//查询收货地址
 		$receivingid = I('receivingid',0);
 		if($receivingid > 0){
@@ -116,7 +132,7 @@ class FlowController extends MobileController {
 		$this->assign('linkurl',$linkurl);
 		
 		$this->assign('page_name','订单确认');
-		$this->assign('page_url',U('Choose/index', array('jid' => $this->jid,'sid'=>$this->sid)));
+		$this->assign('page_url',U('/Index/shopCart', array('jid' => $this->jid,'sid'=>$this->sid)));
 		$this->assign('coupon_list',$coupon_list);	
 		$this->assign('total_number',$total_number);
 		$this->assign('total_price',$total_price);
@@ -162,7 +178,7 @@ class FlowController extends MobileController {
 		foreach($cart_arr2 as $k1=>$v1){
 			if(!empty($v1)){
 				$temp = explode('_', $v1);
-				$cart_key[] = $temp[0];
+				$cart_key[] = $this->isnewTheme ? $temp[1] : $temp[0];
 			}
 		}
 		
@@ -184,17 +200,32 @@ class FlowController extends MobileController {
 		}
 			
 		$total_price  = 0;
-		foreach($goods_list as $k=>$v){
-			$g_price = $v['gdprice'] > 0 ? $v['gdprice'] : $v['goprice'];
-			foreach($cart_arr2 as $k2=>$v2){
-				$temp2 = explode('_', $v2);
-				if($v['gid'] == $temp2[0]){
-					if($v['gstock']==-1)$v['gstock']=10000000;
-					$g_number = $temp2[1] > $v['gstock'] ? $v['gstock'] : $temp2[1] ;
+		if($this->isnewTheme){
+			foreach($goods_list as $k=>$v){
+				$g_price = $v['gdprice'] > 0 ? $v['gdprice'] : $v['goprice'];
+				foreach($cart_arr2 as $k2=>$v2){
+					$temp2 = explode('_', $v2);
+					if($v['gid'] == $temp2[1]){
+						if($v['gstock']==-1)$v['gstock']=10000000;
+						$g_number = $temp2[2] > $v['gstock'] ? $v['gstock'] : $temp2[2] ;
+					}
 				}
+				$total_price += $g_price*$g_number;
+				$goods_list[$k]["gnum"] = $g_number;
 			}
-			$total_price += $g_price*$g_number;
-			$goods_list[$k]["gnum"] = $g_number;
+		}else{
+			foreach($goods_list as $k=>$v){
+				$g_price = $v['gdprice'] > 0 ? $v['gdprice'] : $v['goprice'];
+				foreach($cart_arr2 as $k2=>$v2){
+					$temp2 = explode('_', $v2);
+					if($v['gid'] == $temp2[0]){
+						if($v['gstock']==-1)$v['gstock']=10000000;
+						$g_number = $temp2[1] > $v['gstock'] ? $v['gstock'] : $temp2[1] ;
+					}
+				}
+				$total_price += $g_price*$g_number;
+				$goods_list[$k]["gnum"] = $g_number;
+			}
 		}
 
 		if(in_array($this->jid, array_keys(C('EXPRESS_JID')))){
@@ -336,8 +367,8 @@ class FlowController extends MobileController {
 			if($this->isApp){
 				$data = array('msg' => 'yspay','oid' => $oid);
 			}else{
-				//$data = array('msg' => 'pay','url' => U('Pay/request_alipay',array('o_id'=>$oid,'jump'=>1)));
-				$data = array('msg' => 'yspay','oid' => $oid);
+				$data = array('msg' => 'pay','url' => U('Pay/request_alipay',array('o_id'=>$oid,'jump'=>1)));
+				//$data = array('msg' => 'yspay','oid' => $oid);
 			}
 		}elseif(I('post.paytype')=='weixin' && $oprice > 0){
 			if($this->isApp){

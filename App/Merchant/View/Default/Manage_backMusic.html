@@ -1,0 +1,64 @@
+<extend name="Public:partial"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<form action="{:U('/Manage/setbdzh')}" method="post">
+    <div class="reveal-modal" style="border:none;margin-left:-233px;">
+        <h3>{$pagename} <span class="close" id="DialogClose">×</span></h3>
+        <div class="modal-content">
+            <div class="set">
+                <label>音乐名称</label> <input type="text" id="m_name" value="{$info.music_name}">
+            </div>
+            <div class="set">
+                <label>链接地址</label> <input type="text" id="m_url" value="{$info.music_url}" onpaste="return false;">
+            </div>
+
+            <div class="set">
+                <label></label> <input type="button" value="确认" class="btn btn-pwd" id="DialogSave">
+                <input type="button" value="取消" class="btn btn-hui" id="DialogCancl">
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#DialogClose,#DialogCancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
+	})
+	
+	function CheckFrom() {
+		var m_name = document.getElementById("m_name").value;
+		if( !m_name ) { alert("请输入音乐名称"); document.getElementById("m_name").focus(); return false; }	
+		
+		var m_url = document.getElementById("m_url").value;
+		if( !m_url ) { alert("请确认链接地址"); document.getElementById("m_url").focus(); return false; }	
+
+		return true;
+	}
+	
+	//提交信息
+	$("#DialogSave").click(function() {
+		if( !CheckFrom() ) return false;
+		
+		var m_name = document.getElementById("m_name").value;
+		var m_url  = document.getElementById("m_url").value;
+
+		$.post('__ACTION__', {m_name:m_name, m_url:m_url}, function(data) {
+			if( parseInt(data) == 1 ) {
+				var PwindowObj = window.parent.document.getElementById('MyBdzhInfo');
+				$(PwindowObj).html( m_name );
+				
+				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				window.parent.document.getElementById('silver').style.display = "block";
+			} else {
+				alert("修改失败，请重新尝试!");
+			}
+		})
+	})
+});
+</script>
+</block>

@@ -1,13 +1,14 @@
 <extend name="Public:common"/>
 <block name="body">
-<script src="__PUBLIC__/Js/Merchant/zhuangxiuHandler.js"></script>
-<script src="__PUBLIC__/Js/layer/layer.js" type="text/javascript"></script>
-<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/Merchant/nanoscroller.css">
-<link rel="stylesheet" href="__PUBLIC__/Css/Merchant/phoneShopFix.css" />
-<link rel="stylesheet" href="__PUBLIC__/Css/Merchant/devices.min.css" />
-<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+
+<link rel="stylesheet" href="__PUBLIC__/Merchant/design/Images/phoneShopFix.css" />
+<link rel="stylesheet" href="__PUBLIC__/Merchant/design/Images/devices.min.css" />
+<link rel="stylesheet" href="__PUBLIC__/Css/Merchant/guideLayer.css">
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<script src="__PUBLIC__/Merchant/design/layer/layer.js" type="text/javascript"></script>
+<script src="__PUBLIC__/Merchant/design/Images/zhuangxiuHandler.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Merchant/design/Images/jquery.nanoscroller.js"></script>
 <style>
 .btn-prv{background: #00bae7;}
 .ta-c {text-align: center;}
@@ -30,7 +31,22 @@ function lookinfo( srcing ) {
 	document.getElementById("DialogImage").src = srcing;
 	$("#previewModal").show();
 }
-
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
 $(document).ready(function(e) {
 	$("#CloseMenuImage").click(function() {
 		$("#DialogFrameImage").children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
@@ -39,19 +55,6 @@ $(document).ready(function(e) {
 		$("#previewModal").hide();
 	});
 });
-
-function Operation(t_sign,t_name){
-	if(!t_sign){ alert('参数错误');return false; }
-	if(confirm("确定要更改模版更改"+t_name+"吗？")==false){
-		return false;
-	}
-	$.post("{:U('Manage/template')}",{'t_sign':t_sign},function(result){
-		var data = eval(result);
-		if(data.status==1)window.location.reload();
-		alert(data.msg);
-	});
-}
-
 
 var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
 //上传图片
@@ -65,16 +68,29 @@ function UploadImage(){
 	});
 }
 
+function UploadModul(width, height, src){
+	$('.silver').hide();
+	document.getElementById('DialogFrame').src = src;
+	document.getElementById('DialogFrame').width = width;
+	document.getElementById('DialogFrame').height = height;
+	$("#DialogFrameModel").children("div.DialogFrameModel").width(width);
+	$("#DialogFrameModel").children("div.DialogFrameModel").animate({top:"100px"}).end().fadeIn();
+}
+
+
 $(".guide-layer").click(function(event) {
 	$(".guide-layer").hide();
 });
+
+
+
 </script>
 
 	<!--左边功能内容-->
 	<div class="sideBar_b">
             <div class="phoneWapper">
             	<div class="middlePhone">
-            		<div class="marvel-device iphone6 silver">
+            		<div class="marvel-device iphone6 silver" id="silver">
 					    <div class="top-bar"></div>
 					    <div class="sleep"></div>
 					    <div class="volume"></div>
@@ -82,15 +98,15 @@ $(".guide-layer").click(function(event) {
 					    <div class="sensor"></div>
 					    <div class="speaker"></div>
 					    <div class="screen">
-					        <iframe src="{:U('ctheme')}" scrolling="yes" style=" overflow:scroll; height:100% ; width:100%;"></iframe>
+					        <iframe src="{:U('Design/ctheme',array('sid'=>$sid))}" scrolling="yes" style=" overflow:scroll; height:100% ; width:100%;" class="show-iframe" name="show-iframe" id="show-iframe"></iframe>
 					    </div>
 					    <div class="home"></div>
 					    <div class="bottom-bar"></div>
 					</div>
 					<div class="top-RightBtn yh18">
-						<div class="top-RightBtn-saveBtn"><label>保存</label></div>
-						<div class="top-RightBtn-div border-1s000"><label>预览</label></div>
-						<div class="top-RightBtn-div border-1s000"><label>应用</label></div>
+						<!--  <div class="top-RightBtn-saveBtn"><label>保存</label></div>  -->
+						<div class="top-RightBtn-div border-1s000"><label><a href="{:U('Index/index@yd',array('jid'=>$jid,'sid'=>$sid))}" target="_black">预览</a></label></div>
+					<!--	<div class="top-RightBtn-div border-1s000"><label>应用</label></div> -->
 					</div>
 					
 					
@@ -113,11 +129,12 @@ $(".guide-layer").click(function(event) {
             		<!--模版选项-->
             		<div class="moban-div-content">
             				<div class="whiteBg">
-		            			<div class="moban-kindA border-1s000 vocation" value="{:U('Manage/mobileTheme',array('t_price'=>1))}">
+            				
+		            			<div class="moban-kindA border-1s000 vocation" value="{:U('Manage/mobileTheme',array('sid'=>$sid,'t_price'=>1))}">
 		            				<label class="moban-kind-label yh16">免费模版</label>
 		            			</div>
 		            			
-		            			<div class="moban-kindB border-1s000 vocation" value="{:U('Manage/mobileTheme',array('t_price'=>2))}">
+		            			<div class="moban-kindB border-1s000 vocation" value="{:U('Manage/mobileTheme',array('sid'=>$sid,'t_price'=>2))}">
 		            				<label class="moban-kind-label yh16">收费模版</label>
 		            			</div>
 		            		</div>
@@ -125,8 +142,9 @@ $(".guide-layer").click(function(event) {
 		            		<div class="UlWhiteBg borderBottom">
 		            			<div class="typeKindDiv mLeft10">
 		            				<ul class="typeListUl">
+		            				<li style="width: 80px;"><a href="{:U('Manage/mobileTheme',array('sid'=>$sid,'v_id'=>0))}"><label class="yh16 <?php if(0 == $v_id){ echo 'blueWhite';}?>">全部行业</label></a></li>
 		            					<volist name="vocation" id="vo">
-		            						<li style="width: 80px;" value="{$vo.v_id}"><label class="yh16">{$vo.v_title}</label></li>
+		            						<li style="width: 80px;"><a href="{:U('Manage/mobileTheme',array('sid'=>$sid,'v_id'=>$vo['v_id']))}"><label class="yh16 <?php if($vo['v_id'] == $v_id){ echo 'blueWhite';}?>">{$vo.v_title}</label></a></li>
 		            					</volist>
 		            					<!-- <li><label class="yh16 blueWhite">旅游</label></li> -->
 		            				</ul>
@@ -135,13 +153,13 @@ $(".guide-layer").click(function(event) {
 		            		
 		            		<div class="mobanListDiv nano">
 		            			<ul class="moban-List-Ul nano-content">
-		            				<!-- <volist name="themes" id="vo">
+		            				<volist name="themes" id="vo">
 		            				<li>
-		            					<div class="moban-liImg">
+		            					<div class="moban-liImg" tid="{$vo.t_sign}">
 		            						<img src="{$vo.t_img}" alt="" width="146" height="251">
 		            					</div>
 		            				</li>
-		            				</volist> -->
+		            				</volist>
 		            			</ul>
 		            		</div>
 		            		
@@ -163,165 +181,34 @@ $(".guide-layer").click(function(event) {
 		            		</div>
 		            	</div>
 		            	
-		            	<div class="lanmuListDiv  nano">
+		            	<div class="lanmuListDiv  nano" style="overflow-y:auto;">
 		            		<!--<div class="lanmuList nano-content">-->
 		            		<ul class="lanmu-List-Ul nano-content">
-		            			<!--首页栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			<div class="leftSign mLeft10"></div>
-				            			<label>首页</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            		</div>
-		            			</li>
-		            			
-		            			<!--新品推荐栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			<div class="leftSign mLeft10"></div>
-				            			<label>新品推荐</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--关于我们栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<div class="leftSign mLeft10"></div>
-				            			
-				            			<label>关于我们</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--活动栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<div class="leftSign mLeft10"></div>
-				            			
-				            			<label>活动</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--评价栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<div class="leftSign mLeft10"></div>
-				            			
-				            			<label>评价</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--优惠券栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<div class="leftSign mLeft10"></div>
-				            			
-				            			<label>优惠券</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--大转盘栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<div class="leftSign mLeft10"></div>
-				            			
-				            			<label>大转盘</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
-		            			<!--最新资讯栏目-->
-		            			<li>
-		            				<div class="lm-kind-div yh16">
-				            			<div class="checkDiv">
-				            				<div>
-				            					<input type="checkbox" />
-				            				</div>
-				            			</div>
-				            			
-				            			<!--<img class="leftSign-zixun mLeft10" src="__PUBLIC__/zixun.png" />-->
-				            			
-				            			<div class="leftSign-zixun mLeft10"></div>
-				            			
-				            			<label>最新资讯</label>
-				            			<div class="rightMargin-delete" Title="删除栏目"></div>
-				            			<div class="rightMargin-copy" Title="复制栏目"></div>
-				            			<div class="rightMargin-edit" Title="编辑栏目"></div>
-				            			<div id="setLmTop" class="rightMargin-setTop" Title="上移一位"></div>
-				            			
-				            		</div>
-		            			</li>
-		            			
+		            			<volist name="category" id="vo">
+			            			<li class="sales{$vo['id']}" cname="{$vo['cname']}" url="{$vo.url}">
+			            				<div class="lm-kind-div yh16">
+			            					<div class="change-iframe" url="{$vo.url}">
+						
+						            			<div class="leftSign mLeft10"></div>
+						            			<label>{$vo.cname}</label>
+					            			</div>
+					            			<div class="checkDiv">
+						            				<div>
+						            					<input onclick="cate_status({$vo['id']})" type="checkbox" id="status_{$vo['id']}" name="status_{$vo['id']}" <?php if($vo['status'] == 1){echo "checked='checked'";}?> />
+						            				</div>
+						            			</div>
+					            			<div class="rightMargin-delete" Title="删除栏目" onclick="cate_del({$vo['id']})"></div>
+					            			<div class="rightMargin-copy" Title="复制栏目" onclick="cate_copy({$vo['id']})"></div>
+					            			<div class="rightMargin-edit" Title="编辑栏目" onClick="DialogFrameFun(465, 500, '/Sales/editClass/sid/{$vo['sid']}/cid/{$vo['id']}/sp/1.html')"></div>
+					            		</div>
+			            			</li>
+		            			</volist>
 		            			
 		            			<li>
-		            				<div class="add-lmBtn yh16">
+		            				<div class="add-lmBtn yh16" onClick="DialogFrameFun(465, 500, '/Sales/addClass/sid/{$sid}/sp/1.html')">
 				            			<img id="addNewLMBtn" src="__PUBLIC__/Images/merchant/template/addLMBtn.png" class="addStyle">
 				            				
-				            			<label>新增栏目</label>
+				            			<label >新增栏目</label>
 				            		</div>
 		            			</li>
 		            		</ul>
@@ -330,7 +217,65 @@ $(".guide-layer").click(function(event) {
 		            		</div>
 		            		
 		            	</div>
+		            	<!-- 弹窗 -->
+						<div class="modal" id="DialogFrameModel">
+						    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;top:80px;">
+						    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+						    </div>
+						</div>
+					<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+            		<script type="text/javascript"> 
+            			$('.change-iframe').click(function(){
+            				var url = $(this).attr('url');
+
+            				$('.show-iframe').attr('src',url);
+            			});
+
+            			//删除分类
+            			function cate_del(cid){
+            				var url = "{:U('Sales/delClass')}";
+            				if(confirm('确定要彻底删除此栏目吗?')){
+            					$.post(url, {'cid':cid}, function(data){
+                					if (data == 1) {
+                						window.frames['show-iframe'].location.reload();
+                						$('.sales'+cid).remove();
+                					}
+                				});
+            				}
+            			}
+						
+            			function cate_status(cid){
+            				var s = $("#status_"+cid).is(':checked');
+            				var status = 0;
+            				
+            				if(s == true){
+            					status = 1;
+            				}
             		
+            				$.post('/Sales/cateSta', {status:status,cid:cid}, function(data) {
+            					window.frames['show-iframe'].location.reload();
+            					alert('更新成功');
+            				})
+            			}
+            			//复制分类
+            			function cate_copy(cid){
+            				/*
+            				var rurl  = "{:U('Ajax/copyClass')}";
+            				var cname = $(".sales"+cid).attr('cname');
+            				var url   = $(".sales"+cid).attr('url');
+            				$.post(rurl, {'cid':cid}, function(data){
+            					if (data) {
+            						var html  = "<li class='sales"+data+"'>";
+            						    html += "<div class='lm-kind-div yh16'><div class='change-iframe' url='"+url+"'><div class='checkDiv'><div><input type='checkbox' /></div></div><div class='leftSign mLeft10'></div><label>"+cname+"</label></div>";
+            						    html += "<div class='rightMargin-delete' Title='删除栏目'' onclick='cate_del('"+data+"')'></div>";
+            						    html += "<div class='rightMargin-copy' Title='复制栏目' onclick='cate_copy('"+data+"','"+cname+"','"+url+"''></div>";
+            						    html += "<div class='rightMargin-edit' Title='编辑栏目'></div>";
+            						$(".sales"+cid).append(html);
+            					}
+            				});*/
+            				DialogFrameFun(465, 500, '/Sales/addClass/sid/{$sid}/sp/1/cid/'+cid+'.html');
+            			} 
+            		</script>
             		<!--系统功能选项-->
             		<div class="gongneng-div-content">
             			<div class="gongneng-grayBg">
@@ -365,23 +310,26 @@ $(".guide-layer").click(function(event) {
             			<div class="gongneng-base">
             				<div class="gongneng-nameDiv">
             					<label class="yh16">网站名称:</label>
-            					<input class="gongneng-nameInput yh14"/>
+            					<input class="gongneng-nameInput yh14" id="sitename" name="sitename" value="{$shopInfo.sitename}" />
             				</div>
             				
             				<div class="gongneng-logoDiv">
             					<label class="yh16">网站LOGO:</label>
             					<div class="gongneng-logoBg">
-            						<img class="gongneng-logo" src="{$moduleicon|default='/Public/Images/merchant/noperson_1.gif'}" id="ModuleIcon" />
+            						<img class="gongneng-logo" src="{$shopInfo.logo|default='/Public/Images/merchant/noperson_1.gif'}" id="ModuleIcon" />
             					</div>
             					
             					<div class="gongneng-rightDiv">
-            						<div class="gongnengBtn yh14" id="" onclick="UploadImage()">
+            						<!-- <div class="gongnengBtn yh14" id="" onclick="UploadImage()">
             							<div>修改</div>
-            						</div>
+            						</div> -->
+            						<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(465, 305, '{:U('Manage/logo')}')">
+            							<div>修改</div>
+            						</div >
             						
             						<div class="gongneng-rightDiv-bottom yh14">
-            							<div><input type="radio" name="logoToggleBtn" value="logoToggleBtn" checked> 显示</div>
-            							<div><input type="radio" name="logoToggleBtn" value="logoToggleBtn"> 隐藏</div>
+            							<!-- <div><input type="radio" name="logoToggleBtn" value="logoToggleBtn" checked> 显示</div>
+            							<div><input type="radio" name="logoToggleBtn" value="logoToggleBtn"> 隐藏</div> -->
             						</div>
             					</div>
             				</div>
@@ -390,38 +338,38 @@ $(".guide-layer").click(function(event) {
             					<label class="yh16">网站横幅:</label>
             					
             					<div class="gongnengBtn yh14 mLeft10">
-            							<div>修改</div>
+            							<a href="{:U('Manage/advert')}"><div>修改</div></a>
             					</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn" checked> 单张</div>
+            					<!-- <div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn" checked> 单张</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn"> 多张</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn"> 多张</div> -->
             					
             				</div>
             				
             				<div class="gongnengNomal">
             					<label class="yh16">背景音乐:</label>
             					
-            					<div class="gongnengBtn yh14 mLeft10">
+            					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(465, 305, '{:U('Manage/backMusic')}')">
             							<div>修改</div>
-            					</div>
+            					</div >
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="bgMusicBtn" checked>开启</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="1" <if condition="$shopInfo.bgmon eq 1">checked</if>>开启</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="bgMusicBtn">关闭</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="0" <if condition="$shopInfo.bgmon eq 0">checked</if>>关闭</div>
             					
             				</div>
             				
             				<div class="gongnengNomal">
             					<label class="yh16">视频上传:</label>
             					
-            					<div class="gongnengBtn yh14 mLeft10">
-            							<div>修改</div>
-            					</div>
+            				<!-- 	<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(600, 600, '{:U('Info/addVideo')}')">
+            						<div>修改</div>
+            					</div> -->
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="uploadVideoBtn" checked>开启</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="1" <if condition="$shopInfo.videoon eq 1">checked</if>>开启</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="uploadVideoBtn">关闭</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="0" <if condition="$shopInfo.videoon eq 0">checked</if>>关闭</div>
             					
             				</div>
             				
@@ -430,90 +378,87 @@ $(".guide-layer").click(function(event) {
             				<div class="gongnengNomal">
             					<label class="yh16">底部文字:</label>
             					
-            					<div class="gongnengBtn yh14 mLeft10">
+            					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(800, 600, '{:U('Manage/addFooterText')}')">
             						<div>修改</div>
             					</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="btmTextBtn" checked>显示</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="1" <if condition="$shopInfo.footon eq 1">checked</if>>显示</div>
             					
-            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="btmTextBtn">隐藏</div>
+            					<div class="gongneng-check yh14"><input type="radio" name="btmTextBtn" value="0" <if condition="$shopInfo.footon eq 0">checked</if>>隐藏</div>
             					
             				</div>
             				
             				<div class="gongneng-save">
-            					<div class="yh18">保存</div>
+            					<div class="yh18" id="newBtnA">保存</div>
             				</div>
             			</div>
             		
             		
             			<!--营销-->
+            			<form id="form2">
             			<div class="gongneng-marketingList nano">
+            				<div class="">
             				<ul class="gongneng-marketing-Ul nano-content">
-		            			<!--活动-->
-		            			<li>
-		            				<div class="marketing-kind-div yh16">
-		            					
-		            					<input type="checkbox" class="marketing-check"/>
-		            					
-		            					<label class="marketing-kind-label">活动</label>
-		            					
-		            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
-            								<div>设置</div>
-            							</div>
-            							
-            							<div class="gongneng-marketingBtnB yh14">
-            								<div>升级中</div>
-            							</div>
-				            		</div>
-		            			</li>
-		            			
-		            			
-		            			<!--优惠券-->
-		            			<li>
-		            				<div class="marketing-kind-div yh16">
-		            					
-		            					<input type="checkbox" class="marketing-check"/>
-		            					
-		            					<label class="marketing-kind-label">优惠券</label>
-		            					
-		            					<div class="gongneng-marketingBtnA yh14">
-            								<div>设置</div>
-            							</div>
-            							
-            							<div class="gongneng-marketingBtnB yh14 blockOrNo">
-            								<div>升级中</div>
-            							</div>
-				            		</div>
-		            			</li>
-		            			
-		            			
+            					<volist name="func" id="vo">
+	            					<li>
+			            				<div class="marketing-kind-div yh16">
+			            					
+			            					<input type="checkbox" class="marketing-check" value="{$vo['module_sign']}" name="module_sign[]" <php>if(in_array($vo['module_sign'],$tmfunc)){ echo "checked"; }</php> />
+			            					
+			            					<label class="marketing-kind-label">{$vo.module_name}</label>
+			            					
+			            					
+	            							<if condition="$vo['module_rk'] eq '/DaZhuanPan/index'">
+	            							<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            						<a href="{$vo['module_rk']}"><div>设置</div></a>
+	            							</div>
+			            						
+			            					</if>
+	            							
+					            		</div>
+			            			</li>
+		            			</volist>	      
 		            		</ul>
+		            		</div>
+		            		<div class="gongneng-save">
+            					<div class="yh18 ModuleSet">保存</div>
+            				</div>
             			</div>
-            			
-            			
-            			
+            			</form>
+            			<script type="text/javascript">
+            				$(".ModuleSet").click(function() {
+								$.post("{:U('Setting/setmodule')}", $("#form2").serialize(), function(data) {
+									if( parseInt(data)==1 )
+										alert('设置成功');
+									else
+										alert('设置失败');
+								})
+							})
+            			</script>
             			<!--交易-->
+            			<form id="form1">
             			<div class="gongneng-dealList  yh16">
             				<div class="dealStyle-div">
             					<label class="dealStyle">选择以下支付方式</label>
             				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" class="dealStyle-check"/>
+	            					<input type="checkbox" name="pay_type[]" value="2" class="dealStyle-check" <if condition="$setting['pay_type']==2 || $setting['pay_type']==3 ">checked</if> >
 			            					
 			            			<label class="dealStyle-kind-label">到店支付</label>
 	            				</div>
 	            				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" class="dealStyle-check"/>
+	            					<input type="checkbox" name="pay_type[]" value="1" class="dealStyle-check" <if condition="$setting['pay_type']==1 || $setting['pay_type']==3 ">checked</if> >
 			            					
 			            			<label class="dealStyle-kind-label">支付宝支付</label>
 	            				</div>
 	            				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" class="dealStyle-check"/>
+	            					<input type="checkbox"  class="dealStyle-check" checked >
 			            					
 			            			<label class="dealStyle-kind-label">微信支付</label>
 	            				</div>
+	            				
             				</div>
             				
             				
@@ -522,51 +467,66 @@ $(".guide-layer").click(function(event) {
             					<label class="dealStyle">选择以下消费方式</label>
             				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" class="dealStyle-check"/>
+	            					<input type="checkbox" name="consume_type[]" value="1" class="dealStyle-check" <if condition="$setting['consume_type']==1 || $setting['consume_type']==3">checked</if> >
 			            					
 			            			<label class="dealStyle-kind-label">到店消费</label>
 	            				</div>
 	            				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" class="dealStyle-check"/>
+	            					<input type="checkbox" name="consume_type[]" value="2" class="dealStyle-check" <if condition="$setting['consume_type']==1 || $setting['consume_type']==3">checked</if> >
 			            					
 			            			<label class="dealStyle-kind-label">外送上门</label>
 	            				</div>
             				</div>
+            				<div class="gongneng-save">
+            					<div class="yh18 ModuleUpdate">保存</div>
+            				</div>
             			</div>
-            		
-            		
-            		
+
+            			</form>
+            			<script type="text/javascript">
+            				$(".ModuleUpdate").click(function() {
+								var consume_status = false;
+								$("input[name='consume_type[]']").each(function() {
+									if( $(this).is(":checked") ) { consume_status=true; }
+								})
+								if( !consume_status ) {
+									alert("必须要选择一种消费方式！"); return false;
+								}
+
+								var pay_status = false;
+								$("input[name='pay_type[]']").each(function() {
+									if( $(this).is(":checked") ) { pay_status=true; }
+								})
+								if( !pay_status ) {
+									alert("必须要选择一种支付方式！"); return false;
+								}
+
+								var module_length = 0;
+								$("input[name='modules[]']").each(function(){
+									if( $(this).is(":checked") ) module_length ++;
+								})
+
+								$.post("{:U('Setting/app')}", $("#form1").serialize(), function(data) {
+									if( parseInt(data)==1 )
+										alert('设置成功');
+									else
+										alert('设置成功');
+								})
+							})
+            			</script>
+            			
             		
             			<!--互动-->
             			<div class="gongneng-interactList nano">
             				<ul class="gongneng-interact-Ul nano-content">
-		            			<!--预约上架-->
+		            			<!--评价-->
 		            			<li>
 		            				<div class="interact-kind-div yh16">
 		            					
 		            					<input type="checkbox" class="interact-check"/>
 		            					
-		            					<label class="interact-kind-label">预约上架</label>
-		            					
-		            					<div class="gongneng-interactBtnA yh14 blockOrNo">
-            								<div>设置</div>
-            							</div>
-            							
-            							<div class="gongneng-interactBtnB yh14">
-            								<div>功能升级中</div>
-            							</div>
-				            		</div>
-		            			</li>
-		            			
-		            			
-		            			<!--电话-->
-		            			<li>
-		            				<div class="interact-kind-div yh16">
-		            					
-		            					<input type="checkbox" class="interact-check"/>
-		            					
-		            					<label class="interact-kind-label">电话</label>
+		            					<label class="interact-kind-label">评价</label>
 		            					
 		            					<div class="gongneng-interactBtnA yh14">
             								<div>设置</div>
@@ -575,6 +535,55 @@ $(".guide-layer").click(function(event) {
             							<div class="gongneng-interactBtnB yh14 blockOrNo">
             								<div>功能升级中</div>
             							</div>
+				            		</div>
+		            			</li>
+		            			
+		            			
+		            			<!--qq-->
+		            			<li>
+		            				<div class="interact-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="interact-check"/>
+		            					
+		            					<label class="interact-kind-label">电话</label>
+		            					
+		            					<div class="gongneng-interactBtnA yh14 blockOrNo">
+            								<div onClick="DialogFrameFun(465, 500, '/Shop/editSInfo/sid/{$sid}.html')">设置</div>
+            							</div>
+            							
+            							
+				            		</div>
+		            			</li>
+		            			
+		            			<!--qq-->
+		            			<li>
+		            				<div class="interact-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="interact-check"/>
+		            					
+		            					<label class="interact-kind-label">QQ客服</label>
+		            					
+		            					<div class="gongneng-interactBtnA yh14 blockOrNo">
+            								<div onClick="DialogFrameFun(465, 500, '/Shop/editSInfo/sid/{$sid}.html')">设置</div>
+            							</div>
+            							
+            							
+				            		</div>
+		            			</li>
+		            			
+		            			<!--微信-->
+		            			<li>
+		            				<div class="interact-kind-div yh16">
+		            					
+		            					<input type="checkbox" class="interact-check"/>
+		            					
+		            					<label class="interact-kind-label">微信</label>
+		            					
+		            					<div class="gongneng-interactBtnA yh14 blockOrNo">
+            								<div onClick="DialogFrameFun(465, 500, '/Shop/editSInfo/sid/{$sid}.html')">设置</div>
+            							</div>
+            							
+            							
 				            		</div>
 		            			</li>
 		            			
@@ -593,11 +602,11 @@ $(".guide-layer").click(function(event) {
 		            					
 		            					<label class="extension-kind-label">分享</label>
 		            					
-		            					<div class="gongneng-extensionBtnA yh14 blockOrNo">
+		            					<div class="gongneng-extensionBtnA yh14">
             								<div>设置</div>
             							</div>
             							
-            							<div class="gongneng-extensionBtnB yh14">
+            							<div class="gongneng-extensionBtnB yh14 blockOrNo">
             								<div>功能升级中</div>
             							</div>
 				            		</div>
@@ -612,11 +621,11 @@ $(".guide-layer").click(function(event) {
 		            					
 		            					<label class="extension-kind-label">三级会员推广</label>
 		            					
-		            					<div class="gongneng-extensionBtnA yh14 blockOrNo">
+		            					<div class="gongneng-extensionBtnA yh14">
             								<div>设置</div>
             							</div>
             							
-            							<div class="gongneng-extensionBtnB yh14">
+            							<div class="gongneng-extensionBtnB yh14 blockOrNo">
             								<div>功能升级中</div>
             							</div>
 				            		</div>
@@ -647,19 +656,16 @@ $(".guide-layer").click(function(event) {
             			<!--二维码-->
             			<div class="gongneng-QRcodeBg">
             				<div class="QRcodeDiv">
-            					<img class="qrImg" src="__PUBLIC__/Images/merchant/template/qrImg.png" />
+            					<img class="qrImg" src="/Shop/makeQrcode/sid/{$sid}.html" />
             				</div>
             				
-            				<label class="QRLabel yh16">下载二维码</label>
+            				<a href="/Shop/makeQrcodeDown/sid/{$sid}.html" target="_blank"><label class="QRLabel yh16">下载二维码</label></a>
             				
             				
             				<label class="QRUseLabel yh14">———— 二维码可用于以下场景 ————</label>
             				
             				<table class="QRUseTabel">
             					<tr>
-            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
-            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
-            						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
             						<td><img src="__PUBLIC__/Images/merchant/template/mp.png"></td>
             					</tr>
             				</table>
@@ -672,7 +678,15 @@ $(".guide-layer").click(function(event) {
             </div>
 		</div>
 	</div>
-   
+	<div class="modal" id="DialogFrameModel">
+	    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+	    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+	    </div>
+	</div>
+    <input type="hidden" name="banner_url" value="{:U('Design/inc_banner',array('sid'=>$sid))}" id="banner_url" />
+    <input type="hidden" name="menu_url" value="{:U('Design/inc_menu',array('sid'=>$sid))}" id="menu_url" />
+    <input type="hidden" name="prolist_url" value="{:U('Design/inc_indexprolist',array('sid'=>$sid))}" id="prolist_url" />
+    <input type="hidden" name="shop_url" value="{:U('Design/inc_shop',array('sid'=>$sid))}" id="shop_url" />
    	<div class="ss-modal" id="previewModal" style="display: none;">
         <div class="ss-modal-drop"></div>
         <div class="ss-modal-dialog">
@@ -708,14 +722,34 @@ $(".guide-layer").click(function(event) {
 
 			$('.gongneng-extensionList').height(marketIngHeight)
 			
+			var defaultpage = getCookie('defaultpage');
+			if(defaultpage){
+				$("#"+defaultpage).click();
+			}
 		});
 
     </script>
 
     <script type="text/javascript">
+    var sid = '{$sid}';
 		$('.vocation').click(function(){
 			var t_price = $(this).attr('value');
 			location.href = t_price;
+		});
+		$('#newBtnA').click(function(){
+			var sitename = $("#sitename").val();
+			var bgm      = $('input[name="bgMusicBtn"]:checked').val();
+			var video    = $('input[name="uploadVideoBtn"]:checked').val();
+			var foot     = $('input[name="btmTextBtn"]:checked').val();
+			$.post("{:U('/Ajax/shopSet')}", {sid:sid,sitename:sitename,bgm:bgm,video:video,foot:foot}, function(data) {
+				alert('保存成功');
+			})		
 		})
+		$('.moban-liImg').click(function(){             
+            var t_sign = $(this).attr('tid');
+			if(confirm('确定要应用此套模板吗?')){
+				window.location.href = '/Manage/appTheme/t_sign/'+t_sign+'/sid/'+ sid + '.html';
+			}
+        });
 	</script>
 </block>

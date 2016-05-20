@@ -26,8 +26,8 @@ class SettingController extends MerchantController {
 			$setting_array['consume_type'] = $consume_type;
 			$setting_array['pay_type'] = $pay_type;
 
-			if( count($_POST['modules']) != 6 ) exit('0');
-			$setting_array['modules'] = $_POST['modules'];
+			//if( count($_POST['modules']) != 6 ) exit('0');
+			//$setting_array['modules'] = $_POST['modules'];
 
 			$s = file_put_contents($this->setting_file_path, serialize($setting_array));
 			exit( $s!==false ? '1' : '0');
@@ -74,6 +74,17 @@ class SettingController extends MerchantController {
 			$this->assign('array_icon', $array_icon);
 			$this->display();
 		}
+	}
+
+
+	//设置module
+	public function setmodule(){
+		$p_data = I('post.module_sign');
+		M('merchant_module')->where(array('jid'=>$this->jid))->delete();
+		foreach($p_data as $k=>$v){
+			M('merchant_module')->add(array('module_sign'=>$v,'jid'=>$this->jid));
+		}
+		exit('1');
 	}
 
 

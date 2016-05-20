@@ -7,6 +7,7 @@ function DialogFrameFun(width, height, src) {
 	document.getElementById('DialogFrame').height = height;
 	$("#DialogFrameModel").children("div.DialogFrameModel").width(width);
 	$("#DialogFrameModel").children("div.DialogFrameModel").animate({top:DialogTop+"px"}).end().fadeIn();
+	$('.silver').hide();
 }
 
 //删除分类

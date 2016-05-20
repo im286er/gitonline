@@ -320,12 +320,16 @@ function msgopen( type )
 							<label for="">手机：</label>
 							<input type="number" value="{$user_info.flu_phone}" id="o_phone" name="o_phone" placeholder="请输入手机号码">
 						</div>
-						<if condition="$sarr">
 						<div>
+						<if condition="$defalte_set">
+						<a class="seat-info"  href="javascript:;">桌号: {$defalte_set}</a>
+						<else />
+						<if condition="$sarr">
 							<a class="seat-info" id="js_seat" href="javascript:;">请选择您的座位号<i class="ico ico-right"></i></a>
-						</div>
 						</if>
-						<input type="hidden" name="o_seat" id="o_seat" value="" />
+						</if>
+						</div>
+						<input type="hidden" name="o_seat" id="o_seat" value="{$defalte_set}" />
 						<div>
 							<label for="">备注：</label>
 							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
@@ -366,14 +370,16 @@ function msgopen( type )
 							<label for="">手机：</label>
 							<input type="number" value="{$user_info.flu_phone}" id="o_phone" name="o_phone" placeholder="请输入手机号码">
 						</div>
-
-						<if condition="$sarr">
 						<div>
+						<if condition="$defalte_set">
+						<a class="seat-info"  href="javascript:;">桌号: {$defalte_set}</a>
+						<else />
+						<if condition="$sarr">
 							<a class="seat-info" id="js_seat" href="javascript:;">请选择您的座位号<i class="ico ico-right"></i></a>
-						</div>
 						</if>
-						<input type="hidden" name="o_seat" id="o_seat" value="" />
-
+						</if>
+						</div>
+						<input type="hidden" name="o_seat" id="o_seat" value="{$defalte_set}" />
 						<div>
 							<label for="">备注：</label>
 							<input type="text" id="o_remarks" name="o_remarks" placeholder="备注留言">
@@ -530,7 +536,7 @@ function msgopen( type )
 					    <div class="swiper-wrapper">
 					    	<volist name="sarr" id="vo2">
 	                                <notempty name="vo2">
-	                                    <div class="swiper-slide">{$vo2}</div>
+	                                    <div class="swiper-slide">{$vo2.title}</div>
 	                                </notempty>
 	                        </volist>
 						</div>

@@ -15,19 +15,19 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
             <h3>您品牌下的门店列表<input type="button" value="新增门店" onClick="window.location.href='{:U('/Shop/addShop', '', true)}'"></h3>
             <table class="table border-b">
                 <tr>
+                <th width="100px">编号</th>
                     <th width="100px">门店名称</th>
                     <th width="120px">地址</th>
-                    <th width="100px">联系人</th>
-                    <th width="80px">设备数</th>
+                    
                     <th width="80px">状态</th>
                     <th width="350px">操作</th>
                 </tr>
                 <volist name="shopsList" id="v">
                 <tr>
+                 <td>{$v.sid}</td>
                     <td>{$v.sname}</td>
                     <td>{$v.saddress}</td>
-                    <td>{$v.scontactsname}</td>
-                    <td>暂无</td>
+                    
                     <td>
                     <if condition="$v['is_show'] eq 1">
                     			显示中
@@ -42,7 +42,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
                         <a href="{:U('/Info/index', array('ctype'=>2, 'sid'=>$v['sid']), true)}">预订</a>
                        -->
                         
-                        <a href="{:U('/Shop/infoShop', array('sid'=>$v['sid']), true)}">详情</a>
+                       
                         <a href="{:U('/Shop/editShop', array('sid'=>$v['sid']), true)}">修改</a>
                         <a href="{:U('/Shop/delShop', array('sid'=>$v['sid']), true)}" onClick="return confirm('确实要删除此分店吗？') ? true : false">删除</a>
                         <if condition="$v['is_show'] eq 1">
@@ -50,7 +50,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
                     <else/>
                     			<a href="{:U('/Shop/hidShop', array('sid'=>$v['sid'],'is_show'=>1), true)}" onClick="return confirm('确实要显示此分店吗？') ? true : false">显示</a>
                     </if>
-                        
+                        <a href="{:U('/Shop/editTable', array('sid'=>$v['sid']), true)}">桌号</a>
                     </td>
                 </tr>
                 </volist>

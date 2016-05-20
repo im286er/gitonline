@@ -5,13 +5,6 @@ use Think\Model;
 class AuthModel extends Model {
 	//获取某个商户账号的菜单
 	public function getUserMenu($mid){
-		/*
-		$a = array(
-			'top'=>array('shop','renovation','order','finance','member','wifi','account'),
-			'next'=>array('shop1','shop2')
-		);
-		echo serialize($a);exit;
-		*/
 		
 		$my_auth = M('merchant_user')->where(array('tmid'=>$mid))->find();
 		$menu = C('TOP_MENU');
@@ -33,12 +26,20 @@ class AuthModel extends Model {
 		return $menu;
 	}
 	
-	//获取当前账户的商品列表
+	//获取当前账户的分店列表
 	public function getAuthShops($mid){
-		$shopauth = M('merchant_user')->where(array('tmid'=>$mid))->getField('shopauth');
-		$r = array();
-		if($shopauth){
-			$r = M('shop')->where(array('status'=>'1','sid'=>array('in',$shopauth)))->getField('sid,sname');
+		$where = $this->getAuthWhere($mid);
+		$r = M('shop')->where($where)->getField('sid,sname');
+		return $r;
+	}
+	
+	//获取当前账户的分店列表查询条件
+	public function getAuthWhere($mid){
+		$my_auth = M('merchant_user')->where(array('tmid'=>$mid))->find();
+		if($my_auth['role'] == 1){//超级管理员
+			$r = array('status'=>'1','jid'=>$my_auth['tjid']);
+		}else{
+			$r = array('status'=>'1','sid'=>array('in',$my_auth['shopauth']),'jid'=>$my_auth['tjid']);
 		}
 		return $r;
 	}

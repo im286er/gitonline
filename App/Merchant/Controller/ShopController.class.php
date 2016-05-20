@@ -13,7 +13,8 @@ class ShopController extends MerchantController {
 			//$this->assign('moduleicon', $moduleicon ? $moduleicon : '');
 			//$this->assign('modulelink', 'http://yd.dishuos.com/Shop/index/mod/Choose/jid/'.$this->jid.'.html');
 		//}
-		$where = array('jid'=>$this->jid, 'status'=>'1');
+		//$where = array('jid'=>$this->jid, 'status'=>'1');
+		$where = D('Auth')->getAuthWhere($this->mid);
 		$page = new \Common\Org\Page(M('shop')->where($where)->count(), 9);
 		$this->assign('shopsList', M('shop')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
 		$this->assign('pages', $page->show());
@@ -26,56 +27,24 @@ class ShopController extends MerchantController {
 		
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
-			array_walk($_POST['memb'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
-			$_POST['memb']['mtype'] = 2;
-			$_POST['memb']['mregdate'] = $_POST['memb']['mlogindate'] = date('Y-m-d H:i:s');
 			$_POST['info']['jid'] = $this->jid;
-			$_POST['memb']['mpwd'] = md5(md5( $_POST['memb']['mpwd'] ));
+			$_POST['info']['img_url'] = '/Public/Merchant/images/topbg.png';
+			$_POST['info']['theme'] = 'new2';
 			
-			$seatlist = $_POST['info']['seatlist'];
-			$seatlist_array = explode(",", $seatlist);
-			array_filter($seatlist_array, function(&$value) { $value=trim($value); });
-			$_POST['info']['seatlist'] = implode(",", $seatlist_array);
-
-			$MemberModel = D('Member');
-			$MemberModel->startTrans();
-			
-			$status_01 = $mid = $MemberModel->insert($_POST['memb']);
-			
-			if($_POST['coordinates']){
-				$coordinates = explode(",",$_POST['coordinates']);
-				$_POST['info']['lng'] = $coordinates[0];
-				$_POST['info']['lat'] = $coordinates[1];
-			}
-			if(empty($_POST['info']['district'])){
-				$city = $_POST['info']['city'];
-				$_POST['info']['city'] = $_POST['info']['province'];
-				$_POST['info']['district'] = $city;
-			}
-			
-			$status_02 = $sid = D('Shop')->insert($_POST['info']);
-			$status_03 = M('MerchantUser')->add(array('tmid'=>$mid, 'tjid'=>$this->jid, 'tsid'=>$sid, 'type'=>2));
-			
-			if( $status_01 && $status_02 && $status_03 ) {
-				$MemberModel->commit();
-				$shop_count = M('shop')->where(array('jid'=>$this->jid))->count();
-				if($shop_count == 1){
-					$this->success('添加成功', U('/Sales/goods/',array('ctype'=>1,'guide'=>1), true));
-				}else{
-					$this->success('添加成功', U('/Shop/index', '', true));
-				}
-			} else {
-				$MemberModel->rollback();
-				$error_string = '';
-				if( $MemberModel->getError() ) $error_string = $MemberModel->getError();
-				if( D('Shop')->getError() ) $error_string = $error_string ? $error_string.";".D('Shop')->getError() : D('Shop')->getError();
-				if( !$error_string ) $error_string = '操作失败';
-				$this->error( $error_string );
-			}			
+			$coordinates = explode(",",$_POST['coordinates']);
+			$_POST['info']['lng'] = $coordinates[0];
+			$_POST['info']['lat'] = $coordinates[1];
+					
+		    $sid = D('Shop')->insert($_POST['info']);
+		    if($sid){
+		    	D('service')->insertShopData($this->jid,$sid);
+		    }
+		    $this->success('添加成功', U('/Shop/editTable/sid/'.$sid.'.html', '', true));
+		
 		} else {
-			$this->_AddressList = F('AddressList');
-			if( !is_array($this->_AddressList) || empty($this->_AddressList) ) B('Common\Behavior\CreateAddress', '', $this->_AddressList);
-			$this->assign('addressList', $this->_AddressList);
+			//$this->_AddressList = F('AddressList');
+			//if( !is_array($this->_AddressList) || empty($this->_AddressList) ) B('Common\Behavior\CreateAddress', '', $this->_AddressList);
+			//$this->assign('addressList', $this->_AddressList);
 			$this->assign('guide',I('guide'));
 			$this->display();
 		}	
@@ -113,43 +82,33 @@ class ShopController extends MerchantController {
 		
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
-		  	
-			if(empty($_POST['info']['district'])){
-				$city = $_POST['info']['city'];
-				$_POST['info']['city'] = $_POST['info']['province'];
-				$_POST['info']['district'] = $city;
-			}
-			if($_POST['coordinates']){
-				$coordinates = explode(",",$_POST['coordinates']);
-				$_POST['info']['lng'] = $coordinates[0];
-				$_POST['info']['lat'] = $coordinates[1];
-			}
+			$_POST['info']['jid'] = $this->jid;
+				
+			$coordinates = explode(",",$_POST['coordinates']);
+			$_POST['info']['lng'] = $coordinates[0];
+			$_POST['info']['lat'] = $coordinates[1];
+		
+			$a = D('Shop')->update($_POST['info']);
 			
-			$seatlist = $_POST['info']['seatlist'];
-			$seatlist_array = explode(",", $seatlist);
-			array_filter($seatlist_array, function(&$value) { $value=trim($value); });
-			$_POST['info']['seatlist'] = implode(",", $seatlist_array);
+			$this->success('修改成功', U('/Shop/index', '', true));
 			
-			if( D('Shop')->update($_POST['info']) === false) {
-				$this->error(D('Shop')->getError() ? D('Shop')->getError() : '修改失败' );
-			} else { $this->success('修改成功', U('/Shop/index', '', true)); }		
 		} else {
 			$shop = M('shop')->where(array('sid'=>I('get.sid', 0, 'intval'), 'jid'=>$this->jid))->find();
 			if(!is_array($shop) || empty($shop)) { E('你无权操作此页面'); }
 			
-			$this->_AddressList = F('AddressList');
-			if( !is_array($this->_AddressList) || empty($this->_AddressList) ) B('Common\Behavior\CreateAddress', '', $this->_AddressList);
-			$this->assign('addressList', $this->_AddressList);
+			//$this->_AddressList = F('AddressList');
+			//if( !is_array($this->_AddressList) || empty($this->_AddressList) ) B('Common\Behavior\CreateAddress', '', $this->_AddressList);
+			//$this->assign('addressList', $this->_AddressList);
 			
-			if($shop['province']){
-				$address1 = M('address')->where(array('apid'=>$shop['province']))->select();
-			}
+			//if($shop['province']){
+				//$address1 = M('address')->where(array('apid'=>$shop['province']))->select();
+			//}
 			
-			if($shop['province'] != $shop['city'] && $shop['city']){
-				$address2 = M('address')->where(array('apid'=>$shop['city']))->select();
-			}
-			$this->assign('address1', $address1);
-			$this->assign('address2', $address2);
+			//if($shop['province'] != $shop['city'] && $shop['city']){
+				//$address2 = M('address')->where(array('apid'=>$shop['city']))->select();
+			//}
+			//$this->assign('address1', $address1);
+			//$this->assign('address2', $address2);
 			$this->assign('shop', $shop);
 			$this->display();				
 		}		
@@ -161,10 +120,10 @@ class ShopController extends MerchantController {
 		
 		$shop = M('shop')->where(array('sid'=>I('get.sid', 0, 'intval'), 'jid'=>$this->jid))->find();
 		if(!is_array($shop) || empty($shop)) { E('你无权操作此页面'); }
-		$merchantuser = M('MerchantUser')->where(array('type'=>2,'tsid'=>$shop['sid'], 'tjid'=>$this->jid))->find();
-		if($merchantuser['tmid'])$member = M('Member')->where(array('mid'=>$merchantuser['tmid']))->find();
+		//$merchantuser = M('MerchantUser')->where(array('type'=>2,'tsid'=>$shop['sid'], 'tjid'=>$this->jid))->find();
+		//if($merchantuser['tmid'])$member = M('Member')->where(array('mid'=>$merchantuser['tmid']))->find();
 		//print_r($member);
-		$this->assign('member', $member);
+		//$this->assign('member', $member);
 		$this->assign('shop', $shop);
 		$this->display();
 	} 
@@ -205,5 +164,134 @@ class ShopController extends MerchantController {
 			if($address['apid'] == $pid) $str .= '<option value="'.$address['aid'].'">'.$address['aname'].'</option>';
 		}
 		exit($str);
+	}
+	
+	public function cx(){
+		$root = I('root');
+		$ext  = I('ext');
+		$url = 'http://www.zj01.com/zj01ck.asp?root='.$root.'&ext='.$ext;
+		$r = file_get_contents($url);
+		$rr = explode(',', $r);
+		if($rr[1] == '100'){
+			exit('1');
+		}elseif($rr[1] == '-100'){
+			exit('2');
+		}else{
+			exit('3');
+		}
+	}
+	
+	public function editTable(){
+		$sid = I('sid');
+		$tl = M('table')->where(array('sid'=>$sid))->select();
+		$this->assign('table',$tl);
+		$this->assign('sid',$sid);
+		$this->display();
+	}
+	
+	public function addTable(){
+		if( IS_POST ) {
+			$title = I('title');
+			$number = I('number');
+			$sid = I('sid');
+			$info = array(
+				'title' => I('title'),
+				'number' => intval($number),
+				'sid' => I('sid'),
+			);
+			if(M('table')->add($info) !== false){
+				exit( JSON( array('msg'=>'') ) );
+			}else{
+				exit( JSON( array('msg'=>'添加失败') ) );
+			}
+		}else{
+			$sid = I('sid');
+			$this->assign('sid',$sid);
+			$this->display();
+		}
+	}
+	
+	public function edTable(){
+		if( IS_POST ) {
+			$title = I('title');
+			$number = I('number');
+			$id = I('id');
+			$info = array(
+					'title' => I('title'),
+					'number' => intval($number),
+					'id' => I('id'),
+			);
+			if(M('table')->save($info) !== false){
+				exit( JSON( array('msg'=>'') ) );
+			}else{
+				exit( JSON( array('msg'=>'修改失败') ) );
+			}
+		}else{
+			$tid = I('tid');
+			$tinfo = M('table')->where(array('id'=>$tid))->find();
+			$this->assign('tinfo',$tinfo);
+			$this->display();
+		}
+	}
+	
+	public function delTable(){
+		$id = I('id');
+		M('table')->where(array('id'=>$id))->delete();
+		exit('1');
+	}
+	public function makeQrcode(){
+		$id = I('id');
+		$sid = I('sid');
+		$size = 3;
+		if($sid > 0){
+			$qcUrl = U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$sid));
+		}else{
+			$ss = M('table')->where(array('id'=>$id))->find();
+			$qcUrl = U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$ss['sid'],'table'=>$id));
+		}
+		vendor("phpqrcode.phpqrcode");
+		$QRcode = new \QRcode();
+		echo $QRcode::png($qcUrl, false, 'H', $size);
+	}
+	public function makeQrcodeDown(){
+		$id = I('id');
+		$sid = I('sid');
+		$size = 3;
+		if($sid > 0){
+			$qcUrl = U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$sid));
+		}else{
+			$ss = M('table')->where(array('id'=>$id))->find();
+			$sid = $ss['sid'];
+			$qcUrl = U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$ss['sid'],'table'=>$id));
+		}
+		vendor("phpqrcode.phpqrcode");
+		$QRcode = new \QRcode();
+		$im = $QRcode::png($qcUrl, false, 'H', $size);
+		Header("Content-type: application/octet-stream");   
+		Header("Accept-Ranges: bytes");   
+		Header("Accept-Length:".filesize($im));   
+		Header("Content-Disposition: attachment; filename=".$sid.".png"); 
+		echo $im;
+		exit;
+	}
+	public function editSInfo(){
+		if(IS_POST){
+			
+			$sid = I('sid');
+			
+			$info = array(
+				'mservetel'=>I('mservetel'),
+				'qq'=>I('qq'),
+				'weixin_name'=>I('weixin_name'),
+			);
+				
+			$r = M('shop')->where(array('jid'=>$this->jid,'sid'=>$sid))->save($info);
+			exit($r ? '1' : '0');
+		}else{
+			$sid = I('sid');
+			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
+			$this->assign('sinfo',$sinfo);
+			$this->display();
+		}
 	}
 }

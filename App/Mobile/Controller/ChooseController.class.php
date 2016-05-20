@@ -94,15 +94,38 @@ class ChooseController extends MobileController {
 		);
 		$goods = M('goods');
 		$goods_info = $goods->where($opt)->find();
+		//模板
+		$theme  = M('shop')->where(array('sid'=>$sid))->getField('theme');
+		//判断新旧模板
+		$dtype  = in_array($theme, C('NEW_THEMES')) ? '1' : '2';
 		
 		$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
 		file_exists($path.'InfoMenu1Name.php') && $module1name=file_get_contents($path.'InfoMenu1Name.php');
 		$this->assign('module1name', $module1name ? $module1name : '在线点菜');
 		$this->assign('page_name',$module1name ? $module1name : '在线点菜');	
-	
+		//查询已选商品数量
+		$cart = $_COOKIE['ProductList'];
+
+		//if(!$cart || $cart == ''){
+			//$this->redirect('Index/new2', array('jid' => $this->jid));
+		//}
+		$cart_arr2 = explode('|', $cart);
+		$cart_key = array();
+		foreach($cart_arr2 as $k1=>$v1){
+			if(!empty($v1)){
+				$temp = explode('_', $v1);
+				if ($temp[0] == $sid && $temp[1] == $gid) {
+					$cart_key[] = $temp[2];
+				}
+			}
+		}
+
+		$cart_num = $cart_key[0] ? $cart_key[0] : 0;
+		$this->assign('cart_key', $cart_num);
 		$this->assign('rcid',$goods_info['cid']);
 		$this->assign('goods_info',$goods_info);
 		$this->assign('mid',$this->mid);
+		$this->assign('dtype', $dtype);
 		$page_url = I("from_index") == 1 ? U('Index/index',array('jid'=>$this->jid)) : "";
 		$this->assign('page_url',$page_url);
 		$this->mydisplay();
@@ -166,6 +189,67 @@ class ChooseController extends MobileController {
 		);
 		$this->ajaxReturn($data);
 	}
+
+
+	/*点菜搜索
+	 *
+	*
+	* */
+	public function new_search(){
+		$cid = I('post.cid');
+		$key = I('post.key');
+		//获取商品列表 start
+        $sid=I('get.sid');
+		$goods = M('goods');
+		$opt = array(
+			'g.sid'    =>$sid,
+			'g.gtype' => 0,
+			'g.gstatus' => 1,
+			'g.gname' =>array('like',"%$key%"),  
+			'g.gstock' => array('neq', 0),
+			'c.status' => 1,
+		);
+		$pro_list_a = $goods->alias('g')->join('azd_category c on g.cid=c.id')->where($opt)->order('g.gorder')->select();
+		if($cid){
+			$opt['g.cid'] = $cid;
+		}
+		$goods_list = $goods->alias('g')->join('azd_category c on g.cid=c.id')->where($opt)->order('g.gorder')->select();
+		$result_list = array();
+		$pro_list   = array();
+		foreach($goods_list as $k=>$v){
+			if($key != ''){
+				if(!stristr($v['gname'],$key)){
+					continue;
+				}
+			}
+			if(isset($result_list[$v['cid']])){
+				$result_list[$v['cid']]['list'][] = $v;
+			}else{
+				$result_list[$v['cid']]['cid'] = $v["cid"];
+				$result_list[$v['cid']]['cname'] = $v["cname"];
+				$result_list[$v['cid']]['list'][] = $v;
+			}
+			//$pro_list[$v['gid']] = $v;
+		}
+		foreach($pro_list_a as $s=>$vv){
+			$pro_list[$vv['gid']] = $vv;
+		}
+		//print_r($pro_list);exit;
+		//获取商品列表 end
+		$this->assign('result_list',$result_list);
+		cookie($this->jid.'_rcid_'.$this->sid,null);
+		cookie($this->jid.'_rcid_'.$this->sid,$cid);
+		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
+		$content = $this->theme($tpl_name)->fetch('Choose_goods');
+		$data = array(
+			'msg' => 'true',
+			'content' => $content,
+			'product' => json_encode($pro_list)
+		);
+		$this->ajaxReturn($data);
+	}
+
+
 	//搜索框
 	
 	function searchText(){

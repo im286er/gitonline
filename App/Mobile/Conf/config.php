@@ -57,4 +57,25 @@ return array(
     ),
 
     'MONTHLY_NUM'           => '5713519013',
+
+
+    //模板功能
+	'FUNC_MENU'	=> array(
+		array('id'=>'1', 'name'=>'测试功能', 'url'=>'/Index/new2.html'),
+		array('id'=>'2', 'name'=>'活动', 'url'=>'/Index/new2Activity.html'),
+		array('id'=>'3', 'name'=>'评价', 'url'=>'/Comments/index.html'),
+		// array('id'=>'4', 'name'=>'资讯', 'url'=>'/Sales/goods/ctype/1.html?menucode=goods'),
+		// array('id'=>'5', 'name'=>'大转盘', 'url'=>'/Sales/goods/ctype/1.html?menucode=goods'),
+		array('id'=>'6', 'name'=>'商品', 'url'=>'/Index/new2.html'),
+		array('id'=>'7', 'name'=>'关于我们', 'url'=>'/User/aboutus.html'),
+	),
+
+
+	//新模板
+	'NEW_THEMES'		=> array(
+			'new1',
+			'new2',
+	),
+
+
 );

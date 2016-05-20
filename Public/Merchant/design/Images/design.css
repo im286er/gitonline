@@ -2,3 +2,9 @@
 #design div.editmenu{   position:absolute; top:0px; right:5px; height:20px; line-height:20px; z-index:100000; width:60px; text-align:center; color:#FFF; cursor:pointer; background:url(iconGearBg16_31689.png) #069 no-repeat 5px center; background-size:10px 10px; padding-left:10px; border-radius:0 0 5px 5px;}
 #design div.delmenu{   position:absolute; top:20px; right:5px; height:20px; line-height:20px; z-index:100000; width:60px; text-align:center; color:#FFF; cursor:pointer;  background:url(iconDeleteBg16_24038.png) #C33 no-repeat 5px center; background-size:10px 10px;padding-left:10px; border-radius:0 0 5px 5px;}
 
+#design .edititemmenulist{ position:absolute; top:0px; right:5px;  width:100px; z-index:100010; background-color:#fff;-moz-box-shadow:2px 2px 5px #333333; -webkit-box-shadow:2px 2px 5px #333333; box-shadow:2px 2px 5px #333333; padding:5px; display:none;}
+#design .edititemmenulist .edititemmenu{ line-height:30px; height:30px; }
+
+#design hr{ height:2px; padding:0px; margin:0px; border-bottom:1px solid #CCC;}
+
+#design .editboxitem:hover .edititemmenulist{ display:block; }

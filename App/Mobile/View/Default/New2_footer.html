@@ -1,0 +1,26 @@
+<block name="footer">
+    <footer>
+    	<div class="row">
+        	<a class="col-xs-3 nav-home <?php  if($action_name == 'new2'){ echo 'active';}?> " href="{:U('Index/new2',array('sid'=>$sid, 'jid'=>$jid))}">
+            	首页
+            </a>
+            <a class="col-xs-3 nav-car <?php  if($action_name == 'shopCart'){ echo 'active';}?>" href="{:U('Index/shopCart', array('jid'=>$jid, 'sid'=>$sid))}">
+            	购物车<span class="badge cartnum" id="cartnum">0</span>
+            </a>
+            <a class="col-xs-3 nav-down <?php  if($action_name == 'appdown'){ echo 'active';}?>" href="{$link}">
+            	客服
+            </a>
+            <a class="col-xs-3 nav-my <?php  if($action_name == 'index' && $controller_name == 'User'){  echo 'active';}?>" href="{:U('User/index',array('jid'=>$jid, 'sid'=>$sid))}">
+            	我的
+            </a>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+   
+    // $(document).ready(function() {
+         
+    //     $(".ct-menu img").css("height",$(".ct-menu img").css("width"));
+    // });
+   </script> 
+</block>

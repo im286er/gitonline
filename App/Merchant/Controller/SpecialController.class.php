@@ -5,6 +5,7 @@ class SpecialController extends MerchantController {
 	
 	//列表
 	public function splist() {
+		$this->assign('asd',1);
 		$this->display();
 	}
 	

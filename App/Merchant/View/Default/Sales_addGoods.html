@@ -23,6 +23,15 @@
     <div class="wrapper">
     	<if condition="isset($_GET['ctype']) && intval($_GET['ctype'])==1">
             <h2 class="title">新增商品 </h2>
+            <div class="border-b"></div>
+            <h2 class="title">选择门店：
+            <volist name="shops" id="vo">
+                <span>
+                    <a href="{:U('Sales/addGoods',array('ctype'=>I('get.ctype'),'sid'=>$key))}"<eq name="Think.get.sid" value="$key">style="color: green"</eq>>{$vo}</a>
+                </span>
+            </volist>
+            </h2>
+            <input type="hidden" name="sid" id="sid" value="{$sid}">
             <div class="modal-content modal-contents clearfix" style="padding-bottom:0px;">
                 <div class="modal-a">
                     <div id="divPreview">
@@ -54,7 +63,7 @@
                         <label>商品分类：</label>
                         <select name="cid" id="GoodsCid">
                             <foreach name="clist" item="v">
-                            <option <if condition="isset($_GET['cid']) && intval($_GET['cid'])==$v['cid']">selected</if> value="{$v.cid}">{$v.cname}</option></foreach>
+                            <option <if condition="isset($_GET['cid']) && intval($_GET['cid'])==$v['id']">selected</if> value="{$v.id}">{$v.cname}</option></foreach>
                         </select>
                         <input type="hidden" value="{$sid}" name="sid">
                     </div>
@@ -78,14 +87,7 @@
                     </div>
                     </if>
 					
-                    <div class="set">
-                        <label>是否精品：</label> <input type="checkbox" name="isboutique" value="1" <if condition="$ginfo['isboutique'] gt 0">checked</if>/> 是
-                    </div>
-
-					<div class="set" id="proportion">
-                        <label>返利金额：</label> 
-                        <input type="text" name="gvrebate" id="gvrebate" style="width:30px;" placeholder=""><span style="font-size:12px;">不参与返利不用输入</span>
-                    </div>
+                   
                 </div>
             </div>
             
@@ -243,16 +245,7 @@ $(function() {
 		var GoodsOprice  = $("#GoodsOprice").val();
 		if( !GoodsOprice ) { alert('商品价格不能为空'); return false; }
 		
-        <eq name="Think.get.ctype" value="1">
-        	if(isNaN($('#gvrebate').val())){
-        		alert('请输入VIP会员返现金额必须为数字'); return false;
-        	}
-            var gvgoodsprice = parseFloat( $("#gdprice").val() );
-            if( gvgoodsprice <= 0 ) gvgoodsprice = parseFloat( GoodsOprice );
-            if($('#gvrebate').val() >= gvgoodsprice ) {
-        		alert('VIP会员返现金额不能大于或等于原价。'); return false;
-        	}
-        </eq>
+        
 
 		return true;	
 	}

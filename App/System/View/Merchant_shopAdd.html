@@ -81,12 +81,12 @@ div.main-body .divSetting { width:570px; float:left; } div#Baidu_Map { width:100
                             <th>详细地址</th>
                             <td colspan="3"><input type="text" autocomplete="off" name="shop[saddress]" value="" class="user_input" style="width:445px;" /></td>
                         </tr>
-                        <tr>
+             <!--        <tr>
                             <th>登录账户<b style="color:red">*</b></th>
                             <td><input type="text" autocomplete="off" id="MemberName" name="mname" value="" class="user_input" /></td>
                             <th>登录密码<b style="color:red">*</b></th>
                             <td><input type="password" id="MemberPwds" name="mpwd" value="" class="user_input" /></td>
-                        </tr>
+                        </tr>-->
                     </table>
                 
                     <div class="buttonDiv" align="center">
@@ -194,15 +194,7 @@ $(document).ready(function(e) {
 	$("#SelectScity").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请选择所在地区"});
 	$("#SHOP_EXTERIOR_VALUE").formValidator({onFocus:" "}).inputValidator({min:1, onError:"请上传门景图"});
 	
-	$("#MemberName").formValidator({onFocus:" "}).regexValidator({regExp:"^([a-zA-Z0-9_]){1,30}$", onError:"账号必须为字母、数字或下划线组成"}).inputValidator({min:1, onError:"帐户不能为空"}).ajaxValidator({
-		url  		: "{:U('/System/publicCheckMname', '', true)}",
-		data       	: "mname=#MemberName",
-        success    	: function(data) { return parseInt(data) == 1 ? true : false; },
-        buttons  	: $("#dosubmit"),
-        onError  	: "该账户已经存在，请重新输入一个",
-        onWait   	: "请等待……"
-    });
-	$("#MemberPwds").formValidator({onFocus:" "}).inputValidator({min:1, onError:"帐户密码不能为空"})
+	
 })
 </script>
 </body>

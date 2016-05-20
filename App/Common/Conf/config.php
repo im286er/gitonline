@@ -31,7 +31,7 @@ return array(
 	'SHOW_ERROR_MSG'	=> true,
 	
 	//分组模块
-	'APP_GROUP_LIST' 	=> 'System,Agent,Merchant,Mobile,Ap,Demo,Merchantapp,Rebateapp,Capper',
+	'APP_GROUP_LIST' 	=> 'System,Agent,Merchant,Mobile,Ap,Demo,Merchantapp,Rebateapp,Capper,Home',
 	'DEFAULT_GROUP'     => 'Mobile',
 	
 	// 开启子域名配置
@@ -46,6 +46,7 @@ return array(
 			'ce'		=> array('Demo'),
 			'flapp'		=> array('Rebateapp'),
 			'tr'		=> array('Capper'),
+			'ho'        => array('Home'),
 	),
 	
 	//邮件配置

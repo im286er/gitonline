@@ -1,0 +1,19 @@
+<extend name="New2:common"/>
+<block name="header"></block>
+<block name="body">
+    <div class="container-fluid" >
+        <div class="row ct-promotion">
+        	<h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多</a></small></h3>
+            <volist name="coupon_list" id="vo" >
+                <div class="col-xs-4">
+                    <a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}"><img src="{$vo.vu_img}" class="img-responsive center-block"></a>
+                </div>
+            </volist>
+        </div>
+        
+        
+        <div class="nomore text-center">
+        	没有更多的了
+        </div>
+    </div>
+</block>

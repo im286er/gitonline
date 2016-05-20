@@ -13,9 +13,24 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 .category_order li { float:left; text-align:center; width:20%; }
 .category_order li a { display:block; width:100%; height:100%; font-size:14px; }
 .category_order li.on { border-bottom:2px solid #0099ff; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
 </style>
 <div class="wrapper">
-    <h2 class="title">订单管理 | <a href="{:U('Sales/rebateOrder')}" style="text-decoration:underline;">返利订单管理</a></h2>
+    <h2 class="shops">选择门店：
+	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
+	</volist>
+</h2>
+    
+    
+    
+    
+    
     <div id="category_order" class="category_order" style="display:none;background:#ff8040;color:#ffffff;height:30px; display:block; line-height:30px;">
 		<h3 style="text-align:center;"><a href="/Sales/myorder/dstatus/1.html" style="color:#ffffff;">您有<span id="sp1"></span>条新订单，<span id="sp2"></span>条等待取消订单,点击查看</a></h3>
     </div>
@@ -39,18 +54,26 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                 
                 <input type="text" autocomplete="off" placeholder="订单号"  value="{$Think.get.o_id}" name="o_id" />&nbsp;
                 <select name="o_dstatus" class="fl">
-                    <option value="" <if condition="$_GET['o_dstatus']==''">selected="selected"</if>>全部</option>
+                    <option value="" <if condition="$_GET['o_dstatus']==''">selected="selected"</if>>订单状态</option>
                     <volist name="odstatus" id="vo">
                         <option value="{$key}" <if condition="$_GET['o_dstatus'] == $key && $_GET['o_dstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
                     </volist>
                 </select>
 
                 <select name="o_pstatus" class="fl">
-                    <option value="" <if condition="$_GET['o_pstatus']==''">selected="selected"</if>>全部</option>
+                    <option value="" <if condition="$_GET['o_pstatus']==''">selected="selected"</if>>支付状态</option>
                     <volist name="oostatus" id="vo">
                         <option value="{$key}" <if condition="$_GET['o_pstatus'] == $key && $_GET['o_pstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
                     </volist>
                 </select>
+                
+                <select name="o_seat" class="fl">
+                    <option value="" <if condition="$_GET['o_seat']==''">selected="selected"</if>>桌号</option>
+                    <volist name="o_seat" id="vo">
+                        <option value="{$vo.title}" <if condition="$_GET['o_seat'] == $vo[title] && $_GET['o_seat']!=''">selected="selected"</if>>{$vo.title}</option>
+                    </volist>
+                </select>
+                <input type="hidden" name="sid" value="{$sid}" />
                 <input type="submit" value="开始搜索" class="button">
             </form>
         </div>
@@ -329,16 +352,16 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 	             }     
 	           });
 	        };
-        setInterval(function(){CountNum();}, 10000);
+        //setInterval(function(){CountNum();}, 10000);
      });
 	 </literal>
 
 	var msecs = 3000;	//改变时间得到不同的闪烁间隔；
-	setTimeout("blink()", msecs);
+	//setTimeout("blink()", msecs);
 	function blink() {	//这是闪烁程序的核心
 		category_order.style.visibility =
 		(category_order.style.visibility == "hidden") ? "visible" : "hidden";	//得到与当前状态相反的属性值
-		setTimeout("blink()", ((category_order.style.visibility == "hidden") ? msecs/10 : msecs));	//设定下一次改变状态的时间
+		//setTimeout("blink()", ((category_order.style.visibility == "hidden") ? msecs/10 : msecs));	//设定下一次改变状态的时间
 	}
 	function warning(){
 		if($.browser.msie && $.browser.version=='8.0'){

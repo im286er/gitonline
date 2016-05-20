@@ -56,6 +56,9 @@
                 
                 <div class="set top">
                     <label></label>
+                    <input type="hidden" name="cid" value="{$cid}" id="cid" />
+                    <input type="hidden" name="sid" value="{$sid}" id="sid" />
+                    <input type="hidden" name="dtype" value="{$dtype}" id="dtype" />
                     <input type="button" value="确认" class="btn btn-pwd" id="AddGoods_Save">
                     <input type="button" value="取消" class="btn btn-hui" id="AddGoods_Cancl">
                 </div>
@@ -82,6 +85,7 @@ $(function() {
 	$("#AddGoods_close,#AddGoods_Cancl").click(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+        window.parent.closelayer();
 	})
 	
 	//检查表单
@@ -121,14 +125,19 @@ if(falg==0){
 	
 	//提交信息
 	$("#AddGoods_Save").click(function() {
+        var dtype = {$dtype};
 		if( !CheckFrom() ) return false;
-		var name=$("#VU_NAME").val(), price=$("#VU_PRICE").val(), stime=$("#VU_STIME").val(), etime=$("#VU_ETIME").val(), num=$("#VU_NUMBER").val(), total=$("#VU_TOTAL").val(), sid=temp, des=$("#VU_DES").val(),vu_img=$("#VU_IMG").attr("src"),vu_money=$("#vu_money").val();
+		var name=$("#VU_NAME").val(), price=$("#VU_PRICE").val(), stime=$("#VU_STIME").val(), etime=$("#VU_ETIME").val(), num=$("#VU_NUMBER").val(), total=$("#VU_TOTAL").val(), sid=$('#sid').val(), cid=$('#cid').val(), des=$("#VU_DES").val(),vu_img=$("#VU_IMG").attr("src"),vu_money=$("#vu_money").val();
 
-		$.post('__ACTION__', {n:name,p:price,s:stime,e:etime,u:num,t:total,d:sid,des:des,img:vu_img,vu_money:vu_money}, function(data) {
+		$.post('__ACTION__', {n:name,p:price,s:stime,e:etime,u:num,t:total,d:sid,dtype:dtype,cid:cid,des:des,img:vu_img,vu_money:vu_money}, function(data) {
 			if( parseInt(data)==1 ) {
 				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
-				setTimeout(function() { window.parent.location.href="{:U('/Sales/jqlist', '', true)}"; }, 500); 
+				if (dtype == 1) {
+                    setTimeout(function() { window.parent.location.href="{:U('/Sales/jqlist', '', true)}"; }, 500); 
+                }else{
+                    window.parent.closelayer();
+                }
 			} else { alert( '添加失败' ); }
 		})
 	})

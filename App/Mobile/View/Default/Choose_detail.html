@@ -1,16 +1,21 @@
 <extend name="Public:common"/>
 <block name="body">
 <script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
-<script src="__PUBLIC__/Js/Mobile/flow2.js?v=127"></script>
+<if condition="$dtype eq 1">
+	<script src="__PUBLIC__/Js/Mobile/flow4.js"></script>
+<else/>
+	<script src="__PUBLIC__/Js/Mobile/flow2.js?v=127"></script>
+</if>
 <link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
 <link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/productdetails.css?v=20151013">
 <script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
 <script>
-var reqUrl = "{:U('Mobile/Choose/search',array('jid'=>$jid,'sid'=>$sid))}";
+var reqUrl = "{:U('Mobile/Choose/new_search',array('jid'=>$jid,'sid'=>$sid))}";
 var flowUrl = "{:U('Mobile/Flow/confirm',array('jid'=>$jid,'sid'=>$sid))}";
 var flowUrl2 = "{:U('Mobile/Flow/confirm',array('utoken'=>'xxx','jid'=>$jid,'sid'=>$sid))}";
 var mid = "{$mid}";
 var isApp = "{$isApp}";
+var sid    = {$sid};
 $(document).ready(function(){
 	getProductContent({$rcid},'');
 });
@@ -41,9 +46,9 @@ $(document).ready(function(){
 				<div class="item-price-m">￥{$goods_info['gdprice']>0 ? $goods_info['gdprice'] : $goods_info['goprice'] }</div>
 				<div class="item-price-m" style="color:#ccc;margin-left:15px;"><s>￥{$goods_info['goprice']}</s></div>
 				<div class="item-option-m">
-					<a href="javascript:;" class="ico ico-decrease btn_left" gid="{$goods_info.gid}"></a>
-					<span class="gnum_{$goods_info.gid}" id="number_{$goods_info.gid}">0</span>
-					<a href="javascript:;" class="ico ico-increase btn_right" gid="{$goods_info.gid}"></a>
+					<a href="javascript:;" class="ico ico-decrease btn_left jianBtn" gid="{$goods_info.gid}"></a>
+					<span class="gnum_{$goods_info.gid} numLabel" id="number_{$goods_info.gid}">{$cart_key}</span>
+					<a href="javascript:;" class="ico ico-increase btn_right addBtn" gid="{$goods_info.gid}"></a>
 				</div>
 			</div>
 			<div class="detail-abstract">{$goods_info.gdescription|default='商品暂无简短描述'}</div>
@@ -59,8 +64,14 @@ $(document).ready(function(){
 			<div class="ico ico-cart" id="cartBtn"><span class="cartNumber">0</span></div>
 			<div class="cart-price">共<span class="cartPrice">0</span></div>
 		</div>
-		<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了</a>
-		<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		<if condition="$dtype eq 1">
+			<a class="btn btn-primary" id="okBtn" href="{:U('Index/shopCart',array('sid'=>$sid))}">选好了</a>
+			<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		<else/>
+			<a class="btn btn-primary" id="okBtn" href="javascript:;">选好了</a>
+			<a class="btn btn-primary showbox3" id="subBtn" href="javascript:;" style="display:none;">提交订单</a>
+		</if>
+		
 		</div>
 	</footer>
 	<div class="cart-modal" id="cartModal" style='display:none;'>

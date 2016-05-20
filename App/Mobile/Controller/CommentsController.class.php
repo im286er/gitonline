@@ -17,8 +17,8 @@ class CommentsController extends MobileController {
 				'jid' => $this->jid,
 			);
 		$comments_list = $comments->field('phone , content ,create_time')->where($opt)->select();
-
-
+		
+		$this->funcMenu();
 		$this->assign('mid' , $this->mid);
 		$this->assign('comments_list' , $comments_list);
 		$this->assign('jid',$jid);

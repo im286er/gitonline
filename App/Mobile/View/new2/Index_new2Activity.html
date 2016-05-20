@@ -1,0 +1,25 @@
+<extend name="New2:common"/>
+<block name="header"></block>
+<block name="body">
+      <div class="container-fluid" >
+        <div class="row ct-activity">
+        	<h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多</a></small></h3>
+            <volist name="active_list" id="vo" >
+                <div class="media">
+                  <div class="media-left media-middle">
+                    <a href="#">
+                      <img class="media-object" src="{$vo.av_img}" alt="...">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">{$vo.av_title}<span class="badge">新</span></h4>
+                    <!-- 每天九点开抢 -->
+                  </div>
+                </div>
+            </volist>
+        </div>    
+        <div class="nomore text-center">
+        	没有更多的了
+        </div>
+    </div>
+</block>

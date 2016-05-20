@@ -12,6 +12,17 @@ class IndexController extends MerchantController {
 		$this->assign('corder', M('order')->where(array_merge($where, array('o_dstatus'=>array('egt', '1'), 'o_dstime'=>array(array('egt', $stime), array('elt', $etime), 'and'))))->count());
 		$this->assign('iorder', M('order')->where(array_merge($where, array('o_pstatus'=>'1', 'o_pstime'=>array(array('egt', $stime), array('elt', $etime), 'and'))))->sum('o_price'));
 		$this->assign('sumprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1')) ))->sum('o_price'));
+		$sbwb = 0;
+		if($sid > 0){
+			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
+			if($sinfo['bb_stime'] && $sinfo['bb_etime'] && $sinfo['wb_stime'] && $sinfo['wb_etime']){
+				$this->assign('bprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime'])) ))->sum('o_price'));
+				$this->assign('wprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime'])) ))->sum('o_price'));
+				$sbwb = 1;
+			}
+		}
+		$this->assign('sbwb',$sbwb);
+		
 		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
 		$member = M('member')->where(array('mid'=>$this->mid))->find();
 		$this->assign('merchant', $merchant);
@@ -19,12 +30,20 @@ class IndexController extends MerchantController {
 		$this->assign('mnickname', $merchant['mnickname']);
 		$shops = D('auth')->getAuthShops($this->mid);
 		$this->assign('shops', $shops);
-		//$mtapp = M('merchantApp')->where(array('jid'=>$this->jid))->find();
-		//$this->assign('mtapp', $mtapp);
-		//if($this->type==1)$page = new \Common\Org\Page(M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->count(), 3); 
-		//$this->assign('splist', M('shop')->where(array('jid'=>$this->jid, 'status'=>'1'))->field('sname,mservetel')->select());
-		//if($this->type==1)$this->assign("pages",$page->show()); 
-		//$this->assign('qrcodefile',$this->createQrCode($mtapp));
+		
+		$is_add = 0; 
+		if($this->role == 1){
+			$is_add = 1;
+		}else{
+			$my_auth = M('merchant_user')->where(array('tmid'=>$this->mid))->find();
+			$my_auth2 = unserialize($my_auth['auth']);
+			if(in_array('ShopaddShop',$my_auth2['next'])){
+				$is_add = 1;
+			}
+		}
+		
+		$this->assign('is_add',$is_add);
+		
 		$this->display();
 	}
 

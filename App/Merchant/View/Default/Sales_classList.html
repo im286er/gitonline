@@ -1,0 +1,153 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<js href="__PUBLIC__/Js/layer/layer.js" />
+<style type="text/css">
+.modal-content .set > input[type="text"] { width:420px; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#e7e7eb;padding:10px;color:#ffffff;}
+.table input[type="button"], .tables input[type="button"] {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;border: 1px solid #e7e7eb;color: #5da3ea;margin-right: 3px;padding: 2px 5px;}
+</style>
+<script type="text/javascript">
+var DeleteClassPath		= '{:U("/Sales/delClass@sj", "", true, true)}';
+var DeleteInfoUrlPath	= '{:U("/Sales/delGoods@sj", "", true, true)}';
+var StatusUrlPath	= '{:U("/Sales/statusGoods@sj", "", true, true)}';
+var type = '{$Think.get.ctype}';
+var sid = '{$sid}';
+</script>
+<div class="wrapper">
+    <h2 class="title">
+        <p class="returnMenu">
+            <a href="{:U('/Sales/classList', array('ctype'=>1), true)}" <eq name="Think.get.ctype" value='1'>class="curr"</eq>>商品分类</a>
+        </p>
+    </h2>
+    
+    
+
+    <div class="border-b"></div>
+   <h2 class="shops">选择门店：
+	
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?ctype=1&sid={$key}">{$vo}</a></span>
+	</volist>
+</h2>
+    <input type="hidden" name="sid" id="sid" value="{$sid}">
+    <div class="mian padding">
+        <div class="border">
+            <div class="clearfix border-b">
+            	<!-- 左边的分类列表 -->
+                <div class="manage-left" style="width: 80%">
+                    <h2 class="manage">分类管理
+                        <span class="pull-right show" id="addorder">
+                            <i class="addicon" id="add" onClick="checkSid();"></i>
+                            <i class="orderby" id="orderby"></i>
+                        </span>
+                        <span class="pull-right hide" id="button">
+                            <input type="button" value="完成" class="btn btn-blue" id="finish">
+                            <input type="button" value="取消" class="btn" id="cancel">
+                        </span>
+                    </h2>
+                    <ul class="list" id="ClassList">
+						<php>$countclass = count($classlist);</php>
+                        <foreach name="classlist" item="v">
+                            <li data-id="{$v.id}" style="width: 100%" data-order='{$v.corder}' class="<if condition='$cid eq $v["id"]'>curr</if>">
+								<a href="/Sales/goods/ctype/{$Think.get.ctype}/sid/{$sid}/cid/{$v.id}.html" style="float: left;text-decoration: none;width: 100px;">{$v.cname}</a>
+                                <b class="pull-right" style="display:none;">
+									<neq name="key" value="0"><i class="upicon" onClick="OrderMenu('{$v.id}','{$v.corder}','up')" ></i></neq>
+									<neq name="key" value="$countclass-1"><i class="downicon OrderMenu" onClick="OrderMenu('{$v.id}','{$v.corder}','down')" ></i></neq>
+                                	<i class="writeicon" onClick="DialogFrameFun(465, 500, '/Sales/editClass/sid/{$sid}/cid/{$v.id}.html')"></i>
+                                    <i onClick="DeleMenu('{$v.id}')" class="deleteicon"></i>
+                                </b>
+                            </li>							
+                        </foreach>
+                    </ul>
+                </div>
+            </div>
+            <if condition="$page">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='{:U('Sales/goods',array('ctype'=>I('get.ctype', 1, 'intval'),'sid'=>I('get.sid'),'cid'=>I('get.cid')))}?page='+this.value">{$page}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+<!-- 弹窗 -->
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;top:80px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+var ModuleType = '{$Think.get.ctype}';
+$(function() {
+	//上传图片
+	$("#UploadImage").click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				showRemote:false, clickFn:function(url, title, width, height, border, align) {
+					$('#ModuleIcon').attr("src", url); editor.hideDialog();
+				}
+			});
+		});
+	})
+	
+	//在线消费 最顶部 模块名称和ICON设置
+	$("#ModuleUpdate").click(function() {
+		var ModuleName = $.trim($("#ModuleName").val());
+		var ModuleIcon = $("#ModuleIcon").attr('src');
+		if( !ModuleName || !ModuleIcon || !ModuleType ) { alert("模块名称和ICON图标不能为空"); return false; }
+		if(_length(ModuleName)>12){alert("模块名称不能超过6个汉字"); return false;}
+		$.post("{:U('/Sales/resetModuleInfo', '', true)}", {ModuleName:ModuleName, ModuleIcon:ModuleIcon, ModuleType:ModuleType}, function( data ) {
+			alert( parseInt(data) == 1 ? "设置成功" : "设置失败" );	
+		})
+	})
+	
+	var guide = "{$guide}";
+	
+	$(document).ready(function(){
+		if(guide == 1){
+			//遮罩
+			var wHeight = $(document).height();
+			$(".guide-layer").css('height', wHeight);
+			$(".layer-4").show();
+		}
+	});
+	$(".guide-layer").click(function(event) {
+		$(".guide-layer").hide();
+	});
+});
+
+function OrderMenu(cid,corder,type){
+	$.post("{:U('/Sales/corderClass', '', true)}", {cid:cid, corder:corder, type:type,ctype:ModuleType}, function( data ) {
+		if(data==1){
+			$('#ClassList li').remove();
+			$.get("{:U('/Sales/ajaxClass', '', true)}",{ctype:ModuleType}, function( result ) {
+				$('#ClassList').html(result);
+			});
+		}
+	});
+}
+function _length(str){
+	var len=0;
+	for(var i=0;i<str.length;i++){
+		if(str.charAt(i)>'~'){len+=2;}else{len++;}
+	}
+	return len;
+}
+function checkSid(){
+	if(sid == 0){
+		alert('请先选择分店');
+	}else{
+		DialogFrameFun(465, 500, '{:U('Sales/addClass',array('ctype'=>I('get.ctype'),'sid'=>$sid))}');
+	}
+}
+</script>
+</block>

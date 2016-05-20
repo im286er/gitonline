@@ -67,6 +67,7 @@ $(function() {
 	$("#AddGoods_close,#AddGoods_Cancl").click(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.closelayer();
 	})
 	
 	//上传图片
@@ -97,13 +98,19 @@ $(function() {
 	
 	//提交信息
 	$("#AddGoods_Save").click(function() {
+		var dtype = {$dtype};
 		if( !CheckFrom() ) return false;
 		var sid=$("#AV_SID").val(), title=$.trim($("#AV_TITLE").val()), img=$("#AV_IMG").attr("src"), con=UE.getContent(), stime=$("#AV_STIME").val(), etime=$("#AV_ETIME").val();
-		$.post('__ACTION__', {t:title,i:img,c:con,s:stime,e:etime,d:sid,id:avid}, function(data) {
+		$.post('__ACTION__', {t:title,i:img,c:con,s:stime,e:etime,dtype:dtype, d:sid,id:avid}, function(data) {
 			if( parseInt(data)==1 ) {
 				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
-				setTimeout(function() { window.parent.location.href="{:U('/Message/hdlist', '', true)}"; }, 500); 
+				if (dtype == 1) {
+					setTimeout(function() { window.parent.location.href="{:U('/Message/hdlist', '', true)}"; }, 500);
+				}else{
+					window.parent.closelayer();
+				}
+				 
 			} else { alert( '编辑失败' ); }
 		})
 	})

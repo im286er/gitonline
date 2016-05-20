@@ -3,7 +3,7 @@ namespace Mobile\Controller;
 
 class DZPController extends MobileController {
 	public function index(){
-		$jid = I('jid');
+		$jid = I('jid',$this->jid);
 		if(cookie('opentype')=='flapp'){
 			$utk = I('utoken');
 			if($utk){

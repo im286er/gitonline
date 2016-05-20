@@ -39,9 +39,9 @@
 				<a href="{:U('User/login')}?returnurl=<php>echo urlencode(U());</php>"><span class="icon-menu msg"></span><p>客服</p></a>
 			</if>
             </li>
-            <li>
+            <!-- <li>
             	<a href="javascript:void(0);"  onclick="sendStr('nearby');"><span class="icon-menu find"></span><p>附近</p></a>
-            </li>
+            </li> -->
             <li <if condition="CONTROLLER_NAME eq 'User' AND ACTION_NAME == 'index' ">class="current"</if>>
             	<a href="{:U('User/index')}"><span class="icon-menu my"></span><p>我的</p></a>
             </li>

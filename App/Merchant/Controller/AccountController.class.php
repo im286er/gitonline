@@ -6,14 +6,14 @@ class AccountController extends MerchantController {
 	//个人资料修改
 	public function index() {
 		if( IS_POST ) {
-			$tphone  = I('tphone');
+			//$tphone  = I('tphone');
 			$birthday  = I('birthday');
 			$address  = I('address');
 			$sex  = I('sex');
 			$idcard  = I('idcard');
 			
 			$merchant_user = array(		
-					'tphone' => $tphone,			
+					//'tphone' => $tphone,			
 					'sex' => $sex,
 					'birthday' => $birthday,
 					'address' => $address,

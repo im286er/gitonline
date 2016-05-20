@@ -95,6 +95,10 @@ class ManageController extends MerchantController {
 			$where = " t_status=1 ";
 		}
 		$this->assign('t_price',$t_price);
+
+		//查询店铺
+		$shop = M('shop')->where(array('jid'=>$this->jid))->select();
+		$this->assign('shop', $shop);
 		
 		$page = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
 		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
@@ -240,22 +244,65 @@ class ManageController extends MerchantController {
 		}
 	}
 	
+	public function getSS(){
+		$where = '';
+		$sstime = I('sstime',0);
+		$statime = I('statime',0);
+		$endtime = I('endtime',0);
+		$sid = I('sid',0);
+		if($sstime > 0){
+			if($sstime == 1){
+				$where .= " and o_dstime between '" . date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d"),date("Y"))) . "' and '" . date("Y-m-d H:i:s",mktime(23, 59, 59,date("m"),date("d"),date("Y")))."' ";
+			}elseif($sstime == 2){
+				$where .= " and o_dstime between '" . date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),1,date("Y"))) . "' and '" . date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("t"),date("Y"))) ."' ";
+			}elseif($sstime == 3){
+				$season = ceil((date('n'))/3);
+				$where .= " and o_dstime between '" . date('Y-m-d H:i:s', mktime(0, 0, 0,$season*3-3+1,1,date('Y'))) . "' and '" . date('Y-m-d H:i:s', mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,date("Y"))),date('Y')))."' ";
+			}elseif($sstime == 4){
+				$where .= " and o_dstime between '" . date("Y-m-d H:i:s",mktime(0, 0 , 0,1,1,date("Y"))) . "' and '" . date("Y-m-d H:i:s",mktime(23, 59, 59,12,31,date("Y")))."' ";
+			}
+		}else{
+			if( $statime ) {
+				$where .= " and o_dstime >= '" . date('Y-m-d H:i:s', strtotime($statime))."' ";
+			}
+			if( $endtime ) {
+				$where .= " and o_dstime <= '" . date('Y-m-d 23:59:59', strtotime($endtime))."' ";
+			}
+		}
+		
+		if($this->role != 1 && $sid > 0){
+			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
+			if($this->shift == 2){
+				if($sinfo['bb_stime'] != '' && $sinfo['bb_etime'] != ''){
+					$where .= " and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime'];
+				}
+			}elseif($this->shift == 3){
+				if($sinfo['wb_stime'] != '' && $sinfo['wb_etime'] != ''){
+					$where .= " and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime'];
+				}
+			}
+		}
+		return $where;
+	}
+	
 	//财务管理
 	public function _before_finance()
 	{
+		
 		isset($_GET['type']) || $_GET['type']=0;
 		if( intval($_GET['type']) != 4 )
 		{
 			$member = M('member')->where(array('mid'=>$this->mid))->find();
 			$this->assign('member', $member);
-
+			
+			$ww = $this->getSS();
 			$wheresid =  I('get.sid')?' AND o_sid = '.I('get.sid'):null;
 			$whereflsid =  I('get.sid')?' AND flo_sid = '.I('get.sid'):null;
 
 			//线下总收入
-			$this->assign('count_a', M('order')->where("o_type=0 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid)->sum('o_price'));
-			$this->assign('count_b', M('order')->where("o_type=1 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid)->sum('o_price'));
-			$this->assign('count_c', M('order')->where("o_type=2 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid)->sum('o_price'));
+			$this->assign('count_a', M('order')->where("o_type=0 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid.$ww)->sum('o_price'));
+			$this->assign('count_b', M('order')->where("o_type=1 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid.$ww)->sum('o_price'));
+			$this->assign('count_c', M('order')->where("o_type=2 AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid.$ww)->sum('o_price'));
 			$count_d = M('flOrder')->where("flo_ptype=1 AND flo_dstatus=4 AND flo_pstatus in(1,3) AND flo_jid={$this->jid}".$whereflsid)->sum('flo_price')-M('flOrder')->where("flo_ptype=1 AND flo_dstatus=4 AND flo_pstatus in(1,3) AND flo_jid={$this->jid}".$whereflsid)->sum('flo_backprice');//支付金额减去返利金额
 			$this->assign('count_d',$count_d);
 		}
@@ -263,18 +310,21 @@ class ManageController extends MerchantController {
 
 	public function finance() 
 	{
+		$sid = I('sid',0);
+		$this->assign('sid',$sid);
 		
 		$shops = D('auth')->getAuthShops($this->mid);
 		$this->assign('shops', $shops);
 		$sp_oid = $resource_gdprice = $resource_gdprice_array = array();
-
+		$ww = $this->getSS();
+		
 		switch( intval($_GET['type']) )
 		{
 			case 0:
 			case 1:
 			case 2://线上订单明细
 				$wheresid =  I('get.sid')?' AND o_sid = '.I('get.sid'):null;
-				$where = "o_type=".intval($_GET['type'])." AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid;
+				$where = "o_type=".intval($_GET['type'])." AND o_dstatus=4 AND o_pstatus in(1,3) AND o_jid={$this->jid}".$wheresid.$ww;
 				$page = new \Common\Org\Page(M('order')->where( $where )->count(), 12);
 				$resource = M('order')->where( $where )->limit($page->firstRow.','.$page->listRows)->order('o_dstime desc')->select();
 				
@@ -529,6 +579,22 @@ class ManageController extends MerchantController {
 
 	// 模板管理
 	public function mobileTheme(){
+		$shops = D('auth')->getAuthShops($this->mid);
+		$sid = I('get.sid', key($shops), 'intval');
+		cookie('shop'.$this->jid, $sid);
+		
+		//查询配置
+		$setting_file_path = $this->path.'setting.conf';
+		$setting_array = array();
+		if( file_exists( $setting_file_path ) )
+		{
+			$setting_array = unserialize( file_get_contents( $setting_file_path ) );
+		}
+		$this->assign('setting', $setting_array);
+		//二维码
+		//$mtapp = M('merchantApp')->where(array('jid'=>$this->jid))->find();
+		//$this->assign('mtapp', $mtapp);
+		//$this->assign('qrcodefile',$this->createQrCode($mtapp));
 		//if( $this->type != 1 ) E('你无权查看当前页面');
 		$merchant=M('merchant')->where(array('jid'=>$this->jid))->find();
 		$this->assign('merchant',$merchant);
@@ -543,7 +609,7 @@ class ManageController extends MerchantController {
 			else
 				$this->ajaxReturn(array('status'=>0,'msg'=>'修改失败'));
 		}
-		//$v_id = I('v_id',0);
+		//拼接查询条件
 		$t_price = I('t_price',0);
 		if($t_price == 1){
 			$where = " t_status=1 AND t_price = 0 ";
@@ -552,24 +618,195 @@ class ManageController extends MerchantController {
 		}else{
 			$where = " t_status=1 ";
 		}
-		$this->assign('t_price',$t_price);
-		
-		$page = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
+
+		$v_id  = I('v_id',0);
+		if ($v_id != 0) {
+			$where .= " AND t_vid like '%$v_id%' ";
+		}
+		$page   = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
 		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
+		//功能列表		
+		$module = M('module');
+		$func   = $module->where(array('module_status'=>1))->select();
+		$mfunc  = M('merchant_module')->where(array('jid'=>$this->jid))->field('module_sign')->select();
+		$tmfunc = array();
+		foreach($mfunc as $k=>$v){
+			$tmfunc[] = $v['module_sign'];
+		}
+		//栏目列表
+		$category = M('category')->where(array('sid'=>$sid, 'jid'=>$this->jid))->order('corder')->select();
+		for ($i=0; $i <count($category) ; $i++) { 
+			for ($j=0; $j <count($func) ; $j++) { 
+				if ($category[$i]['model'] == $func[$j]['module_sign']){
+					// if ($func[$j]['module_sign'] == 'goods') {
+					// 	$category[$i]['url'] = '/Design/goods/sid/'.$sid.'/cid/'.$category[$i]['id'].'.html';
+					// }else{
+						$category[$i]['url'] = $func[$j]['default_url'].'cid/'.$category[$i]['id'].'/sid/'.$sid.'.html';
+					// }
+				}
+			}
+		}
+		$this->assign('CurrentUrl','Managetemplate');
+		$this->assign('shopInfo', M('shop')->where(array('sid'=>$sid))->find());
+		$this->assign('category', $category);
+		$this->assign('t_price',$t_price);
+		$this->assign('v_id',$v_id);
 		$this->assign('pages', $page->show());
 		$this->assign('themes',$themes);
+		$this->assign('func', $func);
+		$this->assign('tmfunc', $tmfunc);
+		$this->assign('jid',$this->jid);
+		$this->assign('sid',$sid);
 		$this->display();	
 	}
 
 
+	//应用模板
+	public function appTheme(){
+		$sid    = I('sid', 0 ,'intval');
+		$t_sign = I('t_sign');
 
-	/**
-	 * 后台编辑模板
-	 */
-	public function ctheme(){
-		C('TMPL_FILE_DEPR','');
-		$this->display('/ct/index');
+		$re = M('shop')->where(array('sid'=>$sid))->setField('theme', $t_sign);
+		$this->redirect('mobileTheme', array('sid'=>$sid));
+		
+	}	
+
+
+	//系统模板
+	public function sysTheme(){
+		$shop = D('auth')->getAuthShops($this->mid);		
+		$sid = I('sid', key($shop) );
+		//查询新旧模板
+		$shop_theme = M('shop')->where(array('sid'=>$sid))->getField('theme');
+		$this->assign('shop_theme',$shop_theme);
+		
+		//条件
+		$t_price = I('t_price',0);
+		if($t_price == 1){
+			$where = " t_status=1 AND t_price = 0 ";
+		}elseif($t_price == 2){
+			$where = " t_status=1 AND t_price > 0 ";
+		}else{
+			$where = " t_status=1 ";
+		}
+
+		$v_id  = I('v_id',0);
+		if ($v_id != 0) {
+			$where .= " AND t_vid like '%,$v_id,%' ";
+		}
+		//分页
+		$page   = new \Common\Org\Page(M('Theme')->where($where)->count(), 4);
+		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
+		//查询店铺
+		
+		//行业列表
+		$vocation = M('vocation')->where(array('v_pid'=>0))->select();
+
+		$this->assign('vocation',$vocation);
+		$this->assign('shop', $shop);
+		$this->assign('pages', $page->show());
+		$this->assign('t_price', $t_price);
+		$this->assign('v_id', $v_id);
+		$this->assign('sid', $sid);
+		$this->assign('themes',$themes);
+		$this->display();
 	}
 
+
+	//背景音乐
+	public function backMusic(){
+		$sid = cookie('shop'.$this->jid);
+		if ( IS_POST ) {
+			$post_data = I('post.');
+			$m_name    = $post_data['m_name'];
+			$m_url     = $post_data['m_url'];
+			if ($m_url == '' || $m_name == '') exit('2');
+			//添加条件
+			$opt = array(
+				'music_name' => $m_name,
+				'music_url'  => $m_url,
+			);
+			exit(M('shop')->where(array('sid'=>$sid))->save($opt) !== false ? '1' : '3');
+		}else{
+			$this->assign('info',M('shop')->where(array('sid'=>$sid))->find());
+			$this->assign('pagename',"背景音乐上传");
+			$this->display();
+		}
+		
+	}
+
+
+	//上传商铺logo
+	public function logo(){
+		$sid = cookie('shop'.$this->jid);
+		if ( IS_POST ) {
+			$upload = new \Think\Upload();// 实例化上传类
+		    $upload->maxSize   =     3145728 ;// 设置附件上传大小
+		    $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+		    $upload->rootPath  =     './Public/Data/'.$this->jid.'/'; // 设置附件上传根目录
+		    // 上传文件 
+		    $info   =   $upload->upload();
+		    if(!$info) {// 上传错误提示错误信息
+		        $this->error($upload->getError());
+		    }else{// 上传成功
+		    	$re = M('shop')->where(array('sid'=>$sid))->setField('logo','/Public/Data/'.$this->jid.'/'.$info['file']['savepath'].$info['file']['savename']);
+		    }
+		    $this->redirect('mobileTheme');
+		}else{
+			$this->display();
+		}
+	}
+
+
+
+	//底部文字
+	public function addFooterText(){
+		if ( IS_POST ) {
+			$post_data = I('post.');
+			$t_content = $post_data['con'];
+			if ($t_content == '') exit('2');
+			//添加条件
+			$opt = array(
+				'footer_content'   => $t_content,
+			);
+			exit(M('merchant')->where(array('jid'=>$this->jid))->save($opt) !== false ? '1' : '3');
+		}else{
+			$this->assign('info',M('merchant')->where(array('jid'=>$this->jid))->getField('footer_content'));
+			$this->assign('pagename',"底部文字");
+			$this->display();
+		}
+	}
+
+
+	//创建二维码
+	public function createQrCode($mtapp,$size=10,$domain=true){
+		$qrcodefile = 'qrcode'.$size.'.png';
+		if(!file_exists($this->path.$qrcodefile)) {
+			vendor("phpqrcode.phpqrcode");
+			$QRcode = new \QRcode();
+			$qrcodefile = $qrcodefile;
+			$codetxt = U('Index/appdown@yd',array('jid'=>$this->jid));
+			$QRcode::png($codetxt, $this->path.$qrcodefile, 'H', $size);
+			$applogo = (APP_DIR.$mtapp['applogo']);
+			$QR = $this->path.$qrcodefile;
+			if(file_exists($applogo)) {
+				$QR = imagecreatefromstring(file_get_contents($QR)); 
+				$applogo = imagecreatefromstring(file_get_contents($applogo)); 
+				$QR_width = imagesx($QR); 
+				$QR_height = imagesy($QR); 
+				$logo_width = imagesx($applogo); 
+				$logo_height = imagesy($applogo); 
+				$logo_qr_width = $QR_width / 5; 
+				$scale = $logo_width / $logo_qr_width; 
+				$logo_qr_height = $logo_height / $scale; 
+				$from_width = ($QR_width - $logo_qr_width) / 2; 
+				imagecopyresampled($QR,$applogo, $from_width, $from_width, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height); 
+			} 
+			imagepng($QR,$this->path.$qrcodefile); 
+		}
+		$file = '/Public/Data/'.$this->jid.'/'.$qrcodefile;
+		if($domain)$file ='http://'.I('server.HTTP_HOST').$file;
+		return $file;
+	}
 
 }

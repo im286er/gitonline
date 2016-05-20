@@ -1,25 +1,42 @@
 <extend name="Public:partial"/>
 <block name="body">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
 <style type="text/css">.modal-content .set > input[type="text"] { width:260px; }</style>
 <div class="reveal-modal" style="display:block; border:none;">
     <h3>添加分类 <span class="close" id="AddMenu_close">×</span></h3>
     <div class="modal-content">
-        <div class="text-center Sort">
+        <div class="Sort">
             <p>分类名称不多于6个汉字或12个字母：</p>
-           名称: <input type="text" value="" style="width:224px;" id="AddMenu_Value"><br>
+           名称: <input type="text" value="{$class_info.cname}" style="width:224px;" id="AddMenu_Value"><br>
             
         </div>
-        
-        <if condition="$sid gt 0">
-        <div class="text-center Sort">
-        打印机: <select multiple id="print_id" style="width:224px;height:100px">
-                    <foreach name="print_list" item="vo" >
-                    <option value="{$vo.print_id}">{$vo.print_name}</option>
-                    </foreach>
-            </select>
+	 <div class="Sort">
+图标:	<input type="text" value="{$class_info.cimg}" name="cimg" id="UPLOAD_CIMG_VALUE" placeholder="请上传图标" readonly="readonly" style="width:224px;">
+                <input type="button" onclick="uploadImageFun('CIMG')" value="上传" class="btn btn-pwd" style="" />
+                </div>
+                
+                <if condition="$ml">
+                <div class="Sort">
+           功能: <select name="module" id="module" style="width:200px;height:30px">
+           <option value="0">请选择</option>
+           <volist name="ml" id="vo">
+           <option value="{$vo.module_sign}" <if condition="$vo['module_sign'] eq $class_info['model']">selected</if>>{$vo.module_name}</option>
+           </volist>
+           </select>
+        </div>
+        <else />
+        <div class="Sort">
+           功能: <select name="module" id="module" style="width:200px;height:30px">
+           <option value="goods" selected>商品</option>
+           </select>
         </div>
         </if>
+        <div class="Sort">
+           排序: <input type="text" value="{$class_info.corder}" style="width:224px;" id="Corder"><br>
+        </div>
+        
+        
         
         <div class="text-center Sort">
         <input type="button" value="保存" class="btn btn-pwd" id="AddMenu_Save">
@@ -27,38 +44,68 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="__PUBLIC__/Js/Kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+var editor = KindEditor.editor({ uploadJson:"{:U('/Public/kindeditorUpload', '', true)}", imageUploadLimit:1, });
+
+function uploadImageFun(id) {
+	editor.loadPlugin('image', function() {
+		editor.plugin.imageDialog({
+			showRemote:false, 
+			clickFn:function(url, title, width, height, border, align) {
+				$('#UPLOAD_'+id+'_VALUE').val(url); editor.hideDialog();
+			}
+		});
+		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：180 * 180，图片格式为 jpg,jpeg,png</div>');
+	});	
+}
+</script>
 <script type="text/javascript">
 $(function() {
 	var ctype='{$Think.get.ctype}', sid='{$sid}';
 	
-	if( !ctype ) {
-		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
-		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
-	}
+	// if( !ctype ) {
+	// 	var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+	// 	$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	// }
 	
 	//取消或关闭
 	$("#AddMenu_close,#AddMenu_Cancl").click(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
 	})
 	
 	//提交信息
 	$("#AddMenu_Save").click(function() {
 		var value = $("#AddMenu_Value").val();
-		if(sid > 0){
-			var print_id = $("#print_id").val();
-		}else{
-			var print_id = '';
-		}
-		if( !ctype || !value ) { alert("参数出现错误"); return false; }
+		var corder= $('#Corder').val();
+		var file  = $('#UPLOAD_CIMG_VALUE').val();
+		var module = $('#module').val();
 		
-		$.post('__ACTION__', {cname:value, ctype:ctype, sid:sid,print_id:print_id}, function(data) {
+		if(value == ''){
+			alert('请输入栏目名称');
+			return false;
+		}
+		if(file == ''){
+			alert('请上传栏目图标');
+			return false;
+		}
+		if(module == '' || module == 0){
+			alert('请选择所属功能');
+			return false;
+		}
+		//if( !module ||  || !value ) { alert("参数出现错误"); return false; }
+		
+		$.post('__ACTION__', {module:module,cimg:file,cname:value, corder:corder, ctype:ctype, sid:sid}, function(data) {
 			if( parseInt(data) != 0 ) {
-				var PwindowObj = window.parent.document.getElementById('ClassList');
-				$(PwindowObj).load("/Sales/ajaxClass/sid/"+sid+"/ctype/"+ctype+".html");
+				//var PwindowObj = window.parent.document.getElementById('ClassList');
+				//$(PwindowObj).load("/Sales/ajaxClass/sid/"+sid+"/ctype/"+ctype+".html");
 				
-				var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
-				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				//var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+				//$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				//window.parent.document.getElementById('silver').style.display = "block";
+				window.parent.location.reload();
 			} else { alert("添加失败"); }
 		})
 	})

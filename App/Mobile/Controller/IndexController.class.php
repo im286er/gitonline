@@ -37,6 +37,16 @@ class IndexController extends MobileController {
 		}else{
 			$avnum = 2;
 		}
+
+		//$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
+		$sid = $this->sid;
+
+		$shop_theme =  M('shop')->where(array('sid'=>$sid))->getField('theme');
+
+		if ($shop_theme == 'new1' || $shop_theme == 'new2') {
+			$this->redirect($shop_theme, array('sid'=>$sid, 'jid'=>$this->jid));
+		}
+
 		$active_list = $active->where($opt)->order('av_id desc')->limit($avnum)->select();
 		//首页显示的活动 end
 		
@@ -190,18 +200,7 @@ class IndexController extends MobileController {
 		$this->assign('shop_info', $shop_info);
 		
 		//查询非系统模块
-		$module_list = array();
-		$sign = M("merchant")->where(array('jid'=>$this->jid))->getField("modules");
-		if($sign){
-			$opt = array(
-				'module_pid' => array('gt',0),
-				'module_status' => '1',
-				'module_system' => 0,
-				'module_sign'  => array('in',$sign)
-			);
-			$module_list = M("merchant_module")->where($opt)->order("module_order")->select();
-		}
-		$this->assign('module_list', $module_list);
+		
 		$this->mydisplay();
 	}
 	
@@ -310,26 +309,19 @@ class IndexController extends MobileController {
 	 * @return mixed
 	 */
 	public function active(){
+		$g_data = I('get.');
 		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
 
 		//首页显示的活动 start
 		$active = M('active');
 		$opt = array(
 			'av_jid'    => $this->jid,
-			'av_status' => 1
+			'av_status' => 1,
+			'av_sid'	=> $g_data['sid'],
+			'av_cid'	=> $g_data['cid'],
 		);
-		if($tpl_name == 'yshs'  || $tpl_name == 'clothes' || $tpl_name == 'fruit' || $tpl_name == 'tonghui' || $tpl_name == 'netbar'){
-			$avnum = 3;
-		}elseif($tpl_name=='coffee' || $tpl_name == 'market') {
-			$avnum = 6;
-		}elseif( $tpl_name == 'zyg' || $tpl_name=='njl' || $tpl_name=='jshs'){
-			$avnum = 4;
-		}elseif($tpl_name=='qiye'){
-			$avnum = 8;
-		}else{
-			$avnum = 2;
-		}
-		$active_list = $active->where($opt)->order('av_id desc')->limit($avnum)->select();
+
+		$active_list = $active->where($opt)->order('av_id desc')->limit(3)->select();
 		$this->assign('active_list',$active_list);
 		//首页显示的活动 end
 	}
@@ -369,13 +361,16 @@ class IndexController extends MobileController {
 	 * @return mixed
 	 */
 	public function coupon(){
+		$g_data = I('get.');
 		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
 		//首页显示的优惠券 start
 		$coupon = M('voucher');
 		$opt = array(
 			'v.vu_jid'    => $this->jid,
 			'v.vu_status' => 1,
-			'v.vu_etime' => array('egt',date("Y-m-d H:i:s")),
+			'v.vu_etime'  => array('egt',date("Y-m-d H:i:s")),
+			'v.vu_cid'	  => $g_data['cid'],
+			'v.vu_sid'	  => $g_data['sid'],
 		);
 
 		$NEW_COUPON_NUMBER = C('NEW_COUPON_NUMBER');
@@ -420,6 +415,63 @@ class IndexController extends MobileController {
 	}
 
 
+	/**
+	 * 购物车
+	 */
+	public function shopCart(){
+		$sid  = $this->sid == '0' ? I('sid','95') : $this->sid;
+
+		$cart = $_COOKIE['ProductList'];
+
+		if(!$cart || $cart == ''){
+			$this->redirect('Index/new2', array('jid' => $this->jid));
+		}
+		$cart_arr2 = explode('|', $cart);
+		$cart_key = array();
+		foreach($cart_arr2 as $k1=>$v1){
+			if(!empty($v1)){
+				$temp = explode('_', $v1);
+				if ($temp[0] == $sid) {
+					$cart_key[] = $temp[1];
+				}
+			}
+		}
+
+		$opt = array(
+			'gid' => array('in',join(',',$cart_key))
+		);
+		$goods_list = M('goods')->where($opt)->select();
+
+		$total_number = 0;
+		$total_price  = 0;
+		$cart_arr = array();
+		foreach($cart_arr2 as $k=>$v){
+			$temp2 = explode('_', $v);
+			foreach($goods_list as $kk=>$vv){
+				if($temp2[1] == $vv['gid']){
+					$cart_arr[$k]['gname']  =  $vv['gname'];
+					$cart_arr[$k]['gprice'] = $vv['gdprice']>0 ? $vv['gdprice'] : $vv['goprice'] ;
+					$cart_arr[$k]['number'] = $temp2[2] ;
+					$cart_arr[$k]['gid']    = $vv['gid'];
+					$cart_arr[$k]['gimg']    = $vv['gimg'];
+					$total_number += $temp2[2];
+					$total_price  += $temp2[2] * $cart_arr[$k]['gprice'];
+				}
+			}
+		}
+
+		$this->funcMenu();
+
+		$this->assign('sid',$sid);
+		$this->assign('cart_arr',$cart_arr);
+		$this->assign('total_number',$total_number);
+		$this->assign('total_price',$total_price);
+		$this->assign('page_name','购物车');
+		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$sid) > 0 ? cookie($this->jid.'_rcid_'.$sid) : 0);
+		$this->newdisplay();
+	}
+
+
 	public function new1(){
 		//获取活动
 		$this->active();
@@ -430,6 +482,74 @@ class IndexController extends MobileController {
 
 		$this->mydisplay();
 	}
+
+
+	//新版模板2首页
+	public function new2(){
+
+		$sid     = $this->sid == '0' ? I('sid','95') : $this->sid;
+
+		$dtype   = I('dtype', 1);
+
+		$ghome	 = M('Ghome')->where(array('g_sid'=>$sid))->find();
+
+		$cid     = I('cid', 0) == '0' ? $ghome['g_cid'] : I('cid');
+
+		$order   = $ghome['g_sort'] == 1 ? 'g.gdate desc' : 'g.gsales desc'; 
+
+		$this->funcMenu();
+
+		if ( I('cid',0) ) {
+			$goods   = M('Goods')->alias('g')->join('azd_category c on g.cid=c.id')->where(array('g.sid'=>$sid, 'g.cid'=>$cid, 'g.gstatus'=>1, 'c.status'=>1))->select();
+		}else{
+			$goods   = M('Goods')->alias('g')->join('azd_category c on g.cid=c.id')->where(array('g.sid'=>$sid, 'g.cid'=>$cid, 'g.gstatus'=>1, 'c.status'=>1))->order($order)->limit($ghome['g_num'])->select();
+			$dtype = 2;
+		}
+
+		$cname   = M('category')->where(array('id'=>$cid, 'status'=>1, 'jid'=>$this->jid))->getField('cname');
+
+		//商品分类列表   start
+		$theme  = M('shop')->where(array('sid'=>$sid))->getField('theme');
+		
+		$category = M('category')->alias('c')->join('azd_module m on c.model=m.module_sign')->where(array('c.sid'=>$sid, 'c.status'=>1, 'c.jid'=>$this->jid))->field('c.*,m.module_link')->order('c.corder')->select();
+		foreach($category as $k=>$v){
+			
+			$category[$k]['url'] = $v['module_link'].'jid/'.$this->jid.'/cid/'.$v['id'].'/sid/'.$sid.'.html';
+			
+		}
+		//商品分类列表   end
+		$default_cid = isset($category[0]['id']) ? $category[0]['id'] : 0;
+		
+		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$sid) > 0 ? cookie($this->jid.'_rcid_'.$sid) : $default_cid);
+		$this->assign('category',$category);
+		$this->assign('goods', $goods);
+		$this->assign('cname', $cname);
+		$this->assign('dtype', $dtype);
+		$this->assign('sid', $sid);
+		$this->newdisplay();
+	}
+
+
+	//活动显示
+	public function new2Activity(){
+		$this->funcMenu();
+		//获取活动
+		$this->active();
+		
+		$this->newdisplay();
+	}
+
+
+	//优惠券显示
+	public function new2Coupon(){
+		$this->funcMenu();
+		//获取优惠券
+		$this->coupon();
+
+		$this->newdisplay();
+	}
+
+
 
 
 

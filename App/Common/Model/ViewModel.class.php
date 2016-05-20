@@ -21,8 +21,8 @@ class ViewModel extends \Think\Model\ViewModel {
 		'shop'	  	=> array(
 			'Shop' 			=> array('*', '_type'=>'INNER'),
 			'Merchant' 		=> array('mnickname', 'mcity', '_on'=>'Shop.jid=Merchant.jid', '_type'=>'INNER'),
-	        'Merchant_user'	=> array('tmid', '_on'=>'Shop.sid=Merchant_user.tsid','_type'=>'INNER'),
-			'Member'		=> array('mstatus', 'mregdate','mname', '_on'=>'Merchant_user.tmid=Member.mid','_type'=>'LEFT')   
+	        //'Merchant_user'	=> array('tmid', '_on'=>'Shop.sid=Merchant_user.tsid','_type'=>'INNER'),
+			//'Member'		=> array('mstatus', 'mregdate','mname', '_on'=>'Merchant_user.tmid=Member.mid','_type'=>'LEFT')   
 		),
 		
 		'staffer' 	=> array(

@@ -1,0 +1,61 @@
+<extend name="Public:partial"/>
+<block name="body">
+<div class="modal" id="setModal" style="display:block;">
+<form action="{:U('/Manage/logo')}" method="post"  enctype ="multipart/form-data">
+    <div class="reveal-modal" style="border:none;margin-left:-233px;">
+        <h3>{$pagename} <span class="close" id="DialogClose">×</span></h3>
+        <div class="modal-content">
+            <div class="set">
+                <label>logo</label><input type="file" name="file" id="file">
+            </div>
+
+            <div class="set">
+                <label></label> <input type="submit" value="确认" class="btn btn-pwd" id="DialogSave">
+                <input type="button" value="取消" class="btn btn-hui" id="DialogCancl">
+            </div>
+            <input type="hidden" value="{$info.m_id}" id="m_id" />
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	//取消或关闭
+	$("#DialogClose,#DialogCancl").click(function() {
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
+	})
+	
+	function CheckFrom() {
+		var file = document.getElementById("file").value;
+		if( !file ) { alert("请选择文件"); document.getElementById("m_name").focus(); return false; }	
+
+		return true;
+	}
+	
+	//提交信息
+	$("#DialogSave").click(function() {
+		if( !CheckFrom() ) return false;
+		
+		// var file = document.getElementById("file").value;
+
+		// $.post('__ACTION__', {file:file}, function(data) {
+		// 	if( parseInt(data) == 1 ) {
+		// 		var PwindowObj = window.parent.document.getElementById('MyBdzhInfo');
+		// 		$(PwindowObj).html( file );
+				
+		// 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		// 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		// 	} else {
+		// 		alert("修改失败，请重新尝试!");
+		// 	}
+		// })
+		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
+		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+		window.parent.document.getElementById('silver').style.display = "block";
+
+	})
+});
+</script>
+</block>

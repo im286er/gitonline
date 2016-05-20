@@ -20,12 +20,7 @@ var type = '{$Think.get.ctype}'
 <div class="wrapper">
     <h2 class="title">
         <p class="returnMenu">
-            <a href="{:U('/Sales/goods', array('ctype'=>1), true)}" <eq name="Think.get.ctype" value='1'>class="curr"</eq>>商品上架</a>
-            <a href="{:U('/Sales/goods', array('ctype'=>2), true)}" <eq name="Think.get.ctype" value='2'>class="curr"</eq>>预约上架</a>
-            <a href="{:U('DaZhuanPan/index')}" >大转盘</a>
-            <a href="{:U('Info/index', array('ctype'=>3), true)}" >视频上架</a>
-            <a href="{:U('/Plugin/appdownset')}" >应用上架</a>
-            <a href="{:U('/Index/weishop')}" >自定义链接</a>
+            <a href="{:U('/Sales/goods', array('ctype'=>1), true)}" <eq name="Think.get.ctype" value='1'>class="curr"</eq>>商品管理</a>
         </p>
     </h2>
     
@@ -59,56 +54,45 @@ var type = '{$Think.get.ctype}'
     </eq>
 
     <div class="border-b"></div>
-	 <eq name="type" value="1">
 	<h2 class="shops">选择门店：
-	<volist name="shops" id="vo"><span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="{:U('Sales/goods',array('ctype'=>I('get.ctype'),'sid'=>$key))}">{$vo}</a></span></volist>
+	<volist name="shops" id="vo">
+        <span <eq name="Think.get.sid" value="$key">class="curr"</eq>>
+            <a href="{:U('Sales/goods',array('ctype'=>I('get.ctype'),'sid'=>$key))}">{$vo}</a>
+        </span>
+    </volist>
 	</h2>
-	</eq>
+    <input type="hidden" name="sid" id="sid" value="{$sid}">
+    <div class="border-b"></div>
+    <h2 class="shops">选择分类：
+    <select name="class" onchange="change_class(this.value)">
+        <option value="">请选择</option>
+        <volist name="classlist" id="vo">
+            <option value="{$vo.id}" <eq name="cid" value="$vo['id']">selected="selected"</eq>>{$vo.cname}</option>
+        </volist>
+    </select>
+    </h2>
+    <script type="text/javascript">
+    function change_class(class_id){
+        var sid = $('#sid').val();
+        url = "/Sales/goods/cid/"+ class_id + "/sid/" + sid + "/ctype/1.html";
+        window.location.href = url;
+    }
+    </script>
     <div class="mian padding">
         <div class="border">
             <div class="clearfix border-b">
-            	<!-- 左边的分类列表 -->
-                <div class="manage-left">
-                    <h2 class="manage">分类管理
-                        <span class="pull-right show" id="addorder">
-                            <i class="addicon" id="add" onClick="DialogFrameFun(465, 500, '{:U('Sales/addClass',array('ctype'=>I('get.ctype'),'sid'=>$sid))}')"></i>
-                            <i class="orderby" id="orderby"></i>
-                        </span>
-                        <span class="pull-right hide" id="button">
-                            <input type="button" value="完成" class="btn btn-blue" id="finish">
-                            <input type="button" value="取消" class="btn" id="cancel">
-                        </span>
-                    </h2>
-                    <ul class="list" id="ClassList">
-						<php>$countclass = count($classlist);</php>
-                        <foreach name="classlist" item="v">
-                            <li data-id="{$v.cid}" data-order='{$v.corder}' class="<if condition='$cid eq $v["cid"]'>curr</if>">
-								<a href="/Sales/goods/ctype/{$Think.get.ctype}/sid/{$sid}/cid/{$v.cid}.html" style="float: left;text-decoration: none;width: 100px;">{$v.cname}</a>
-                                <b class="pull-right" style="display:none;">
-									<neq name="key" value="0"><i class="upicon" onClick="OrderMenu('{$v.cid}','{$v.corder}','up')" ></i></neq>
-									<neq name="key" value="$countclass-1"><i class="downicon" onClick="OrderMenu('{$v.cid}','{$v.corder}','down')" ></i></neq>
-                                	<i class="writeicon" onClick="DialogFrameFun(465, 500, '/Sales/editClass/sid/{$sid}/cid/{$v.cid}.html')"></i>
-                                    <i onClick="DeleMenu('{$v.cid}')" class="deleteicon"></i>
-                                </b>
-                            </li>							
-                        </foreach>
-                    </ul>
-                </div>
+            	
                 
                 <!-- 右边的商品列表 -->
-                <div class="manage-right" id="getTable">
+                <div class="manage-right" id="getTable" style="width: 100%">
                     <h2 class="manage">
                         <span class="pull-left show manage-margin">
                             <input type="checkbox" id="checkbox">全选/反选
                             <input type="button" value="删除" class="btn btn-red" id="btn-delete">
                         </span>
                         <span class="pull-right" id="addorders">
-                        	<eq name="tfs" value="1">
-    							<in name="Think.get.ctype" value="1,2">
-                                    <i id="sync" class="synchronous" onClick="DialogFrameFun(465, 450, '{:U('Sales/synchro@sj', array('ctype'=>$_GET['ctype']), true, true)}')"></i>
-                                </in>
-                            </eq>
-						    <i id="Import" class="import" onClick="DialogFrameFun(465, 450, '{:U('Sales/importgoods@sj', array('ctype'=>$_GET['ctype'], 'sid'=>I('get.sid', 0, 'intval')?I('get.sid', 0, 'intval'):$sid), true, true)}')"></i>        
+                        	
+						   
                             <a href="{:U('Sales/addGoods',array('ctype'=>I('get.ctype'),'sid'=>$sid,'cid'=>$cid))}"><i class="addicon" id="addshopp"></i></a>
                             <i class="orderby" id="orderbyshopp"></i>
                         </span>
@@ -125,8 +109,8 @@ var type = '{$Think.get.ctype}'
                             	
                                 <?php if($v['gtype']==0){ ?>
                                     <tr data-id="{$v.gid}" data-type="product" data-cid="{$v.cid}" data-order="{$v.gorder}">
-                                        <td class="vertical" width="60px"><input type="checkbox"></td>
-                                        <td <neq name="tfs" value="1">width="220px"<else/>width="330px;"</neq>>
+                                        <td class="vertical" width="10%"><input type="checkbox"></td>
+                                        <td <neq name="tfs" value="1">width="40%"<else/>width="40%"</neq>>
                                             <dl class="table-content">
                                                 <dt class="pull-left" style="height:63px;"><img src="{$v.gimg}" alt="" class="gimg"></dt>
                                                 <dd class="" >
@@ -139,9 +123,10 @@ var type = '{$Think.get.ctype}'
                                             </dl>
                                         </td>
                                         <neq name="tfs" value="1">
-                                        <td width="100px" class="vertical ">库存:<span class="gstock">{$v[gstock] == -1 ? '无限制' : $v[gstock]}</span></td>
+                                        <td width="10%" class="vertical ">库存:<span class="gstock">{$v[gstock] == -1 ? '无限制' : $v[gstock]}</span></td>
+                                        <td width="10%" class="vertical ">分类：<span class="gstock">{$v[cname]}</span></td>
                                         </neq>
-                                        <td class="vertical">
+                                        <td class="vertical" width="30%">
                                             <input type="button" value="修改" class="addshopp" onClick=" location.href='/Sales/editGoods/sid/{$v.sid}/gid/{$v.gid}/pg/{$Think.get.page}.html' ">
                                             <eq name="v.gstatus" value="1"><input type="button" class="btnstop" style="color:#ff9900;" value="下线" onClick="GoodsStatusById('{$v.gid}',1,2)"></eq>
 											<eq name="v.gstatus" value="2"><input type="button" class="btnstart" value="上线" style="color:#339900" onClick="GoodsStatusById('{$v.gid}',1,1)"></eq>
@@ -187,9 +172,10 @@ var type = '{$Think.get.ctype}'
                                             </dd>
                                         </dl>
                                     </td>
-                                    <neq name="Think.get.ctype" value="3">
+                                    <!-- <neq name="Think.get.ctype" value="3"> -->
                                     <td width="100px" class="vertical ">库存:<span class="gstock">{$v.gstock}</span></td>
-                                    </neq>
+                                    <td width="10%" class="vertical ">分类：<span class="gstock">{$v[cname]}</span></td>
+                                    <!-- </neq> -->
                                     <td class="vertical">
                                         <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 450, '/Sales/editVideo/sid/{$v.sid}/gid/{$v.gid}.html')">
                                         <eq name="v.gstatus" value="1"><input type="button" class="btnstop" style="color:#ff9900;" value="下线" onClick="GoodsStatusById('{$v.gid}',3,2)"></eq>

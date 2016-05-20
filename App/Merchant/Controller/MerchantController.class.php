@@ -3,7 +3,7 @@ namespace Merchant\Controller;
 use Common\Controller\ManagerController;
 
 class MerchantController extends ManagerController {
-    protected $jid, $mid, $path, $type, $tsid, $sidlist=array(),$role;
+    protected $jid, $mid, $path, $type, $tsid, $sidlist=array(),$role,$shift;
 
 	public function _initialize() {
 		//parent::_initialize();
@@ -34,15 +34,22 @@ class MerchantController extends ManagerController {
 
 		//if( $this->type==1 ) { 
 			//$_splist=$this->sidlist; $shopinfo=array_shift($_splist);
-			//if( isset($shopinfo['sid']) && is_numeric($shopinfo['sid']) && $this->tsid != $shopinfo['sid'] ) {
+			//( isset($shopinfo['sid']) && is_numeric($shopinfo['sid']) && $this->tsid != $shopinfo['sid'] ) {
 				//$this->tsid = $shopinfo['sid'];
 			//}
 		//}
 		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
 		
-		$this->role = M('merchant_user')->where(array('tmid'=>$this->mid))->getField('role');
+		$muser = M('merchant_user')->where(array('tmid'=>$this->mid))->find();
+		$this->role = $muser['role'];
 		$this->assign('role',$this->role);
-		$this->assign('modules', D('MerchantModule')->getMerchantModule($merchant['modules']));
+		if($this->role == 1){
+			$this->shift = 1;
+		}else{
+			$this->shift = $muser['shift'];
+		}
+		
+		//$this->assign('modules', D('MerchantModule')->getMerchantModule($merchant['modules']));
 		//print_r(D('MerchantModule')->getMerchantModule($merchant['modules']));
 
 		$this->assign('mnickname', $merchant['mnickname']);
