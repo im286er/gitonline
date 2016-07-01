@@ -30,6 +30,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
                                 <td class="vertical">
                                     <input type="button" value="修改" class="addshopp" onClick="DialogFrameFun(650, 500, '/Shop/edTable/tid/{$v.id}.html')">
                                     <input type="button" value="删除" class="btndelete" onClick="dl('{$v.id}')">
+                                    <a href="/Shop/makeQrcodeDown/sid/{$sid}/id/{$v.id}.html" target="_blank" class="btndelete">下载二维码</a>
                                 </td>
                             </tr>
                         </foreach>	

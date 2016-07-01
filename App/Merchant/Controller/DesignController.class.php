@@ -17,6 +17,11 @@ class DesignController extends MerchantController {
 		$sid     = I('sid',$this->sid,'intval');
 		//背景图
 		$backImg = M('shop')->field('img_url,img_height,theme')->where(array('sid'=>$sid))->find();
+		$opt = array(
+			'jid' => $this->jid,
+			'sid' => $sid,
+		);
+		$banner_list = M('banner')->where($opt)->order('bid desc')->find();
 		//判断新旧模板
 		if ( !in_array($backImg['theme'], C('NEW_THEMES')) ) {
 			exit('旧模板不支持装修');
@@ -35,7 +40,7 @@ class DesignController extends MerchantController {
 		$this->assign('goods', $goods);
 		$this->assign('cname', $cname);
 		$this->assign('category', $category);
-		$this->assign('backImg', $backImg);
+		$this->assign('banner_list',$banner_list);
 		$this->display('/ct/index');
 	}
 
@@ -92,6 +97,32 @@ class DesignController extends MerchantController {
 		$this->assign('cid', $g_data['cid']);
 		$this->assign('sid', $g_data['sid']);
 		$this->display('/ct/activity');
+	}
+
+
+	//活动列表
+	public function video(){
+		$g_data = I('get.');
+		$tpl_name = M('merchant')->where(array('jid'=>$this->jid))->getField('theme');
+
+		//首页显示的活动 start
+		$active = M('video');
+		$opt = array(
+			'jid'     => $this->jid,
+			'gstatus' => 1,
+			'sid'	  => $g_data['sid'],
+		);
+
+		$video = $active->where($opt)->order('gid desc')->limit(3)->select();
+		$this->assign('video',$video);
+		//首页显示的活动 end
+		//分类名称
+		$cname   = M('category')->where(array('id'=>$g_data['cid'], 'status'=>1))->getField('cname');
+
+		$this->assign('cname', $cname);
+		$this->assign('cid', $g_data['cid']);
+		$this->assign('sid', $g_data['sid']);
+		$this->display('/ct/video');
 	}
 
 	
@@ -250,6 +281,11 @@ class DesignController extends MerchantController {
 					'cimg'	 => '/Public/Data/'.$this->jid.'/'.$img['file']['savepath'].$img['file']['savename'],
 				);
 				M('category')->add($opt);
+			}else if($p_data['type'] == 3){
+				if ($p_data['cid'] == '') {
+					exit('2');
+				}
+				exit(M('category')->where(array('id'=>$p_data['cid']))->delete() ? '1' :'3' );
 			}else{
 				foreach ($p_data['id'] as $key => $value) {
 					$arr[$key] = array(

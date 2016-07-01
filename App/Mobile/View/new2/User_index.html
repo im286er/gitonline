@@ -1,6 +1,9 @@
 <extend name="New2:common"/>
-<block name="header"></block>
+<block name="header">
+	<body id="index" class="center2">
+</block>
 <block name="body">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
 	<script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -20,38 +23,76 @@
 
     </script>
 	<div class="container-fluid" >
-		<div class="ct-top" >
+		<div class="row ct-top"  style=" overflow:hidden;" >
+			<h1 class="text-center">个人中心</h1>
+        	<a class="ct-topmyring2" href="{:U('mymsg')}">
+                <img src="__PUBLIC__/Merchant/images/ico_u_ring.png" style="width: 20px;">
+        	</a>
+        	<if condition="$msgCount gt 0">
+        	<b style="display: block; position:absolute; top:2.8rem; right:1.6rem; background: red; width: 7px; height: 7px; border-radius: 50%; z-index: 12;"></b>
+        	</if>
+        	<div class="text-center ct-topmy2">
 			<empty name="member">
-				<div class="row text-center ct-topmy">
-					<empty name="member.u_avatar"><img src="__PUBLIC__/Mobile/default/img/avatar.png" alt="" class="img-responsive img-circle center-block"><else /><img class="floatImg" src="{$member.flu_avatar}"/></empty>
-					<br />
-					<a class="btn" style="text-decoration:none;" href="{:U('login')}"><label>登录/注册</label></a>
-				</div>
+                <div class="col-xs-3">
+                    <img src="__PUBLIC__/Mobile/default/img/avatar.png" class="img-circle center-block">
+                </div>
+                <div class="col-xs-9 text-left">
+	                <h4><a class="btn" style="text-decoration:none;color: #eee;" href="{:U('login')}"><label>登录/注册</label></a></h4>
+                </div>
 			<else />
-				<div class="row text-center ct-topmy">
-					<empty name="member.u_avatar"><img src="__PUBLIC__/Mobile/default/img/avatar.png" alt="" class="img-responsive img-circle center-block"><else /><img class="floatImg" src="{$member.flu_avatar}"/></empty>
-					<br />
-					{$member['flu_nickname']?$member['flu_nickname']:$member['flu_username']}
-				</div>
+                <a href="{:U('myaccount')}" style="color: #eee">
+                    <div class="col-xs-3">
+                        <empty name="member.flu_avatar">
+                            <img src="__PUBLIC__/Mobile/default/img/avatar.png" alt="" class="img-circle center-block">
+                            <else />
+                            <img class="img-circle center-block" src="{$member.flu_avatar}"/>
+                        </empty>
+                    </div>
+                    <div class="col-xs-9 text-left">
+    	                <h4>{$member['flu_nickname']?$member['flu_nickname']:$member['flu_username']}</h4>
+    	                <h5>{:substr($member['flu_phone'],0,3)}****{:substr($member['flu_phone'],7,11)}</h5>
+                    </div>
+                </a>
 			</empty>
-			<div class="row ct-banner">
-			 	<img src="__PUBLIC__/Merchant/images/centerbg.jpg" class="img-responsive center-block">
 			</div>
-		</div>   
+            <div class="row ct-banner">
+            	<img src="__PUBLIC__/Merchant/images/centerbg.jpg" class="img-responsive center-block">
+            </div>
+		</div> 
 	</div> 
+	<div class="usermoney">
+    	<div class="col-xs-4 text-center">
+        	<h3 class="orange1">{$member['flu_balance']?$member['flu_balance']:0}<small class="orange1">元</small></h3>
+            <h5>我的余额</h5>
+        </div>
+        <div class="col-xs-4 text-center">
+        	<h3 class="red">0<small class="red">个</small></h3>
+            <h5>我的红包</h5>
+        </div>
+        <div class="col-xs-4 text-center">
+        	<h3 class="green">0<small class="green">分</small></h3>
+            <h5>我的返利</h5>
+        </div>
+    </div>
+    <br/>
 	<ul class="list-group ct-centerlist">
-		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>"><li class="list-group-item center-order">我的订单<span>&gt;</span></li></a>
-		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve')}</empty>"><li class="list-group-item center-yy">我的预约<span>&gt;</span></li></a>
-	<!--  	<li class="list-group-item center-address"><a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myaccount'),'E')))}<else />javascript:;</empty>">收货地址<span>&gt;</span></a></li>-->
-	</ul> 
+		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>"><li class="list-group-item center-order">我的订单<span></span></li></a>
+		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve', array('dtype'=>2))}</empty>"><li class="list-group-item center-yy">我的预约<span></span></li></a>
+	  	<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('addressList'),'E')))}<else />{:U('addressList')}</empty>"><li class="list-group-item center-address">收货地址<span></span></li></a>
+	</ul>
 	
 	<ul class="list-group ct-centerlist">
-		<!-- <li class="list-group-item center-money"><a href="javascript:;">我的钱包<span>&gt;</span></a></li>-->
-			
+		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('wallet'),'E')))}<else />{:U('wallet')}</empty>"><li class="list-group-item center-money">我的钱包<span></span></li></a>
+		<a class="" href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('mycoupon'),'E')))}<else />{:U('mycoupon')}</empty>"><li class="list-group-item center-yhq">我的优惠券<span></span></li></a>	
 	</ul> 
 	
 	<ul class="list-group ct-centerlist">	 
-		<li class="list-group-item center-99"><a href="javascript:;">9.9元升级消费商，返现翻翻翻<span>&gt;</span></a></li>
-		<a href="{:U('aboutus')}"><li class="list-group-item center-about">关于我们<span>&gt;</span></li></a>
+		<a href="javascript:;"><li class="list-group-item center-99">9.9元升级消费商，返现翻翻翻<span></span></li></a>
+		<a href="{:U('aboutus')}"><li class="list-group-item center-about">关于我们<span></span></li></a>
 	</ul> 
-</block>   
+
+	<ul class="list-group ct-centerlist">
+        <a href="{:U('opinion')}"><li class="list-group-item center-feedback">意见反馈</li></a>
+    </ul> 
+</block>
+<block name="foot"></block>

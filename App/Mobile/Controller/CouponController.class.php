@@ -18,6 +18,7 @@ class CouponController extends MobileController {
 		$coupon = M('voucher');
 		$opt = array(
 				'v.vu_jid'    => $this->jid,
+				'v.vu_sid'   => $this->sid,
 				'v.vu_status' => 1,
 				'v.vu_etime' => array('egt',date("Y-m-d H:i:s")),
 		);

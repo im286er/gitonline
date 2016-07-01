@@ -44,6 +44,8 @@ class JsApiPay
 		if (!isset($_GET['code'])){
 			//触发微信返回code码
 			$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
+			//$baseUrl = urlencode('http://www.dishuos.com/index.php/Home/Wechat/dsWxJsPay.html');
+			//echo urldecode($baseUrl);exit;
 			$url = $this->__CreateOauthUrlForCode($baseUrl);
 			Header("Location: $url");
 			exit();

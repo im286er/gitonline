@@ -12,12 +12,13 @@
 ::-moz-placeholder { color: #999; }
 :-ms-input-placeholder {  color: #999; }
 .modal-content img { margin:0px; }
-#divPreview { height:300px; width:452px; border:none; }
-#divPreview li { float:left; width:145px; height:145px; overflow:hidden; margin:2px; border:1px dashed #cccccc; position: relative; }
-#divPreview li img { width:145px; height:145px; }
+#divPreview { height:106px; width:644px; border:none;}
+#divPreview li { float:left; width:102px; height:106px; overflow:hidden; margin:2px; border:1px dashed #cccccc; position: relative; }
+#divPreview li img { width:102px; height:104px; }
 #divPreview li a { position:absolute; top:3px; right:3px; background:url("/Public/Images/cross.png") no-repeat scroll left 3px rgba(0, 0, 0, 0); width:17px; height:16px; }
 #divPreview li a:hover { background:url("/Public/Images/cross.png") no-repeat scroll left -46px rgba(0, 0, 0, 0); }
 .reveal-modal { margin-left:0px; left:0px; width:100%; }
+
 </style>
 
     <div class="wrapper">
@@ -25,6 +26,7 @@
             <h2 class="title">新增商品 </h2>
             <div class="border-b"></div>
             <h2 class="title">选择门店：
+            <!-- <span><a href="{:U('Sales/addGoods',array('ctype'=>I('get.ctype'),'sid'=>'0'))}" <eq name="Think.get.sid" value="0">style="color: green"</eq>>全部门店</a></span> -->
             <volist name="shops" id="vo">
                 <span>
                     <a href="{:U('Sales/addGoods',array('ctype'=>I('get.ctype'),'sid'=>$key))}"<eq name="Think.get.sid" value="$key">style="color: green"</eq>>{$vo}</a>
@@ -33,28 +35,34 @@
             </h2>
             <input type="hidden" name="sid" id="sid" value="{$sid}">
             <div class="modal-content modal-contents clearfix" style="padding-bottom:0px;">
-                <div class="modal-a">
-                    <div id="divPreview">
-                    	<ul id="UploadImage">
-                        	<li style="margin-left:0px;"><a href="javascript:;" data-value="0"></a><img id="GoodsImage0" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                            <li><a href="javascript:;" data-value="1"></a><img id="GoodsImage1" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                            <li><a href="javascript:;" data-value="2"></a><img id="GoodsImage2" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                            <li style="margin-left:0px;"><a href="javascript:;" data-value="3"></a><img id="GoodsImage3" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                            <li><a href="javascript:;" data-value="4"></a><img id="GoodsImage4" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                            <li><a href="javascript:;" data-value="5"></a><img id="GoodsImage5" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
-                        	
-                            <input type="hidden" name="picture[]" id="GoodsImageValue0" value="" />
-                            <input type="hidden" name="picture[]" id="GoodsImageValue1" value="" />
-                            <input type="hidden" name="picture[]" id="GoodsImageValue2" value="" />
-                            <input type="hidden" name="picture[]" id="GoodsImageValue3" value="" />
-                            <input type="hidden" name="picture[]" id="GoodsImageValue4" value="" />
-                            <input type="hidden" name="picture[]" id="GoodsImageValue5" value="" />
-                        </ul>
-                    </div>
-                </div>
+
                 <div class="modal-b">
                     <div class="set">
                         <label>商品名称：</label> <input type="text" name="gname" id="GoodsName">
+                    </div>
+                    <div class="set">
+                        <label>商品图片： </label>
+                        		 <div class="modal-a">
+                                    <div id="divPreview">
+                                        <ul id="UploadImage">
+                                            <li style="margin-left:0px;"><a href="javascript:;" data-value="0"></a><img id="GoodsImage0" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            <li><a href="javascript:;" data-value="1"></a><img id="GoodsImage1" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            <li><a href="javascript:;" data-value="2"></a><img id="GoodsImage2" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            <li style="margin-left:0px;"><a href="javascript:;" data-value="3"></a><img id="GoodsImage3" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            <li><a href="javascript:;" data-value="4"></a><img id="GoodsImage4" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            <li><a href="javascript:;" data-value="5"></a><img id="GoodsImage5" src="/Public/Images/default_goods.jpg" alt="" title="点击图片重新上传" /></li>
+                                            
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue0" value="" />
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue1" value="" />
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue2" value="" />
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue3" value="" />
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue4" value="" />
+                                            <input type="hidden" name="picture[]" id="GoodsImageValue5" value="" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                       
                     </div>
                     <div class="set">
                         <label>商品描述：</label> <input value="" type="text" name="gdescription">
@@ -93,7 +101,7 @@
             
             
             <div style="clear:both;"></div>
-            <div style="width:740px; margin:0 auto;">
+            <div style="width:740px; margin:20px 0 0 4%">
 				<textarea id="content" style="width:740px; height:220px;"></textarea>
             </div>
             <script type="text/javascript">
@@ -108,7 +116,7 @@
 			});
 			</script>
 			
-            <div style="text-align:center; margin:30px 0 10px;">
+            <div style="margin:30px 0 100px 18%;">
                 <input type="button" value="确认" class="btn btn-pwd" id="AddGoods_Save">
                 <input type="button" value="取消" class="btn btn-hui" id="AddGoods_Cancl">
             </div>

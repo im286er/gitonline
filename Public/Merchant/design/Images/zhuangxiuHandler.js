@@ -3,7 +3,7 @@ function edit(type,id,sid,cid)
 	 
 	if(type == "banner")
 	{
-		editbanner(type,id);
+		editbanner(type,id,sid);
 	}else if(type == "menu")
 	{
 		editmenu(type,id);
@@ -38,6 +38,12 @@ function edititem(type,id,action,sid,cid)
 			editCoupon(type,id,sid);
 		}else if (action == 'add') {
 			addCoupon(type,id,sid,cid);
+		}
+	}else if(type == "video"){
+		if (action == 'edit') {
+			editVideo(type,id,sid);
+		}else if (action == 'add') {
+			addVideo(type,id,sid,cid);
 		}
 	}
 
@@ -105,6 +111,34 @@ function addActivity(type,id,sid,cid){
     });
 }
 
+function editVideo(type,id,sid){
+	var content = "/Info/editVideo/dtype/2/sid/"+sid+"/gid/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '修改视频',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
+function addVideo(type,id,sid,cid){
+	var content = "/Info/addVideo/dtype/2/cid/"+cid+"/sid/"+sid+"/id/"+id+".html";
+	layerid = layer.open({
+        type: 2,
+        skin: 'layui-layer-lan',
+        title: '添加视频',
+        fix: false,
+        shadeClose: false,
+        maxmin: false,
+        area: ['800px', '900px'],
+        content: content
+    });
+}
+
 function editGoods(type,id,sid){
 	var content = "/Sales/editGoods/dtype/2/sid/"+sid+"/gid/"+id+"/pg/.html";
 	layerid = layer.open({
@@ -134,9 +168,10 @@ function addGoods(type,id,sid,cid){
     });
 }
 
-function editbanner(type,id)
+function editbanner(type,id,sid)
 {
 	var content = $('#banner_url').val();
+	// var content = "/Manage/advert/dtype/2/sid/"+sid+".html";
 	layerid = layer.open({
         type: 2,
         skin: 'layui-layer-lan',
@@ -144,7 +179,7 @@ function editbanner(type,id)
         fix: false,
         shadeClose: false,
         maxmin: false,
-        area: ['400px', '500px'],
+        area: ['800px', '900px'],
         content: content
     });
 

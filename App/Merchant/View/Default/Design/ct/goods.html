@@ -27,7 +27,7 @@
                     	<h5>{$vo.gname}</h5>
                         <div class="star start-5"></div>
                         <div class="proinfo-sale">月销{$vo.gsales}份</div>
-                        <div class="proinfo-price">&yen; {$vo.gdprice} <del>&yen; {$vo.goprice}</del></div>
+                        <div class="proinfo-price">&yen; {$vo[gdprice] > 0  ? $vo[gdprice] : $vo[goprice]} <del>&yen; {$vo.goprice|number_format=1}</del></div>
                         <div class="addtocart">+</div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             	购物车
             </a>
             <a class="col-xs-3 nav-down active">
-            	下载
+            	客服
             </a>
             <a class="col-xs-3 nav-my ">
             	我的

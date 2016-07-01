@@ -31,7 +31,7 @@
 		    <table class="table-list">
 		        <thead>
 		            <tr>
-                        <th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('sid[]');"></th>
+                        <th width="5%"><input type="checkbox" id="checkbox" onclick="selectAll('sid[]');">编号</th>
                         <th width="8%">门店名称</th>
                         <th width="8%">所属商家</th>
                         <th width="5%">联系人名称</th>
@@ -49,7 +49,7 @@
 		        <tbody>
                     <volist name="shopsList" id="vo">
                     	<tr id="TP_SP_{$vo.sid}">
-                            <td><input type="checkbox" name="sid[]" value="{$vo.sid}"></td>
+                            <td><input type="checkbox" name="sid[]" value="{$vo.sid}">{$vo.sid}</td>
                             <td>{$vo.sname}</td>
                             <td>{$vo.mnickname}</td>
                             <td>{$vo.scontactsname}</td>

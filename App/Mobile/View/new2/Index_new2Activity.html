@@ -1,13 +1,17 @@
 <extend name="New2:common"/>
 <block name="header"></block>
 <block name="body">
+    <header >
+        <a href="javascript:history.go(-1);"><div class="back pull-left"></div></a>
+        {$cname}
+    </header>
       <div class="container-fluid" >
         <div class="row ct-activity">
-        	<h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多</a></small></h3>
+        	<!-- <h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多</a></small></h3> -->
             <volist name="active_list" id="vo" >
                 <div class="media">
                   <div class="media-left media-middle">
-                    <a href="#">
+                    <a href="{:U('Active/info',array('av_id'=>$vo['av_id']))}">
                       <img class="media-object" src="{$vo.av_img}" alt="...">
                     </a>
                   </div>

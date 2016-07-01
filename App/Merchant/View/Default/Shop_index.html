@@ -51,6 +51,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
                     			<a href="{:U('/Shop/hidShop', array('sid'=>$v['sid'],'is_show'=>1), true)}" onClick="return confirm('确实要显示此分店吗？') ? true : false">显示</a>
                     </if>
                         <a href="{:U('/Shop/editTable', array('sid'=>$v['sid']), true)}">桌号</a>
+                        <a href="{:U('/Index/index@yd', array('sid'=>$v['sid'], 'jid'=>$jid), true)}" target="_blank">预览</a>
                     </td>
                 </tr>
                 </volist>

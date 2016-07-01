@@ -215,11 +215,11 @@ class WechatController extends Controller {
 		$opt = array('o_id'=>$o_id,'o_pstatus'=> 0,'o_price'   => array('gt',0));
 		$order_info = M('order')->where($opt)->find();
 		if(empty($order_info)){
-			$this->error('支付失败',U('User/myorder@yd',array('jump'=>cookie('payjump') )));
+			$this->error('支付失败',U('/User/myorder@yd',array('jump'=>cookie('payjump') )));
 		}
-		$mnickname = M('merchant')->where(array('jid'=>$order_info['o_jid']))->getField('mnickname');
+		$mnickname = M('shop')->where(array('sid'=>$order_info['o_sid']))->getField('sname');
 		$gtype = D('Mobile/Order')->runGtype();
-		$order_info['o_title'] = ($gtype[$order_info['o_gtype']]?$gtype[$order_info['o_gtype']]:'在线点餐').'-'.$mnickname;
+		$order_info['o_title'] = '在线下单'.'-'.$mnickname;
 		vendor("Weixin.JsApiPay");
 		$logHandler= new \CLogFileHandler(\WxPayConfig::Log());
 		$log = \Log::Init($logHandler, 15);

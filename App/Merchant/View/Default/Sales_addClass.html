@@ -2,7 +2,9 @@
 <block name="body">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/merchant/page.css">
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/Js/Kindeditor/themes/default/default.css" />
-<style type="text/css">.modal-content .set > input[type="text"] { width:260px; }</style>
+<style type="text/css">
+.modal-content .set > input[type="text"] { width:260px; }
+</style>
 <div class="reveal-modal" style="display:block; border:none;">
     <h3>添加分类 <span class="close" id="AddMenu_close">×</span></h3>
     <div class="modal-content">
@@ -36,8 +38,20 @@
            排序: <input type="text" value="{$class_info.corder}" style="width:224px;" id="Corder"><br>
         </div>
         
-        
-        
+   <div class="Sort">
+           链接: <input type="text" value="{$class_info.url}" style="width:224px;" id="link"><br/>
+           <font color="red">注：添加外链接后，该栏目功能自动转为自定义链接。</font>
+        </div>     
+        <if condition="$is_print eq 1">
+        <div class="Sort">
+                        <label>打印机：</label>
+                        <select multiple name="printid[]" id="GoodsPrint" style="width:180px;">
+                        	<volist name="print_list" id="p">
+                            <option value="{$p.print_id}">{$p.print_name}</option>
+                            </volist>
+                        </select>
+                    </div>
+            </if>        
         <div class="text-center Sort">
         <input type="button" value="保存" class="btn btn-pwd" id="AddMenu_Save">
             <input type="button" value="取消" class="btn btn-hui" id="AddMenu_Cancl">
@@ -82,6 +96,8 @@ $(function() {
 		var corder= $('#Corder').val();
 		var file  = $('#UPLOAD_CIMG_VALUE').val();
 		var module = $('#module').val();
+		var link = $('#link').val();
+		var print_id = $('#GoodsPrint').val();
 		
 		if(value == ''){
 			alert('请输入栏目名称');
@@ -97,7 +113,7 @@ $(function() {
 		}
 		//if( !module ||  || !value ) { alert("参数出现错误"); return false; }
 		
-		$.post('__ACTION__', {module:module,cimg:file,cname:value, corder:corder, ctype:ctype, sid:sid}, function(data) {
+		$.post('__ACTION__', {print_id:print_id,link:link,module:module,cimg:file,cname:value, corder:corder, ctype:ctype, sid:sid}, function(data) {
 			if( parseInt(data) != 0 ) {
 				//var PwindowObj = window.parent.document.getElementById('ClassList');
 				//$(PwindowObj).load("/Sales/ajaxClass/sid/"+sid+"/ctype/"+ctype+".html");

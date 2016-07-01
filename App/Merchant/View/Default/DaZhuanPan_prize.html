@@ -7,7 +7,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 .dis {display:none;}
 </style>
 	<div class="wrapper">
-	<h2 class="title"><a href="{:U('DaZhuanPan/index')}" style="text-decoration:underline;">基本设置</a> | 奖品设置  | <a href="{:U('DaZhuanPan/user')}" style="text-decoration:underline;">抽奖记录</a></h2>   
+	<h2 class="title"><a href="{:U('DaZhuanPan/index',array('sid'=>$sid))}" style="text-decoration:underline;">基本设置</a> | 奖品设置  | <a href="{:U('DaZhuanPan/user',array('sid'=>$sid))}" style="text-decoration:underline;">抽奖记录</a></h2>   
    
 		<div class="mian padding">
 			<div class="content_a top">
@@ -42,6 +42,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 					</tr>
 					</volist>
 				</table>
+				<input type="hidden" name="sid" value="{$sid}" />
 				</form>
 			</div>
 			<div class="set">

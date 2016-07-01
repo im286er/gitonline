@@ -72,6 +72,7 @@ $(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
 		window.parent.closelayer();
+		
 	})
 	
 	//上传图片
@@ -112,7 +113,8 @@ $(function() {
 				if (dtype == 1) {
 					setTimeout(function() { window.parent.location.href="{:U('/Message/hdlist', '', true)}"; }, 500);
 				}else{
-					window.parent.closelayer();
+					window.history.go(0);
+					//window.parent.closelayer();
 				}
 			} else { alert( '添加失败' ); }
 		})

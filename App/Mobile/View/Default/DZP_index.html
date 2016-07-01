@@ -41,23 +41,25 @@ var jid = "{$jid}";
         </if>
      </div>
     </div>
-    <div class="lty_intr"><span id="last_num"><if condition="$mid eq 0">赶紧试试自己的手气吧~<else />今日您还有{$last_num}次抽奖机会</if></span><br>分享给好友，立即增加1次抽奖机会<br>本店消费每满<span>{$prize.minmoney}</span>元送1次抽奖,以此类推</div>
-    <div class="lty_btn"><span class="btn_share">立即分享</span></div>
+    <div class="lty_intr"><span id="last_num"><if condition="$mid eq 0">赶紧试试自己的手气吧~<else />今日您还有{$last_num}次抽奖机会</if></span><br>本店消费每满<span>{$prize.minmoney}</span>元送1次抽奖,以此类推</div>
+    <div class="lty_btn">
+        </div>
     <div class="lty_rule">
     	<h3>游戏规则</h3>
         <p>1.每个人每天有{$prize.freetime}次免费抽奖机会</p>
-        <p>2.每人每天首次分享到一个第三方平台即可获得一次抽奖机会。例如：每天分享至朋友圈首次可获得一次，同时每天首次分享至QQ空间又可以获得一次哟！</p>
-        <p>3.绑定手机号或者用手机号注册，中奖概率更高哦</p>
-        <p>4.获得奖品为优惠券时，直接放入“我的优惠券”</p>
+        <p>2.绑定手机号或者用手机号注册，中奖概率更高哦</p>
+        <p>3.获得奖品为优惠券时，直接放入“我的优惠券”</p>
+        <p><div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"一起来玩大转盘吧","bdMini":"2","bdMiniList":false,"bdPic":"http://yd.dishuos.com/Public/Mobile/default/img/bg_lottery.png","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+        </p>
     </div>
   </div>
 </div>
-
 <div class="results" id="ShowPrizeResults">
   <div class="results-content succeed"><!--抽奖失败时样式"succeed"改为"fail"-->
 	<h2 class="results-title">中奖啦</h2>
     <p class="results-txt fn-center">抽中了50元代金券<br>逆天了有没有！</p>
-    <div class="results-btn"><span class="btn_share">分享分享</span><span class="btn_again">再抽一次</span></div>
+    <div class="results-btn"><span class="btn_again">再抽一次</span></div>
     <div class="btn_close"><span class="j-close-results">关闭</span></div>
   </div>
 </div>

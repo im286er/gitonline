@@ -13,6 +13,77 @@
                 <textarea  name="pcontent"></textarea>
             </div>
             <div class="set">
+                <b style="float:left; margin-right:7px;">发送对象：</b>
+                <input type="text" name="phone" placeholder="手机号" />
+                <input type="button" value="选择" class="btn btn-pwd" onclick="show_list()">   注：未填写即群发
+            </div>
+            <script type="text/javascript"> 
+                function checkAll(){
+                    var status = $('.check-all').is(':checked');
+                    $(":checkbox").attr("checked", status);
+                }
+
+                function show_list(){
+                    $('.top').show();
+                }
+            </script>
+
+            <div class="content_a top" style="display: none;">
+                <table class="table border-b">
+                    <tr>
+                        <th width="100px"><input type="checkbox" class="check-all" onclick="checkAll()">全选/反选</th>
+                        <th width="100px">会员昵称</th>
+                        <th width="100px">手机</th>
+                        <th width="100px">来源</th>
+                        <?php if(in_array("$jid",$MEMBER_B)):?>
+                            <th width="100px">是否特权会员</th>
+                        <?php else:?>
+                            <th width="100px">是否VIP</th>
+                        <?php endif;?>
+                        <th>注册时间</th>
+                        <th>最后登录</th>
+                    </tr>
+                    <foreach name="userlist" item="v">
+                    <tr id="playList">
+                        <td><input type="checkbox" name="uid[]" value="{$v.flu_phone}"></td>
+                        <td>{$v.flu_nickname}</td>
+                        <td>{$v.flu_phone}</td>
+                        <td>
+                        <if condition="$v[flu_source] eq 1">qq
+                        <elseif condition="$v[flu_source] eq 2"/>微博
+                        <elseif condition="$v[flu_source] eq 3"/>微信
+                        <else />系统
+                        </if>
+                        </td>
+                        <td>
+                        <?php if(in_array("$jid",$MEMBER_B)):?>
+                            <if condition="$v[flu_privilege] eq 1">
+                                <img src="__PUBLIC__/Images/onSuccess.gif" class="status-{$v['flu_userid']} change-status" id="status_1" fid="{$v['flu_userid']}">
+                            <else />
+                                <img src="__PUBLIC__/Images/status_0.gif" class="status-{$v['flu_userid']} change-status" id="status_0" fid="{$v['flu_userid']}">
+                            </if>
+                        <?php else:?>
+                            <if condition="$v[flu_usertype] eq 1">
+                                VIP会员
+                            <else />
+                                普通会员
+                            </if>
+                        <?php endif;?>
+                        </td>
+                        <td>{$v.flu_regtime}</td>
+                        <td>{$v.flu_lasttime}</td>
+                    </tr> 
+                    </foreach>
+                </table>
+                <if condition="$pages">
+                    <div class="page clearfix">
+                        <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                        <input type="text" onBlur="document.getElementById('btnpre').href='{:U()}?page='+this.value">{$pages}
+                    </div>
+                </if>
+            </div>
+
+            <div class="set">
                 <input type="submit" value="确认推送" class="btn btn-pwd">
             </div>
         </form>

@@ -4,8 +4,9 @@
     <h2 class="title">
       <!--<eq name="Think.get.type" value='1'>首次打开APP自动回复<else/>意见反馈自动回复</eq>-->
         <p class="returnMenu">
-            <a href="{:U('/Function/autoreply', array('type'=>1), true)}" <eq name="Think.get.type" value='1'>class="curr"</eq>>首次打开APP自动回复</a>
+            <!-- <a href="{:U('/Function/autoreply', array('type'=>1), true)}" <eq name="Think.get.type" value='1'>class="curr"</eq>>首次打开APP自动回复</a> -->
             <a href="{:U('/Function/autoreply', array('type'=>2), true)}" <eq name="Think.get.type" value='2'>class="curr"</eq>>意见反馈自动回复</a>
+            <a href="{:U('/Function/notice', array('type'=>3), true)}" <eq name="Think.get.type" value='3'>class="curr"</eq>>公告信息</a>
         </p>
     </h2>
     <div class="prompt-div"><i class="prompticon"></i>该功能主要用于商家移动客户端内的“互动消息机制”，让您的客户端系统自动回复设置。</div>

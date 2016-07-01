@@ -35,7 +35,8 @@
                 <div class="set">
                     <label>视频分类：</label>
                     <select name="cid" id="VideoCid">
-                        <foreach name="clist" item="v"><option <if condition="isset($_GET['cid']) && intval($_GET['cid'])==$v['cid']">selected</if> value="{$v.cid}">{$v.cname}</option></foreach>
+                    	<option value="">请选择</option>
+                        <foreach name="clist" item="v"><option value="{$v.id}">{$v.cname}</option></foreach>
                     </select>
 					<input type="hidden" value="{$jid}" name="jid">
                     <input type="hidden" value="{$sid}" name="sid">
@@ -59,6 +60,8 @@ $(function() {
 		var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 		$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
 		window.parent.document.getElementById('silver').style.display = "block";
+		window.parent.closelayer(); 
+		history.go(0);
 	})
 	
 	//上传图片
@@ -97,7 +100,7 @@ $(function() {
 		if( !VideoFile && !VideoLink ) { alert('视频文件不能为空，请本地上传或者输入视频链接'); return false; }
 		
 		var VideoCid  = $("#VideoCid").val();
-		if( !VideoCid || !/[1-9]\d{0,5}/.test(VideoCid) ) { alert('视频分类不能为空'); return false; }
+		if( VideoCid == '' ) { alert('视频分类不能为空'); return false; }
 		
 		return true;
 	}
@@ -113,6 +116,7 @@ $(function() {
 				InsertVideo(data.info, 'a', 'p'); var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
 				window.parent.document.getElementById('silver').style.display = "block";
+				history.go(0);
 			} else { alert( data.msg ); }
 		})
 	})

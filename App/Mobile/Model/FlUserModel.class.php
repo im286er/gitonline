@@ -36,12 +36,14 @@ class FlUserModel extends Model {
 		$data = array();
 		$data['flu_username'] = $username;
 		$data['flu_password'] = $this->passwordmd5($password);
-		$data['flu_usertype'] = 0;
+		$data['flu_usertype'] = '0';
 		$data['flu_sjid'] = $jid;
+		$data['flu_sagentid'] = M('merchant')->where(array('jid'=>$jid))->getField('magent');
 		if($ismobile==1)$data['flu_phone'] = $username;
 		if($ismobile==1)$data['flu_nickname'] = $username;
 		$data['flu_regtime'] = date('Y-m-d H:i:s');
 		$data['flu_lastip'] = get_client_ip();
+		$data['flu_puserid'] = session('smid')>0 ? session('smid') : 0;
 		$userid = $this->add($data);
 		return $userid;
 	}

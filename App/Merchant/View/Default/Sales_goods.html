@@ -77,6 +77,15 @@ var type = '{$Think.get.ctype}'
         url = "/Sales/goods/cid/"+ class_id + "/sid/" + sid + "/ctype/1.html";
         window.location.href = url;
     }
+
+
+    function UploadModul(width, height, src){
+        document.getElementById('DialogFrame').src = src;
+        document.getElementById('DialogFrame').width = width;
+        document.getElementById('DialogFrame').height = height;
+        $("#DialogFrameModel").children("div.DialogFrameModel").width(width);
+        $("#DialogFrameModel").children("div.DialogFrameModel").animate({top:"100px"}).end().fadeIn();
+    }
     </script>
     <div class="mian padding">
         <div class="border">
@@ -92,7 +101,7 @@ var type = '{$Think.get.ctype}'
                         </span>
                         <span class="pull-right" id="addorders">
                         	
-						   
+						    <i class="addicon" id="addshopp" onClick="UploadModul(465, 305, '{:U('Sales/importgoods', array('ctype'=>I('get.ctype'),'sid'=>$sid,'cid'=>$cid))}')"></i>
                             <a href="{:U('Sales/addGoods',array('ctype'=>I('get.ctype'),'sid'=>$sid,'cid'=>$cid))}"><i class="addicon" id="addshopp"></i></a>
                             <i class="orderby" id="orderbyshopp"></i>
                         </span>

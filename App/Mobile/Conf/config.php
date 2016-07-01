@@ -3,8 +3,8 @@ return array(
 	'DEFAULT_THEME'			=> 'Default',
 	'TMPL_FILE_DEPR'		=> '_' ,
 	'USER_AUTH_ON'			=> false,
-	'NEW_ACTIVE_NUMBER'     => 2,  //首页展示的活动数量
-	'NEW_COUPON_NUMBER'     => 2,  //首页展示的优惠券数量
+	'NEW_ACTIVE_NUMBER'     => 3,  //首页展示的活动数量
+	'NEW_COUPON_NUMBER'     => 3,  //首页展示的优惠券数量
 	'WXCONFIGPATH' => 'xiyiapp', //微信公众号的配置，包含微信支付的配置目录
 	//腾讯QQ登录配置
 	'THINK_SDK_QQ' => array(
@@ -45,15 +45,15 @@ return array(
 
 	/* 快递参数设置 */
     'EXPRESS_CHECKHEADER'   =>  array(      //客户卡号,校验码
-        'SF'    => '5713519013',    //AZS
+        'SF'    => '5713519013',    //AZS //5713519013
     ),
 
-    'EXPRESS_CHECKWORD'   =>  array(      //checkword 秘钥
-        'SF'    => 'mv30QsuGvxWigY9Fdv6TN4aMdIi95xE9',      // ////qYiwqrF1nvPc
+    'EXPRESS_CHECKWORD'     =>  array(      //checkword 秘钥
+        'SF'    => 'mv30QsuGvxWigY9Fdv6TN4aMdIi95xE9',      //mv30QsuGvxWigY9Fdv6TN4aMdIi95xE9 ////qYiwqrF1nvPc
     ),
 
     'EXPRESS_URL'           =>  array(      //快递类服务接口url
-        'SF'    => 'http://bsp-oisp.sf-express.com/bsp-oisp/sfexpressService',    //http://218.17.248.244:11080/bsp-oisp/sfexpressService//http://bsp-ois.sf-express.com/bsp-ois/sfexpressService
+        'SF'    => 'http://bsp-ois.sf-express.com/bsp-ois/sfexpressService',    //http://218.17.248.244:11080/bsp-oisp/sfexpressService//http://bsp-ois.sf-express.com/bsp-ois/sfexpressService
     ),
 
     'MONTHLY_NUM'           => '5713519013',

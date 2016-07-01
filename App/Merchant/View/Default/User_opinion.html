@@ -6,11 +6,18 @@
 .button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
 td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
 .table td, .table th { border-top:none; }
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
 </style>
 </head>
 <body>
 	<div class="wrapper">
-		<h2 class="title">会员反馈</h2>
+		<h2 class="shops">选择门店：
+			<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
+			<volist name="shops" id="vo">
+				<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>&nbsp;
+			</volist>
+		</h2>
 		<div class="mian padding">
 			<div class="content_c">
 				<form action="__ACTION__" method="post">
@@ -38,7 +45,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 						<td><span title="{$v.op_replytxt}">{$v.op_replytxt|msubstr=0,10,'utf-8'}</span></td>
 						<td>
 						<if condition="$v['op_status'] eq 1 and !$v['op_replytxt']">
-							<input type="button" onClick="reply('{$v.op_id}', '{$v.op_content|trim|str_replace="'","",###}', '{$v.flu_nickname|trim}')" value="回复">
+							<input type="button" onClick="reply('{$v.op_id}', '{$v.op_content|trim|str_replace="'","",###}', '{$v.flu_nickname|trim}', '{$v.op_sid}')" value="回复">
 							<input type="button" onClick="Operation('0','{$v.op_id}',this.value)" value="删除">
 						<elseif condition="$v['op_replytxt']"/>
 							<span style="color:#336600;">已回复</span>
@@ -56,7 +63,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 		</div>
 	</div>
 <script type="text/javascript">
-function reply(op_id,op_content,nickname,op_replytxt){
+function reply(op_id,op_content,nickname,op_replytxt,sid){
 	var replytxt;
 	if(op_replytxt)replytxt = op_replytxt;else replytxt = '';
 	if(!op_id && !op_content){alert('参数错误！');return false;}
@@ -77,8 +84,8 @@ function reply(op_id,op_content,nickname,op_replytxt){
 				alert('请输入回复内容！');
 				return false;
 			}
-			 $.post("{:U('opreply')}",{'op_id':op_id,'op_replytxt':op_replytxt,'action':'reply'},function(result){
-				if(result == 1){alert('回复成功');this.close(value);this.remove();}else{alert('回复失败');}
+			 $.post("{:U('opreply')}",{'sid':sid, 'op_id':op_id,'op_replytxt':op_replytxt,'action':'reply'},function(result){
+				if(result == 1){alert('回复成功');window.location.reload();this.close(value);this.remove();}else{alert('回复失败');}
 					reloadpage();
 			 });
 		}

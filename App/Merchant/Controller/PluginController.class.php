@@ -43,7 +43,7 @@ class PluginController extends MerchantController {
 		$sharetype = array(
 			'internet' => '上网分享',
 			'login' => '登录分享',
-			'download' => 'APP分享',
+			'download' => 'H5分享',
 		);
 		$ShareData = array();
 		file_exists($this->path.'ShareData.php') && $ShareData=json_decode(file_get_contents($this->path.'ShareData.php'),true);

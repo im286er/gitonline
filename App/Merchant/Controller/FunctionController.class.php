@@ -8,10 +8,24 @@ class FunctionController extends MerchantController {
 		if( IS_POST ) {
 			$ModuleInfo = I('post.content', '');
 			if( $ModuleInfo ) { file_put_contents($path, $ModuleInfo); }
-			$this->success('操作成功', U('/Function/autoreply', array('type'=>I('type', 1, 'intval')), true));
+			$this->success('操作成功', U('/Function/autoreply', array('type'=>I('type', 2, 'intval')), true));
 		} else {
 			file_exists($path) && $autoreply=file_get_contents($path);
 			$this->assign('autoreply', $autoreply ? $autoreply : '');
+			$this->display();	
+		}
+    }
+
+
+    public function notice() {
+		$path = $this->path.'Notice'.I('type', 0, 'intval').'.php';
+		if( IS_POST ) {
+			$ModuleInfo = I('post.content', '');
+			if( $ModuleInfo ) { file_put_contents($path, $ModuleInfo); }
+			$this->success('操作成功', U('/Function/notice', array('type'=>I('type', 3, 'intval')), true));
+		} else {
+			file_exists($path) && $notice=file_get_contents($path);
+			$this->assign('notice', $notice ? $notice : '');
 			$this->display();	
 		}
     }

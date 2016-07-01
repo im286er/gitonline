@@ -6,18 +6,25 @@ use ORG\ThinkSDK\ThinkOauth;
 class UserController extends MobileController {
 	//用户中心首页
 	public function index(){
+		$this->funcMenu();
 		
+		$msgCount = 0;
 		if($this->mid){
 			$member = M('FlUser')->find($this->mid);
 			$this->assign('member',$member);
+			$msgCount = M('user_msg')->where(array('sid'=>$this->sid,'userid'=>$this->mid,'status'=>0))->count();//未读消息数
 		}
+
 		$merchant = M('Merchant')->where("jid='{$this->jid}'")->find();
 		$this->assign('merchant',$merchant);
+
 		$merchantapp = M('merchant_app')->where("jid='{$this->jid}'")->field('appversions,iosversions')->find();
 		$this->assign('merchantapp',$merchantapp);
+		
 		$page_name = $merchant['mabbreviation'];
 		$this->assign('page_url','banreturn');
 		$this->assign('page_name',$page_name);
+		$this->assign('msgCount',$msgCount);
 		$this->newdisplay();
 	}
 
@@ -70,6 +77,8 @@ class UserController extends MobileController {
 		die();
 	}
 
+
+	//账户信息
 	public function myaccount(){
 		
 		if((!$this->mid && !cookie('opentype')) )
@@ -79,12 +88,17 @@ class UserController extends MobileController {
 			$result = M('FlUser')->where(array('flu_userid'=>$this->mid))->setField($data);
 			exit($result?'1':'0');
 		}
+
 		$user = M('FlUser')->find($this->mid);
-		$this->assign('user',$user);
+
 		$page_name = '账户信息';
+		
+		$suid = \Think\Crypt\Driver\Base64::encrypt($this->mid, C('CODEKEY'));
+		$this->assign('bdUrl',U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$this->sid,'suid'=>$suid)));
+		$this->assign('user',$user);
 		$this->assign('page_name',$page_name);
 		$this->assign('page_url',U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid)));
-		$this->mydisplay();
+		$this->newdisplay();
 	} 
 
 	//我的订单
@@ -102,8 +116,19 @@ class UserController extends MobileController {
 		//$oostatus = array(0=>'未付款',1=>'已付款');
 		$this->assign('odstatus',$odstatus);
 		//$this->assign('oostatus',$oostatus);
-		
-		$order = M('order')->where(array('o_uid'=>$this->mid,'o_jid'=>$this->jid,'o_gtype'=>'Choose'))->order('o_dstime desc')->select();
+		$opt = array(
+			'o_uid'		=>$this->mid,
+			'o_jid'	=>$this->jid,
+			'o_gtype'	=>'Choose',
+			'o_sid'	=>$this->sid,
+		);
+		$o_dstatus = I('o_dstatus', '' , 'intval');
+		if ($o_dstatus) {
+			$opt['o_dstatus'] = $o_dstatus;
+		}
+		$this->assign('o_dstatus', $o_dstatus);
+		$order = M('order')->where(array($opt))->order('o_dstime desc')->select();
+		//$order = M('order_user')->alias('u')->join("azd_order as o on u.o_id=o.o_id")->where($opt)->order('o.o_dstime desc')->select();
 		
 		if($order){
 			$oid_list = array();
@@ -111,7 +136,7 @@ class UserController extends MobileController {
 				$oid_list[] = $value['o_id'];
 				//$vu_id = M('voucher_order')->where(array('mid'=>$this->mid,'o_id'=>$value['o_id']))->getField('vu_id');
 				//if($vu_id){
-				$order[$key]['used_vprice'] = M("voucherOrder")->alias("AS vo")->field("vo.o_price,v.vu_name")->join("__VOUCHER__ AS v ON vo.vu_id=v.vu_id")->where( array('vo.mid'=>$this->mid, 'vo.o_id'=>$value['o_id']) )->select();
+				$order[$key]['used_vprice'] = M("voucherOrder")->alias("AS vo")->field("vo.o_price,v.vu_name")->join("__VOUCHER__ AS v ON vo.vu_id=v.vu_id")->where( array('vo.o_id'=>$value['o_id']) )->select();
 				//}
 				
 				if($value['o_type'] == 0){
@@ -163,22 +188,68 @@ class UserController extends MobileController {
  
 		$page_name = '我的订单';
 		$this->assign('page_name',$page_name);
-		$this->mydisplay();
+		$this->newdisplay();
+	}
+
+
+	//订单详情页面
+	public function orderDetail(){
+		$o_id  = I('o_id', 0);
+		//订单详情
+		$order = M('order')->where(array('o_id'=>$o_id))->find();
+		//联系电话
+		$numb  = M('shop')->where(array('sid'=>$this->sid))->getField('mservetel');
+		//订单商品
+		$goods = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
+		//合计
+		$total_price = 0;
+		foreach ($goods as $key => $value) {
+			$total_price += $value['sp_number']*$value['sp_gdprice'];
+		}
+		//推荐产品
+		$list  = M('goods')->where(array('sid'=>$this->sid, 'gstatus'=>1))->order('gsales desc')->limit(6)->select(); 
+		$page_name = '订单详情';
+		$this->assign('page_name',$page_name);
+		$this->assign('order', $order);
+		$this->assign('numb', $numb);
+		$this->assign('goods',$goods);
+		$this->assign('total_price',$total_price);
+		$this->assign('list', $list);
+		$this->newdisplay();
 	}
 	
+
+	//我的预定
 	public function myreserve(){
 		
 		if((!$this->mid && !cookie('opentype')) )
 		redirect(U('User/login',array('jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
 	
 		$odstatus =  array(
-				1 => '预定待处理',
-				3 => '同意预定',
-				4 => '拒绝预定',
-				5 => '预定关闭',
+			1 => '预定待处理',
+			3 => '同意预定',
+			4 => '拒绝预定',
+			5 => '预定关闭',
 		);
-		
-		$order = M('order')->where(array('o_uid'=>$this->mid,'o_jid'=>$this->jid,'o_gtype'=>'Seat'))->order('o_dstime desc')->select();
+
+		$opt = array(
+			'o_uid'=>$this->mid,
+			'o_jid'=>$this->jid,
+			'o_sid'	=>$this->sid,
+			'o_gtype'=>'Seat',
+		);
+
+		$o_dstatus = I('o_dstatus', '' , 'intval');
+
+		if ($o_dstatus && I('dtype') == 2) {
+			$opt['o_dstatus'] = 1;
+		}else {
+			$opt['o_dstatus'] = array('in', '3,4,5');
+		}
+
+		$this->assign('o_dstatus', $o_dstatus);
+
+		$order = M('order')->where($opt)->order('o_dstime desc')->select();
 		
 		if($order){
 			$oid_list = array();
@@ -209,7 +280,32 @@ class UserController extends MobileController {
 		$this->assign('order',$order);
 		$page_name = '我的预定';
 		$this->assign('page_name',$page_name);
-		$this->mydisplay();
+		$this->newdisplay();
+	}
+
+
+
+	//预约详情
+	public function reserveDetail(){
+		$o_id  = I('o_id', 0);
+		$order = M('order')->where(array('o_id'=>$o_id))->find();
+		//联系电话
+		$numb  = M('shop')->where(array('sid'=>$this->sid))->getField('mservetel');
+		//订单商品
+		$goods = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
+		//合计
+		$total_price = 0;
+		foreach ($goods as $key => $value) {
+			$total_price += $value['sp_number']*$value['sp_gdprice'];
+		}
+
+		$page_name = '预约详情';
+		$this->assign('page_name',$page_name);
+		$this->assign('order', $order);
+		$this->assign('numb', $numb);
+		$this->assign('goods',$goods);
+		$this->assign('total_price',$total_price);
+		$this->newdisplay();
 	}
 
 	//我的优惠券
@@ -236,7 +332,7 @@ class UserController extends MobileController {
 		$page_name = '我的优惠券';
 		$this->assign('page_name',$page_name);
 		$this->assign('page_url',U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid)));
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 	
 	//意见反馈
@@ -298,7 +394,7 @@ class UserController extends MobileController {
 			$this->assign('page_url',U('User/aboutus',array('opentype'=>cookie('opentype'),'jid'=>$this->jid)));	
 		}	
 		$this->assign('member',$member);
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 
 	//关于我们
@@ -355,6 +451,10 @@ class UserController extends MobileController {
 			$result = D('FlUser')->login($username,$password);
 			if($result['errcode']>0)die(JSON($result));
 			cookie('mid', $result['flu_userid'],604800);
+			$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
+			if(empty($u)){
+				M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
+			}
 			die(JSON(array('errcode'=>0,'errmsg'=>'登录成功')));
 		}
 		if($this->mid)U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid));
@@ -407,7 +507,7 @@ class UserController extends MobileController {
 		session('sendsmsTel', $mobile);
 		session('SendSms', $content);
 		//die(JSON(array('errcode'=>'ok','errmsg'=>$content)));
-		die(flsendmsg( $mobile, $content) ? JSON(array('errcode'=>'ok','errmsg'=>$content)):JSON(array('errcode'=>81444,'errmsg'=>'短信发送失败')));		
+		die(flsendmsg( $mobile, $content, $this->jid) ? JSON(array('errcode'=>'ok','errmsg'=>$content)):JSON(array('errcode'=>81444,'errmsg'=>'短信发送失败')));		
 	}
 	
 	//手机注册
@@ -423,6 +523,13 @@ class UserController extends MobileController {
 			$sendcode == session('sendcode') or die(JSON(array('errcode'=>80104,'errmsg'=>'填写的验证码有误')));
 			$result = D('FlUser')->register($username,$password,$this->jid);
 			if($result['errcode']>0)die(JSON($result));
+			$result = D('FlUser')->login($username,$password);
+			if($result['errcode']>0)die(JSON($result));
+			cookie('mid', $result['flu_userid'],604800);
+			$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
+			if(empty($u)){
+				M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
+			}
 			die(JSON(array('errcode'=>'ok','errmsg'=>'注册成功')));
 		}
 		if($this->mid)U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid));
@@ -698,9 +805,10 @@ class UserController extends MobileController {
 		$address_list = D('Address')->getAddressList($this->mid);
 		$page_name = '收货地址';
 
+		$this->assign('dtype', I('dtype', '1'));
 		$this->assign('page_name',$page_name);
 		$this->assign('address_list',$address_list);
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 
 
@@ -726,13 +834,15 @@ class UserController extends MobileController {
 	 */
 	public function addressEdit(){
 		$receivingid  = I('receivingid');
+		$dtype        = I('dtype', '1');
 		if (IS_POST){
 			$post_data = $_POST;
 			$opt = array(
-				'userid' => $this->mid,
-				'name'   => $post_data['name'],
-				'phone'  => $post_data['phone'],
-				'address' => $post_data['address'],
+				'userid'   => $this->mid,
+				'name'     => $post_data['name'],
+				'sex'      => $post_data['sex'],
+				'phone'    => $post_data['phone'],
+				'address'  => $post_data['address'],
 				'maddress' => $post_data['maddress'],
 			);
 			//编辑数据
@@ -741,13 +851,154 @@ class UserController extends MobileController {
 			}else{
 				$r = D('Address')->Address_edit($this->mid,$receivingid,$opt);
 			}
-			$this->redirect('addressList');
+			$this->redirect('addressList', array('dtype'=>$dtype));
 		}else{
 			//通过主键查询信息
 			$info = D('Address')->getAddressInfo($receivingid);
+			$page_name = '收货地址';
+
+			$this->assign('page_name',$page_name);
 			$this->assign('info',$info);
-			$this->mydisplay();
+			$this->assign('dtype', $dtype);
+			$this->newdisplay();
 		}
 	}
 
+
+	//我的钱包
+	public function wallet(){
+		$page_name = '我的钱包';
+		$member = M('FlUser')->find($this->mid);
+
+		$this->assign('member',$member);
+		$this->assign('page_name',$page_name);
+		$this->newdisplay();
+	}
+
+
+	//余额提现
+	public function bringForward(){
+		$page_name   = '余额提现';
+		$Bookkeeping = D('Common/Bookkeeping');
+		$member      = M('FlUser')->field('flu_balance,flu_phone')->find($this->mid);
+
+		if( IS_POST ) {
+			if($member['flu_balance'] < 0.01)$this->ajaxReturn(array('status'=>0,'msg'=>'您的账号里暂无可提现金额'));
+			$bmention = I('post.bmention');
+			if($member['flu_balance'] < $bmention)$this->ajaxReturn(array('status'=>0,'msg'=>'提现申请金额不能超过账户金额！'));
+			$data = array();
+			$data = $Bookkeeping->calculate($bmention);
+			$data['bmention'] = $bmention;
+			$data['bls'] = $bls = date('YmdHis').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 6);
+			$data['bmid'] = $this->mid;
+			$data['bstime'] = date('Y-m-d H:i:s');
+			$data['bip'] = get_client_ip();
+			$data['bdzh'] = I('post.mbdzh');
+			$data['bname'] = I('post.msurname');
+			$data['bresidue'] = 0;
+			$data['butype'] = 1;
+			$result = $Bookkeeping->data($data)->add();
+			if($result){
+				M('FlUser')->where(array('flu_userid'=>$this->mid))->setField('flu_balance', 0);
+
+				$ins = array();
+				$ins['uid']   = $this->mid;
+				$ins['sid']   = $this->sid;
+				$ins['phone'] = $member['flu_phone'];
+				$ins['price'] = $bmention;
+				$ins['ptype'] = 1;
+				$ins['gtype'] = 2;
+				$ins['sname'] = M('shop')->where(array('sid'=>$this->sid))->getField('sname');
+				$ins['create_time'] = date('Y-m-d H:i:s');
+				M('AccountDetails')->add($ins);
+				$this->ajaxReturn(array('status'=>1,'msg'=>'提现申请成功！'));
+			}else $this->ajaxReturn(array('status'=>0,'msg'=>'提现申请失败！'));
+		}else{
+			$this->assign('page_name',$page_name);
+			$this->assign('member', $member);
+			$this->newdisplay();
+		}
+	}
+
+
+
+	//账户明细
+	public function finance(){
+		$gtype = I('gtype', '');
+		$page_name   = '账户明细';
+		
+		$opt = array(
+			'uid'=>$this->mid,
+		);
+
+		if (!empty($gtype)) {
+			$opt['gtype'] = $gtype;
+		}
+		$info = M('AccountDetails')->where($opt)->select();
+
+		$this->assign('info', $info);
+		$this->assign('gtype', $gtype);
+		$this->assign('page_name',$page_name);
+		$this->newdisplay();
+	}
+	
+	//我的消息
+	public function mymsg(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		$msg_list = M('user_msg')->where(array('sid'=>$this->sid,'userid'=>$this->mid))->order('add_time desc')->select();
+		$this->assign('msg_list',$msg_list);
+		M('user_msg')->where(array('sid'=>$this->sid,'userid'=>$this->mid))->save(array('status'=>1));
+		$this->newdisplay();
+	}
+	
+	//修改密码
+	public function editPasswd(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		if(IS_POST){
+			$password = I('password');
+			$password2 = I('password2');
+			$p = D('FlUser')->passwordmd5($password);
+			$m = M('FlUser')->where(array('flu_userid'=>$this->mid))->getField('flu_password');
+			if($p != $m){
+				exit('1');
+			}
+			$pp = D('FlUser')->passwordmd5($password2);
+			$s = M('FlUser')->where(array('flu_userid'=>$this->mid))->save(array('flu_password'=>$pp));
+			exit('0');
+		}else{
+			$this->assign('page_name','修改密码');
+			$this->newdisplay();
+		}
+	}
+	
+	//上传头像
+	public function upTX(){
+		$uploadROOT = realpath(THINK_PATH.'../Public/');//上传地址的根目录
+	
+		$uploadSubPath = '/Upload/';//上传地址的子目录
+		$subName = array('date','Y-m-d');
+		
+		$uploadPath =$uploadROOT.$uploadSubPath;
+        if(!file_exists($uploadPath)) mkdirs($uploadPath,  0777);
+		$uploadConfig = array(
+			'rootPath'	=> $uploadPath,
+			'subName'	=> $subName,
+			'exts'		=> 'jpg,jpeg,png',
+			'maxSize'	=> 256000
+		);
+		$attachment = new \Think\Upload($uploadConfig);
+		$attachmentInfo = $attachment->uploadOne($_FILES['file']);
+		if($attachmentInfo && is_array($attachmentInfo)) {
+			$u = '/Public'.$uploadSubPath.date('Y-m-d').'/'.$attachmentInfo['savename'];
+			M('FlUser')->where(array('flu_userid'=>$this->mid))->save(array('flu_avatar'=>$u));
+		}
+		redirect('myaccount');
+	}
+	
 }

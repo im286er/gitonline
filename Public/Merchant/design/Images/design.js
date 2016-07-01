@@ -49,17 +49,23 @@ $(function(){
 		var cid  = $('#cid').val();
 		
 		if (action == 'delete') {
-			if (type == 'indexproone') {
-				var content = "/Sales/deleGoods.html";
-			}else if (type == 'activity') {
-				var content = "/Message/delhd.html";
-			}else if (type == 'coupon') {
-				var content = "/Sales/deljq.html";
+			if (confirm("确定删除？")) {
+				if (type == 'indexproone') {
+					var content = "/Sales/deleGoods.html";
+				}else if (type == 'activity') {
+					var content = "/Message/delhd.html";
+				}else if (type == 'coupon') {
+					var content = "/Sales/deljq.html";
+				}else if (type == 'video') {
+					var content = "/Info/delGoods.html";
+				}
+				
+				$.post(content, { 'id':id}, function(data){
+					$('.sales'+id).remove();
+				});
+			}else{
+				return false;
 			}
-			
-			$.post(content, { 'id':id}, function(data){
-				$('.sales'+id).remove();
-			});
 		}else{
 			window.parent.edititem(type,id,action,sid,cid);
 		}

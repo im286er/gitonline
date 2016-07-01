@@ -249,7 +249,7 @@ $(function() {
 				//InsertGoods(data.info, 'u', 'p'); var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				//$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
 				//history.go(-1);
-				location.href = "{:U('Sales/goods',array('ctype'=>1,'sid'=>I('get.sid'),'cid'=>$ginfo['cid'],'page'=>I('get.pg')))}";
+				location.href = "{:U('Sales/goods',array('ctype'=>1,'sid'=>I('get.sid'),'page'=>I('get.pg')))}";
 			} else { alert(data.msg ? data.msg : '修改失败'); } 
 		})
 	})

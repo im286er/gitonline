@@ -40,6 +40,17 @@ class MobileController extends Controller {
 		if($table){
 			session('table',$table);
 		}
+		if(session('table') > 0){
+			D('Tsbind')->hebing($this->sid);
+		}
+		$suid = $_GET['suid'];//我的二维码进来的
+		if($suid){
+			$smid = \Think\Crypt\Driver\Base64::decrypt($suid, C('CODEKEY'));
+			$smid = M('fl_user')->where(array('flu_userid'=>$smid))->getField('flu_userid');
+			if($smid){
+				session('smid',$smid);
+			}
+		}
 		
 		//cookie('sid') or redirect("http://www.dishuos.com/");
 		
@@ -199,32 +210,54 @@ class MobileController extends Controller {
 
 	//功能按钮
 	public function funcMenu(){
-		$sid      = I('sid',$this->sid);
+		$sid      = $this->sid;
 		$theme    = M('shop')->where(array('sid'=>$sid))->getField('theme');
 		$category = M('category')->alias('c')->join('azd_module m on c.model=m.module_sign')->where(array('c.sid'=>$sid, 'c.status'=>1, 'c.jid'=>$this->jid))->field('c.*,m.module_link')->order('c.corder')->select();
 		foreach($category as $k=>$v){
-			$category[$k]['url'] = $v['module_link'].'cid/'.$v['id'].'/sid/'.$sid.'.html';
+			if(!empty($v['url'])){
+				$v['url'] = stristr($v['url'],'http') ? $v['url'] : 'http://'.$v['url'];
+				$category[$k]['url'] = $v['url'];
+			}else{
+				$category[$k]['url'] = $v['module_link'].'cid/'.$v['id'].'/sid/'.$sid.'.html';
+			}
 		}
 		//背景图
-		// $backImg = M('BackImg')->where(array('b_sid'=>$sid))->find();
 		$backImg = M('shop')->field('img_url,img_height')->where(array('sid'=>$sid))->find();
+		$banner = M('banner');
+		$opt = array(
+			'jid' => $this->jid,
+			'sid' => $this->sid,
+		);
+		$banner_list = $banner->where($opt)->order('bid asc')->select();
+		foreach($banner_list as $k=>$v){
+			$banner_list[$k]['burl'] = 'http://'.ltrim($v['burl'],'http://');
+			$banner_list[$k]['burl']  = $banner_list[$k]['burl'] == 'http://' ? '' : $banner_list[$k]['burl'];
+		}
 		//分类名称
 		$cname   = M('category')->where(array('id'=>I('cid',0), 'status'=>1, 'jid'=>$this->jid))->getField('cname');
 		//客服电话
-		$info = M('shop')->field('qq,mservetel')->where(array('sid'=>$sid))->find();
-		if ($info['qq']) {
-			$link = "http://wpa.qq.com/msgrd?v=3&uin=".$info['qq']."&site=qq&menu=yes";
-		}else{
-			$link = "tel:".$info['mservetel']."";
-		}
+		$info = M('shop')->field('qq,mservetel,weixin_pic')->where(array('sid'=>$sid))->find();
+		$link['qq']  = "http://wpa.qq.com/msgrd?v=3&uin=".$info['qq']."&site=qq&menu=yes";
+		$link['tel'] = "tel:".$info['mservetel']."";
+		$link['wx']  = $info['weixin_pic'];
+
+		//底部文字
+		$foot     = M('merchant')->where(array('jid'=>$this->jid))->getField('footer_content');
 		//商铺列表
 		$shop_list = M('shop')->field('sid,sname')->where(array('jid'=>$this->jid))->select(); 
+		//公告
+		$this->path = APP_DIR.'/Public/Data/'.$this->jid.'/';
+		$path = $this->path.'Notice3.php';
+		file_exists($path) && $notice=file_get_contents($path);
 
+		$this->assign('notice', $notice ? $notice : '');
+		$this->assign('banner_list',$banner_list);
 		$this->assign('shop_list', $shop_list);
 		$this->assign('cname', $cname);
 		$this->assign('link', $link);
 		$this->assign('category', $category);
 		$this->assign('backImg', $backImg);
+		$this->assign('foot', $foot);
 	}
 
 

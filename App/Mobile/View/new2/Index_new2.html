@@ -34,11 +34,15 @@
         })
 
     </script>
+    
     <if condition="$dtype eq 1">
         <div class="container-fluid" >
     </if>
             <div class="row ct-xptj">
-            <h3 class="ct-title">{$cname}</h3>
+            <h3 class="ct-title" style="float: left; width: 100%">
+                <font style="float: left;">{$cname}</font>
+                <a href="{:U('Index/new2',array('cid'=>$cid, 'dtype'=>1))}" class="indexmore">更多</a>
+            </h3>
             <volist name="goods" id="vo">
                 <div class="col-xs-4">
                     <a href="{:U('Choose/detail',array('gid'=>$vo['gid'], 'sid'=>$sid, 'jid'=>$jid))}"><img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg" ></a>
@@ -46,9 +50,13 @@
                         <h5>{$vo.gname}</h5>
                         <div class="star start-5"></div>
                         <div class="proinfo-sale">月销{$vo.gsales}份</div>
-                        <div class="proinfo-price">&yen; {$vo['gdprice'] > 0 ? $vo['gdprice'] : $vo['goprice']} <del>&yen; {$vo.goprice}</del></div>
+                        <div class="proinfo-price">
+                            <font>&yen; {$vo['gdprice'] > 0 ? $vo['gdprice'] : $vo['goprice']|number_format=1}</font>
+                            <del> {$vo.goprice|number_format=1}</del>
+                            <div class="addtocart" data-id="{$vo.gid}" data-gstock="{$vo.gstock}" data-pic="{$vo.gimg}" ></div>
+                        </div>
                         <label id="numLabel1" class="numLabel gnum_{$vo.gid}" style="display: none;"></label>
-                        <div class="addtocart" data-id="{$vo.gid}" data-pic="{$vo.gimg}" >+</div>
+
                     </div>
                 </div>
             </volist>
@@ -56,6 +64,7 @@
         <div class="nomore text-center">
             没有更多的了
         </div>
+        
     </div>
     
     

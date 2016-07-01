@@ -62,6 +62,10 @@ select {
             <div class="set">
                 <label>平均配送时间</label><input type="text" name="info[ps_time]" placeholder="请输入平均配送时间">分钟
             </div>
+            <div class="set">
+                <label>允许合并时间</label><input type="text" name="info[hb_time]" value="10">分钟
+                <font color="red"> 允许同一桌号二维码未付款订单在这段时间内合并为同一个订单,可以直接使用默认值10 </font>
+            </div>
              <div class="set">
                 <label>营业时间</label><input type="text" name="info[yy_stime]" id="yy_stime"> - <input type="text" name="info[yy_etime]" id="yy_etime">
               <font color="red"> 正确的时间格式为:  HH.MM     例如:05.05或者14.30 </font>
@@ -94,6 +98,7 @@ select {
             </div>
             <div class="set">
                 <label>QQ</label><input type="text" name="info[qq]" placeholder="请输入QQ">
+                QQ设置好之后，客服功能如未能正常使用，请点击<a style="color:red" href="http://www.54kefu.net/linshi/201202/391.html" target="_black">这里</a>查看QQ支持临时会话操作步骤，并设置客服QQ支持临时会话。
             </div>
             <div class="set">
                 <label>状态</label><input type="radio" name="info[is_show]" checked value="1">显示  <input type="radio" name="info[is_show]" value="0">隐藏

@@ -338,7 +338,7 @@ $(".guide-layer").click(function(event) {
             					<label class="yh16">网站横幅:</label>
             					
             					<div class="gongnengBtn yh14 mLeft10">
-            							<a href="{:U('Manage/advert')}"><div>修改</div></a>
+            							<a href="{:U('Manage/advert',array('sid'=>$sid))}"><div>修改</div></a>
             					</div>
             					
             					<!-- <div class="gongneng-check yh14"><input type="radio" name="bannerBtn" value="bannerBtn" checked> 单张</div>
@@ -347,7 +347,7 @@ $(".guide-layer").click(function(event) {
             					
             				</div>
             				
-            				<div class="gongnengNomal">
+            				<!-- <div class="gongnengNomal">
             					<label class="yh16">背景音乐:</label>
             					
             					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(465, 305, '{:U('Manage/backMusic')}')">
@@ -358,14 +358,14 @@ $(".guide-layer").click(function(event) {
             					
             					<div class="gongneng-check yh14"><input type="radio" name="bgMusicBtn" value="0" <if condition="$shopInfo.bgmon eq 0">checked</if>>关闭</div>
             					
-            				</div>
+            				</div> -->
             				
             				<div class="gongnengNomal">
             					<label class="yh16">视频上传:</label>
             					
-            				<!-- 	<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(600, 600, '{:U('Info/addVideo')}')">
+            					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(800, 800, '{:U('Info/addVideo',array('sid'=>$sid))}')">
             						<div>修改</div>
-            					</div> -->
+            					</div>
             					
             					<div class="gongneng-check yh14"><input type="radio" name="uploadVideoBtn" value="1" <if condition="$shopInfo.videoon eq 1">checked</if>>开启</div>
             					
@@ -378,7 +378,7 @@ $(".guide-layer").click(function(event) {
             				<div class="gongnengNomal">
             					<label class="yh16">底部文字:</label>
             					
-            					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(800, 600, '{:U('Manage/addFooterText')}')">
+            					<div class="gongnengBtn yh14 mLeft10" onClick="UploadModul(800, 600, '{:U('Manage/addFooterText', array('dtype'=>2))}')">
             						<div>修改</div>
             					</div>
             					
@@ -396,7 +396,7 @@ $(".guide-layer").click(function(event) {
             		
             			<!--营销-->
             			<form id="form2">
-            			<div class="gongneng-marketingList nano">
+            			<div class="gongneng-marketingList nano" style="overflow-y:auto;">
             				<div class="">
             				<ul class="gongneng-marketing-Ul nano-content">
             					<volist name="func" id="vo">
@@ -410,18 +410,66 @@ $(".guide-layer").click(function(event) {
 			            					
 	            							<if condition="$vo['module_rk'] eq '/DaZhuanPan/index'">
 	            							<div class="gongneng-marketingBtnA yh14 blockOrNo">
-			            						<a href="{$vo['module_rk']}"><div>设置</div></a>
+			            						<a href="{$vo['module_rk']}?sid={$sid}"><div>设置</div></a>
 	            							</div>
 			            						
 			            					</if>
 	            							
 					            		</div>
 			            			</li>
-		            			</volist>	      
+			            			</volist>	  
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">消费投资</label>		
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">限时购</label>					
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">限量购</label>					
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">团购</label>					
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">红包</label>					
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">1元购</label>					
+					            		</div>
+			            			</li>
+			            			<li>
+			            				<div class="marketing-kind-div yh16">		
+			            					<input type="checkbox" class="marketing-check" />
+			            					<label class="marketing-kind-label">投票</label>					
+					            		</div>
+			            			</li>
+		            			   
+			            			<li>
+			            				<div class="gongneng-save">
+                        					<div class="yh18 ModuleSet">保存</div>
+                        				</div>
+			            			</li>
 		            		</ul>
 		            		</div>
 		            		<div class="gongneng-save">
-            					<div class="yh18 ModuleSet">保存</div>
+            					<!-- <div class="yh18 ModuleSet">保存</div> -->
             				</div>
             			</div>
             			</form>
@@ -442,21 +490,21 @@ $(".guide-layer").click(function(event) {
             					<label class="dealStyle">选择以下支付方式</label>
             				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" name="pay_type[]" value="2" class="dealStyle-check" <if condition="$setting['pay_type']==2 || $setting['pay_type']==3 ">checked</if> >
+	            					<input <php>if(stristr($shopInfo['zf_type'],'online')){ echo 'checked'; }</php> type="checkbox" name="pay_type[]" value="online" class="dealStyle-check" >
+			            					
+			            			<label class="dealStyle-kind-label">在线支付(支付宝,微信)</label>
+	            				</div>
+	            				
+	            				<div class="dealStyle-kind">
+	            					<input <php>if(stristr($shopInfo['zf_type'],'cod')){ echo 'checked'; }</php> type="checkbox" name="pay_type[]" value="cod" class="dealStyle-check">
 			            					
 			            			<label class="dealStyle-kind-label">到店支付</label>
 	            				</div>
 	            				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" name="pay_type[]" value="1" class="dealStyle-check" <if condition="$setting['pay_type']==1 || $setting['pay_type']==3 ">checked</if> >
+	            					<input <php>if(stristr($shopInfo['zf_type'],'yue')){ echo 'checked'; }</php> type="checkbox" name="pay_type[]" value="yue" class="dealStyle-check">
 			            					
-			            			<label class="dealStyle-kind-label">支付宝支付</label>
-	            				</div>
-	            				
-	            				<div class="dealStyle-kind">
-	            					<input type="checkbox"  class="dealStyle-check" checked >
-			            					
-			            			<label class="dealStyle-kind-label">微信支付</label>
+			            			<label class="dealStyle-kind-label">余额支付</label>
 	            				</div>
 	            				
             				</div>
@@ -467,15 +515,21 @@ $(".guide-layer").click(function(event) {
             					<label class="dealStyle">选择以下消费方式</label>
             				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" name="consume_type[]" value="1" class="dealStyle-check" <if condition="$setting['consume_type']==1 || $setting['consume_type']==3">checked</if> >
+	            					<input checked disabled type="checkbox" name="consume_type[]" value="dd" class="dealStyle-check">
 			            					
 			            			<label class="dealStyle-kind-label">到店消费</label>
 	            				</div>
 	            				
 	            				<div class="dealStyle-kind">
-	            					<input type="checkbox" name="consume_type[]" value="2" class="dealStyle-check" <if condition="$setting['consume_type']==1 || $setting['consume_type']==3">checked</if> >
+	            					<input <php>if(stristr($shopInfo['xf_type'],'ws')){ echo 'checked'; }</php> type="checkbox" name="consume_type[]" value="ws" class="dealStyle-check">
 			            					
 			            			<label class="dealStyle-kind-label">外送上门</label>
+	            				</div>
+	            				
+	            				<div class="dealStyle-kind">
+	            					<input <php>if(stristr($shopInfo['xf_type'],'yy')){ echo 'checked'; }</php> type="checkbox" name="consume_type[]" value="yy" class="dealStyle-check">
+			            					
+			            			<label class="dealStyle-kind-label">预约消费</label>
 	            				</div>
             				</div>
             				<div class="gongneng-save">
@@ -502,16 +556,11 @@ $(".guide-layer").click(function(event) {
 									alert("必须要选择一种支付方式！"); return false;
 								}
 
-								var module_length = 0;
-								$("input[name='modules[]']").each(function(){
-									if( $(this).is(":checked") ) module_length ++;
-								})
-
-								$.post("{:U('Setting/app')}", $("#form1").serialize(), function(data) {
+								$.post('{:U("Setting/app",array("sid"=>$sid))}', $("#form1").serialize(), function(data) {
 									if( parseInt(data)==1 )
 										alert('设置成功');
 									else
-										alert('设置成功');
+										alert('设置失败');
 								})
 							})
             			</script>
@@ -683,7 +732,7 @@ $(".guide-layer").click(function(event) {
 	    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
 	    </div>
 	</div>
-    <input type="hidden" name="banner_url" value="{:U('Design/inc_banner',array('sid'=>$sid))}" id="banner_url" />
+    <input type="hidden" name="banner_url" value="{:U('Manage/advert',array('sid'=>$sid, 'dtype'=>2))}" id="banner_url" />
     <input type="hidden" name="menu_url" value="{:U('Design/inc_menu',array('sid'=>$sid))}" id="menu_url" />
     <input type="hidden" name="prolist_url" value="{:U('Design/inc_indexprolist',array('sid'=>$sid))}" id="prolist_url" />
     <input type="hidden" name="shop_url" value="{:U('Design/inc_shop',array('sid'=>$sid))}" id="shop_url" />

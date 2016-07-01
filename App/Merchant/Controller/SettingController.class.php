@@ -14,23 +14,11 @@ class SettingController extends MerchantController {
 	{
 		if( IS_POST )
 		{
-			$consume_type = array_sum( $_POST['consume_type'] );
-			$pay_type = array_sum( $_POST['pay_type'] );
-			if( $consume_type==0 || $pay_type==0 ) exit('0');
-
-			$setting_array = array();
-			if( file_exists( $this->setting_file_path ) )
-			{
-				$setting_array = unserialize( file_get_contents( $this->setting_file_path ) );
-			}
-			$setting_array['consume_type'] = $consume_type;
-			$setting_array['pay_type'] = $pay_type;
-
-			//if( count($_POST['modules']) != 6 ) exit('0');
-			//$setting_array['modules'] = $_POST['modules'];
-
-			$s = file_put_contents($this->setting_file_path, serialize($setting_array));
-			exit( $s!==false ? '1' : '0');
+			$sid = I('get.sid');
+			$consume_type = join(',',$_POST['consume_type']);
+			$pay_type     = join(',',$_POST['pay_type']);
+			M('shop')->where(array('sid'=>$sid))->save(array('zf_type'=>$pay_type,'xf_type'=>$consume_type));
+			exit('1');
 		}
 		else
 		{

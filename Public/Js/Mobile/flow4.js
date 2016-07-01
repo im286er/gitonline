@@ -130,6 +130,7 @@ function addClickEvt() {
 		}
 
 		if (goods_info[goods_id].gstock != '-1' && old_number >= parseInt(goods_info[goods_id].gstock)) {
+			alert("此商品暂无库存");
 			return false;
 		}
 

@@ -33,41 +33,40 @@ class UserController extends MerchantController {
 
 	public function opinion(){
 		$where = array();
-		$where = $this->type == 1 ? array('op.op_jid'=>$this->jid) : array('op.op_sid'=>$this->tsid);
+		$where = array('op.op_jid'=>$this->jid);
+		$sid = I('sid', 0);
+		if ($sid) {
+			$where['op_sid'] = $sid;
+		}
 		if( isset($_POST['keywords']) && !empty($_POST['keywords']) ) {
 			$where['flu_nickname|op_content'] = array('like', "%{$_POST['keywords']}%");	
 		}
 		$where['op.op_status'] = '1';
 		$page = new \Common\Org\Page(M('Opinion')->alias('AS op')->where($where)->join('azd_fl_user AS u ON op.op_uid=u.flu_userid')->count(), 10);
 		$datalist = M('Opinion')->alias('AS op')->where($where)->join('azd_fl_user AS u ON op.op_uid=u.flu_userid')->order('op.op_id desc')->limit($page->firstRow.','.$page->listRows)->select();
-		$sids = array();
-		if($datalist)foreach($datalist as $value)$sids[] = $value['op_sid'];
-		if($sids){
-			$shops = M('shop')->field('sid,sname')->where('sid in('.implode(',',$sids).')')->select();
-			$this->assign('shops', array_column($shops,'sname','sid'));
-		}
+
+		
+		$shops = D('auth')->getAuthShops($this->mid);
+		$this->assign('shops', $shops);
 		$this->assign('datalist', $datalist);
 		$this->assign('pages', $page->show());
+		$this->assign('sid', $sid);
 		$this->display();
 	}
 	
 	public function opreply(){
 		$action = I('post.action');
-		$op_id = I('post.op_id');
+		$op_id  = I('post.op_id');
+		$sid    = I('sid', 0);
 		if(!$op_id)exit('0');
-		$where = array();
-		$where = $this->type == 1 ? array('op_jid'=>$this->jid) : array('op_sid'=>$this->tsid);
+		$where = array('op_sid'=>$sid);
 		$where['op_id']=$op_id;
 		if($action=='reply'){
 			$op_replytxt = I('post.op_replytxt');
 			$data=array('op_replytxt'=>$op_replytxt,'op_replytime'=>time());
 			$result = M('Opinion')->where($where)->setField($data);
-			$uid = M('Opinion')->where(array('op_id'=>$op_id))->getField('op_uid');
-			$clientid = M('User')->where(array('u_id'=>$uid))->getField('u_clientid');
-			if($clientid){
-				$app = M('merchantApp')->where( array('jid'=>$this->jid) )->field('gt_appid,gt_appkey,gt_appsecret,gt_mastersecret')->find();
-				$this->_IGtPushMessageToCidTransmission($app,$clientid);
-			}
+			$uid = M('Opinion')->where(array('op_id'=>$op_id))->find();
+			D('Order')->addUserMsg($uid['op_jid'],$uid['op_sid'],'您的意见反馈商家已回复，详情请到“个人中心 ”->“意见反馈中查看”',2,$uid['op_uid'],'意见反馈已回复');
 			exit($result?'1':'0');
 		}elseif($action=='operation'){
 		   $op_status = I('post.op_status');
@@ -90,16 +89,16 @@ class UserController extends MerchantController {
 
 	//全民返利会员管理
 	public function rebate(){
-		$where = array('flu_sjid'=>$this->jid);
+		$where = array('s.jid'=>$this->jid);
 		
 		$keywords = trim(I('keywords'));
 		
 		if( !empty($keywords) ) {			
-			$where['flu_phone'] = array('like', "%{$keywords}%");
+			$where['u.flu_phone'] = array('like', "%{$keywords}%");
 		}
 		
-		$page = new \Common\Org\Page(M('fl_user')->where($where)->count(), 10);
-		$this->assign('userlist', D('fl_user')->order('flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
+		$page = new \Common\Org\Page(M('fl_user')->alias('u')->join('azd_shop_user as s on u.flu_userid=s.uid')->where($where)->count(), 10);
+		$this->assign('userlist', M('fl_user')->alias('u')->join('azd_shop_user as s on u.flu_userid=s.uid')->order('u.flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
 		$this->assign('pages', $page->show());
 		$this->assign('type',$this->type);
 		$this->assign('jid',$this->jid);

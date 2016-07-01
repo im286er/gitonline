@@ -293,6 +293,7 @@ class IndexController extends MobileController {
 		$banner = M('banner');
 		$opt = array(
 			'jid' => $this->jid,
+			'sid' => $this->sid,
 		);
 		$banner_list = $banner->where($opt)->order('bid asc')->select();
 		foreach($banner_list as $k=>$v){
@@ -419,12 +420,12 @@ class IndexController extends MobileController {
 	 * 购物车
 	 */
 	public function shopCart(){
-		$sid  = $this->sid == '0' ? I('sid','95') : $this->sid;
+		$sid  = $this->sid;
 
 		$cart = $_COOKIE['ProductList'];
 
 		if(!$cart || $cart == ''){
-			$this->redirect('Index/new2', array('jid' => $this->jid));
+			//$this->redirect('Index/new2', array('jid' => $this->jid));
 		}
 		$cart_arr2 = explode('|', $cart);
 		$cart_key = array();
@@ -487,7 +488,7 @@ class IndexController extends MobileController {
 	//新版模板2首页
 	public function new2(){
 
-		$sid     = $this->sid == '0' ? I('sid','95') : $this->sid;
+		$sid     = $this->sid;
 
 		$dtype   = I('dtype', 1);
 
@@ -513,9 +514,12 @@ class IndexController extends MobileController {
 		
 		$category = M('category')->alias('c')->join('azd_module m on c.model=m.module_sign')->where(array('c.sid'=>$sid, 'c.status'=>1, 'c.jid'=>$this->jid))->field('c.*,m.module_link')->order('c.corder')->select();
 		foreach($category as $k=>$v){
-			
-			$category[$k]['url'] = $v['module_link'].'jid/'.$this->jid.'/cid/'.$v['id'].'/sid/'.$sid.'.html';
-			
+			if(!empty($v['url'])){
+				$v['url'] = stristr($v['url'],'http') ? $v['url'] : 'http://'.$v['url'];
+				$category[$k]['url'] = $v['url'];
+			}else{
+				$category[$k]['url'] = $v['module_link'].'jid/'.$this->jid.'/cid/'.$v['id'].'/sid/'.$sid.'.html';
+			}
 		}
 		//商品分类列表   end
 		$default_cid = isset($category[0]['id']) ? $category[0]['id'] : 0;
@@ -526,6 +530,7 @@ class IndexController extends MobileController {
 		$this->assign('cname', $cname);
 		$this->assign('dtype', $dtype);
 		$this->assign('sid', $sid);
+		$this->assign('cid', $cid);
 		$this->newdisplay();
 	}
 
@@ -551,6 +556,29 @@ class IndexController extends MobileController {
 
 
 
+	//搜索
+	public function search(){
+		$dtype   = I('dtype', 1, 'intval'); 
+		$keyword = I('keyword', ''); 
+
+		$opt = array(
+			'sid' 		=> $this->sid,
+			'gstatus'	=> 1,
+		);
+
+		if ($dtype == 2 && !empty($keyword)) {
+			$opt['gname'] = array('like',"%$keyword%"); 
+			$goods_list = M('goods')->field('gid, gname, goprice, gdprice, gimg, gsales')->where($opt)->order('gsales desc')->select();
+		}else{
+			$goods_list = M('goods')->field('gid, gname, goprice, gdprice, gimg, gsales')->where($opt)->order('gsales desc')->limit(7)->select();
+		}
+
+		$this->assign('dtype', $dtype);
+		$this->assign('goods_list', $goods_list);
+		$this->assign('keyword', $keyword);
+		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$sid) > 0 ? cookie($this->jid.'_rcid_'.$sid) : 0);
+		$this->newdisplay();
+	}
 
 
 }

@@ -16,12 +16,21 @@ class FlowController extends MobileController {
 		//if(!$this->mid){		
 			//redirect(U('User/login',array('jid'=>$this->jid,'backurl'=>url_param_encrypt(U('Mobile/Choose/index',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'),'returnurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'))));		
 		//}
-	
+		$dtype = I('dtype', 0, 'intval');
+		$o_id  = I('o_id');
+		if ($dtype == 3) {
+			$goods_arr = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
+			$string = '';
+			foreach ($goods_arr as $k => $v) {
+				$string .= $this->sid.'_'.$v['sp_gid'].'_'.$v['sp_number'].'|';
+			}
+			cookie('ProductList', $string);
+		}
 		//查询购物车商品
 		$cart = $_COOKIE['ProductList'];
 		
 		if(!$cart || $cart == ''){
-			$this->redirect('Choose/index', array('jid' => $this->jid,'sid'=>$this->sid));
+			$this->redirect('Index/index', array('jid' => $this->jid,'sid'=>$this->sid));
 		}
 		$cart_arr2 = explode('|', $cart);
 		$cart_key = array();
@@ -96,33 +105,35 @@ class FlowController extends MobileController {
 			'u.vu_price' => array('gt',0),
 			'v.vu_status' => 1,
 			'v.vu_jid' => $this->jid,
-			'v.vu_sid' => array('like','%,'.$this->sid.',%'),
+			'v.vu_sid' => $this->sid,
 			'v.vu_stime' => array('elt',date("Y-m-d H:i:s")),
 			'v.vu_etime' => array('egt',date("Y-m-d H:i:s")),
 			'v.vu_money'  => array('elt',$total_price),
 		);
 		$coupon_list = $coupon_user->alias('u')->join('azd_voucher v on u.vu_id=v.vu_id')->where($opt)->field('v.vu_name,u.vu_price,u.uvid')->select();
 		//查询店铺座位信息
- 		$sarr = M("table")->where(array("sid"=>$this->sid))->field("title")->select();
+ 		$sarr = M("table")->where(array("sid"=>$this->sid))->field("title,number")->select();
  		$defalte_set = '';
  		if(session('table') > 0){
- 			$defalte_set = M('table')->where(array("sid"=>$this->sid,'id'=>session('table')))->getField('title');
+ 			$defalte_set = M('table')->field('title,number')->where(array("sid"=>$this->sid,'id'=>session('table')))->find();
  		}
  		$this->assign('defalte_set',$defalte_set);
  		
 		//查询收货地址
 		$receivingid = I('receivingid',0);
 		if($receivingid > 0){
-			$address_info = M('fl_receiving')->where(array('flr_userid'=>$this->mid,'flr_receivingid'=>$receivingid))->find();
+			$address_info = M('receiving')->where(array('userid'=>$this->mid,'receivingid'=>$receivingid))->find();
 		}
 		if(empty($address_info)){
-			$address_info = M('fl_receiving')->where(array('flr_userid'=>$this->mid,'flr_default'=>1))->find();
+			$address_info = M('receiving')->where(array('userid'=>$this->mid,'defaults'=>1))->find();
 		}
 		if(empty($address_info)){
-			$address_info = M('fl_receiving')->where(array('flr_userid'=>$this->mid))->find();
+			$address_info = M('receiving')->where(array('userid'=>$this->mid))->find();
 		}
 		$this->assign('receivingid',$receivingid);
-		$this->assign('address_info',$address_info);
+		if ($this->mid) {
+			$this->assign('address_info',$address_info);
+		}
 		
 		$linkurl = U('User/login',array('jid'=>$this->jid,'backurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E'),'returnurl'=>url_param_encrypt(U('Mobile/Flow/confirm',array('jid'=>$this->jid,'sid'=>$this->sid)),'E')));
 		if ($this->jid == 438){
@@ -147,9 +158,11 @@ class FlowController extends MobileController {
 		$settingpath = APP_DIR.'/Public/Data/'.$this->jid.'/setting.conf';
 		$setting = @unserialize( file_get_contents($settingpath) );
 		if( !is_array( $setting ) || empty( $setting ) ) $setting = array();
+		
+		$this->assign('shopinfo', M('shop')->where(array('sid'=>$this->sid))->find());	
 		$this->assign('setting', $setting);
-
-		$this->mydisplay();
+		$this->assign('dtype', $dtype);
+		$this->newdisplay();
 	}
 	
 	//订单提交
@@ -227,7 +240,7 @@ class FlowController extends MobileController {
 				$goods_list[$k]["gnum"] = $g_number;
 			}
 		}
-
+		
 		if(in_array($this->jid, array_keys(C('EXPRESS_JID')))){
 			$total_price = cookie('price'.$this->mid);
 		}
@@ -247,21 +260,40 @@ class FlowController extends MobileController {
 				}
 			}
 		}
-
+		
+		//如果使用余额支付 判断余额是否足够
+		if(I('post.paytype') == 'yue'){
+			$yue = M('fl_user')->where(array('flu_userid'=>$this->mid))->getField('flu_balance');
+			if($yue < $oprice){
+				$data = array(
+						'msg' => 'noyue',
+				);
+				$this->ajaxReturn($data);
+			}
+		}
 	
 		//$otc = M("merchant")->where(array('jid'=>$this->jid))->getField("mtc");
 		//$oemt = userAgent($_SERVER["HTTP_USER_AGENT"]);
-		$o_xftype  = I("o_xftype");
+		$ctype = I('ctype', 1, 'intval');
+		$o_xftype  = $ctype == 3 ? 2 : 1;
 		$o_seat    = I("o_seat");
 		$o_name    = I("o_name");
 		$o_phone   = I("o_phone");
 		$o_address = I("o_address");
 		$o_remarks = I("o_remarks");
+		$o_gdate   = I("o_gdate");
 
 		if($o_xftype == 1 && !in_array($this->jid, array_keys(C('EXPRESS_JID')))){
 			$o_address = '';
 		}else{
 			$o_seat = '';
+		}
+		
+		$o_type = 0;
+		if(I('post.paytype')=='weixin'){
+			$o_type = 2;
+		}elseif(I('post.paytype')=='yue'){
+			$o_type = 1;
 		}
 		
 		$oid = orderNumber();
@@ -271,7 +303,7 @@ class FlowController extends MobileController {
 				'o_sid' => $this->sid,
 				'o_jid' => $this->jid,
 				'o_uid' => $this->mid,
-				'o_type' => 0,
+				'o_type' => $o_type,
 				'o_name' => $o_name,
 				'o_phone' => $o_phone,
 				'o_address' => $o_address,
@@ -284,12 +316,24 @@ class FlowController extends MobileController {
 				'o_table'   => 'goods_snapshot',
 				'o_remarks'   => $o_remarks,
 				'o_xftype'   => $o_xftype,
+				'o_pway'   => I('post.paytype'),
 		);
 		if($oprice == 0){
 			$opt['o_pstatus'] = 1;
 			$opt['o_pstime'] = date("Y-m-d H:i:s");
 		}
+
+		if ($ctype == 2) {
+			$opt['o_gdate']   = $o_gdate;
+			$opt['o_gtype']   = 'Seat';
+		}
+
+		if ($ctype == 3) {
+			$opt['o_gdate']   = $o_gdate;
+		}
+		
 		$order->add($opt);
+		
 		//订单商品
 		
 		$app_con = array();
@@ -356,8 +400,16 @@ class FlowController extends MobileController {
 			$vu_price = 0;
 			M('voucher_user')->where(array('uvid' => $used_coupon,'mid'  => $this->mid))->save(array('vu_price'=>$vu_price));
 		}
+		//余额支付
+		if(I('post.paytype')=='yue'){
+			M('fl_user')->where(array('flu_userid'=>$this->mid))->setDec('flu_balance',$oprice);//用户余额更新
+			$merchantmid = M('merchant')->where(array('jid'=>$this->jid))->getField('mid');
+			M('member')->where(array('mid'=>$merchantmid))->setInc('money',$oprice);//商户余额更新
+			M('order')->where(array('o_id'=>$oid))->save(array('o_pstatus'=>1,'o_pstime'=>date("Y-m-d H:i:s")));//订单状态更新
+		}
 		cookie('cart',null);
 		cookie('ProductList', null);
+		M('temp_cart')->where(array('tableid'=>session('table')))->delete();
 		
 		//订单打印
 		D('Print')->doPrint($oid,1);
@@ -374,11 +426,75 @@ class FlowController extends MobileController {
 			if($this->isApp){
 				$data = array('msg' => 'yspay','oid' => $oid);
 			}else{
-				//$data = array('msg' => 'pay','url' => U('/Home/Wechat/dsWxJsPay@www').'?o_id='.$oid.'&jump=1');
-				$data = array('msg' => 'yspay','oid' => $oid);
+				$data = array('msg' => 'pay','url' => U('/Home/Wechat/dsWxJsPay@www').'?o_id='.$oid.'&jump=1');
+				//$data = array('msg' => 'yspay','oid' => $oid);
 			}
 		}
+
+		if (in_array($this->jid, array_keys(C('EXPRESS_JID')))){
+			$data = array('msg' => 'yspay','oid' => $oid);
+		}
 		
+		$this->ajaxReturn($data);
+	}
+	
+	//判断是否符合订单合并条件
+	private function canHB(){
+		$table     = session('table');
+		$o_seat    = I("o_seat");
+		if($table && $o_seat){
+			$defalte_set = M('table')->where(array("sid"=>$this->sid,'id'=>$table))->getField('title');
+			if($defalte_set == $o_seat){
+				$hb_time = M('shop')->where(array("sid"=>$this->sid))->getField('hb_time');
+				$hb_time = empty($hb_time) ? 10 : $hb_time;
+				$hb_date = date('Y-m-d H:i:s',(time()-($hb_time*60)));
+				$hb_oid  = M('order')->where(array('hb_order'=>1,'o_jid'=>$this->jid,"o_sid"=>$this->sid,'o_seat'=>$o_seat,'o_pstatus'=>0,'o_dstatus'=>array('elt',3),'o_close'=>0,'o_dstime'=>array('gt',$hb_date)))->getField('o_id');
+				if($hb_oid){
+					return $hb_oid;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+	
+	private function HB($hb_oid,$goods_list){
+		foreach($goods_list as $k=>$v){
+			$r = M('goods_snapshot')->where(array('sp_oid'=>$hb_oid,'sp_gid'=>$v['gid']))->getField('sp_id');
+			if($r){
+				M('goods_snapshot')->where(array('sp_id'=>$r))->setInc('sp_number',$v['gnum']);	
+			}else{
+				$gt = array(
+						'sp_gid' => $v['gid'],
+						'sp_oid' => $hb_oid,
+						'sp_name' => $v['gname'],
+						'sp_gdescription' => $v['gdescription'],
+						'sp_goprice' => $v['goprice'],
+						'sp_gdprice' => $v['gdprice'] > 0 ? $v['gdprice'] : $v['goprice'],
+						'sp_number' =>  $v['gnum'],
+						'sp_img' => $v['gimg'],
+				);
+				M('goods_snapshot')->add($gt);
+			}
+		}
+		D('Common/Order')->saveOrder($hb_oid);
+		$m = M('order_user')->where(array('o_id'=>$hb_oid,'mid'=>$this->mid))->getField('id');
+		if(!$m){
+			M('order_user')->add(array('o_id'=>$hb_oid,'mid'=>$this->mid));
+		}
+		/*合并之后的订单需要重新生成订单号*/
+		$oid = orderNumber();
+		M('order')->where(array('o_id'=>$hb_oid))->save(array('o_id'=>$oid));
+		M('goods_snapshot')->where(array('sp_oid'=>$hb_oid))->save(array('sp_oid'=>$oid));
+		M('voucher_order')->where(array('o_id'=>$hb_oid))->save(array('o_id'=>$oid));
+		M('order_user')->where(array('o_id'=>$hb_oid))->save(array('o_id'=>$oid,'tes'=>$hb_oid));
+		cookie('cart',null);
+		cookie('ProductList', null);
+		$data = array("msg" => "true");
 		$this->ajaxReturn($data);
 	}
 
@@ -387,17 +503,19 @@ class FlowController extends MobileController {
 	//测试
 	// public function test(){
 	// 	$jid   = I('jid');
-	// 	$data  = C('EXPRESS_JID')[$jid];
+	// 	$data  = C('EXPRESS_JID');
+	// 	$data  = $data[$jid];
 	// 	//判断是否发快递
 	// 	if (in_array($jid, array_keys(C('EXPRESS_JID')))){
 	// 		// 导入快递
-	// 		vendor('Express.SF.OrderService#class');
+	// 		vendor('Express.SF.OrderService');
 	// 		$tpl  = new \OrderService();
-	// 		$info = $tpl->xmlservice('1603301057388121' , 'join' , '13021992467' , '浙江省杭州市拱墅区上塘路41号' , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
+	// 		$info = $tpl->xmlserviceorder('1603301057388132' , 'join' , '13021992467' , '浙江省杭州市拱墅区上塘路41号' , $data['d_company'] , $data['d_contact'] , $data['d_telphone'] , $data['d_address']);
 
 	// 		print_r($info);
 	// 	}else return false;
 	// }
+
 
 
 	// public function test_back(){
@@ -405,7 +523,7 @@ class FlowController extends MobileController {
 	// 	//判断是否发快递
 	// 	if (in_array($jid, array_keys(C('EXPRESS_JID')))){
 	// 		// 导入快递
-	// 		vendor('Express.SF.OrderService#class');
+	// 		vendor('Express.SF.OrderService');
 	// 		$tpl  = new \OrderService();
 	// 		$info = $tpl->xmlserviceback('1605040904027132');
 

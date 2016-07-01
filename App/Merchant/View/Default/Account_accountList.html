@@ -15,6 +15,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 						<th width="15%">账号</th>
 						<th width="10%">姓名</th>
 						<th width="25%">职务</th>
+						<th width="10%">角色</th>
 						<th width="10%">手机</th>
 						<th width="15%">状态</th>
 						<th width="25%">操作</th>
@@ -24,6 +25,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 					<td>{$v.mname}</td>
 					<td>{$v.tname}</td>
 					<td>{$v.job}</td>
+					<td><if condition="$v.role eq 1">超级管理员<else />普通管理员</if></td>
 					<td>{$v.tphone}</td>
 					<td><if condition="$v.mstatus eq 1">正常<else />禁止</if></td>
 					<td>

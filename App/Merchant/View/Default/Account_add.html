@@ -12,20 +12,20 @@ input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; 
     <div class="mian padding">
         <form action="__ACTION__" method="post" onsubmit="return check();">
            <div class="set">
-                <label>账号</label> <input type="text" name="mname" value="" id="mname">
+                <label><font color="red">*</font>账号</label> <input type="text" name="mname" value="" id="mname">
             </div>
             <div class="set">
-                <label>姓名</label> <input type="text" name="tname" value="" id="tname">
+                <label><font color="red">*</font>姓名</label> <input type="text" name="tname" value="" id="tname">
             </div>
             <div class="set">
-                <label>密码</label> <input type="password" name="mpwd" value="" id="mpwd">
+                <label><font color="red">*</font>密码</label> <input type="password" name="mpwd" value="" id="mpwd"><font color="red">注:至少6位</font>
             </div>
             <div class="set">
-                <label>确认密码</label> <input type="password" name="cpwd" value="" id="cpwd">
+                <label><font color="red">*</font>确认密码</label> <input type="password" name="cpwd" value="" id="cpwd">
             </div>
              <div class="set">
                 <label>角色</label> <select name="role" id="ssr"><option value="2">普通管理员</option><option value="1">超级管理员</option></select>
-                    注:超级管理员不需要设置权限和班次
+                  <font color="red">  注:超级管理员不需要设置权限和班次 </font>
             </div>
              <div class="set" style="margin-top:30px;">
                 <label>权限</label>
@@ -60,23 +60,23 @@ input[type="password"] { border:1px solid #e7e7eb; font-size:14px; height:32px; 
             </div>
          
             <div class="set">
-                <label>职务</label> <input type="text" name="job" value="" id="job">
+                <label><font color="red">*</font>职务</label> <input type="text" name="job" value="" id="job">
             </div>
             <div class="set">
-                <label>手机</label> <input type="text" name="tphone" value="" id="tphone">
+                <label><font color="red">*</font>手机</label> <input type="text" name="tphone" value="" id="tphone">
             </div>
             <div class="set">
                 <label>性别</label> <input checked type="radio" name="sex" value="男" id="sex">男 
                 					<input type="radio" name="sex" value="女" id="sex">女
             </div>
             <div class="set">
-                <label>生日</label> <input type="text" readonly="readonly" value="" id="birthday" name="birthday">
+                <label><font color="red">*</font>生日</label> <input type="text" readonly="readonly" value="" id="birthday" name="birthday">
             </div>
             <div class="set">
-                <label>籍贯</label> <input type="text" name="address" value="" id="address">
+                <label><font color="red">*</font>籍贯</label> <input type="text" name="address" value="" id="address">
             </div>
             <div class="set">
-                <label>身份证</label> <input type="text" name="idcard" value="" id="idcard">
+                <label><font color="red">*</font>身份证</label> <input type="text" name="idcard" value="" id="idcard">
             </div>
             <div class="set">
                 <label></label> <input type="submit" value="确认" class="btn btn-pwd">

@@ -58,7 +58,7 @@ return array(
 					array('id'=>'ShopaddShop','name'=>'添加店铺','url'=>'/Shop/addShop.html'),
 					array('id'=>'Shopindex','name'=>'管理店铺','url'=>'/Shop/index.html'),
 					array('id'=>'PrintprintList','name'=>'打印设置','url'=>'/Print/printList.html'),
-					array('id'=>'Functionautoreply','name'=>'消息设置','url'=>'/Function/autoreply/type/1.html'),
+					array('id'=>'Functionautoreply','name'=>'消息设置','url'=>'/Function/autoreply/type/2.html'),
 			)),
 			'renovation' =>    array('code'=>'renovation','name'=>'店铺装修','url'=>'/Manage/template.html?menucode=renovation','next'=>array(
 					array('id'=>'mobileTheme','name'=>'手机版装修','url'=>'/Manage/template.html','next'=>array(
@@ -80,24 +80,20 @@ return array(
 					)),
 			)),
 			'goods' =>    array('code'=>'goods','name'=>'商品管理','url'=>'/Sales/goods/ctype/1.html?menucode=goods','next'=>array(
+					array('id'=>'SalesclassList','name'=>'分类管理','url'=>'/Sales/classList.html?ctype=1'),
 					array('id'=>'SalesaddGoods','name'=>'添加商品','url'=>'/Sales/addGoods.html?ctype=1'),
 					array('id'=>'Salesgoods','name'=>'商品管理','url'=>'/Sales/goods.html?ctype=1'),
-					array('id'=>'SalesclassList','name'=>'分类管理','url'=>'/Sales/classList.html?ctype=1'),
 					// array('id'=>'Salesgoods','name'=>'管理店铺','url'=>'/Sales/goods/ctype/1.html'),
 					// array('id'=>'PrintprintList','name'=>'打印设置','url'=>'/Print/printList.html'),
 			)),
 			'order' =>    array('code'=>'order','name'=>'订单管理','url'=>'/Sales/myorder.html?menucode=order','next'=>array(
-					array('id'=>'Salesmyorder','name'=>'全部订单','url'=>'/Sales/myorder.html','next'=>array(
-							array('id'=>'Salesmyorder2','name'=>'消费订单','url'=>'/Sales/myorder.html'),
-							array('id'=>'SalesrebateOrder','name'=>'返利订单','url'=>'/Sales/rebateOrder.html'),
+					array('id'=>'Salesmyorder2','name'=>'全部订单','url'=>'/Sales/myorder.html','next'=>array(
+							array('id'=>'Salesmyorder','name'=>'消费订单','url'=>'/Sales/myorder.html'),
 					)),
-					array('id'=>'Salesmyreserve','name'=>'预约订单','url'=>'/Sales/myreserve.html','next'=>array(
-							array('id'=>'Salesmyreserve2','name'=>'消费预约订单','url'=>'/Sales/myreserve.html'),
-							array('id'=>'SalesrebateReserve','name'=>'返利预约订单','url'=>'/Sales/rebateReserve.html'),
-					)),
-					array('id'=>'SalesrecedeOrderGoods','name'=>'退货管理','url'=>'/Sales/recedeOrderGoods.html','next'=>array(
-							array('id'=>'SalesrecedeOrderGoods2','name'=>'退货商品','url'=>'/Sales/recedeOrderGoods.html'),
-							array('id'=>'SalesrecedeOrderGoods3','name'=>'退货分析','url'=>'/Sales/recedeOrderGoods/type/tab1.html'),
+					
+					array('id'=>'SalesrecedeOrderGoods2','name'=>'退货管理','url'=>'/Sales/recedeOrderGoods.html','next'=>array(
+							array('id'=>'SalesrecedeOrderGoods','name'=>'退货商品','url'=>'/Sales/recedeOrderGoods.html'),
+							array('id'=>'SalesrecedeOrderGoods1','name'=>'退货分析','url'=>'/Sales/recedeOrderGoods/type/tab1.html'),
 					)),
 			)),
 			'finance' =>    array('code'=>'finance','name'=>'财务管理','url'=>'/Manage/finance.html?menucode=finance','next'=>array(
@@ -129,6 +125,8 @@ return array(
 					array('id'=>'Accountadd','name'=>'添加账户','url'=>'/Account/add.html'),
 					array('id'=>'AccountaccountList','name'=>'账号管理','url'=>'/Account/accountList.html'),
 			)),
-
+			'marketing' =>    array('code'=>'marketing','name'=>'营销管理','url'=>'/Invest/index.html?menucode=marketing','next'=>array(
+					array('id'=>'Investindex','name'=>'消费投资','url'=>'/Invest/index.html'),
+			)),
 	),
 );

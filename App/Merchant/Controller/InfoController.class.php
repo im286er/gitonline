@@ -102,7 +102,7 @@ class InfoController extends MerchantController {
 	}
 	
 	//添加商品
-	public function addGoods() {
+	public function addVideo() {
 		if( IS_POST ) { 
 			if( !$_POST['cid'] ) exit( json_encode(array('msg'=>'添加失败')) );
 			B('Common\\Behavior\\CheckMerchantCid', '', $_POST['cid']);
@@ -113,9 +113,10 @@ class InfoController extends MerchantController {
 			}
 			exit( json_encode($msg) );
 		} else {
-			$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-			$ctype=I('get.ctype', 0, 'intval') or die('你无权查看当前页面');
-			$this->assign('clist', M('class')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'ctype'=>$ctype, 'status'=>1))->select());
+			$sid   = I('get.sid', 0, 'intval');
+			// $ctype = I('get.ctype', 0, 'intval') or die('你无权查看当前页面');
+			$clist = M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1, 'model'=>'video'))->select();
+			$this->assign('clist', $clist);
 			$this->assign('sid', $sid);
 			$this->display("addVideo");	
 		}
@@ -145,10 +146,13 @@ class InfoController extends MerchantController {
 			}
 			exit( json_encode($msg) );
 		} else {
-			$vinfo = M('video')->alias('AS g')->join('__CLASS__ as c ON g.cid=c.cid', 'left')->where(array('c.jid'=>$this->jid, 'gid'=>I('get.gid')))->find();
+			$sid = I('get.sid', 0, 'intval');
+			$vinfo = M('video')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'gid'=>I('get.gid')))->find();
 			if( !is_array($vinfo) || empty($vinfo) ) E('你无权查看当前页面');
-			$sid = $this->type==1 ? I('get.sid', 0, 'intval') : $this->tsid;
-			$this->assign('clist', M('class')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'ctype'=>$vinfo['ctype'], 'status'=>1))->select());
+			
+			// $clist = M('category')->alias('C')->join("azd_module M on C.model = M.module_sign")->where(array('C.jid'=>$this->jid, 'C.sid'=>$sid, 'C.status'=>1, 'M.module_sign'=>'video'))->select();
+			$clist = M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1, 'model'=>'video'))->select();
+			$this->assign('clist', $clist);
 			$this->assign('vinfo', $vinfo);
 			$this->display();		
 		}

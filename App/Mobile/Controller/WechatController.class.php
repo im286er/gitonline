@@ -195,10 +195,10 @@ class WechatController extends Controller {
 		switch ($orderinfo['o_gtype']){
 			case '1':
 			 	$orderinfo['title'] = $orderinfo['sname'].'-在线下单';
-				$linkurl = url_param_encrypt(U('Shop/index@mobile',array('sid'=>$orderinfo['o_sid'])),'E');
+				$linkurl = url_param_encrypt(U('Shop/index@yd',array('sid'=>$orderinfo['o_sid'])),'E');
 			  break;  
 			case '2':
-				$linkurl = url_param_encrypt(U('Shop/index@mobile',array('sid'=>$orderinfo['o_sid'])),'E');
+				$linkurl = url_param_encrypt(U('Shop/index@yd',array('sid'=>$orderinfo['o_sid'])),'E');
 				$orderinfo['title'] = $orderinfo['sname'].'-在线预约';
 			  break;
 			case '3': 
@@ -229,7 +229,7 @@ class WechatController extends Controller {
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
 		$input->SetGoods_tag($orderinfo['sname']);
-		$input->SetNotify_url(U('Wechat/dsWxNotify@mobile'));
+		$input->SetNotify_url(U('Wechat/dsWxNotify@yd'));
 		$input->SetTrade_type("APP");
 		$order = \WxPayApi::unifiedOrder($input);
 		//print_r($order);
@@ -238,8 +238,8 @@ class WechatController extends Controller {
 		$order['errcode'] = 'ok';
 		$order['paykey'] = \WxPayConfig::KEY;
 		$order['errmsg'] = $order['return_msg'];
-		$order['success_url'] = U('User/myorder@mobile',array('returnurl'=>$linkurl));//支付成功返回的url
-		$order['fail_url'] = U('User/myorder@mobile',array('returnurl'=>$linkurl));//支付失败返回的url
+		$order['success_url'] = U('User/myorder@yd',array('returnurl'=>$linkurl));//支付成功返回的url
+		$order['fail_url'] = U('User/myorder@yd',array('returnurl'=>$linkurl));//支付失败返回的url
 		$order?die(JSON($order)):die(JSON(array('errcode'=>81202,'errmsg'=>'订单号不存在订单!')));
 	}
 

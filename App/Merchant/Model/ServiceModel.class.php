@@ -4,7 +4,8 @@ use Think\Model;
 
 class ServiceModel extends Model {
 	public function insertShopData($jid,$sid){
-		$mod = M('module')->where(array('module_status'=>1))->field('module_sign,default_img,default_name')->select();
+		//id小于6的模块生成演示栏目
+		$mod = M('module')->where(array('module_status'=>1,'id'=>array('lt',6)))->field('module_sign,default_img,default_name')->select();
 		foreach($mod as $k=>$v){
 			$info = array(
 				'jid' => $jid,

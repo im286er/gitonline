@@ -19,6 +19,33 @@
            排序: <input type="text" value="{$class.corder}" style="width:224px;" id="Corder"><br>
         </div>
        
+        <div class=" Sort">
+           分类: {$class['cname']}<br>
+        </div>
+
+        <div class="Sort">
+           链接: <input type="text" value="{$class.url}" style="width:224px;" id="link"><br/>
+           <font color="red">注：添加外链接后，该栏目功能自动转为自定义链接。</font>
+        </div>     
+         <if condition="$is_print eq 1">
+        <div class="Sort">
+                        <label>打印机：</label>
+                        <select multiple name="printid[]" id="GoodsPrint" style="width:180px;">
+                        	<volist name="print_list" id="p">
+                        	<option value="{$p.print_id}" <php>if(in_array($p['print_id'],$print_id)){ echo 'selected'; }</php> >{$p.print_name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                 <else />
+                 <div class="Sort" style="display:none">
+                        <label>打印机：</label>
+                        <select multiple name="printid[]" id="GoodsPrint" style="width:180px;">
+                        	<volist name="print_list" id="p">
+                            <option value="{$p.print_id}" <php>if(in_array($p['print_id'],$print_id)){ echo 'selected'; }</php> >{$p.print_name}</option>
+                            </volist>
+                        </select>
+                    </div>
+            </if>        
         <div class="text-center Sort">
        <input type="button" value="保存" class="btn btn-pwd" id="AddMenu_Save">
             <input type="button" value="取消" class="btn btn-hui" id="AddMenu_Cancl">
@@ -57,10 +84,10 @@ $(function() {
 		var value = $("#AddMenu_Value").val();
 		var corder= $('#Corder').val();
 		var file  = $('#UPLOAD_CIMG_VALUE').val();
-		
-		
-		
-		$.post('__ACTION__', {cimg:file,cname:value, corder:corder, cid:cid}, function(data) {
+		var link = $('#link').val();
+		var print_id = $("#GoodsPrint").val();
+				
+		$.post('__ACTION__', {print_id:print_id,link:link,cimg:file,cname:value, corder:corder, cid:cid}, function(data) {
 			if( parseInt(data) != 0 ) {
 				window.parent.location.reload();
 			} else { alert("添加失败"); }

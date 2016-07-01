@@ -233,7 +233,7 @@ class WechatController extends Controller {
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
 		$input->SetGoods_tag($mnickname);
-		$input->SetNotify_url(U('/Home/Wechat/dsWxNotify@www'));
+		$input->SetNotify_url(U('Wechat/dsWxNotify@ho'));
 		$input->SetTrade_type("JSAPI");
 		$input->SetOpenid($openId);
 		$order = \WxPayApi::unifiedOrder($input);
@@ -243,7 +243,7 @@ class WechatController extends Controller {
 		$this->assign('order_info', $order_info);
 		//$this->assign('editAddress', $editAddress);
 		$this->assign('jsApiParameters', $jsApiParameters);
-		$this->assign('returnurl', U('/User/myorder@yd',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump'))) );//更改url地址
+		$this->assign('returnurl', U('User/myorder@yd',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump'))) );//更改url地址
 		$this->display();
 	}
 

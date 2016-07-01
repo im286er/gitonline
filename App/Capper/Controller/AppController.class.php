@@ -129,7 +129,7 @@ class AppController extends CapperappController {
 			$sharedata['title'] = ($nickname?$nickname:'您的朋友').'邀你一起来全民返利拿返现啦';
 			$sharedata['introduce'] = '通过APP消费，不仅帮您省，还能帮您挣，就是这么奇妙这么任性，快来一起下载吧！';			
 		}
-		$sharedata['img'] = U('@www').'/Public/Upload/2015-07-14/55a4bd143fb4b.png';
+		$sharedata['img'] = U('@ho').'/Public/Upload/2015-07-14/55a4bd143fb4b.png';
 		$sharedata['linkurl'] = U('My/invite@flapp',array('inviter'=>$userid));
 		die(JSON($sharedata));
 	}
@@ -234,7 +234,7 @@ class AppController extends CapperappController {
 	public function checkUpdate(){
 		$appid = 1;
 		$appinfo = D('System/App')->field('ico,versions,status')->find($appid);
-		$appinfo['ico'] = U('@www').$appinfo['ico'];
+		$appinfo['ico'] = U('@ho').$appinfo['ico'];
 		$appinfo['downurl'] = U('Token/inviteDown@flapp');
 		if($appinfo['status']<1)die(JSON(array()));
 		die(JSON($appinfo));
@@ -260,7 +260,7 @@ class AppController extends CapperappController {
 		if(!$_FILES['imgFile'])die(JSON(array('errcode'=>'90000', 'errmsg'=>'图片流未提交')));
         $attachmentInfo = $attachment->uploadOne($_FILES['imgFile']);
         if($attachmentInfo && is_array($attachmentInfo)) {
-			$imgpath = U('@www').'/Public'.$uploadSubPath.($subName?date('d').'/':'').$attachmentInfo['savename'];
+			$imgpath = U('@ho').'/Public'.$uploadSubPath.($subName?date('d').'/':'').$attachmentInfo['savename'];
 			D('FlUser')->where(array('flu_userid'=>$this->userid))->setField('flu_avatar',$imgpath);
             die(JSON(array('errcode'=>'ok', 'errmsg'=>$imgpath, 'savename'=>basename($attachmentInfo['savename']))));
         } else {

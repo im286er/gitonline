@@ -111,7 +111,22 @@ function addClickEvt() {
         var img = addcar.attr('data-pic'); 
         var id = addcar.attr('data-id');
 
-        var flyer = $('<img class="u-flyer" src="'+img+'">'); 
+        var goods_id = $(this).attr('data-id');
+
+        var data_gstock =  $(this).attr('data-gstock');
+
+        var old_number  = $(".gnum_" + goods_id).html();
+
+        if (old_number == undefined || old_number == '') {
+            old_number = $(".gnum_" + goods_id).html();
+        }
+
+        if (data_gstock != '-1' && old_number >= parseInt(data_gstock)) {
+			alert("此商品暂无库存");
+			return false;
+		}
+
+		var flyer = $('<img class="u-flyer" src="'+img+'">'); 
 			flyer.fly({ 
 				start: {
 				left: event.pageX,
@@ -129,14 +144,6 @@ function addClickEvt() {
 		}); 
 
         $("#cartnum").html( parseInt($("#cartnum").text())+1);
-
-        var goods_id = $(this).attr('data-id');
-
-        var old_number = $(".gnum_" + goods_id).html();
-
-        if (old_number == undefined || old_number == '') {
-            old_number = $(".gnum_" + goods_id).html();
-        }
 
         old_number++;
 

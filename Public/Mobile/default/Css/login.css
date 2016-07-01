@@ -12,7 +12,7 @@
 .form-mod .getCode{ border-left:1px solid #e3e3e8; color:#bf242a; width:8rem; text-align:center; position:absolute; right:0px;}
 .form-mod .getCode.disable{ color:#ccc}
 .login-btn{ padding:0 1.5rem;}
-.login-btn span { width:100%; height:4.4rem; line-height:4.4rem; text-align:center; font-size:1.6rem; color:#FFF; background:#bf242a; display:block; border-radius:0.4rem}
+.login-btn span { width:100%; height:4.4rem; line-height:4.4rem; text-align:center; font-size:1.6rem; color:#FFF; background:#ff4400; display:block; border-radius:0.4rem}
 .login-btn span.disable{ background:#999}
 .login-other{ padding:1.5rem 3.8rem; font-size:1.1rem}
 .login-other a{ color:#000}

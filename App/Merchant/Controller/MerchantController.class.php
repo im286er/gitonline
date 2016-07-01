@@ -115,7 +115,6 @@ class MerchantController extends ManagerController {
 		
 		$mtapp2 = M('merchantApp')->where(array('jid'=>$this->jid))->find();
 		$this->assign('mtapp2', $mtapp2);
-		
 		$this->assign('countNotice', $this->countNotice($merchant));
 		$this->assign('orderCount', $this->numOrder());
 		$this->assign('reserveCount', $this->numReserve());

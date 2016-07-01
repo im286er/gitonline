@@ -32,12 +32,12 @@ class OrderService{
 function xmlservice($orderid,$j_contact,$j_telphone,$j_address,$d_company,$d_contact,$d_telphone,$d_address) 
 {
      $checkhead = C('EXPRESS_CHECKHEADER');
-     $body = '<Request service="OrderReverseService" lang="zh-CN"><Head>'.$checkhead['SF'].'</Head><Body><Order orderid="'.$orderid.'" express_type="1"  j_contact="'.$j_contact.'" j_mobile="'.$j_telphone.'" j_address="'.$j_address.'"  d_company="'.$d_company.'" d_contact="'.$d_contact.'" d_mobile="'.$d_telphone.'" d_address="'.$d_address.'" parcel_quantity="1" pay_method="3" custid="'.C('MONTHLY_NUM').'" ><Cargo name="衣服" unit="件" /><AddedService name="INSURE" value="500" /></Order></Body></Request>';
+     $body = '<Request service="OrderReverseService" lang="zh-CN"><Head>'.$checkhead['SF'].'</Head><Body><Order orderid="'.$orderid.'" express_type="6"  j_contact="'.$j_contact.'" j_mobile="'.$j_telphone.'" j_address="'.$j_address.'"  d_company="'.$d_company.'" d_contact="'.$d_contact.'" d_mobile="'.$d_telphone.'" d_address="'.$d_address.'" parcel_quantity="1" pay_method="1" custid="'.C('MONTHLY_NUM').'" ><Cargo name="衣服" unit="件" /><AddedService name="INSURE" value="500" /></Order></Body></Request>';
      $checkword = C('EXPRESS_CHECKWORD');
      $newbody = $body.$checkword['SF'];
      $md5 =  md5($newbody,true);  
      $verifyCode = base64_encode($md5);
-     $url1 = C('EXPRESS_URL')
+     $url1 = C('EXPRESS_URL');
      $url  = $url1['SF']; 
      $fields = array('xml'=>$body,'verifyCode'=>$verifyCode);
      $parambody =  http_build_query($fields, '', '&'); 
@@ -55,7 +55,24 @@ function xmlserviceback($orderid)
      $newbody = $body.$checkword['SF'];
      $md5 =  md5($newbody,true);  
      $verifyCode = base64_encode($md5);
-     $url1 = C('EXPRESS_URL')
+     $url1 = C('EXPRESS_URL');
+     $url  = $url1['SF']; 
+     $fields = array('xml'=>$body,'verifyCode'=>$verifyCode);
+     $parambody =  http_build_query($fields, '', '&'); 
+     $res = $this->post($url,$parambody); 
+     return $res;
+}
+
+
+function xmlserviceorder($orderid,$j_contact,$j_telphone,$j_address,$d_company,$d_contact,$d_telphone,$d_address){
+     $calldate = date("Y-m-d",strtotime("+3 day"));
+     $checkhead = C('EXPRESS_CHECKHEADER');
+     $body = '<Request service="OrderService" lang="zh-CN"><Head>'.$checkhead['SF'].'</Head><Body><Order orderid="'.$orderid.'" j_contact="'.$j_contact.'" j_mobile="'.$j_telphone.'" j_address="'.$j_address.'" d_contact="'.$d_contact.'" d_mobile="'.$d_telphone.'" d_address="'.$d_address.'" express_type="6" pay_method="1" parcel_quantity="1" remark="衣物" custid="'.C('MONTHLY_NUM').'"></Order></Body>';
+     $checkword = C('EXPRESS_CHECKWORD');
+     $newbody = $body.$checkword['SF'];
+     $md5 =  md5($newbody,true);  
+     $verifyCode = base64_encode($md5);
+     $url1 = C('EXPRESS_URL');
      $url  = $url1['SF']; 
      $fields = array('xml'=>$body,'verifyCode'=>$verifyCode);
      $parambody =  http_build_query($fields, '', '&'); 

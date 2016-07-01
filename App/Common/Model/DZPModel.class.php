@@ -7,13 +7,13 @@ class DZPModel extends Model {
 	/* 抽奖
 	 * 
 	 * */	
-	public function doPrize($userid,$jid) {
+	public function doPrize($userid,$jid,$sid) {
 		//验证抽奖资格
-		$r = $this->checkPrize($userid,$jid);
+		$r = $this->checkPrize($userid,$jid,$sid);
 		if($r == false){
 			return false;
 		}
-		$shop = M('dazhuanpan')->where(array('z_jid'=>$jid))->find();
+		$shop = M('dazhuanpan')->where(array('z_jid'=>$jid,'z_sid'=>$sid))->find();
 		$set = unserialize($shop['set']);
 		$gailv = $set['gailv'];
 		$key = get_rand($gailv);
@@ -25,7 +25,7 @@ class DZPModel extends Model {
 		);
 		
 		//记录抽奖记录
-		$s = $this->savePrize($userid,$jid,$result);
+		$s = $this->savePrize($userid,$jid,$result,$sid);
 		
 		return $s ? $result : false;
 	}
@@ -34,8 +34,8 @@ class DZPModel extends Model {
 	 * 
 	 * 
 	 * */
-	public function checkPrize($userid,$jid){
-		$n1 = $this->userCount($jid,$userid);
+	public function checkPrize($userid,$jid,$sid){
+		$n1 = $this->userCount($jid,$userid,$sid);
 		if($n1 > 0){
 			return true;
 		}else{
@@ -45,9 +45,9 @@ class DZPModel extends Model {
 	
 	
 	/*保存抽奖记录*/
-	public function savePrize($userid,$jid,$result){
-		$f = $this->getFreeCount($jid);
-		$u = $this->getUsedCount($jid,$userid);
+	public function savePrize($userid,$jid,$result,$sid){
+		$f = $this->getFreeCount($jid,$sid);
+		$u = $this->getUsedCount($jid,$userid,$sid);
 		if($f - $u > 0){
 			$ptype = 0;//使用免费次数
 		}else{
@@ -64,6 +64,7 @@ class DZPModel extends Model {
 		}
 		$opt = array(
 				'jid' => $jid,
+				'sid' => $sid,
 				'userid' => $userid,
 				'addtime' => date("Y-m-d H:i:s"),
 				'rtype' => $result['ptype'],
@@ -100,37 +101,39 @@ class DZPModel extends Model {
 	/* 获取用户在某商户的剩余抽奖次数
 	 * 
 	 * */
-	public function userCount($jid,$userid){
-		$num_free  = $this->getFreeCount($jid);//当天免费次数
-		$num_pay  = $this->getPayCount($jid,$userid);//总的剩余不免费次数
-		$num_used  = $this->getUsedCount($jid,$userid);//当天已使用的免费次数
+	public function userCount($jid,$userid,$sid){
+		$num_free  = $this->getFreeCount($jid,$sid);//当天免费次数
+		$num_pay  = $this->getPayCount($jid,$userid,$sid);//总的剩余不免费次数
+		$num_used  = $this->getUsedCount($jid,$userid,$sid);//当天已使用的免费次数
 		$num = $num_free - $num_used + $num_pay;
 		return $num;
 	}
 	
 	//每日免费次数
-	public function getFreeCount($jid){
-		$r = M('dazhuanpan')->where(array('z_jid'=>$jid))->getField('freetime');
+	public function getFreeCount($jid,$sid){
+		$r = M('dazhuanpan')->where(array('z_jid'=>$jid,'z_sid'=>$sid))->getField('freetime');
 		return $r;
 	}
 	//不免费的次数
-	public function getPayCount($jid,$userid){
-		$minmoney = M('dazhuanpan')->where(array('z_jid'=>$jid))->getField('minmoney');
-		$num_share = M('dzp_share')->where(array('jid'=>$jid,'userid'=>$userid))->count();//分享得到的次数
-		$ot1 = M('order')->where(array('o_jid'=>$jid,'o_uid'=>$userid,'o_pstatus'=>1))->sum('o_price');//os订单总额
-		$ot2 = M('fl_order')->where(array('flo_jid'=>$jid,'flo_uid'=>$userid,'flo_pstatus'=>1))->sum('flo_price');//返利订单总额
+	public function getPayCount($jid,$userid,$sid){
+		$minmoney = M('dazhuanpan')->where(array('z_jid'=>$jid,'z_sid'=>$sid))->getField('minmoney');
+		//$num_share = M('dzp_share')->where(array('jid'=>$jid,'userid'=>$userid))->count();//分享得到的次数
+		$num_share = 0;
+		$ot1 = M('order')->where(array('o_sid'=>$sid,'o_jid'=>$jid,'o_uid'=>$userid,'o_pstatus'=>1))->sum('o_price');//os订单总额
+		$ot2 = M('fl_order')->where(array('flo_sid'=>$sid,'flo_jid'=>$jid,'flo_uid'=>$userid,'flo_pstatus'=>1))->sum('flo_price');//返利订单总额
 		$num_order = floor(($ot1+$ot2)/$minmoney);
-		$num_userd = M('dzp_prize')->where(array('jid'=>$jid,'userid'=>$userid,'ptype'=>1))->count();
+		$num_userd = M('dzp_prize')->where(array('sid'=>$sid,'jid'=>$jid,'userid'=>$userid,'ptype'=>1))->count();
 		$num = $num_share + $num_order - $num_userd;
 		return $num;
 	}
 	//当天已使用的免费次数
-	public function getUsedCount($jid,$userid){
+	public function getUsedCount($jid,$userid,$sid){
 		$opt = array(
 			'addtime' => array(array('egt',date("Y-m-d")),array('elt',date("Y-m-d 23:59:59"))),
 			'jid' => $jid,
 			'userid' => $userid,
 			'ptype' => 0,
+			'sid' => $sid,
 		);
 		$num = M('dzp_prize')->where($opt)->count();
 		return $num;

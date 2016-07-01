@@ -78,15 +78,23 @@ function sendmsg($phone, $content, $foottxt = '【阿宅订】',$verify=true) {
 	return substr($res, 0, 2)=='ok' ? true : false;
 }
 
-function flsendmsg($phone, $content) {
+function flsendmsg($phone, $content , $qm) {
 	if( setsmsip($phone, $content) == false) return false;
 	$url = "http://58.83.147.92:8080/qxt/smssenderv2?user=CS_azd&password=".md5('66313768')."&tele=".$phone;
 	if(  is_numeric($content) ) {
 		$data = "msg=您的验证码为：".$content."【全民返利】";
+		if($qm == '438'){
+			$data = "msg=您的验证码为：".$content."【天湖洗衣】";
+		}
 	} else {
 		$data = "msg=".$content;
 		$data = iconv('UTF-8', 'GB2312', $data);
-		$data = $data . "【全民返利】";
+		if($qm == '438'){
+			$data = $data . "【天湖洗衣】";
+		}else{
+			$data = $data . "【全民返利】";
+		}
+		
 	}
 	$ch = curl_init($url);
 	//curl_setopt($ch, CURLOPT_ENCODING , 'gbk');
@@ -117,13 +125,13 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true)
 {
 	if(function_exists("mb_substr")){
 		if ($suffix && strlen($str)>$length)
-			return mb_substr($str, $start, $length, $charset)."...";
+			return mb_substr($str, $start, $length, $charset)."";
 		else
 			return mb_substr($str, $start, $length, $charset);
 	}
 	elseif(function_exists('iconv_substr')) {
 		if ($suffix && strlen($str)>$length)
-			return iconv_substr($str,$start,$length,$charset)."...";
+			return iconv_substr($str,$start,$length,$charset)."";
 		else
 			return iconv_substr($str,$start,$length,$charset);
 	}
@@ -133,7 +141,7 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true)
 	$re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
 	preg_match_all($re[$charset], $str, $match);
 	$slice = join("",array_slice($match[0], $start, $length));
-	if($suffix) return $slice."…";
+	if($suffix) return $slice."";
 	return $slice;
 }
 

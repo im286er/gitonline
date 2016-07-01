@@ -18,7 +18,7 @@
         <div class="row ct-activity editbox" data-type="class" id="class" cid="{$cid}" sid="{$sid}">
         	<h3 class="ct-title">{$cname}<small class="more"><a href="#">更多</a></small></h3>
             <volist name="active_list" id="vo" >
-                <div class="media editboxitem sales{$vo.av_id} col-xs-10" data-type="activity" id="{$vo.av_id}" data-id="{$vo.av_id}" >
+                <div class="media editboxitem sales{$vo.av_id} col-xs-10" data-type="activity" id="{$vo.av_id}" data-id="{$vo.av_id}" style="overflow:visible">
                   <div class="media-left media-middle">
                     <a href="#">
                       <img class="media-object" src="{$vo.av_img}" alt="...">
@@ -27,7 +27,7 @@
                   <div class="media-body">
                     <h4 class="media-heading">{$vo.av_title}<span class="badge">新</span></h4>
                     <!-- 每天九点开抢 -->
-                  </div><br/>
+                  </div>
                 </div>
             </volist>
             <div class="col-xs-4" >
@@ -50,7 +50,7 @@
             	购物车
             </a>
             <a class="col-xs-3 nav-down active">
-            	下载
+            	客服
             </a>
             <a class="col-xs-3 nav-my ">
             	我的

@@ -46,7 +46,7 @@ class ChooseController extends MobileController {
 		
 		//商品分类列表   start
 		
-		$category = M('class');
+		$category = M('category');
 		/*
 		$opt = array(
 				'g.sid'    => $this->sid,
@@ -60,7 +60,7 @@ class ChooseController extends MobileController {
 		//$category_list = $category->where($opt)->order('corder')->select();
 		$category_list = $category->alias('c')->join('azd_goods g on g.cid=c.cid')->where($opt)->group('c.cid')->order('c.corder')->select();
 		*/
-		$category_list = $category->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$this->sid, 'ctype'=>1))->order('corder asc,cid asc')->select();
+		$category_list = $category->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$this->sid))->order('corder asc,id asc')->select();
 		//商品分类列表   end		
 		$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
 		file_exists($path.'InfoMenu1Name.php') && $module1name=file_get_contents($path.'InfoMenu1Name.php');
@@ -72,7 +72,7 @@ class ChooseController extends MobileController {
 			$page_url = U('Shop/index', array('jid' => $this->jid,'mod'=>'Choose'));
 		}
 		$this->assign('page_url',$page_url);
-		$default_cid = isset($category_list[0]['cid']) ? $category_list[0]['cid'] : 0;
+		$default_cid = isset($category_list[0]['id']) ? $category_list[0]['id'] : 0;
 		//print_r($category_list);die;
 		$this->assign('rcid',cookie($this->jid.'_rcid_'.$this->sid));
 		$this->assign('mid',$this->mid);
@@ -128,7 +128,7 @@ class ChooseController extends MobileController {
 		$this->assign('dtype', $dtype);
 		$page_url = I("from_index") == 1 ? U('Index/index',array('jid'=>$this->jid)) : "";
 		$this->assign('page_url',$page_url);
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 	
 	/*点菜搜索
@@ -398,7 +398,7 @@ class ChooseController extends MobileController {
 		$this->assign('total_price',$total_price);
 		$this->assign('page_name','购物车');
 		$this->assign('default_cid',cookie($this->jid.'_rcid_'.$sid) > 0 ? cookie($this->jid.'_rcid_'.$sid) : 0);
-		$this->mydisplay();
+		$this->newdisplay();
 	}
 	
 }

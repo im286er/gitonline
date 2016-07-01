@@ -4,6 +4,7 @@ namespace Merchant\Controller;
 class DaZhuanPanController extends MerchantController {
 	//基本设置
 	public function index() {
+		$sid   = I('sid', 0, 'intval');
 		if( IS_POST ) {
 			$data = array();
 			$data['status'] = I('status',0);
@@ -12,27 +13,36 @@ class DaZhuanPanController extends MerchantController {
 			$data['freetime'] = I('freetime',0);
 			$data['minmoney'] = I('minmoney',0);
 			$data['z_jid'] = $this->jid;
+			$data['z_sid'] = $sid;
 			
+			if(empty($sid)){
+				die("3");
+			}
 			if(empty($data['stime']) || empty($data['etime'])){
 				die("0");
 			}
-			$dzp = M('dazhuanpan')->where(array('z_jid'=>$this->jid))->find();
+			$dzp = M('dazhuanpan')->where(array('z_jid'=>$this->jid, 'z_sid'=>$sid))->find();
 			if($dzp){
-				$r = M('dazhuanpan')->where(array('z_jid'=>$this->jid))->save($data);
+				$r = M('dazhuanpan')->where(array('z_jid'=>$this->jid, 'z_sid'=>$sid))->save($data);
 				die('1');
 			}else{
 				$r = M('dazhuanpan')->add($data);
 				die('2');
 			}
 		}else{
-			$dzp = M('dazhuanpan')->where(array('z_jid'=>$this->jid))->find();
+			$shops = D('auth')->getAuthShops($this->mid);
+			$dzp   = M('dazhuanpan')->where(array('z_sid'=>$sid, 'z_jid'=>$this->jid))->find();
+
+			$this->assign('shops', $shops);
 			$this->assign('dzp',$dzp);
+			$this->assign('sid', $sid);
 			$this->assign('CurrentUrl', 'Salesgoods');
 			$this->display();
 		}
 	}
 	//奖品设置
 	public function prize() {
+		$sid   = I('sid', 0, 'intval');
 		$default = array(0,1,2,3,4,5,6,7,8,9);
 		if( IS_POST ) {
 			$prize = $_POST['prize'];
@@ -40,6 +50,9 @@ class DaZhuanPanController extends MerchantController {
 			$t = array_sum($gailv);
 			if($t != 100){
 				die(json_encode(array('code'=>'error1')));
+			}
+			if(empty($sid)){
+				die(json_encode(array('code'=>'error2','msg'=>'未选择分店')));
 			}
 			for($i=0;$i<count($default);$i++){
 				if($prize['ptype'][$i] ==1 && empty($prize['pname'][$i])){
@@ -49,28 +62,31 @@ class DaZhuanPanController extends MerchantController {
 				}				
 			}
 			$data['set'] = serialize($_POST['prize']);
-			$r = M('dazhuanpan')->where(array('z_jid'=>$this->jid))->save($data);
+			$r = M('dazhuanpan')->where(array('z_jid'=>$this->jid,'z_sid'=>$sid))->save($data);
 			if($r){
 				die(json_encode(array('code'=>'success')));
 			}else{
 				die(json_encode(array('code'=>'error2','msg'=>'请先进行基础设置再设置奖品')));
 			}
 		}else{
-			$prize_set = M('dazhuanpan')->where(array('z_jid'=>$this->jid))->getField('set');
+			$prize_set = M('dazhuanpan')->where(array('z_jid'=>$this->jid,'z_sid'=>$sid))->getField('set');
 			$prize = unserialize($prize_set);
 			//优惠券
-			$voucher = M('voucher')->where(array('vu_jid'=>$this->jid,'vu_status'=>1,'vu_etime'=>array('gt',date("Y-m-d H:i:s"))))->select();
+			$voucher = M('voucher')->where(array('vu_sid'=>$sid,'vu_jid'=>$this->jid,'vu_status'=>1,'vu_etime'=>array('gt',date("Y-m-d H:i:s"))))->select();
 			$this->assign('voucher',$voucher);
 			$this->assign('prize',$prize);
 			$this->assign('default',$default);
 			$this->assign('CurrentUrl', 'DaZhuanPan');
+			$this->assign('sid',$sid);
 			$this->display();
 		}
 	}
 	//中奖列表
 	public function user() {
+		$sid = I('sid',0);
 		$where = array(
-			'jid'=>$this->jid
+			'jid'=>$this->jid,
+			'sid'=>$sid,
 		);
 		$page = new \Common\Org\Page(M('dzp_prize')->where($where)->count(), 10);
 		$datalist = M('dzp_prize')->where($where)->order('addtime desc')->limit($page->firstRow.','.$page->listRows)->select();
@@ -84,6 +100,7 @@ class DaZhuanPanController extends MerchantController {
 		$this->assign('datalist',$datalist);
 		$this->assign('pages', $page->show());
 		$this->assign('CurrentUrl', 'DaZhuanPan');
+		$this->assign('sid',$sid);
 		$this->display();
 	}
 	

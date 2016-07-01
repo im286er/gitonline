@@ -585,7 +585,7 @@ class UserController extends CapperappController {
 		if(!$_FILES['imgFile'])die(JSON(array('errcode'=>'90000', 'errmsg'=>'图片流未提交')));
         $attachmentInfo = $attachment->uploadOne($_FILES['imgFile']);
         if($attachmentInfo && is_array($attachmentInfo)) {
-			$imgpath = U('@www').'/Public'.$uploadSubPath.($subName?date('d').'/':'').$attachmentInfo['savename'];
+			$imgpath = U('@ho').'/Public'.$uploadSubPath.($subName?date('d').'/':'').$attachmentInfo['savename'];
 			D('TrUser')->where(array('u_userid'=>$this->userid))->setField('u_avatar',$imgpath);
             die(JSON(array('errcode'=>'ok', 'errmsg'=>$imgpath, 'savename'=>basename($attachmentInfo['savename']))));
         } else {

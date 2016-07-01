@@ -2,8 +2,8 @@
 <block name="body">
 <style>.content_a > ul.ul-cell > li { width:150px; } </style>
 <style type="text/css">
-.category_order { height:50px; display:block; line-height:50px; }
-.category_order li { float:left; text-align:center; width:20%; }
+.category_order { height:35px; display:block; line-height:35px; }
+.category_order li { float:left; text-align:center; width:8%; border:solid #a5a5a5 1px;margin-right:10px }
 .category_order li a { display:block; width:100%; height:100%; font-size:14px; }
 .category_order li.on { border-bottom:2px solid #0099ff; }
 .modal-content .set > input[type="text"] { width:420px; }
@@ -14,6 +14,8 @@
 input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
 .button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
 .table input[type="button"], .tables input[type="button"] {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;border: 1px solid #e7e7eb;color: #5da3ea;margin-right: 3px;padding: 2px 5px;}
+.tab-meun{width:100%;height:70px;background:#f1f1f1;padding-top:30px;font-family:"微软雅黑"; font-size:16px; border:solid #d5d5d5 1px; border-bottom:none}
+.main_div_l{background:#f4f4f4; width:98%;heigh:500px;border:solid #d5d5d5 1px; margin-bottom:30px; padding:20px 20px}
 </style>
 <div class="wrapper">
     <h2 class="title">财务管理</h2>
@@ -28,7 +30,18 @@ input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;pad
 	</volist>
 </h2>
 
-<div class="category_order">
+    <div class="top_btn_l">
+    		 <h3>
+               
+                <span class="c_a2a2a6"> 账户明细 申请提现后1-2个工作日内到账，非工作日顺延</span>
+                <input type="button" value="提现" onclick="location='/Manage/carryapply.html'">
+            </h3>
+    
+    </div>    
+    <div class="mian padding">
+    <div class="main_div_l">
+    	
+	<div class="category_order">
     	<ul>
     		<li <eq name="Think.get.sstime" value="0">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>0))}">全部账目</a></li>
         	<li <eq name="Think.get.sstime" value="1">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>1))}">当日账目</a></li>
@@ -37,8 +50,8 @@ input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;pad
             <li <eq name="Think.get.sstime" value="4">class="on"</eq>><a href="{:U('/Manage/finance', array('type'=>$_GET['type'],'sid'=>$sid,'sstime'=>4))}">当年账目</a></li>
         </ul>
     </div>
-        
-    <div class="mian padding">
+    
+
     <div class="content_c">
             <form action="__ACTION__" method="get">
             	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
@@ -53,11 +66,7 @@ input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;pad
         <div style="width:100%;height:15px;"></div>
         
         <div class="content_a">
-            <h3>
-                账户明细
-                <span class="c_a2a2a6">申请提现后1-2个工作日内到账，非工作日顺延</span>
-                <input type="button" value="提现" onclick="location='/Manage/carryapply.html'">
-            </h3>
+           
             <ul class="clearfix ul-cell">
                 <li><p>{$count_a|default='0.00'}</p>线下总收入</li>
                 <li><p>{$count_b|default='0.00'}</p>线上总收入（商）</li>
@@ -65,9 +74,11 @@ input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;pad
                 <li><p>{$count_d|default='0.00'}</p>返利总收入</li>
                 <li class="last"><p>{$member.money|default='0.00'}</p>可提现金额</li>
             </ul>
+        </div>  
         </div>
+        
         <div class="tab-meun">
-        <p class="returnMenu meun-lef" style="width:675px;">
+        <p class="returnMenu meun-lef" ">
             <a href="{:U('Manage/finance@sj', array('type'=>0,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==0">class="curr"</if>>线下收入明细（商）</a>
             <a href="{:U('Manage/finance@sj', array('type'=>1,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==1">class="curr"</if>>线上收入明细（商）</a>
             <a href="{:U('Manage/finance@sj', array('type'=>2,'sid'=>$sid), true, true)}" <if condition="isset($_GET['type']) && $_GET['type']==2">class="curr"</if>>线上收入明细（平）</a>

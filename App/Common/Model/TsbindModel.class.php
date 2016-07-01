@@ -86,6 +86,40 @@ class TsbindModel extends Model {
 		}
 		return true;
 	}
+	
+	public function hebing($sid){
+		$cart = $_COOKIE['ProductList'];
+		//提交购物车数据
+		if(!empty($cart) && in_array(CONTROLLER_NAME.ACTION_NAME,array('IndexshopCart','Flowconfirm'))){		
+			M('temp_cart')->where(array('tableid'=>session('table')))->delete();
+			$cart_arr2 = explode('|', $cart);
+			foreach($cart_arr2 as $k1=>$v1){
+				if(!empty($v1)){
+					$temp = explode('_', $v1);
+					$opt = array(
+						'tableid' => session('table'),
+						'gid' => $temp[1],
+						'gnumber' => $temp[2],
+						'sid' => $sid,
+						'add_time' => date("Y-m-d H:i:s"),
+					);
+					M('temp_cart')->add($opt);
+				}
+			}
+		}else{
+			//读取购物车数据
+			$r = M('temp_cart')->where(array('tableid'=>session('table')))->select();
+			$cc = array();
+			foreach($r as $k2=>$v2){
+				$str = $sid.'_'.$v2['gid'].'_'.$v2['gnumber'];
+				$cc[] = $str;
+			}
+			$cd = join('|',$cc);
+			cookie('ProductList',$cd);
+			//$_COOKIE['ProductList'] = $cd;
+		}
+		
+	}
 }
 
 ?>

@@ -28,7 +28,7 @@ class DZPController extends MobileController {
 			$this->assign('loginurl2',$loginurl2);
 		}
 		$r = array();
-		$prize = M('dazhuanpan')->where(array('z_jid'=>$jid))->find();
+		$prize = M('dazhuanpan')->where(array('z_jid'=>$jid, 'z_sid'=>$this->sid))->find();
 		if($prize['set']){
 			$a =  unserialize($prize['set']);
 			foreach($a['ptype'] as $k=>$v){
@@ -57,7 +57,7 @@ class DZPController extends MobileController {
 			$this->msystem = 'android';
 			$this->assign('msystem','android');
 		}
-		$last_num = D('DZP')->userCount($jid,$userid);
+		$last_num = D('DZP')->userCount($jid,$userid,$this->sid);
 		$this->assign('jid',$jid);
 		$this->assign('last_num',$last_num);
 		$this->assign('status',$status);
@@ -80,10 +80,11 @@ class DZPController extends MobileController {
 			$back_url = U('DZP/index@yd',array('jid'=>$jid,'utoken'=>$utk));
 		}else{
 			$userid = $this->mid;
-			$back_url = U('DZP/index@yd',array('jid'=>$jid));
+			$back_url = U('DZP/index@yd',array('jid'=>$jid,'sid'=>$this->sid));
 		}
 		$opt = array(
 			'p.jid' => $jid,
+			'p.sid' => $this->sid,
 			'p.userid'  =>  $userid,
 			'p.rtype' =>  array('neq',0)
 		);
@@ -94,7 +95,7 @@ class DZPController extends MobileController {
 				if($v['isget'] == 1){
 					$r2[] = array('id'=>$v['id'],'type'=>1,'name'=>$v['rname'],'dt'=>'','status'=>'2');
 				}else{
-					$dt = M('dazhuanpan')->where(array('z_jid'=>$jid))->find();
+					$dt = M('dazhuanpan')->where(array('z_jid'=>$jid,'z_sid'=>$this->sid))->find();
 					if(time() > strtotime($dt['etime'])){
 						$r3[] = array('id'=>$v['id'],'type'=>1,'name'=>$v['rname'],'dt'=>date("Y-m-d",strtotime($dt['etime'])),'status'=>'3');
 					}else{
@@ -125,6 +126,7 @@ class DZPController extends MobileController {
 	public function getPrize(){
 		$jid = I('jid');
 		$utk = I('utk');
+		$sid = $this->sid;
 		$r = array(
 				'code' => 0,
 				'last_num' => 0,
@@ -141,8 +143,8 @@ class DZPController extends MobileController {
 		if(empty($userid)){
 			die(json_encode($r));
 		}
-		$pp = D('DZP')->doPrize($userid,$jid);
-		$last_num = D('DZP')->userCount($jid,$userid);
+		$pp = D('DZP')->doPrize($userid,$jid,$sid);
+		$last_num = D('DZP')->userCount($jid,$userid,$sid);
 		$r['last_num'] = $last_num;
 		if($pp){
 			$r['code'] = 1;
@@ -173,7 +175,7 @@ class DZPController extends MobileController {
 			$back_url = U('DZP/myPrize@yd',array('jid'=>$jid));
 		}
 		$prize = M('dzp_prize')->where(array('rtype'=>1,'jid'=>$jid,'userid'=>$userid,'id'=>$id))->find();
-		$end_time = M('dazhuanpan')->where(array('z_jid'=>$prize['jid']))->getField('etime');
+		$end_time = M('dazhuanpan')->where(array('z_jid'=>$prize['jid'],'z_sid'=>$prize['sid']))->getField('etime');
 		$shop = M('shop')->where(array('jid'=>$jid,'status'=>'1'))->field('sname,mservetel')->select();
 		$prize['end_time'] = $end_time;
 		$this->assign('prize',$prize);

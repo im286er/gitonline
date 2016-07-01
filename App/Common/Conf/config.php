@@ -86,6 +86,6 @@ return array(
 				'd_address'  => '杭州市江干区丁桥镇天鹤路318号',
 		),
 	),
-	
+	'CODEKEY' => 'yhujikuytgfrtyhu',
 );
 

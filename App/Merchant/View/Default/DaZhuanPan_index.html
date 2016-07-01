@@ -9,12 +9,21 @@
 .modal-content .set > input[type="text"] { width:420px; }
 span.paytype { margin:0 20px 0 0; line-height: 36px; height: 36px; display: inline-block; }
 span.paytype input[type="text"] { width:150px; }
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
 </style>
 <div class="wrapper">
   
     
-    <h2 class="title">基本设置 | <a href="{:U('DaZhuanPan/prize')}" style="text-decoration:underline;">奖品设置</a> | <a href="{:U('DaZhuanPan/user')}" style="text-decoration:underline;">抽奖记录</a></h2>   
-   
+    <h2 class="title">基本设置 | <a href="{:U('DaZhuanPan/prize',array('sid'=>$sid))}" style="text-decoration:underline;">奖品设置</a> | <a href="{:U('DaZhuanPan/user',array('sid'=>$sid))}" style="text-decoration:underline;">抽奖记录</a></h2>   
+    <h2 class="shops">选择门店：
+	<!-- <if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if> -->
+	<volist name="shops" id="vo">
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="{:U('DaZhuanPan/index',array('sid'=>$key))}">{$vo}</a></span>
+	</volist>
+	</h2>
     <div class="mian padding">
         
         <div class="modal-content">
@@ -57,6 +66,7 @@ span.paytype input[type="text"] { width:150px; }
 				</div>
 				<div class="set">
 					<label></label>
+					<input type="hidden" name="sid" value="{$sid}" />
 					<input id="ModuleUpdate" type="button" class="btn btn-pwd" value="保存">
 				</div>
 				<div class="border-b top"></div>
@@ -85,7 +95,9 @@ span.paytype input[type="text"] { width:150px; }
 				alert('保存成功');
 			}else if(parseInt(data)==2){
 				alert('保存成功');
-				location.href = "{:U('DaZhuanPan/prize@sj')}";
+				location.href = "{:U('DaZhuanPan/prize@sj',array('sid'=>$sid))}";
+			}else if(parseInt(data)==3){
+				alert('请选择分店之后再设置');
 			}
 			else{
 				alert('保存失败');

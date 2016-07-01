@@ -28,7 +28,7 @@ class SalesController extends MerchantController {
 			}
 		}
 		
-		$where['o_gtype'] = 'Choose';//订单类型 
+		//$where['o_gtype'] = 'Choose';//订单类型 
 		
 		$shops = D('auth')->getAuthShops($this->mid);
 		
@@ -107,7 +107,7 @@ class SalesController extends MerchantController {
 		$this->assign('o_seat',$o_seat);
 		$this->assign('sid',$sid);
 		
-		$this->assign('countOrder', $this->countOrder(1));
+		$this->assign('countOrder', $this->countOrder2($sid));
 		//$this->assign('users', $users);
 		$this->assign('shops', $shops);
         $this->assign('pages', $page->show());
@@ -163,6 +163,7 @@ class SalesController extends MerchantController {
 			}
 			$this->assign('otypeprice', $otypeprice);
 			$this->assign('datas', $datas);
+			$this->assign('CurrentUrl', 'SalesrecedeOrderGoods1');
 			$this->display('Sales_recedeStatistics');
 			exit;
 		}
@@ -362,8 +363,8 @@ class SalesController extends MerchantController {
 			$this->assign('moduleicon', $moduleicon ? $moduleicon : '');
 			$this->assign('modulelink', $ctype==1 ? 'http://yd.dishuos.com/Shop/index/mod/Choose/jid/'.$this->jid.'.html' : 'http://yd.dishuos.com/Shop/index/mod/Seat/jid/'.$this->jid.'.html');
 		}
-		$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
-		$sid = I('get.sid', key($shops), 'intval');
+		$shops = D('auth')->getAuthShops($this->mid);
+		$sid   = I('get.sid', key($shops), 'intval');
 		// $classlist = M('class')->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid, 'ctype'=>$ctype))->order('corder asc')->select();
 		$classlist = M('category')->where(array('jid'=>$this->jid, 'status'=>1, 'sid'=>$sid,'model'=>'goods'))->order('corder asc')->select();
 		
@@ -462,6 +463,7 @@ class SalesController extends MerchantController {
 
 	//添加分类信息
 	public function addClass() {
+		$sid = I('sid', 0, 'intval');
 		if( IS_POST ) {
 			if( !$_POST['cname'] ) exit('0');
 			if(is_array(I('post.print_id'))){
@@ -469,12 +471,19 @@ class SalesController extends MerchantController {
 			}else{
 				$print_id = '';
 			}
-			exit( M("category")->add(array('cimg'=>I('post.cimg', ''),'model'=>I('post.module', ''),'print_id'=>$print_id,'jid'=>$this->jid, 'corder'=>I('post.corder', ''), 'sid'=>I('post.sid', 0, 'intval'), 'cname'=>I('post.cname', ''))));
-		} else {
-			$sid = I('sid',0);
-			$sp  = I('sp',0);
+			// if ($sid == 0) {
+			// 	$shops = M('shop')->field('sid')->where(array('jid'=>$this->jid))->select();
+			// 	for ($i=0; $i <count($shops) ; $i++) { 
+			// 		$re = M("category")->add(array('cimg'=>I('post.cimg', ''),'model'=>I('post.module', ''),'print_id'=>$print_id,'jid'=>$this->jid, 'corder'=>I('post.corder', ''), 'sid'=>$shops[$i], 'cname'=>I('post.cname', '')));
+			// 	}
+			// 	exit($re);
+			// }else{
+				exit( M("category")->add(array('url'=>I('post.link', ''),'cimg'=>I('post.cimg', ''),'model'=>I('post.module', ''),'print_id'=>$print_id,'jid'=>$this->jid, 'corder'=>I('post.corder', ''), 'sid'=>I('post.sid', 0, 'intval'), 'cname'=>I('post.cname', ''))));
+			// }
 			
-			$ml = array();
+		} else {
+			$sp  = I('sp',0);
+			$ml  = array();
 			if($sp){
 				$ml = M('merchant_module')->alias('m')->join('azd_module b on m.module_sign=b.module_sign')->where(array('m.jid'=>$this->jid,'b.module_status'=>1))->field('b.module_sign,b.module_name')->select();
 			}
@@ -483,6 +492,12 @@ class SalesController extends MerchantController {
 			if($cid){
 				$class_info = M('category')->where(array('id'=>$cid))->find();
 			}
+			if($sp == 0){
+				$print_list = M('print')->where(array('print_sid'=>$sid,'print_status'=>1))->select();
+				$this->assign('is_print',1);
+				$this->assign('print_list',$print_list);
+			}
+				
 			$this->assign('class_info',$class_info);
 			$this->assign('ml',$ml);
 			$this->assign('sid', $sid);
@@ -519,14 +534,16 @@ class SalesController extends MerchantController {
 			}else{
 				$print_id = '';
 			}
-			exit( M("category")->save(array('cimg'=>I('post.cimg', ''),'cname'=>I('post.cname', ''),'corder'=>I('post.corder', ''),'print_id'=>$print_id, 'id'=>I('post.cid', 0, 'intval'))) ? '1' : '0' );
+			exit( M("category")->save(array('url'=>I('post.link', ''),'cimg'=>I('post.cimg', ''),'cname'=>I('post.cname', ''),'corder'=>I('post.corder', ''),'print_id'=>$print_id, 'id'=>I('post.cid', 0, 'intval'))) ? '1' : '0' );
 		} else {
+			$sp  = I('sp',0);
 			$class_info = M('category')->where(array('id'=>$cid))->find();
 			$print_list = array();
 			$sid = $class_info['sid'];
-			if($sid > 0){
-				$print_list = M('print')->where(array('print_sid'=>$sid,'print_status'=>1))->select();
+			if($sp == 0){
+				$this->assign('is_print',1);
 			}
+			$print_list = M('print')->where(array('print_sid'=>$sid,'print_status'=>1))->select();
 			$print_id = explode(',', $class_info['print_id']);
 			
 			$this->assign('print_id',$print_id);
@@ -630,10 +647,10 @@ class SalesController extends MerchantController {
 			$this->assign('clist', M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1,'model'=>'goods'))->select());
 			$this->assign('sid', $sid);
 			
-			if( ($this->type==1 || $this->type==2) && $sid ) {//添加分店的时候，要有打印机
+			if( $sid ) {//添加分店的时候，要有打印机
 				$printList = M('print')->where( array("print_sid"=>$sid) )->select();
 				$this->assign('printList', $printList);
-				//$this->assign('isprint', 1);
+				$this->assign('isprint', 1);
 			}
 			//$shops = M('shop')->where(array('jid'=>$this->jid, "status"=>'1'))->getField('sid,sname');
 			$this->assign('shops', $shops);
@@ -702,18 +719,19 @@ class SalesController extends MerchantController {
 			}
 			exit( json_encode($msg) ); 
 		} else {
-			$ginfo = M('goods')->alias('AS g')->join('azd_category as c ON g.cid=c.id', 'left')->where(array('c.jid'=>$this->jid, 'gid'=>I('get.gid')))->find();
+			$sid = I('get.sid', 0, 'intval');
+			// $ginfo = M('goods')->alias('AS g')->join('azd_category as c ON g.cid=c.id', 'left')->where(array('c.jid'=>$this->jid, 'gid'=>I('get.gid')))->find();print_r(M()->_sql());die;
+			$ginfo = M('goods')->where(array('gid'=>I('get.gid'), 'sid'=>$sid))->find();
 			if( !is_array($ginfo) || empty($ginfo) ) E('你无权查看当前页面');
 			//$ginfo['gvrebate'] = $ginfo['gdprice'] > 0 ? $ginfo['gvrebate']*$ginfo['gdprice']/100 : $ginfo['gvrebate']*$ginfo['goprice']/100;
 			//$ginfo['gvrebate'] = round($ginfo['gvrebate'],2);
-			$sid = I('get.sid', 0, 'intval');
 			$this->assign('clist', M('category')->where(array('jid'=>$this->jid, 'sid'=>$sid, 'status'=>1,'model'=>'goods'))->select());
 			$this->assign('ginfo', $ginfo);
 			
-			if( ($this->type==1 || $this->type==2) && $sid ) {//添加分店的时候，要有打印机
+			if(  $sid ) {//添加分店的时候，要有打印机
 				$printList = M('print')->where( array("print_sid"=>$sid) )->select();
 				$this->assign('printList', $printList);
-				//$this->assign('isprint', 1);
+				$this->assign('isprint', 1);
 				$print_id = explode(',', $ginfo['printid']);
 				$this->assign('print_id',$print_id);
 			}
@@ -815,16 +833,10 @@ class SalesController extends MerchantController {
 			$data['vu_description'] = I('post.des', '');
 			$data['vu_money'] = I('post.vu_money', '0.00', 'floatval');
 			if( !$data['vu_name'] ) exit('0');
-			if (I('dtype') == 1) {
-				if( $this->type != 1 ) {
-					$data['vu_sid'] =','.$this->tsid.',';
-				} else {
-				 $data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
-				}
-			}else{
-				$data['vu_sid'] = I('d', 0, 'intval');
-				$data['vu_cid'] = I('cid', 0, 'intval');
-			}
+			
+			$data['vu_sid'] = I('d', 0, 'intval');
+			$data['vu_cid'] = I('cid', 0, 'intval');
+			
 			exit( M('voucher')->add($data) ? "1" : "0" );
 		} else {
 			//如果是 商家登录（品牌），先要判断此商家有没有分店
@@ -866,15 +878,7 @@ class SalesController extends MerchantController {
 			$data['vu_img'] = I('post.img', '');
 			$data['vu_description'] = I('post.des', '');
 			$data['vu_money'] = I('post.vu_money', '0.00', 'floatval');
-			if (I('dtype') == 1) {
-				if( $this->type != 1 ) {
-					$data['vu_sid'] =','.$this->tsid.',';
-				} else {
-				 $data['vu_sid'] = ','.trim(implode(',', $_POST['d']), ',').',';
-				}
-			}else{
-				$data['vu_sid'] = I('d', 0, 'intval');
-			}
+			
 			exit( M('voucher')->where('vu_id='.I('post.id', 0, 'intval'))->save($data) ? "1" : "0" );
 		} else {
 			//如果是 商家登录（品牌），先要判断此商家有没有分店
@@ -925,7 +929,6 @@ class SalesController extends MerchantController {
 		$this->assign('odstatus', $this->odstatus(1));
 		$this->assign('oostatus', $this->oostatus());
 		$this->assign('type', $this->type);
-		$this->assign('CurrentUrl', 'Salesmyorder');
 		$this->display();
 	}
 	
@@ -1024,7 +1027,6 @@ class SalesController extends MerchantController {
 		$this->assign('odstatus', $this->odstatus(2));
 		$this->assign('oostatus', $this->oostatus());
 		$this->assign('type', $this->type);
-		$this->assign('CurrentUrl', 'Salesmyreserve');
 		$this->display();
 	}
 
@@ -1083,9 +1085,9 @@ class SalesController extends MerchantController {
 		$maxRow = $PHPExcel->getSheet(0)->getHighestRow(); 
 		
 		$cidlist = array();
-		foreach( M("class")->where(array("jid"=>$this->jid, "sid"=>intval( $post['sid'] ), "ctype"=>1, "status"=>1))->select() as $class )
+		foreach( M("category")->where(array("jid"=>$this->jid, "sid"=>intval( $post['sid'] ),  "status"=>1))->select() as $class )
 		{
-			$cidlist[ $class['cid'] ] = $class['cname'];
+			$cidlist[ $class['id'] ] = $class['cname'];
 		}
 		$arrayData = array();
 		if( $maxRow > 0 ) {
@@ -1098,7 +1100,7 @@ class SalesController extends MerchantController {
 				$classname = $PHPExcel->getSheet(0)->getCellByColumnAndRow(2, $i)->getValue();
 				$classname = trim( $classname );
 				if( !$cid=array_search( $classname, $cidlist ) ) {
-					$cid = M("class")->add( array("cname"=>$classname, "jid"=>$this->jid, "sid"=>intval( $post['sid'] ), "corder"=>99, "ctype"=>1, "status"=>1) );
+					$cid = M("category")->add( array("cname"=>$classname, "jid"=>$this->jid, "sid"=>intval( $post['sid'] ), "corder"=>99,  "status"=>1) );
 					$cidlist[ $cid ] = $classname;
 				}
 
@@ -1176,7 +1178,7 @@ class SalesController extends MerchantController {
     }
 
     public function ImportFile() {
-    	if(stripos($_SERVER['HTTP_REFERER'], 'dishuos.com') === false ) E('你无权进行此操作');
+    	// if(stripos($_SERVER['HTTP_REFERER'], 'dishuos.com') === false ) E('你无权进行此操作');
 
 		$uploadROOT = realpath(THINK_PATH.'../Public/'); //上传地址的根目录
 		if(urldecode(I('get.custompath'))) {
@@ -1283,7 +1285,7 @@ class SalesController extends MerchantController {
 		header("Content-type: text/html; charset=utf-8");  
 		$orderid = I('post.o', '');
 		$userid = I('post.u', 0, 'intval');
-		$contentmsg = '亲~ 欢迎光临！您的订单('.$orderid.')我们已经收到咯，还需要您选择付款或者线下支付，我们才能受理哦~';
+		$contentmsg = '亲~ 欢迎光临！您的订单('.$orderid.')我们已经收到咯，还需要付款，我们才能受理哦~';
 		if( !$orderid || !$userid ) exit("0");
 		
 		//给用户发送通知
@@ -1301,6 +1303,11 @@ class SalesController extends MerchantController {
 		
 		//订单打印
 		D('Print')->doPrint($order_id,2);
+		
+		//给用户发送通知
+		$contentmsg = '您的订单商家已接受~';
+		$userid = M('order')->where(array('o_id'=>$order_id))->getField('o_uid');
+		$status = $this->_SendMessageToUser($userid, $order_id, $this->jid, "订单已接受", $contentmsg);
 		exit("1");
 	}
 	
@@ -1406,11 +1413,18 @@ class SalesController extends MerchantController {
 			M("member")->where("mid=".$_member_id)->setInc('money', $orderInfo['o_price']);
 		}
 		*/
-		
 		if( is_array($orderInfo) && !empty($orderInfo) && $status ) {
 			$OrderModel->commit();
+			//消费投资计算
+			D('Order')->doTz($orderid);
 			//订单打印
 			D('Print')->doPrint($orderid,3);
+			
+			$contentmsg = "您的订单已确认完成,欢迎再次光临~";
+			$userid = M('order')->where(array('o_id'=>$orderid))->getField('o_uid');
+			//给用户发送通知
+			$status = $this->_SendMessageToUser($userid, $orderid, $this->jid, "订单已完成", $contentmsg);
+			
 			exit('1');	
 		} else {
 			$OrderModel->rollback(); exit('0');	
@@ -1420,45 +1434,20 @@ class SalesController extends MerchantController {
 	//给用户发送消息
 	private function _SendMessageToUser($userid, $orderid, $jid, $title, $content)
 	{
-		
 		$userInfo = M("fl_user")->where("flu_userid=".$userid)->find();
-		$u_clientid = $userInfo['flu_clientid'];
+		$content = $content.' 订单号:' . $orderid ;
 		
-		//if( !$u_clientid ) {//如果不存在，则用短信通知
-			SENDMSG:;
-			$user_phone = M("order")->where(array("o_id"=>$orderid))->getField("o_phone");
-			if( !$user_phone ) $user_phone = $userInfo['flu_phone'];
-			if( $user_phone ) {
-				//获取商家的名称
-				//$jia_name = \Common\Org\Cookie::get('mnickname');
-				//$content = $content.'【'.($jia_name ? $jia_name : '阿宅订').'】';
-				$content = $content.' 订单号:' . $orderid ;
-				return sendmsg( $user_phone,  $content ) ? true : false;
-			}
-			return false;
-		//}
-		
-		//获取商家的appid
-		$appinfo = M('merchantApp')->where("jid=".$jid)->field("gt_appid,gt_appkey,gt_appsecret,gt_mastersecret")->find();
-		if( !is_array($appinfo) || empty($appinfo) ) goto SENDMSG;
-		
-		$info = array();
-		$info['title'] = $title;
-		$info['time'] = date('Y-m-d H:i:s');
-		$info['content'] = $content;
-		$info['pid'] = 0;
-		
-		$args = array(
-			'transmissionContent'	=> JSON($info),
-		);
-		$mesg = array(
-			'offlineExpireTime'		=> 7200,
-			'netWorkType'			=> 1
-		);
-		$status = \Common\Org\IGPushMsg::getIGPushMsg(true, $appinfo)->pushMessageToCid($u_clientid, 4, $args, $mesg);
-		
-		if(!$status) { goto SENDMSG; }
-		return $status ? true : false;
+		SENDMSG:;
+		$user_phone = M("order")->where(array("o_id"=>$orderid))->getField("o_phone");
+		if( !$user_phone ) $user_phone = $userInfo['flu_phone'];
+		if( $user_phone ) {
+			sendmsg( $user_phone,  $content );
+		}
+				
+		$sid = M('order')->where(array('o_id'=>$orderid))->getField('o_sid');
+		D('Order')->addUserMsg($jid,$sid,$content,1,$userid,$title);
+	
+		return true;
 	}
 	
 	//退款操作
@@ -1498,9 +1487,8 @@ class SalesController extends MerchantController {
 
 	//统计订单消息
 	public function countOrder($type=0){
-		$where = $this->type == 1 ? array('o_jid'=>$this->jid) : array('o_sid'=>$this->tsid); 
+		$where = array('o_sid'=>I('sid')); 
 		$orderCount=M('order')->where(array_merge($where, array('o_dstatus'=>1,'o_gtype'=>'Choose') ))->count();
-		if($type==1)return $orderCount;
 		
 		$corder = I('post.corder');
 		$r = array(
@@ -1508,6 +1496,13 @@ class SalesController extends MerchantController {
 			"close_order"     => M('order')->where(array_merge($where, array('o_close'=>1,'o_gtype'=>'Choose') ))->count()
 		);
 		die(json_encode($r));
+	}
+	//统计订单消息
+	public function countOrder2($sid){
+		$where = array('o_sid'=>$sid);
+		$orderCount=M('order')->where(array_merge($where, array('o_dstatus'=>1,'o_gtype'=>'Choose') ))->count();
+	
+		return $orderCount;
 	}
 	//统计预定消息
 	public function countReserve(){

@@ -32,19 +32,19 @@ class VideoController extends MobileController {
 		//判断是否有多家分店 end
 		
 		//商品分类列表   start
-		$category = M('class');
+		$category = M('category');
 		$opt = array(
-				'jid' => $this->jid,
-				'sid' => 0,
-				'ctype' => 3,
+				'jid'    => $this->jid,
+				'sid'    => $this->sid,
+				'model'  => 'video',
 				'status' => 1
 		);
 		$category_list = $category->where($opt)->order('corder')->select();
 		//商品分类列表   end
 		$re = $cids = array();
 		foreach($category_list as $k=>$v){
-			$cids[$v['cid']] = $v['cname'];
-			$re[] = $v['cid'];
+			$cids[$v['id']] = $v['cname'];
+			$re[] = $v['id'];
 		}
 		//视频
 		$video = M('video');

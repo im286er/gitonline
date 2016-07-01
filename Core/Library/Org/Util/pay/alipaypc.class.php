@@ -353,15 +353,15 @@ class alipaypc{
         }
     }
 	public function get_pay_info(){
-		$this->$pay_info = array(
-			'out_trade_no'  => I('out_trade_no'),
-			'trade_no'      => I('trade_no'),
-			'trade_status'  => I('trade_status'),
+		$this->pay_info = array(
+			'out_trade_no'  => $_POST["out_trade_no"],
+			'trade_no'      => $_POST["trade_no"],
+			'trade_status'  => $_POST["trade_status"],
 		);
-		return $this->$pay_info;
+		return $this->pay_info;
 	}
 	public function is_success(){
-		if($this->$pay_info['trade_status'] == 'TRADE_FINISHED' || $this->$pay_info['trade_status'] == 'TRADE_SUCCESS'){
+		if($this->pay_info['trade_status'] == 'TRADE_FINISHED' || $this->pay_info['trade_status'] == 'TRADE_SUCCESS'){
 			return true;
 		}else{
 			return false;

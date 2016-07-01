@@ -79,7 +79,7 @@ class ShopController extends MerchantController {
 	//修改分店
 	public function editShop() {
 		//if( $this->type != 1 ) E('你无权查看当前页面');
-		
+		$sid = I('sid', 0, 'intval');
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
 			$_POST['info']['jid'] = $this->jid;
@@ -110,6 +110,7 @@ class ShopController extends MerchantController {
 			//$this->assign('address1', $address1);
 			//$this->assign('address2', $address2);
 			$this->assign('shop', $shop);
+			$this->assign('sid', $sid);
 			$this->display();				
 		}		
 	}
@@ -254,9 +255,9 @@ class ShopController extends MerchantController {
 		echo $QRcode::png($qcUrl, false, 'H', $size);
 	}
 	public function makeQrcodeDown(){
-		$id = I('id');
-		$sid = I('sid');
-		$size = 3;
+		$id    = I('id');
+		$sid   = I('sid');
+		$size  = 3;
 		if($sid > 0){
 			$qcUrl = U('Index/index@yd',array('jid'=>$this->jid,'sid'=>$sid));
 		}else{

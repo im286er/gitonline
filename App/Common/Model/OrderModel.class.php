@@ -162,6 +162,98 @@ class OrderModel extends Model {
 		$r = M('order')->where(array('o_id'=>$oid))->save(array('o_price'=>$o_price));
 		return $r;
 	}
+	
+	//订单完成是计算消费投资
+	public function doTz($oid){
+		$tj = $this->checkTz($oid);//判断是否满足条件
+		if($tj){
+			$r = $this->creatTz($oid);
+			return $r;
+		}else{
+			return false;
+		}
+	}
+	//判断是否满足条件
+	public function checkTz($oid){
+		$order = M('order')->where(array('o_id'=>$oid))->field('o_sid,o_price')->find();
+		$tz    = M('touzi')->where(array('sid'=>$order['o_sid'],'status'=>1))->find();
+		if(empty($tz)){
+			return false;
+		}
+		if($tz['tz_type'] == 1){//店铺投资
+			$r = $order['o_price'] >= $tz['money'] ? true : false;
+			return $r;
+		}elseif($tz['tz_type'] == 2 && $tz['tz_goods']){//商品投资
+			$sql = "select sum(sp_number*sp_gdprice) as total from azd_goods_snapshot where sp_gid in (".$tz['tz_goods'].") and sp_oid='".$oid."'";
+			$total = M()->query($sql);
+			$r = $total[0]['total'] >= $tz['money'] ? true : false;
+			return $r;
+		}else{
+			return false;
+		}
+	}
+	//投资返利
+	public function creatTz($oid){
+		$order = M('order')->where(array('o_id'=>$oid))->field('o_sid,o_price,o_uid')->find();
+		$tz    = M('touzi')->where(array('sid'=>$order['o_sid'],'status'=>1))->find();
+		$total = $order['o_price'] * $tz['fanli'] / 100;//总共要返利的钱
+		$set1 = $tz['set1'];
+		$set2 = $tz['set2'];
+		$set3 = $tz['set3'];
+		if($set1 == 0 && $set2 == 0 && $set3 == 0){
+			$set1 = 100;
+		}
+		$user2 = M('fl_user')->where(array('flu_userid'=>$order['o_uid']))->getField('flu_puserid');
+		$user3 = M('fl_user')->where(array('flu_userid'=>$user2))->getField('flu_puserid');
+		if($set1 > 0){
+			$opt1 = array(
+				'oid' => $oid,
+				'uid' => $order['o_uid'],
+				'money' => round($total * $set1 / 100,2),
+				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
+				'addtime' => date("Y-m-d H:i:s"),
+			);
+			M('touzi_hb')->add($opt1);//一级
+
+		}
+		if($set2 > 0 && $user2 > 0){
+			$opt2 = array(
+				'oid' => $oid,
+				'uid' => $user2,
+				'money' => round($total * $set2 / 100,2),
+				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
+				'addtime' => date("Y-m-d H:i:s"),
+			);
+			M('touzi_hb')->add($opt2);//二级	
+		}
+		if($set3 > 0 && $user3 > 0){
+			$opt3 = array(
+				'oid' => $oid,
+				'uid' => $user3,
+				'money' => round($total * $set3 / 100,2),
+				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
+				'addtime' => date("Y-m-d H:i:s"),
+			);
+			M('touzi_hb')->add($opt3);//三级	
+		}
+		return true;
+	}
+	
+	//添加消息
+	public function addUserMsg($jid,$sid,$text,$type,$userid,$title){
+		$opt = array(
+			'jid' => $jid,
+			'sid' => $sid,
+			'userid' => $userid,
+			'msgtype' => $type,
+			'msgtext' => $text,
+			'msgtitle' => $title,
+			'add_time' => date("Y-m-d H:i:s"),
+			'status' => 0,
+		);
+		M('user_msg')->add($opt);
+		return true;
+	}
 }
 
 ?>

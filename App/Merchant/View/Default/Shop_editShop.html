@@ -33,6 +33,10 @@ select {
                 <label><font color="red">*</font>服务热线</label><input type="text" name="info[mservetel]" placeholder="请输入服务热线" value="{$shop.mservetel}">
             </div>
             <div class="set">
+                <label>预览地址</label><span class="copy-cont">{:U('Index/index@yd',array('jid'=>$jid,'sid'=>$sid))} </span>&nbsp;&nbsp;
+                <a href="{:U('Index/index@yd',array('jid'=>$jid,'sid'=>$sid))}" target="_blank"><input type="button" value="预览" class="btn btn-pwd" /></a>
+            </div>
+            <div class="set">
                 <label>一级域名</label><input type="text" name="info[domain]" placeholder="请输入一级域名" value="{$shop.domain}">
             </div>
             <div class="set">
@@ -60,12 +64,16 @@ select {
             <div class="set">
                 <label>平均配送时间</label><input type="text" name="info[ps_time]" placeholder="请输入平均配送时间" value="{$shop.ps_time}">分钟
             </div>
+            <div class="set">
+                <label>允许合并时间</label><input type="text" name="info[hb_time]" value="{$shop.hb_time}">分钟
+                <font color="red"> 允许同一桌号二维码未付款订单在这段时间内合并为同一个订单,可以直接使用默认值10 </font>
+            </div>
              <div class="set">
                 <label>营业时间</label><input type="text" name="info[yy_stime]" id="yy_stime" value="{$shop.yy_stime}"> - <input type="text" name="info[yy_etime]" id="yy_etime" value="{$shop.yy_etime}">
               <font color="red"> 正确的时间格式为:  HH.MM     例如:05:05或者14.30 </font>
             </div>
             <div class="set">
-                <label>商家信息</label><textarea name="info[mexplain]"></textarea>
+                <label>商家信息</label><textarea name="info[mexplain]">{$shop.mexplain}</textarea>
 			</div>
             <div class="set">
                 <label>白班时间</label><input type="text" name="info[bb_stime]" id="bb_stime" value="{$shop.bb_stime}"> - <input type="text" name="info[bb_etime]" id="bb_etime" value="{$shop.bb_etime}">
@@ -89,9 +97,15 @@ select {
             <div class="set">
                 <label>二维码</label><input type="text" name="info[weixin_pic]" id="UPLOAD_weixin_pic_VALUE" placeholder="请上传二维码" readonly="readonly" value="{$shop.weixin_pic}">
                 <input type="button" onclick="uploadImageFun('weixin_pic')" value="上传二维码" class="btn btn-pwd" />
+                <a href="/Shop/makeQrcodeDown/sid/{$sid}.html" target="_blank"><input type="button"  value="下载二维码" class="btn btn-pwd"/></a>
             </div>
             <div class="set">
+            	<label></label>
+				<img class="qrImg" src="/Shop/makeQrcode/sid/{$sid}.html" />
+			</div>
+            <div class="set">
                 <label>QQ</label><input type="text" name="info[qq]" placeholder="请输入QQ" value="{$shop.qq}">
+                QQ设置好之后，客服功能如未能正常使用，请点击<a style="color:red" href="http://www.54kefu.net/linshi/201202/391.html" target="_black">这里</a>查看QQ支持临时会话操作步骤，并设置客服QQ支持临时会话。
             </div>
             <div class="set">
                 <label>状态</label><input type="radio" name="info[is_show]" <if condition="$shop.is_show eq 1">checked</if> value="1">显示  <input type="radio" name="info[is_show]" value="0" <if condition="$shop.is_show eq 0">checked</if>>隐藏
@@ -125,6 +139,7 @@ function uploadImageFun(id) {
 		$(".ke-dialog-body").append('<div>温馨提示：图片大小不超过200K，规格：180 * 180，图片格式为 jpg,jpeg,png</div>');
 	});	
 }
+
 </script>
 
 <script type="text/javascript">

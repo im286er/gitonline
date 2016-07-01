@@ -1,3 +1,10 @@
+<block name="foot">
+    <if condition="$foot neq ''">
+        <div class="text-center" style="background-color: white;height: 30px;color: #ddd;">
+            {$foot}
+        </div>
+    </if>
+</block>
 <block name="footer">
     <footer>
     	<div class="row">
@@ -7,7 +14,7 @@
             <a class="col-xs-3 nav-car <?php  if($action_name == 'shopCart'){ echo 'active';}?>" href="{:U('Index/shopCart', array('jid'=>$jid, 'sid'=>$sid))}">
             	购物车<span class="badge cartnum" id="cartnum">0</span>
             </a>
-            <a class="col-xs-3 nav-down <?php  if($action_name == 'appdown'){ echo 'active';}?>" href="{$link}">
+            <a class="col-xs-3 nav-down <?php  if($action_name == 'appdown'){ echo 'active';}?>" href="javascript:void(0)" data-toggle="modal" data-target="#myModal">
             	客服
             </a>
             <a class="col-xs-3 nav-my <?php  if($action_name == 'index' && $controller_name == 'User'){  echo 'active';}?>" href="{:U('User/index',array('jid'=>$jid, 'sid'=>$sid))}">
@@ -15,12 +22,103 @@
             </a>
         </div>
     </footer>
+    <input type="hidden" id="rimg" value="__PUBLIC__/Merchant/images/ico_search_hover.png" />
 
-    <script type="text/javascript">
-   
-    // $(document).ready(function() {
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog show-style" role="document" style="margin-top: 100px;">
+            <div class="modal-content">
+                <div class="modal-header"  style="border:0;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+</button>
+                </div>
+                <div class="modal-body" style="padding-bottom:0; border:0;">
+                    <div class="row" style="text-align: center; color: #fff;">
+                        <a href="{$link['tel']}" style="color: #fff"><span style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #fb2a2a; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">电&nbsp;话</span></a>
+                        <a href="{$link['qq']}" style="color: #fff"><span style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #09a3dc; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">Q&nbsp;Q</span></a>
+                        <span class="show-wx" style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #81d741; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">微&nbsp;信</span>
+                    </div>
+                    <br />
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-dialog" role="document" id="wx_inc" style="margin-top: 50px;display: none; background: #fff; border-radius: 5px;">
+            <div class="modal-header"  style="border:0;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="text-align: center; color: #fff;">
+                    <img src="{$link['wx']}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="__PUBLIC__/Merchant/plugins/unslider/dist/js/unslider-min.js"></script>
+    <script type="text/javascript"> 
+     
+    $(document).ready(function() {
+        widthAuto();
+        $('.ct-banner').unslider({
+             
+            autoplay: true,               
+            arrows: false,
+            fluid: true,
+            dots: true
+        });
+
+        $('.show-wx').click(function(){
+             $('#wx_inc').fadeIn();
+             $('.show-style').fadeOut();
+        });
+        $('.close').click(function(){
+            $('#wx_inc').fadeOut();
+            $('.show-style').fadeIn();
+        });
          
-    //     $(".ct-menu img").css("height",$(".ct-menu img").css("width"));
-    // });
-   </script> 
+    });
+
+    function widthAuto() {
+        var Width=document.documentElement.clientWidth - 160 +'px';/*可视窗口宽度*/
+        $('#wx_inc img').css({'width':Width,'maxWidth':'600px','marginBottom':'20px'});
+    }
+
+
+   </script>
+   <script type="text/javascript">
+    var isQQ = navigator.userAgent.indexOf("QQ") > -1;
+    var isWeixin=navigator.userAgent.indexOf("MicroMessenger") > -1;
+    var oldpositon,newposition,flag,nt;
+    $(window).bind("touchstart",function(){
+        oldpositon=$(document).scrollTop();
+    });
+
+    $(window).scroll(function() {
+        nt=$('.ct-banner').height() - 48;
+        newposition=$(document).scrollTop();
+        flag = (newposition - oldpositon) > 0;
+        var sel=$(".ct-topnav");
+        if ( $(document).scrollTop() >= nt ) {
+            sel.addClass("ct-topnav-hover");
+            $("#top-share").attr("src","/Public/Merchant/images/ico_search_hover.png");
+            $("#top-search").attr("src","/Public/Merchant/images/ico_share_hover.png");
+        }
+        else {
+            sel.removeClass("ct-topnav-hover");
+            $("#top-share").attr("src","/Public/Merchant/images/ico_search.png");
+            $("#top-search").attr("src","/Public/Merchant/images/ico_share.png");
+        }
+    });
+
+    $(window).bind("touchend",function(){
+        if($(document).scrollTop()<nt){
+            if(flag)
+                $('body').animate({scrollTop: nt},300);
+            else
+                $('body').animate({scrollTop: '0'},300);
+        }
+    });
+
+   </script>
 </block>

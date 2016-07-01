@@ -12,6 +12,7 @@ class IndexController extends Controller {
 	}
 	
     public function index() {
+    	//redirect('http://www.azding.cn/');
 		$this->display();	
 	}
 

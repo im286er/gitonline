@@ -4,8 +4,8 @@
         <div class="ct-top" >
             <div class="row ct-topnav">
                 <div class="col-xs-2 text-center ct-navlist">
-                    <span class="btn btn-link dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding:0px;color:#FFF;">
-                    总店
+                    <span class="btn btn-link dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >
+                    店铺
                     </span>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <volist name="shop_list" id="vo">
@@ -14,32 +14,151 @@
                     </ul>
                 </div>
                 <div class="col-xs-7  ct-notice ">
-                    &nbsp;&nbsp;
+                    <MARQUEE scrollAmount=3 direction=left>{$notice}&nbsp;</MARQUEE>
                 </div>
                 <div class="col-xs-3 ct-control">
-                     <img src="__PUBLIC__/Merchant/images/ico_search.png" class="img-responsive"> 
-                     <img src="__PUBLIC__/Merchant/images/ico_share.png" class="img-responsive">
+                    <a href="{:U('Index/search')}"><img src="__PUBLIC__/Merchant/images/ico_search.png" id="top-share" class="img-responsive"></a>
+                    <a data-toggle="modal" data-target="#share"><img src="__PUBLIC__/Merchant/images/ico_share.png"  id="top-search" class="img-responsive"></a>
                 </div>
                 
             </div>
-            <div class="row ct-banner">
-                <empty name="backImg">
-                    <img src="__PUBLIC__/Data/73/2016-05-06/572c51778df3f.png" class="img-responsive center-block">
-                <else/>
-                    <img src="{$backImg['img_url']}" class="img-responsive center-block" >
-                </empty>
+            
+            <div class="row grayhover"><img src="__PUBLIC__/Merchant/images/grayhover.png"> </div>
+            <div class="row whitehover"><img src="__PUBLIC__/Merchant/images/whitehover.png"></div>
+
+            <div class="row bgdiv">
+                <div class="ct-banner">
+                    <ul>
+                    <empty name="banner_list">
+                        <li><img src="__PUBLIC__/Merchant/images/topbg.png" class="img-responsive center-block"></li>
+                    <else/>
+                        <volist name="banner_list" id="vo">
+                        <li><a href="{$vo.burl}"><img src="{$vo.bimg}" class="img-responsive center-block"></a></li>
+                        </volist>
+                    </empty>
+                    </ul>
+                </div>
             </div>
-        </div>  
+        </div>
+            <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"  style="border:0;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body" style="padding-bottom:0; border:0;">
+                            <h3 class="text-center" style="margin-bottom: 20px;">饮店88888</h3>
+                            <div class="row">
+                                <div style="margin-left: calc(50% - 100px)">
+                                    <img src="images/erwm.png" style="width: 200px;"/>
+                                </div>
+                            </div>
+                            <h5 class="text-center gray">长按或扫描二维码进入店铺</h5>
+                            <h6 class="text-center gray2" >www.hzazhaiding.com</h6>
+                        </div>
+                        <div class="modal-footer"  style="   border:0px;  text-align:center;  overflow:hidden;  ">
+                            <div class="row"  style="background:#f6f6f6; height:7rem; margin-bottom:-1.5rem; border-radius:0 0 5px 5px; padding-top:1.5rem; padding-left:2rem; padding-right:2rem;">
+                                <div class="col-xs-3">
+                                    <img src="__PUBLIC__/Merchant/images/ico_sina.png" class="img-responsive img-circle center-block" style="width:4rem;" >
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="__PUBLIC__/Merchant/images/ico_weixin.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="__PUBLIC__/Merchant/images/ico_qq.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="__PUBLIC__/Merchant/images/ico_weixin2.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Merchant/plugins/flexslider/flexslider.css" />
+        <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/flexslider/jquery.flexslider-min.js"></script>
+        <script type="text/javascript">
+        $(function() {
+            $(".flexslider").flexslider({
+                animation: "slide",
+                animationLoop: false,
+                itemWidth: $(document).width()/5-20,
+                itemMargin: 5,
+                minItems: 1,
+                maxItems: 5,
+               // pausePlay: true
+               directionNav: false
+            });
+        }); 
+        </script>
+
+
+    <script>
+        function topAuto(){
+            var winwidth=document.documentElement.clientWidth;/*可视窗口宽度*/
+            var topp,gheight,wheight;
+                if( winwidth<750 ){
+                    topp= winwidth/750*376+'px';
+                    gheight=winwidth/750*430+'px';
+                    wheight=winwidth/750*(430-376)+'px';
+                    $('.whitehover').css({'top':topp});
+                    $('.whitehover img').css({'height':wheight,'width':'750px'});
+                    $('.grayhover').css('height',topp);
+                    $('.bgdiv').css('height',gheight);
+                    $('.bgdiv img').css('height',gheight);
+                }
+                else
+                {
+                    topp= 376+'px';
+                    gheight= 430+'px';
+                    wheight=(430-376)+'px';
+                    $('.whitehover').css({'top':topp});
+                    $('.whitehover img').css({'height':wheight,'width':winwidth+'px'});
+                    $('.grayhover').css('height',gheight);
+                    $('.bgdiv').css('height',gheight);
+                    $('.bgdiv img').css('height',gheight);
+                }
+        }
+        $(document).ready(function(){
+            topAuto();
+        });
+        $(window).onresize=topAuto;
+    </script>
+
+
+        <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider.css" rel="stylesheet">
+        <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider-dots.css" rel="stylesheet">
+        <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.move.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.swipe.js"></script>
+
         <div class="row ct-menu">
-             <volist name="category" id="vo">
+            <div class="flexslider carousel ">
+                <ul class="slides">
+                    <volist name="category" id="vo">
+                        <li >
+                            <a href="{$vo.url}"><img src="{$vo.cimg}"  style="width:60px; height:60px;" class="img-circle center-block" />
+                                <h6 class="text-center">{$vo.cname}</h6>
+                                <span class="menu-hover"></span>
+                            </a>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+
+<!--              <volist name="category" id="vo">
                 <div class="col-xs-3">
                     <a href="{$vo.url}">
                     <img src="{$vo.cimg}" class="img-responsive img-circle center-block" style="width: 50px;height: 50px;">
                     <h6 class="text-center">{$vo.cname}</h6>
                     </a>
                 </div>
-            </volist>
+            </volist> -->
         </div>
         <br />
+    <else />
+        <header >
+            <a href="javascript:history.go(-1);"><div class="back pull-left"></div></a>
+            {$cname}
+        </header>
     </if>
 </block>

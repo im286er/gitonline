@@ -35,7 +35,7 @@
 		    <table class="table-list">
 		        <thead>
 		            <tr id="TR_MER_0">
-                        <th width="6%"><input type="checkbox" id="checkbox" onclick="selectAll('jid[]');"></th>
+                        <th width="6%"><input type="checkbox" id="checkbox" onclick="selectAll('jid[]');">编号</th>
                         <th width="10%">商家全称</th>
                         <th width="8%">所属代理商</th>
                         <th width="8%">所属行业</th>
@@ -52,7 +52,7 @@
 		        <tbody>
                     <volist name="merchantsList" id="vo">
                         <tr id="TR_MER_{$vo.jid}">
-                            <td><input type="checkbox" name="jid[]" value="{$vo.jid}"></td>
+                            <td><input type="checkbox" name="jid[]" value="{$vo.jid}">{$vo.jid}</td>
                             <td>{$vo.mnickname}</td>
                             <td>{$vo.anickname}</td>
                             <td>{$vo.vname}</td>

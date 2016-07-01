@@ -7,26 +7,40 @@ class MessageController extends MerchantController {
 	//群发消息
 	public function pushmsg() {
 		if( IS_POST ) {
-			
 			$data['pcontent'] = $_POST['pcontent'];
 			$data['putype'] = 1;
 			$data['pmid'] = $this->mid;
+			$uid = I('uid', 0);
 
 			if( $pid=M('pushContent')->add($data) ) {
-				$user = M('fl_user')->where(array('flu_sjid'=>$this->jid))->field('flu_phone')->select();
-				$user_str = array();
-				foreach($user as $k=>$v){
-					if($v['flu_phone']){
-						$user_str[] = $v['flu_phone'];
+				if ($_POST['phone']) {
+					$user_str2 = $_POST['phone'];
+				}else{
+					$user = M('fl_user')->where(array('flu_sjid'=>$this->jid))->field('flu_phone')->select();
+					$user_str = array();
+					foreach($user as $k=>$v){
+						if($v['flu_phone']){
+							$user_str[] = $v['flu_phone'];
+						}
 					}
+					$user_str2 = join(',',$user_str);
 				}
-				$user_str2 = join(',',$user_str);
+				//判断是否选择
+				if ($uid) {
+					$user_str2 = join(',',$uid);
+				}
+
 				if($user_str2){
 					sendmsg($user_str2, $data['pcontent']);
 				}
 				$this->success('推送成功', U('/Message/listmsg', '', true));
 			} else { $this->error('推送失败'); }			
 		} else {
+			$where = array('flu_sjid'=>$this->jid);
+			$page = new \Common\Org\Page(M('fl_user')->where($where)->count(), 10);
+
+			$this->assign('userlist', D('fl_user')->order('flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
+			$this->assign('pages', $page->show());
 			$this->assign('CurrentUrl', 'Messagepushmsg2');
 			$this->display();	
 		}

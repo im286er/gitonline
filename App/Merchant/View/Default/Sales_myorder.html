@@ -4,48 +4,44 @@
 <script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
 <script src="__PUBLIC__/Js/jquery1.8.min.js"></script>
 <style type="text/css">
+body{ font-family:"微软雅黑"; font-size:14px}
 input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
 .button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
 td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
 .table td, .table th { border-top:none; vertical-align:middle; }
 select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
-.category_order { height:50px; display:block; line-height:50px; }
-.category_order li { float:left; text-align:center; width:20%; }
+.category_order { height:58px; display:block; line-height:35px; }
+.category_order li { float:left; text-align:center; width:8%;border:#a5a5a5 solid 1px; margin-left:20px; margin-top:20px}
 .category_order li a { display:block; width:100%; height:100%; font-size:14px; }
-.category_order li.on { border-bottom:2px solid #0099ff; }
-.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%;}
+.category_order li.on { border-bottom:2px solid #00bbe8;}
+.category_order ul span{width:100px;height:35px; float:left; margin-top:20px; line-height:35px; text-align:center; font-family:"微软雅黑"; font-size:16px}
+.category_order_l{ height:58px; display:block; line-height:35px;}
+.category_order_l li{ float:left; text-align:center; width:8%;border:#a5a5a5 solid 1px; margin-left:20px; margin-top:20px; cursor:pointer}
+.category_order_l ul span{width:100px;height:35px; float:left; margin-top:20px; line-height:35px; text-align:center; font-family:"微软雅黑"; font-size:16px}
+
+
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%; margin-bottom:10px}
 .shops span{margin-left:15px;}
 .shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
 .shops .curr a{color:#ffffff;}
+.content_top_l{width:100%;height:130px;background:#f4f4f4;border:#d5d5d5 solid 1px; margin-bottom:50px}
 </style>
 <div class="wrapper">
     <h2 class="shops">选择门店：
 	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
 	<volist name="shops" id="vo">
 		
-		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="/Sales/myorder/sid/{$key}.html">{$vo}</a></span>
 	</volist>
 </h2>
-    
-    
-    
-    
+
     
     <div id="category_order" class="category_order" style="display:none;background:#ff8040;color:#ffffff;height:30px; display:block; line-height:30px;">
-		<h3 style="text-align:center;"><a href="/Sales/myorder/dstatus/1.html" style="color:#ffffff;">您有<span id="sp1"></span>条新订单，<span id="sp2"></span>条等待取消订单,点击查看</a></h3>
+		<h3 style="text-align:center;"><a href="/Sales/myorder/sid/{$sid}/o_dstatus/1.html" style="color:#ffffff;">您有<span id="sp1"></span>条新订单，<span id="sp2"></span>条等待取消订单,点击查看</a></h3>
     </div>
 
-    <div class="category_order">
-    	<ul>
-    		<li <eq name="Think.get.dstatus" value="0">class="on"</eq>><a href="{:U('/Sales/myorder', array('dstatus'=>0))}">全部订单</a></li>
-        	<li <eq name="Think.get.dstatus" value="1">class="on"</eq>><a href="{:U('/Sales/myorder', array('dstatus'=>1))}">待处理订单</a></li>
-            <li <eq name="Think.get.dstatus" value="3">class="on"</eq>><a href="{:U('/Sales/myorder', array('dstatus'=>3))}">待完成订单</a></li>
-            <li <eq name="Think.get.dstatus" value="4">class="on"</eq>><a href="{:U('/Sales/myorder', array('dstatus'=>4))}">已完成订单</a></li>
-            <li <eq name="Think.get.dstatus" value="5">class="on"</eq>><a href="{:U('/Sales/myorder', array('dstatus'=>5))}">已关闭订单</a></li>
-        </ul>
-    </div>
     <div class="mian padding">
-        <eq name="Think.get.dstatus" value="0">
+        
         <div class="content_c">
             <form action="__ACTION__" method="get">
             	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
@@ -78,8 +74,31 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
             </form>
         </div>
         <div style="width:100%;height:15px;"></div>
-        </eq>
+       
 		
+        <div class="content_top_l">
+        	 <div class="category_order">
+                <ul>
+                	<span>订单状态:</span>
+                    <li <eq name="Think.get.o_dstatus" value="">class="on"</eq>><a href="{:U('/Sales/myorder', array('sid'=>$sid))}">全部订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="1">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_dstatus'=>1,'sid'=>$sid))}">待处理订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="3">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_dstatus'=>3,'sid'=>$sid))}">待完成订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="4">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_dstatus'=>4,'sid'=>$sid))}">已完成订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="5">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_dstatus'=>5,'sid'=>$sid))}">已关闭订单</a></li>
+                </ul>
+   			</div>
+             <div class="category_order">
+                <ul>
+                	<span>付款状态:</span>
+                	<li <eq name="Think.get.o_pstatus" value="">class="on"</eq>><a href="{:U('/Sales/myorder', array('sid'=>$sid))}">全部订单</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="0">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_pstatus'=>0,'sid'=>$sid))}">未支付</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="1">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_pstatus'=>1,'sid'=>$sid))}">已支付</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="3">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_pstatus'=>3,'sid'=>$sid))}">待退款</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="2">class="on"</eq>><a href="{:U('/Sales/myorder', array('o_pstatus'=>2,'sid'=>$sid))}">已退款</a></li>
+                </ul>
+   			</div>
+        </div>
+
     	<volist name="datalist" id="v">
         <div class="content_a" <neq name="i" value="1">top</neq> id="OID_{$v.o_id}">
             <h3 class="font-12">
@@ -91,13 +110,19 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
             
             </h3>
             <h3 class="font-12">
-				<if condition="$v['o_xftype']==1">
+            <if condition="$v['o_gtype']=='Choose'">
+            	<if condition="$v['o_xftype']==1">
 					<span>订单类型：店内消费</span>
                 	<span>座位号：{$v.o_seat}</span> 
 				<else/>
-					<span>订单类型：店外消费</span>
+					<span>订单类型：外送上门</span>
                 	<span>收货地址：{$v.o_address}</span> 
 				</if>
+            <else/>
+            		<span>订单类型：预约消费</span>
+                	<span>座位号：{$v.o_seat}</span>
+                	<span>预约时间：{$v.o_gdate}</span> 
+            </if>
             </h3>
 			<if condition="$v['o_remarks']">
             <h3 class="font-12">
@@ -105,7 +130,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
             </h3>
 			</if>
 			<table class="table">
-				<tr>
+				<tr style="border-bottom:solid #e7e7eb 1px">
                     <th width="150px">商品</th>
 					<th>名称</th>
                     <th>单价(元）</th>
@@ -118,22 +143,22 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                 <volist name="v.ogoods" id="g" empty="暂无订单信息">
                 <tr>
                     <td style=""><img src="{$g.sp_img}" alt="" width="60" height="50"> </td>
-					<td>{$g.sp_name}</td>
-                    <td>{$g.sp_gdprice}</td>
-                    <td>{$g.sp_number}</td>
+					<td  style="border-left:1px solid #e7e7eb;">{$g.sp_name}</td>
+                    <td  style="border-left:1px solid #e7e7eb;">{$g.sp_gdprice}</td>
+                    <td  style="border-left:1px solid #e7e7eb;">{$g.sp_number}</td>
                     <eq name="_j" value="1">
                         <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle;">{$v.o_dstime|strtotime|date='H:i:s',###} </td>
 						<td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle; text-align:left; padding-left:25px;">
 
-                            <p>支付类型：{$order_type[$v['o_type']]}</p>
-                            <p>支付状态：{$order_pstatus[$v['o_pstatus']]}</p>
+                            <p style="line-height:25px">支付类型：{$order_type[$v['o_type']]}</p>
+                            <p  style="line-height:25px">支付状态：{$order_pstatus[$v['o_pstatus']]}</p>
                             <if condition="$v['o_pstatus'] eq 1">
                             	<p>支付时间： {$v.o_pstime|strtotime|date='m-d H:i',###}</p>
                             </if>
                             <eq name="Think.get.dstatus" value="0">
-                            	<p>订单状态：{$order_dstatus[$v['o_dstatus']]}</p>
+                            	<p  style="line-height:25px">订单状态：{$order_dstatus[$v['o_dstatus']]}</p>
                             </eq>
-							<if condition="$v['voucher']"><span>优惠券抵：-{$v.voucher.o_price} 元</span></if>
+							<if condition="$v['voucher']"><span style="line-height:25px">优惠券抵：-{$v.voucher.o_price} 元</span></if>
                             
 						</td>
                         <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle;">
@@ -150,11 +175,11 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                                 <?php } else {?>
                                     <!-- 如果是线上支付，并且支付失败 -->
                                     <?php if($v['o_type']!=0 && $v['o_pstatus']==0): ?>
-										<?php if( date('Y-m-d',strtotime('-1 day')) < $v['o_dstime']):?>
+										
 											<p><input type="button" onclick="SetMessageForUser(this, '<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="提醒支付"></p>
-										 <?php else:?>
+										 
 											<p><input type="button" onclick="AgreeCancelOrder('<?php echo $v['o_id']; ?>')" value="关闭订单"></p>
-										 <?php endif; ?>
+										 
                                     <!-- 如果是线上支付，并且支付成功 或者 是下线支付 -->
                                     <?php elseif($v['o_type']==0 || ($v['o_type']!=0 && $v['o_pstatus']==1)):?>
                                         <p><input type="button" onclick="GetOrderInfo('<?php echo $v['o_id']; ?>')" value="接受订单"></p>
@@ -326,6 +351,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 	}
 	var CountUrl = "{:U('/Sales/countOrder')}";
 	var countOrder = "{$countOrder}";
+	var sid = "{$sid}";
 	<literal>
    $(document).ready(function(){
 	   $("#category_order").hide();
@@ -337,7 +363,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 				 async:false,
 				 cache:false,
 				 timeout:80000,     //ajax请求超时时间80秒     
-				 data:{corder:countOrder}, //40秒后无论结果服务器都返回数据     
+				 data:{corder:countOrder,sid:sid}, //40秒后无论结果服务器都返回数据     
 	             success:function(data){//从服务器得到数据，显示数据并继续查询 
 					if(data.new_order>0 || data.close_order>0){
 						$("#category_order").slideDown("slow");; //清空前一次刷新数据，不清除索表会出错
@@ -352,16 +378,16 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 	             }     
 	           });
 	        };
-        //setInterval(function(){CountNum();}, 10000);
+        setInterval(function(){CountNum();}, 10000);
      });
 	 </literal>
 
 	var msecs = 3000;	//改变时间得到不同的闪烁间隔；
-	//setTimeout("blink()", msecs);
+	setTimeout("blink()", msecs);
 	function blink() {	//这是闪烁程序的核心
 		category_order.style.visibility =
 		(category_order.style.visibility == "hidden") ? "visible" : "hidden";	//得到与当前状态相反的属性值
-		//setTimeout("blink()", ((category_order.style.visibility == "hidden") ? msecs/10 : msecs));	//设定下一次改变状态的时间
+		setTimeout("blink()", ((category_order.style.visibility == "hidden") ? msecs/10 : msecs));	//设定下一次改变状态的时间
 	}
 	function warning(){
 		if($.browser.msie && $.browser.version=='8.0'){
@@ -370,6 +396,12 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 			$('#newMessageDIV').html('<audio autoplay="autoplay"><source src="/Public/Js/warningmsg.wav"'+'type="audio/wav"/></audio>');
 		}
 	}
+	$(function(){
+		$(".category_order_l ul li").click(function(){
+			var index=$(this).index()
+			$(this).css("border-bottom","2px solid #00bbe8").siblings("li").css("border","#a5a5a5 solid 1px")
+			})
+		})
 	</script>
 	<div id="newMessageDIV" style="display:none"></div> 
 </div>

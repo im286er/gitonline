@@ -51,8 +51,8 @@ function init() {
                 <li><p>{$member.money|default='0.00'}</p>可提现金额</li>
                 <li><p>{$sumprice|default='0.00'}</p>总交易额</li>
                 <if condition="$sbwb eq 1">
-                <li><p>{$bprice|default='0.00'}</p>白班金额</li>
-                <li class="last"><p>{$wprice|default='0.00'}</p>晚班金额</li>
+                <li><p>{$bprice|default='0.00'}</p>今日白班金额</li>
+                <li class="last"><p>{$wprice|default='0.00'}</p>今日晚班金额</li>
                 </if>
             </ul>
 			

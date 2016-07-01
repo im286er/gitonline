@@ -17,10 +17,10 @@
                     <label>最低消费额：</label> <input type="text" value="{$voucher.vu_money}" placeholder="最低消费额" id="vu_money">
                 </div>
                 <div class="set">
-                    <label>有效起时间：</label> <input type="text" value="{$voucher.vu_stime}" placeholder="优惠券有效开始时间" id="VU_STIME" readonly>
+                    <label><font color="red">*</font>有效起时间：</label> <input type="text" value="{$voucher.vu_stime}" placeholder="优惠券有效开始时间" id="VU_STIME" readonly>
                 </div>
                 <div class="set">
-                    <label>有效终时间：</label> <input type="text" value="{$voucher.vu_etime}" placeholder="优惠券有效结束时间" id="VU_ETIME" readonly>
+                    <label><font color="red">*</font>有效终时间：</label> <input type="text" value="{$voucher.vu_etime}" placeholder="优惠券有效结束时间" id="VU_ETIME" readonly>
                 </div>
                 <div class="set">
                     <label>领取限制数：</label> <input type="text" value="{$voucher.vu_num}" placeholder="每个账号最多领取张数" value="1" id="VU_NUMBER">
@@ -32,25 +32,13 @@
                     <label>优惠券说明：</label> <textarea style="width:170px;height:70px;" id="VU_DES">{$voucher.vu_description}</textarea>
                 </div>
                  <div class="set">
-                    <label>优惠券封面：</label> <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
+                    <label><font color="red">*</font>优惠券封面：</label> <span class="file"><input type="button" id="UploadImage" value="上传" class="btn btn-blue"></span>
                     <p style="float:right">建议尺寸1160*320，JPG,PNG ，200KB</p>
                 </div>
                 
                 
                 <div class="set">
-                	<eq name="type" value="1">
-					<div class="fendian" >
-						<input type="button"  value="请选择分店" class="buttonfendian" style="width:300px;margin-left:0px;" /> 
-					 	<div style="margin-top:10px;"><input type="checkbox" name="sid[]" id="checkbox" onclick="selectAll('sid[]');"/>全选/反选</div> 
-                    	<php>$sid = array_filter(explode(',', $voucher['vu_sid'])); </php>
-                    	<volist name="splist" id="s">
-           					<input type="checkbox" value="{$s.sid}" name="sid[]"  style="margin-top:10px;" <if condition="in_array($s['sid'], $sid)">checked</if> /> {$s.sname} 
-               			</volist>
-			   		  	<if condition="$pagef"> 
-                            <div class="page clearfix">  {$pagef} </div>
-                        </if>
-                 	</div>
-                    </eq>
+                	
                     <div style="position:absolute; top:340px;left:10px;width:240px;height:120px;">
                     	<label></label> <img alt="" style="width: 240px; height: 120px;" src="{$voucher.vu_img}" id="VU_IMG">
                 	</div>
@@ -105,25 +93,19 @@ $(function() {
 		var total=$("#VU_TOTAL").val();
 		if( !total ) { alert("发放总数不能为空"); return false; }
 		
-		//var vuimg = $("#VU_IMG").attr("src");
-		//if( !vuimg ) { alert('优惠券封面图不能为空'); return false; }
+		var VU_STIME = $("#VU_STIME").val();
+		if( !VU_STIME ) { alert('有效期开始时间不能为空'); return false; }
 		
-		<eq name="type" value="1">
-			//选择门店
-	 var falg=0;
-	
-   $("input[name='sid[]']:checked").each(function () {  
-   if ($(this).checked=true) {
-   temp.push($(this).val());  
-   falg =1; 
-
-    } 
-     }) 
-
-if(falg==0){
- alert("选择要发放的门店"); return false; 
-}
-		</eq>
+		var VU_ETIME = $("#VU_ETIME").val();
+		if( !VU_ETIME ) { alert('有效期结束时间不能为空'); return false; }
+		
+		var total=$("#VU_TOTAL").val();
+		if( !total ) { alert("发放总数不能为空"); return false; }
+		
+		var vuimg = $("#VU_IMG").attr("src");
+		if( !vuimg ) { alert('优惠券封面图不能为空'); return false; }
+		
+		
 		return true;	
 	}
 	
@@ -140,6 +122,7 @@ if(falg==0){
                 if (dtype == 1) {
                     setTimeout(function() { window.parent.location.href="{:U('/Sales/jqlist', '', true)}"; }, 500); 
                 }else{
+                	window.parent.frames['show-iframe'].location.reload();
                     window.parent.closelayer();
                 }
 				

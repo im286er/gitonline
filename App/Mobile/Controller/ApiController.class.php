@@ -28,7 +28,7 @@ class ApiController extends Controller {
 		$merchant = M("merchant")->field('jid,mnickname,mabbreviation')->where(array('jid'=>$jid))->find();
 		$merchantapp = M("merchantApp")->field('jid,applogo,appjs')->where(array('jid'=>$jid))->find();
 		$wxShare = array(
-					'imgUrl' => U('@www').$merchantapp['applogo'],
+					'imgUrl' => U('@ho').$merchantapp['applogo'],
 					'link' =>  U('Index/index@yd',array('jid'=>$jid,'v'=>time())),
 					'desc' => $this->DeleteHtml(strip_tags($merchantapp['appjs'])),
 					'title' => $merchant['mabbreviation'],

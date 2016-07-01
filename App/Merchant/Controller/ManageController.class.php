@@ -4,51 +4,75 @@ namespace Merchant\Controller;
 class ManageController extends MerchantController {
 	//广告管理
 	public function advert() {
+		$sid  = I('sid', 0, 'intval');
 		$where['jid'] = $this->jid;
+		$where['sid'] = $sid;
 		if( isset($_POST['keywords']) && !empty($_POST['keywords']) ) $where['btitle'] = array('like', "%{$_POST['keywords']}%");
 		$page = new \Common\Org\Page(M('banner')->where($where)->count(), 12);
 		$this->assign('bdlist', M('banner')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
 		$this->assign('pages', $page->show());
+		$this->assign('sid', $sid);
+		if (I('dtype', 1) == 2) {
+			$this->assign('sid', $sid);
+			$this->display('advert2');exit;
+		}
 		$this->display();	
 	}
 	
 	//添加广告
 	public function adinse() {
+		$sid   = I('sid', 0, 'intval');
+		$dtype = I('dtype', 1, 'intval');
 		if( IS_POST ) {
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
 			$_POST['info']['jid'] = $this->jid;
 			if( M('banner')->add( $_POST['info'] ) ) {
-				$this->success('添加成功', U('/Manage/advert', '', true));	
+				$this->success('添加成功', U('/Manage/advert', array('dtype'=>$dtype, 'sid'=>$_POST['info']['sid']), true));	
 			} else { $this->error('添加失败'); }		
 		} else {
+			if ($dtype == 2) {
+				$this->assign('sid', $sid);
+				$this->assign('dtype', $dtype);
+				$this->display('adinse2');exit;
+			}
+			$this->assign('sid', $sid);
 			$this->display();	
 		}
 	}
 	
 	//删除广告
 	public function adupde() {
+		$sid   = I('sid', 0, 'intval');
 		$banner = M('banner')->where(array('bid'=>I('get.bid'), 'btype'=>'3'))->find();
 		if( !$banner || $banner['jid'] != $this->jid) E('你无权查看当前页面');
 
 		if( M('banner')->where(array('bid'=>I('get.bid')))->delete() ) {
-			$this->success('删除成功', U('/Manage/advert', '', true));		
+			$this->success('删除成功', U('/Manage/advert', array('sid'=>$banner['sid']), true));		
 		} else { $this->error('操作失败'); }
 	}
 	
 	//修改广告
 	public function adedit() {
+		$sid   = I('sid', 0, 'intval');
+		$dtype = I('dtype', 1, 'intval');
 		if( IS_POST ) {
 			$banner = M('banner')->where(array('bid'=>intval($_POST['info']['bid']), 'btype'=>'3'))->find();
 			if( !$banner || $banner['jid'] != $this->jid) E('你无权查看当前页面');
 
 			if( M('banner')->save( $_POST['info'] ) ) {
-				$this->success('修改成功', U('/Manage/advert', '', true));	
+				$this->success('修改成功', U('/Manage/advert', array('dtype'=>$dtype, 'sid'=>$sid), true));	
 			} else { $this->error('修改失败'); }		
 
 		} else {
 			$banner = M('banner')->where(array('bid'=>I('get.bid'), 'btype'=>'3'))->find();
 			if( !$banner || $banner['jid'] != $this->jid) E('你无权查看当前页面');
 			$this->assign('banner', $banner);
+			if ($dtype == 2) {
+				$this->assign('sid', $sid);
+				$this->assign('dtype', $dtype);
+				$this->display('adedit2');exit;
+			}
+			$this->assign('sid', $banner['sid']);
 			$this->display();
 		}
 	}
@@ -97,8 +121,8 @@ class ManageController extends MerchantController {
 		$this->assign('t_price',$t_price);
 
 		//查询店铺
-		$shop = M('shop')->where(array('jid'=>$this->jid))->select();
-		$this->assign('shop', $shop);
+		$shops = D('auth')->getAuthShops($this->mid);
+		$this->assign('shop', $shops);
 		
 		$page = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
 		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
@@ -761,6 +785,7 @@ class ManageController extends MerchantController {
 
 	//底部文字
 	public function addFooterText(){
+		$dtype = I('dtype', 1);
 		if ( IS_POST ) {
 			$post_data = I('post.');
 			$t_content = $post_data['con'];
@@ -773,7 +798,12 @@ class ManageController extends MerchantController {
 		}else{
 			$this->assign('info',M('merchant')->where(array('jid'=>$this->jid))->getField('footer_content'));
 			$this->assign('pagename',"底部文字");
-			$this->display();
+			if ($dtype == 2) {
+				$this->display('addFooterText2');
+			}else{
+				$this->display();
+			}
+			
 		}
 	}
 

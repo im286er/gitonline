@@ -80,7 +80,7 @@ class AccountController extends MerchantController {
 					'address' => $address,
 					'idcard' => $idcard,
 					'auth' => serialize($auth),
-					'shopauth' => join(',',$shopauth),
+					'shopauth' => $shopauth ? join(',',$shopauth) : '',
 					'shift' => $shift,
 					'role' => $role,
 				);
@@ -112,6 +112,7 @@ class AccountController extends MerchantController {
 			$shopauth = I('shopauth');
 			$shift = I('shift');
 			$role = I('role');
+			$mpwd = I('mpwd', 0, 'intval');
 				
 			$auth = array();
 			$auth['top'] = $top;
@@ -129,6 +130,11 @@ class AccountController extends MerchantController {
 					'role' => $role,
 			);
 			$r = M('merchant_user')->where(array('tmid'=>$tmid,'tjid'=>$this->jid))->save($merchant_user);
+
+			//判断是否更改密码
+			if ($mpwd) {
+				M('member')->where('mid='.$tmid)->setField('mpwd', md5(md5($password)));
+			}
 			if($r){
 				$this->success('修改成功');
 			}else{

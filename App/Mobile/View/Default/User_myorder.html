@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/myorder.css">
     <script>
     var reqUrl = "{:U('Pay/request_alipay')}";
+    var weixinUrl = "{:U('/Home/Wechat/dsWxJsPay@www')}";
     var o_id  = "";
     var ctype = 1;
     var isApp = "{$isApp}";
@@ -50,11 +51,15 @@
     		$("#con-qx-3").show();
     	}
     }
-    function ch_pay(oid){
+    function ch_pay(oid,r){
     	if(isApp > 0){
     		payOrder('alipay',oid);
     	}else{
-    		location.href = reqUrl + "?o_id=" + oid;
+    		if(r == 2){
+    			location.href = weixinUrl + "?o_id=" + oid + '&jump=1&mid={$mid}';
+    		}else{
+    			location.href = reqUrl + "?o_id=" + oid + '&mid=' + {$mid};
+    		}
     	}
     }
     $(document).ready(function(){
@@ -148,7 +153,11 @@
 				<if condition="$vo['paytype_name'] eq '待付款' && $vo['o_dstatus'] neq 5">
 					<!-- <a class="btn btn-o" href="javascript:;" onclick="ch_paytype('{$vo.o_id}',0);">线下支付</a>-->
 					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
-					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}');">付款</a>
+					<if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype') && $vo['o_pway'] eq 'weixin'">
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',2);">微信付款</a>
+					<else />
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',1);">支付宝付款</a>
+					</if>
 				<elseif condition="$vo['o_dstatus'] eq 1 && ($vo['paytype_name'] eq '线下支付' or $vo['paytype_name'] eq '线上已付')"/>
 					<a class="btn btn-o" href="tel:{$vo.shop_tel}">联系我们</a>
 					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
@@ -201,7 +210,11 @@
 				</div>
 				<div class="myorder-footer">
 					<if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"><a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
-					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}');">付款</a>
+					<if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype') && $vo['o_pway'] eq 'weixin'">
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',2);">微信付款</a>
+					<else />
+					<a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',1);">支付宝付款</a>
+					</if>
 				</div>
 			</section>
 			</if>

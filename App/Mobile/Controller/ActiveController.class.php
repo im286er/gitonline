@@ -17,6 +17,7 @@ class ActiveController extends MobileController {
 		$active = M('active');
 		$opt = array(
 				'av_jid'    => $this->jid,
+				'av_sid'    => $this->sid,
 				'av_status' => 1
 		);
 		$active_list = $active->where($opt)->order('av_id desc')->select();
@@ -45,10 +46,10 @@ class ActiveController extends MobileController {
 				'av_id' => $av_id
 		);
 		$active_info = $active->where($opt)->find();
-				$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
-		file_exists($path.'HdModule.php') && $HdModule=unserialize(file_get_contents($path.'HdModule.php'));
-		$this->assign('page_name', $HdModule ? $HdModule['Name'] : '活动详情');
-		$page_url = I("from_index") == 1 ? U('Index/index',array('jid'=>$this->jid)) : U('Active/index',array('jid'=>$this->jid));
+				//$path = APP_DIR.'/Public/Data/'.$this->jid.'/';
+		//file_exists($path.'HdModule.php') && $HdModule=unserialize(file_get_contents($path.'HdModule.php'));
+		$this->assign('page_name', $active_info['av_title']);
+		$page_url = U('Index/new2Activity',array('jid'=>$this->jid,'sid'=>$this->sid,'cid'=>$active_info['av_cid']));
 		$this->assign('page_url',$page_url);
 		$this->assign('active_info',$active_info);
 		$this->mydisplay();

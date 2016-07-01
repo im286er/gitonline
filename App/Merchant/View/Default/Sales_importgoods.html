@@ -56,6 +56,7 @@ $(function() {
 			if( parseInt(data)==1 ) {
 				$("h3").html( "导入成功" ); var PwindowObj = window.parent.document.getElementById('DialogFrameModel');
 				$(PwindowObj).children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+				window.history.go(0);
 			} else { alert('导入失败'); }
 		})
 	})

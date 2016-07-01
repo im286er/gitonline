@@ -44,6 +44,7 @@ function usedCoupon(pid){
 	if(new_total < 0){
 		new_total = 0;
 	}
+	new_total = new_total.toFixed(2);
 	$(".order-pice").html(new_total);
 	used_coupon = pid;
 }
@@ -189,6 +190,9 @@ function submitChoose(){
 					payOrder(paytype,data.oid);
 				}else if(data.msg =="true" ){
 		        	$(".modal-ss").show();
+		        }else if(data.msg =="noyue"){
+		        	msg = dialog({title: '提示',content: '您的余额不足,请选择其它支付方式',id: 'm1'});
+		  		    msg.show();
 		        }else{
 		        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
 		  		    msg.show();
@@ -204,6 +208,9 @@ function submitChoose(){
 							payOrder(paytype,data.oid);
 						}else if(data.msg =="true" ){
 				        	$(".modal-ss").show();
+				        }else if(data.msg =="noyue"){
+				        	msg = dialog({title: '提示',content: '您的余额不足,请选择其它支付方式',id: 'm1'});
+				  		    msg.show();
 				        }else{
 				        	msg = dialog({title: '提示',content: '订单提交失败',id: 'm1'});
 				  		    msg.show();
@@ -422,7 +429,7 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select ico-pay" paytype="weixin"></i>
 						</li>
-						</if>
+						<else />
 						<li class="{$weixinpay?'':'checked'}">
 							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
 							<div>
@@ -431,6 +438,8 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select ico-pay" paytype="alipay"></i>
 						</li>
+						</if>
+						
 						<li onclick="msgopen(1)">
 							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
 							<div>
@@ -451,7 +460,7 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select ico-pay" paytype="weixin"></i>
 						</li>
-						</if>
+						<else />
 						<li onclick="msgopen(2)">
 							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
 							<div>
@@ -460,6 +469,7 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select" paytype="alipay"></i>
 						</li>
+						</if>
 						<li class="{$weixinpay?'':'checked'}">
 							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
 							<div>
@@ -480,7 +490,7 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select ico-pay" paytype="weixin"></i>
 						</li>
-						</if>
+						<else />
 						<li>
 							<img src="__PUBLIC__/Images/mobile/zhifubao.jpg" alt="">
 							<div>
@@ -489,6 +499,7 @@ function msgopen( type )
 							</div>
 							<i class="ico ico-select ico-pay" paytype="alipay"></i>
 						</li>
+						</if>
 						<li class="{$weixinpay?'':'checked'}">
 							<img src="__PUBLIC__/Images/mobile/bank.jpg" alt="">
 							<div>
@@ -498,6 +509,14 @@ function msgopen( type )
 							<i class="ico ico-select ico-pay" paytype="cod"></i>
 						</li>
 					</if>
+					<li>
+							<img src="__PUBLIC__/Merchant/images/ico_money.png" alt="">
+							<div>
+								<h6>余额支付</h6>
+								<p>推荐用户使用余额支付</p>
+							</div>
+							<i class="ico ico-select ico-pay" paytype="yue"></i>
+					</li>
 				</ul>
 			</div>
 		</section>

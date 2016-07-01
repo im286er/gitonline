@@ -16,8 +16,8 @@ class IndexController extends MerchantController {
 		if($sid > 0){
 			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
 			if($sinfo['bb_stime'] && $sinfo['bb_etime'] && $sinfo['wb_stime'] && $sinfo['wb_etime']){
-				$this->assign('bprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime'])) ))->sum('o_price'));
-				$this->assign('wprice', M('order')->where(array_merge($where, array('o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime'])) ))->sum('o_price'));
+				$this->assign('bprice', M('order')->where(array('o_sid'=>$sid,'o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," >='".date("Y-m-d")."' and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime'])) )->sum('o_price'));
+				$this->assign('wprice', M('order')->where(array('o_sid'=>$sid,'o_pstatus'=>array('egt', '1'),'o_dstime'=>array('exp'," >='".date("Y-m-d")."' and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime'])) )->sum('o_price'));
 				$sbwb = 1;
 			}
 		}
