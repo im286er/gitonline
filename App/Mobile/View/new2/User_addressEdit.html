@@ -1,0 +1,87 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="address">
+    <style>
+        .checkbox label{ padding-left: 0 !important;}
+        .checkB{width:5rem !important; height: 16px;border: 0px;border-radius: 8px;overflow: hidden;float: left;}
+        #checkman,#checkwoman{ width: 0;}
+        #forman,#forwoman{ background: #eee; float:left; border-radius: 50%; margin-top: 4px; margin-right: 0.5rem;}
+    </style>
+</block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/addressList')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid order" >
+    <form action="{:U('addressEdit')}" method="post">
+        <div class="row orderconfirminput">
+            <ul class="list-group">
+                <li class="list-group-item  ">
+              	    <label>联系人: </label><input type="text" name="name" value="{$info['name']}" placeholder="您的姓名" required="">
+                </li>
+                <li class="list-group-item  " style="padding-top:1.2rem;">
+              	 <label>&nbsp;</label>
+                    <div class="pull-left">
+                        <div class="checkbox checkbox-warning  checkbox-circle">
+                            <input id="checkman" type="radio" name="sex" value="1" <if condition="$info['sex'] neq 2">checked="checked"</if>>
+                            <label for="checkman" class="checkB" id="man">
+                                <img src="__PUBLIC__/Merchant/images/gou.png" id="forman" />
+                                先生
+                            </label>
+                        </div>
+                    </div>
+                    <div class=" pull-left">
+                        <div class="checkbox checkbox-warning  checkbox-circle">
+                            <input id="checkwoman" type="radio" name="sex" value="2" <if condition="$info['sex'] eq 2">checked="checked"</if>>
+                            <label for="checkwoman" class="checkB" id="woman">
+                                <img src="__PUBLIC__/Merchant/images/gou.png" id="forwoman"/>
+                                 女士
+                            </label>
+                        </div>
+                    </div> 
+                </li>
+                <li class="list-group-item  ">
+                	<label>联系电话：</label><input type="tel" name="phone" value="{$info['phone']}" placeholder="你的手机号码" required="">
+                </li>
+                <li class="list-group-item  ">
+                	<label>收货地址：</label><input type="text" name="address" value="{$info['address']}" placeholder="小区/写字楼/学校等" required="">
+                </li>
+                <li class="list-group-item addressmore">
+                	<label>&nbsp;</label><input type="text"   name="maddress" value="{$info['maddress']}" placeholder="如门牌号等" required="">
+                </li>
+                <!-- <li class="list-group-item  ">
+                	<label>标签：</label><input type="text" name="" value="" placeholder="">
+                </li> -->
+            </ul>
+        </div>
+        <br />
+        <input type="hidden" name="receivingid" value="{$info['receivingid']}" />
+        <input type="hidden" name="dtype" value="{$dtype}" />
+        <button type="submit" class="btn btn-danger btn-lg btn-block">确定</button>       
+        </form>
+    </div>
+</block>
+<block name="footer">
+
+    <script>
+        function setCheckBox()
+        {
+            if($('#checkman').is(":checked"))
+                document.getElementById('forman').style.backgroundColor = '#ff4400';
+            else
+                document.getElementById('forwoman').style.backgroundColor = '#ff4400';
+
+            document.getElementById('man').addEventListener('touchend',function(){
+                document.getElementById('forman').style.backgroundColor = '#ff4400';
+                document.getElementById('forwoman').style.backgroundColor = '#EEEEEE';
+            },false);
+
+            document.getElementById('woman').addEventListener('touchend',function(){
+                document.getElementById('forman').style.backgroundColor = '#EEEEEE';
+                document.getElementById('forwoman').style.backgroundColor = '#ff4400';
+            },false);
+        }
+        setCheckBox();
+    </script>
+</block>

@@ -1,0 +1,92 @@
+<extend name="Public:partial"/>
+<block name="body">
+<style type="text/css">
+.button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
+td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
+</style>
+<div class="wrapper">
+    <h2 class="title add_child">店铺首页轮换广告</h2>
+    <div class="mian padding"> 
+    	                  
+        <div class="content_c" style=" padding:0; overflow:hidden;_zoom:1">
+        	<form action="__ACTION__" method="post">
+                <label>模糊搜索</label> <input type="text" name="keywords" value="{$Think.post.keywords}" placeholder="搜索：广告标题">
+                <input type="submit" value="开始搜索" class="button">
+            </form>
+        </div>
+        <div class="content_a top" style="border-bottom:0">
+            <h3>您品牌下的广告列表<input type="button" value="新增广告" onClick="window.location.href='{:U('/Manage/adinse', array('sid'=>$sid, 'dtype'=>2), true)}'"></h3>
+            <table class="table border-b">
+                <tr>
+                    <th width="80px">序号</th>
+                    <th width="170px">广告标题</th>
+                    <th width="120px">连接地址</th>
+                    <th width="200px">图片信息</th>
+                    <th width="180px">操作</th>
+                </tr>
+                <volist name="bdlist" id="v">
+                <tr>
+                    <td>{$v.bid}</td>
+                    <td>{$v.btitle}</td>
+                    <td>
+                        <empty name="v.burl">
+                            <span style="color:#ccc;">查看</span>
+                        <else/>
+                            <a href="{$v.burl}" target="_blank" style="border:none;">查看</a>
+                        </empty>
+                    </td>
+                    <td><a href="javascript:lookinfo('{$v.bimg}');">查看图片</a></td>
+                    <td>
+                    	<if condition="$v['btype'] eq 3">
+                        	<a href="{:U('/Manage/adedit', array('bid'=>$v['bid'], 'sid'=>$sid, 'dtype'=>2), true)}">修改</a>
+                        	<a href="{:U('/Manage/adupde', array('bid'=>$v['bid'], 'sid'=>$sid), true)}" onClick="return confirm('确实要删除此广告吗？') ? true : false">删除</a>
+                        <else/>
+                        	-
+                        </if>
+                    </td>
+                </tr>
+                </volist>
+            </table>
+            <if condition="$pages">
+                <div class="page clearfix">
+                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>
+                    <input type="text" onBlur="document.getElementById('btnpre').href='/Shop/index/page/'+this.value">{$pages}
+
+                </div>
+            </if><br/>
+            <input type="submit" value="应用" class="button" id="close">
+        </div>
+    </div>
+</div>
+
+<!-- 图片信息 -->
+<div class="modal" id="DialogFrameImage">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-325px;">
+    	<h3>广告预览 <span class="close" id="CloseMenuImage">×</span></h3><img src="" id="DialogImage">
+    </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal" id="DialogFrameModel">
+    <div class="DialogFrameModel reveal-modal" style="margin-left:-386px;">
+    	<iframe id="DialogFrame" name="DialogFrame" src="" frameborder="0" width="0" height="0" scrolling="no" ></iframe>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/Merchant/common.js"></script>
+<script type="text/javascript">
+function lookinfo( srcing ) {
+	if( !srcing ) { alert('信息出错'); return false; }
+	document.getElementById("DialogImage").src = srcing;
+	$("#DialogFrameImage").children("div.DialogFrameModel").animate({top:"100px"}).end().fadeIn();
+}
+$(document).ready(function(e) {
+	$("#CloseMenuImage").click(function() {
+		$("#DialogFrameImage").children("div.reveal-modal").animate({top:'-1000px'}).end().fadeOut();
+	})
+});
+$("#close").on("click",function(){
+    //window.parent.closelayer();  
+    window.history.go(0);
+});
+</script>
+</block>

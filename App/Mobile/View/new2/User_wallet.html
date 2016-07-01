@@ -1,0 +1,20 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="wallet">
+</block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid moneylistdetail ">
+    	<h3 class="text-center orange">&yen; {$member['flu_balance']} </h3>
+        <br />
+        <div class="row bgwhite walletlist">
+         	<a href="{:U('bringForward')}" class="arrow">余额转出(提现)</a>
+            <a href="{:U('finance')}" class="arrow">账户明细</a>
+            <a href="#" class="arrow">常见问题</a>
+        </div>
+    </div>
+</block> 
+<block name="footer"></block>

@@ -1,0 +1,45 @@
+<extend name="New2:common"/>
+<block name="header"></block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid myappoint" >
+        <div class="row myappointstep">
+            <div class="col-xs-6" >
+                <a href="{:U('User/myreserve',array('dtype'=>2))}" <if condition="$o_dstatus neq '1'"> class="red" </if>>已处理</a>
+            </div>
+            <div class="col-xs-6">
+                <a href="{:U('User/myreserve',array('dtype'=>2, 'o_dstatus'=>1))}" <if condition="$o_dstatus eq '1'"> class="red" </if>>未处理</a>
+            </div>
+        </div><br />
+    	<if condition="!empty($order)">
+        <volist name="order" id="vo">
+        <a href="{:U('reserveDetail',array('o_id'=>$vo['o_id']))}" style="color: #878787;">
+         	<div class="row orderpros">
+                <div class="ordernotitle">
+                    <div class="pull-left">
+                        <h5 class="f14">{$vo.o_name}</h5>
+                        <p class="gray">手机：{$vo.o_phone}</p>
+                    </div>
+                    <div class="pull-right">
+                        {$vo.o_dstime}
+                    </div>
+                </div>
+             
+                <div class="ordertotal">
+                    <div class="col-xs-8 text-left"><volist name="vo.ogoods" id="value" key="keys"><egt name="keys" value="2">、</egt>{$value.sp_name}</volist></div> 
+                    <div class="col-xs-4 text-right">{$vo.status_name}</div>
+                </div>
+            </div>
+        </a>
+            <br />
+        </volist>
+        <else />
+        <div style="width:50%;margin:10% auto;font-size:16px;color:#666;text-align:center;">暂时没有预订！</div>
+        </if>
+    </div>
+     
+</block> 
+<block name="footer"></block>

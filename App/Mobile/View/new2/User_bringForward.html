@@ -1,0 +1,92 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="center">
+</block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/wallet')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid " >
+        <br />
+        <div class="row centerform">
+        
+            <ul class="list-group">
+                <li class="list-group-item  ">
+                	 <label>支付宝账号: </label><input type="text" name="mbdzh" value="" placeholder="请输入您的支付宝账号" id="mbdzh1" required="">
+                </li>
+                <li class="list-group-item  ">
+                	<label>确认支付宝账号：</label><input type="text" name="mbdzh" value="" placeholder="请再次输入您的支付宝账号" id="mbdzh2" required="">
+                </li>
+                <li class="list-group-item">
+                	<label>真实姓名：</label><input type="text" name="msurname" id="msurname" value="" placeholder="请输入支付宝所登记的实名" required="">
+                </li>
+            </ul>
+        </div>
+        <br />
+
+        <input type="hidden" name="bmention" id="bmention" value="{$member.flu_balance}" >
+		<button type="button" class="btn btn-danger btn-lg btn-block" id="DialogSave">确定</button>
+ 
+        
+    </div>
+    
+<!--     <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script> -->
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    
+</block> 
+<block name="footer">
+    <script type="text/javascript">
+    function CheckForm() {
+        mbdzh1   = $('#mbdzh1').val();
+        mbdzh2   = $('#mbdzh2').val();
+        msurname = $('#msurname').val();
+        bmention = $('#bmention').val();
+        if( !mbdzh1 || !mbdzh2 ) { alert("请输入支付宝账户"); $('#mbdzh1').focus(); return false; }
+        if ( mbdzh1 != mbdzh2 ) {alert("两次输入支付宝账户不同"); $('#mbdzh2').focus(); return false;}
+        if( !msurname ) { alert("请输入真实姓名"); $('#msurname').focus(); return false; }
+        if(parseFloat(bmention) < parseFloat(0.01)){ 
+            alert("当前余额为零，无法体现！");
+            return false;
+        }
+        return true;
+    }
+
+
+    //提交信息
+    $("#DialogSave").click(function() {
+
+        if( CheckForm() == false) return false;
+        var result = confirm('确定要提现吗？');
+        if(!result)return false;
+        $.post('__ACTION__', {bmention:bmention,mbdzh:mbdzh1,msurname:msurname},function(result) {
+            alert(result.msg);
+        });
+        
+    });
+
+
+    function fontAuto(){
+        var winWidth=document.documentElement.clientWidth;/*可视窗口宽度*/
+        if(winWidth<=500)
+        {
+            var f=winWidth/500*14 ;
+            if(f>12){
+                f=f + "px";
+                $('label').css({'fontSize':f});
+            }
+            else{
+                f=12 + "px";
+                $('label').css({'fontSize':f});
+            }
+        }
+
+    }
+    window.onresize=fontAuto;
+    $(document).ready(function(){
+        fontAuto();
+    })
+    </script>
+
+</block>

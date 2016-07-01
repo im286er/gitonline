@@ -1,0 +1,277 @@
+<extend name="New2:common"/>
+<block name="header"></block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+        <a href="tel:{$numb}"><div class="tel pull-right"></div></a>
+    </header>
+    <link href="__PUBLIC__/Merchant/images/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/images/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <div class="container-fluid order tab-nav" >
+     	<div class="row myorderstep">
+        	<div class="col-xs-2">
+            	<a href="{:U('User/myorder',array('dtype'=>2))}" <if condition="$o_dstatus eq ''">class="red"</if>>全部</a>
+            </div>
+            <div class="col-xs-2">
+            	<a href="{:U('User/myorder',array('dtype'=>2, 'o_dstatus'=>1))}" <if condition="$o_dstatus eq '1'">class="red"</if>>待处理</a>
+            </div>
+            <div class="col-xs-2">
+            	<a href="{:U('User/myorder',array('dtype'=>2, 'o_dstatus'=>3))}" <if condition="$o_dstatus eq '3'">class="red"</if>>待完成</a>
+            </div>
+            <div class="col-xs-2">
+            	<a href="{:U('User/myorder',array('dtype'=>2, 'o_dstatus'=>4))}"  <if condition="$o_dstatus eq '4'">class="red"</if>>已完成</a>
+            </div>
+            <div class="col-xs-2">
+                <a href="{:U('User/myorder',array('dtype'=>2, 'o_dstatus'=>5))}"  <if condition="$o_dstatus eq '5'">class="red"</if>>已关闭</a>
+            </div>
+        </div>
+        <br />
+        <volist name="order" id="vo" >
+        
+        <div class="row orderpros">
+        <a href="{:U('orderDetail',array('o_id'=>$vo['o_id']))}" style="color: #1b1b1b;">
+            <div class="ordernotitle">
+                <h5 class="gray" style="float: left; width: 100%">
+                    <font style="float: left;">订单号：{$vo.o_id}</font>
+                    <div style="float: right;">
+                        未评价
+                    </div>
+                </h5>
+                <span class="red" style="float: left; width: 100%">
+                    <font style="float: left;"><if condition="$vo['o_seat']">座位号:{$vo.o_seat}<elseif condition="$vo['o_xftype'] eq 1"/>店内消费<else />外卖订单</if></font>
+                    <div class="gray" style="float: right;">
+                        <php>echo date('Y-m-d H:i',strtotime($vo['o_dstime']))</php>
+                    </div>
+                </span>
+
+            </div>
+        </a>
+            <ul  >
+                <php>$goodsCount=0;</php>
+                <volist name="vo.ogoods" id="value" key="keys">
+                <li>
+                    <div class="col-xs-6 text-left">{$value.sp_name}</div>
+                    <div class="col-xs-3">X {$value.sp_number}</div>
+                    <div class="col-xs-3" style="text-align: right; padding-right: 15px;">&yen; {$value.sp_gdprice}</div>
+                </li>
+                <php>
+                    $goodsCount+=$value['sp_number'];
+                </php>
+                </volist>
+            </ul>
+            
+            <div class="ordertotal">
+                <div class="col-xs-4 text-left"></div> 
+                <div class="col-xs-8 text-right"><small >共{$goodsCount}件</small>合计 &yen; {$vo.o_price} 元</div>
+            </div>
+            
+            <div class="row"><div class="col-xs-12"><hr /></div></div>
+            
+            <div class="orderbuttons">
+            	
+                <if condition="$vo['paytype_name'] eq '待付款' && $vo['o_dstatus'] neq 5">
+                   
+                    <if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> 
+                    <a class="btn btn-o btn2"  href="javascript:;" data-toggle="modal" data-target="#myModal" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a>
+                    </if>
+                    <if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype') && $vo['o_pway'] eq 'weixin'">
+                            <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',2);">微信付款</a>
+                    <else />
+                        <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',1);">支付宝付款</a>
+                    </if>
+                <elseif condition="$vo['o_dstatus'] eq 1 && ($vo['paytype_name'] eq '线下支付' or $vo['paytype_name'] eq '线上已付')"/>
+                   
+                    <if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o btn2" href="javascript:;" data-toggle="modal" data-target="#myModal" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+                    
+                <elseif condition="$vo['o_dstatus'] eq 3"/>
+                    
+                    <if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" data-toggle="modal" data-target="#myModal" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+                    
+                <else />
+                    
+                </if>
+                
+            	<a class="btn btn-o" href="javascript:;">{$odstatus[$vo['o_dstatus']]}</a>
+
+            </div>
+        </div>
+        
+        <br />
+        </volist>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade con-qx" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title text-center" >确定要取消该笔订单吗</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px; border:0px;">
+             <!-- <ul class="modalczselect">
+                <li>
+                    <div class="col-xs-5 text-left strong">1号座</div>
+                    <div class="col-xs-5 text-left gray">6人位</div>
+                    <div class="col-xs-2 text-right"><div class="checkbox checkbox-warning  checkbox-circle">
+                        <input id="checkbox1" type="checkbox">
+                        <label for="checkbox1">
+                        </label>
+                    </div></div>
+                </li>
+             </ul> -->
+          </div>
+          <div class="modal-footer"  style=" border:0px;  text-align:center; ">
+            <button type="button" class="btn btn-danger btn-lg" style="width:40% ; margin:0 auto;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">取消</span></button>
+            <button type="button" class="btn btn-danger btn-lg btn-qx-yes"  style="width:40% ; margin:0 auto;"> 确认 </button>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="play-success">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title text-center" >操作成功</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px; border:0px;">
+          </div>
+          <div class="modal-footer"  style=" border:0px;  text-align:center; ">
+            <button type="button" class="btn btn-danger btn-lg" style="width:40% ; margin:0 auto;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">确定</span></button>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="con-qx-2">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title text-center" >点击输入取消订单的原因</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px; border:0px;">
+            <h6 class="modal-title modal-title-single"><input type="text" value="" id="qx-reason-xxx" placeholder="点击输入取消订单的原因"/></h6>
+          </div>
+          <div class="modal-footer"  style=" border:0px;  text-align:center; ">
+            <button type="button" class="btn btn-danger btn-lg" style="width:40% ; margin:0 auto;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">取消</span></button>
+            <button type="button" class="btn btn-danger btn-lg btn-qx-yes"  style="width:40% ; margin:0 auto;"> 确认 </button>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="con-qx-3">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title text-center" >确定要提交退单申请吗</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px; border:0px;">
+            <h6 class="modal-title">确定要提交退单申请吗?</h6>
+            <!-- <p class="modal-p">您好！由于您的订单商户已受理，取消订单请先联系商户，由商户确认后为您关闭订单，谢谢！</p> -->
+            <p class="modal-p">退单原因:<input type="text" value="" id="qx-reason" placeholder="点击输入"/></p>
+          </div>
+          <div class="modal-footer"  style=" border:0px;  text-align:center; ">
+            <button type="button" class="btn btn-danger btn-lg" style="width:40% ; margin:0 auto;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">取消</span></button>
+            <button type="button" class="btn btn-danger btn-lg btn-qx-yes"  style="width:40% ; margin:0 auto;"> 确认 </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    var reqUrl = "{:U('Pay/request_alipay')}";
+    var weixinUrl = "{:U('/Home/Wechat/dsWxJsPay@www')}";
+    var o_id  = "";
+    var ctype = 1;
+    var isApp = "{$isApp}";
+    function send_qet(reqUrl,qet_data){
+        $.ajax( {    
+            url:reqUrl,   
+            data:qet_data,
+            type:'post',    
+            cache:false,    
+            dataType:'json',    
+            success:function(data) {    
+                if(data.msg =="true" ){
+                    // $("#play-success").show();
+                    window.location.reload();
+                }
+             },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                if(XMLHttpRequest.status == '200'){
+                    var data = eval('('+ XMLHttpRequest.responseText +')');
+                    if(data.msg =="true" ){
+                        $("#play-success").show();
+                        //window.location.reload();
+                    }
+                }
+            }
+        });
+    }
+    function ch_paytype(oid,o_type){
+        var reqUrl = "{:U('Mobile/User/changeOrder')}";
+        var qet_data = {
+                type  : 'paytype',
+                o_id  : oid,
+                o_type: o_type
+        };
+        send_qet(reqUrl,qet_data);
+    }
+    function ch_dtype(oid,ct){
+        o_id  = oid;
+        ctype = ct;
+        // if(ctype == 1){
+        //     $("#con-qx").show();
+        // }else if(ctype == 2){
+        //     $("#con-qx-2").show();
+        // }else if(ctype == 3){
+        //     $("#con-qx-3").show();
+        // }
+    }
+    function ch_pay(oid,r){
+        if(isApp > 0){
+            payOrder('alipay',oid);
+        }else{
+            if(r == 2){
+                location.href = weixinUrl + "?o_id=" + oid + '&jump=1&mid={$mid}';
+            }else{
+                location.href = reqUrl + "?o_id=" + oid + '&mid=' + {$mid};
+            }
+        }
+    }
+    $(document).ready(function(){
+        
+        $('.play-success-yes').click(function(){
+            window.location.reload();
+        });
+        
+        $('.btn-qx-yes').click(function(){
+            var reqUrl = "{:U('Mobile/User/changeOrder')}";
+            var qx_reason = '';
+            if(ctype == 3){
+                qx_reason = $("#qx-reason").val();
+                if(qx_reason == ''){
+                    //return false;
+                }
+            }
+            var qet_data = {
+                    type  : 'dtype',
+                    o_id  : o_id,
+                    ctype : ctype,
+                    qx_reason : qx_reason,
+            };
+            $("#myModal").hide();
+            send_qet(reqUrl,qet_data);
+        });
+    }); 
+    </script>
+</block>   
+<block name="footer"></block>

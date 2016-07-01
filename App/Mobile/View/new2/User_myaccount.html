@@ -1,0 +1,137 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="center">
+</block>
+<block name="body">
+  <body class="center">
+     <header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid " >
+      <div class="row">
+        <br />
+        <ul class="list-group ct-centerlist">
+            <li class="list-group-item center-avater ">
+                <a href="#" data-toggle="modal" data-target="#photo">头像<small>
+                <empty name="user.flu_avatar">
+                    <img src="__PUBLIC__/Mobile/default/img/avatar.png" alt="" class="img-circle center-block" width="60">
+                <else />
+                    <img class="img-circle center-block" src="{$user.flu_avatar}" width="60"/>
+                </empty>
+                </small></a>
+            </li>
+            <li class="list-group-item "><a href="#">用户名<small class="gray" >{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</small></a></li>
+            <li class="list-group-item "><a href="#" data-toggle="modal" data-target="#myModal">我的二维码<small class="gray" ><span class="glyphicon glyphicon-qrcode"></span></small></a>
+        </ul> 
+        
+        <ul class="list-group ct-centerlist">
+            <li class="list-group-item"><a href="#">手机号码<small class="gray" >{:substr($user['flu_phone'],0,3)}****{:substr($user['flu_phone'],7,11)}</small></a></li>
+        </ul> 
+        
+        <ul class="list-group ct-centerlist">
+            <li class="list-group-item  "><a href="{:U('editPasswd')}">修改密码</a></li>
+        </ul> 
+
+      </div>   
+      <a href="{:U('logout')}"><button type="button" class="btn btn-danger btn-lg btn-block"  >退出登陆</button></a>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header"  style="border:0;">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                 </div>
+                 <div class="modal-body" style="padding-bottom:0; border:0;">
+                     <h3 class="text-center" style="margin-bottom: 20px;">{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</h3>
+                     <div class="row">
+                         <div style="margin-left: calc(50% - 100px)">
+                             <img src="{:U('Common/creatMyQrcode@sj', array('sid'=>$sid, 'jid'=>$jid, 'mid'=>$mid))}" style="width: 200px;">
+                         </div>
+                     </div>
+                     <h5 class="text-center gray">长按或扫描二维码进入店铺</h5>
+                 </div>
+                 <div class="modal-footer"  style="   border:0px;  text-align:center;  overflow:hidden;  ">
+                     <div class="row"  style="background:#f6f6f6; height:7rem; margin-bottom:-1.5rem; border-radius:0 0 5px 5px; padding-top:1.5rem; padding-left:2rem; padding-right:2rem;">
+                        <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdUrl":"{$bdUrl}","bdText":"我的二维码","bdMini":"2","bdMiniList":false,"bdPic":"{:U('Common/creatMyQrcode@sj', array('sid'=>$sid, 'jid'=>$jid, 'mid'=>$mid))}","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+        
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <div class="modal fade" id="photo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="" role="document" style="margin: 120px auto; width: 300px;">
+             <div class="modal-content">
+                 <div class="modal-header"  style="border:0;">
+                     <div style="font-size: 1.6rem; float: left; margin-left: calc(50% - 30px);">修改头像</div>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                 </div>
+                 <div class="myphotobody">
+                     <div style="float: left; width: 100%; height: 100px; margin-bottom: 40px;">
+                      <empty name="user.flu_avatar">
+                    <img src="__PUBLIC__/Mobile/default/img/avatar.png"  id="myphoto">
+                <else />
+                    <img  src="{$user.flu_avatar}"  id="myphoto"/>
+                </empty>
+                     </div>
+                     <label for="submit">提&nbsp;交</label>
+                     <label for="file">上传头像</label>
+                     <form id='formFile' name='formFile' method="post" action="{:U('upTX')}" enctype="multipart/form-data">
+                       <input type="file" name="file" id="file" style="visibility: hidden; width: 0;">
+                       <input type="submit" id="submit" style="visibility: hidden; width: 0;">
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <script>
+         document.getElementById('file').onchange = function(evt) {
+
+             // 如果浏览器不支持FileReader，则不处理
+
+             if (!window.FileReader) return;
+
+             var files = evt.target.files;
+
+             for (var i = 0, f; f = files[i]; i++) {
+
+                 if (!f.type.match('image.*')) {
+
+                     continue;
+
+                 }
+
+
+                 var reader = new FileReader();
+
+                 reader.onload = (function(theFile) {
+
+                     return function(e) {
+
+                         // img 元素
+
+                         document.getElementById('myphoto').src = e.target.result;
+
+                     };
+
+                 })(f);
+
+
+                 reader.readAsDataURL(f);
+
+             }
+
+         }
+         
+     </script>
+</block>
+<block name="footer">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</block>

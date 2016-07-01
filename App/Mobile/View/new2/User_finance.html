@@ -1,0 +1,51 @@
+<extend name="New2:common"/>
+<block name="header"></block>
+<block name="body">
+<header>
+    <a href="{:U('User/wallet')}"><div class="back pull-left"></div></a>
+        {$page_name}
+</header>
+<div class="container-fluid order" >
+
+    <div class="row mydetail">
+        <div class="col-xs-4">
+            <a href="{:U('finance')}" <if condition="$gtype eq ''"> class="red" </if> >全部</a>
+        </div>
+        <div class="col-xs-4">
+            <a href="{:U('finance', array('gtype'=>'1'))}" <if condition="$gtype eq '1'"> class="red" </if>>收入</a>
+        </div>
+        <div class="col-xs-4">
+            <a href="{:U('finance', array('gtype'=>'2'))}" <if condition="$gtype eq '2'"> class="red" </if>>支出</a>
+        </div>
+
+    </div>
+
+    <div style=" line-height: 44px; font-size: 1.5em"> 本月：<i style="font-style: normal; font-size:1.6rem; float: right; color: #969696;">月账单&nbsp;&nbsp;></i></div>
+
+    <volist name="info" id="vo">
+        <div class="row mydetailmain">
+            <div class="mydetailtime">
+                <!-- <i class="day">今天</i><br/> -->
+                <i class="thetime">{$vo['create_time']}</i>
+            </div>
+            <div class="information">
+                <if condition="$vo['gtype'] eq 1">
+                    <i class="figure" style="font-size: 1.8rem;">+{$vo['price']}</i><br/>
+                <else/>
+                    <i class="figure" style="font-size: 1.8rem;">-{$vo['price']}</i><br/>
+                </if>
+                <i class="thetext" style="color: #878787;font-size: 1.2rem;">{$vo['sname']}<if condition="$vo['ptype'] eq 1">支付宝支付<else/>微信支付</if></i>
+            </div>
+            <div class=" condition">
+                完成订单
+            </div>
+        </div>
+    </volist>
+
+</div>
+
+<script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+
+</block>
+<block name="footer"></block>

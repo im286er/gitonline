@@ -1,0 +1,64 @@
+<extend name="New2:common"/>
+<block name="header">
+  <body class="appointdetail">
+</block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/myreserve')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+      <a href="tel:{$numb}"><div class="tel pull-right"></div></a>
+    </header>
+    <div class="container-fluid order" >
+    	<br />
+     	<div class="orderstep img-rounded">
+        	<div class="steptitle">
+            	<h4 class="orange"><if condition="$order['o_dstatus'] eq '1'">预约已提交<else/>预约成功</if></h4>
+                <h5>{$order['o_seat']}</h5>
+            </div>
+            <div class="stepinfo">
+            	  <if condition="$order['o_dstatus'] eq '1'">预约已提交<else/>预约成功</if>
+            </div>
+        </div>
+         <br />
+         <div class="row orderpros">
+            <ul>
+                <volist name="goods" id="vo">
+                <li>
+                    <div class="col-xs-6 text-left sp-name">{$vo['sp_name']}</div>
+                    <div class="col-xs-3 text-right">X {$vo['sp_number']}</div>
+                    <div class="col-xs-3 text-right">&yen; {$vo['sp_number']*$vo['sp_gdprice']}</div>
+                </li>
+                </volist>
+            </ul>
+            
+            <!-- <div class="col-xs-12"><hr /></div> -->
+            
+            <!-- <div class="peisong">
+                <div class="col-xs-6 text-left">配送费</div>
+                <div class="col-xs-6 text-right">&yen; 2</div>
+            </div> -->
+            
+            <div class="row"><div class="col-xs-12"><hr  /></div></div>
+            
+            <div class="comeneworder">
+                 <div class="col-xs-6 text-left">
+                    <a class="orderrepeat to-order" href="{:U('Flow/confirm', array('dtype'=>3, 'o_id'=>$order['o_id']))}">再来一单</a>
+                 </div>
+                <div class="col-xs-6 text-right orange">合计： &yen; {$total_price}</div>
+            </div>
+        </div>
+
+        <br />
+         
+        <ul class="row list-group orderinfo">
+          <li class="list-group-item"><h4>预约详情<small>预约号：{$order['o_id']}</small></h4></li>
+           <li class="list-group-item"><h5>联系电话：{$numb}</h5></li> 
+           <li class="list-group-item"><h5>订单内容：<?php foreach($goods as $k=>$v){echo $v['sp_name'].' ';}?></h5></li>
+           <li class="list-group-item"><h5>下单时间：{$order['o_dstime']}</h5></li>
+           <li class="list-group-item"><h5>预约时间：{$order['o_gdate']}</h5></li>
+           <li class="list-group-item"><h5>支付方式：<if condition="$order['o_type'] eq '0'">到店支付<else/>线上支付</if></h5></li>
+        </ul>  
+
+    </div>
+</block>
+<block name="footer"></block>

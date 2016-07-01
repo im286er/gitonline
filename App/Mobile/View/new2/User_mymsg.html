@@ -1,0 +1,45 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="center">
+</block>
+<block name="body">
+  
+     <header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	我的消息
+    </header>
+    <link href="__PUBLIC__/Merchant/images/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/images/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    
+<div class="message">
+     <div class="container-fluid  " >
+    	<div class="row">
+            <ul class="media-list">
+              <volist name="msg_list" id="vo" >
+              <li class="media">
+                <div class="media-left">
+                  <a href="#">
+                    <img class="media-object img-circle center-block" src="__PUBLIC__/Merchant/images/ico_msg_{$vo.msgtype}.png"  >
+                  </a>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">{$vo.msgtitle}
+                      <div class="pull-right time">
+                        {$vo.add_time}
+                       </div>
+                  </h4>
+                  <div class="gray">{$vo.msgtext}</div>
+                </div>
+              </li>
+              </volist>
+            </ul>
+        </div>
+        
+    </div>
+</div>     
+</block>
+<block name="footer">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</block>

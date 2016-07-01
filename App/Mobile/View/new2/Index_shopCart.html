@@ -1,0 +1,189 @@
+<extend name="New2:common"/>
+<block name="head">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="__PUBLIC__/Merchant/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/images/syw.css" rel="stylesheet"> 
+    <link href="__PUBLIC__/Merchant/images/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/images/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/Js/Mobile/flow4.js"></script>
+</block>
+<block name="header">
+    <header>
+        <a href="{:U('Index/index')}"><div class="back pull-left" ></div></a><!-- onclick="history.go(-1)" -->
+        购物车
+        <div class="complete pull-right orange complete-one" style="display: none;">完成</div>
+        <div class="complete pull-right orange edit-all">编辑</div>
+    </header>
+</block>
+<block name="body">
+    <script type="text/javascript">
+        $('.complete').click(function(){
+            var status = $('.checkbox-circle').hasClass('checkbox');
+            if (status){
+                $('.complete-one').css('display','none');
+                $('.edit-all').css('display','block');
+                $('.checkbox-circle').removeClass('checkbox');
+                $('.checkbox-circle input').css({'visibility':'hidden'});
+                $('footer .checkbox-circle').css('display','none');
+                $('.confirm-to').css('display','block');
+            }else{
+                $('.complete-one').css('display','block');
+                $('.edit-all').css('display','none');
+                $('.checkbox-circle').addClass('checkbox');
+                $('.checkbox-circle:first').css('margin-left','');
+                $('.checkbox-circle input').css({'visibility':'visible'});
+                $('footer .checkbox-circle').css('display','block');
+                $('.confirm-to').css('display','none');
+            }
+        })
+    </script>
+    <div class="container-fluid cart" >
+        <volist name="cart_arr" id="vo" >
+            <div class="row goodsList{$vo.gid}">
+                <div class="col-xs-1  checkbox-warning  checkbox-circle" style=" height: 3rem; padding-left: 25px; padding-right: 5px;">
+                    <input id="checkbox{$vo.gid}" type="checkbox" name="checkbox" gid="{$vo.gid}" style="visibility: hidden;">
+                    <label for="checkbox{$vo.gid}">
+
+                    </label>
+                </div>
+                <div class="col-xs-3" style="padding:0px;"><img src="{$vo.gimg}" class="img-responsive"></div>
+                <div class="col-xs-3" style="padding:0px"> 
+                    <span>{:msubstr($vo['gname'],0,6)}</span>
+                </div>
+                <div class="col-xs-1 " style="padding:0px"><span class="orange2">&yen;{$vo.gprice}</span></div>
+                <div class="col-xs-3"  >
+                    <div class="pull-left" id="jian1" style="width:33%"><img src="__PUBLIC__/Merchant/images/jie.jpg" width="20" class="btn_left jianBtn" gid="{$vo.gid}"></div>
+                    <div class="pull-left num gnum_{$vo.gid} numLabel" style="width:33%" id="numLabel1">{$vo.number}</div>
+                    <div class="pull-right" id="jia1" style="width:33%"><img src="__PUBLIC__/Merchant/images/jia.jpg" width="20" class="addBtn btn_right" gid="{$vo.gid}"></div>
+                </div>
+            </div> 
+        </volist>
+    </div>
+
+    <empty name="cart_arr">
+    <div class="emptybody" >
+
+        <img src="__PUBLIC__/Merchant/images/cart_emp.jpg" style="width: 100%; float: left;">
+
+        <a class="goback" href="{:U('Index/index')}">去逛逛</a>
+
+    </div>
+    <else/>
+        <footer class="goodfooter del-all" id="cartfooter">
+            <div class="row">
+                 <div class="col-xs-8" style="margin-right: -10px;">
+                    <div class=" checkbox-warning  checkbox-circle" style="display: none; padding-left: 25px; padding-right: 5px;">
+                        <input id="checkbox7" type="checkbox" class="checked-all">
+                        <label for="checkbox7" >
+                        <div style="height:3px;"></div>
+                           <span> 全选 </span>
+                        </label>
+                    </div>
+                 </div>
+                 <div class="col-xs-4 cartcheckout"  id="delGoods" sid="{$sid}">删除</div>
+            </div>
+        </footer>
+    
+    
+    <footer class="goodfooter confirm-to" id="cartfooter">
+        <div class="row">
+             <div class="col-xs-8 carttotalmoney" style="margin-right: -10px;">合计&yen;<i class="cartPrice"></i></div>
+             <a href="<empty name="mid">{:U('User/login',array('backurl'=>url_param_encrypt(U('Index/shopCart'),'E'),'returnurl'=>url_param_encrypt(U('Flow/confirm'),'E')))}<else />{:U('Flow/confirm')}</empty>"><div class="col-xs-4 cartcheckout">去结算</div></a>
+        </div>
+    </footer>
+    </empty>
+    
+    <script type="text/javascript"> 
+      var reqUrl = "{:U('Mobile/Choose/new_search',array('jid'=>$jid,'sid'=>$sid))}";
+      var sid    = {$sid};
+      
+      $(document).ready(function(){
+        getProductContent({$default_cid},'');
+
+        var ff = $.cookie("ProductList");
+        if( ff ) {
+            var num = 0;
+            $.each(ff.split("|"), function(index, ostr) {
+                var opro = ostr.split("_");
+                if (opro[0] == sid) {
+                    if(opro[1] != undefined) {
+                        num += parseInt(opro[2]); 
+                    };
+                }
+            })
+            $("#cartnum").html( num );
+        }
+
+        $('.shopEdit').click(function(){
+            var status = $('.reSignDiv').css('display');
+            var gid    = $(this).attr('gid');
+            var gnum   = $('.gnum_'+gid).html();
+
+            if (status == 'none'){
+                $('.reSignDiv').css('display','block');
+            }else{
+                $('.reSignDiv').css('display','none');
+            }
+        })
+
+        //选择全部
+        $('.checked-all').click(function(){
+            var float  = $('#checkbox7').is(':checked');
+            if(float){
+                var j=$("[name='checkbox']").length;
+                 for(i=0;i<j;i++){
+                 if (!$("[name='checkbox']").eq(i).is(':checked'))
+                 $("[name='checkbox']").eq(i).click();
+                 }
+            }
+
+            $("[name='checkbox']").attr("checked",this.checked);
+        });
+
+        //删除全部
+        $('#delGoods').click(function(){
+            var float  = $('#checkbox7').is(':checked');         
+            //删除全部
+            if ( float ){
+                $.cookie("ProductList", '', {path:'/'});
+            }else{
+                $("input[name='checkbox']:checked").each(function() {   // 遍历选中的checkbox
+                    var gid = $(this).attr('gid');
+                    var ff  = $.cookie("ProductList");
+                    if( ff ) {
+                        var num    = 0;
+                        var string = "";
+                        $.each(ff.split("|"), function(index, ostr) {
+                            var opro = ostr.split("_");
+                            if (opro[1] != gid && opro[1] != undefined) {
+                                string  += opro[0]+'_'+opro[1]+'_'+opro[2]+"|";
+                            }
+                        });
+                        $.cookie("ProductList", string, {path:'/'});
+                    }
+                });
+            }
+            history.go(0);
+        })
+      })
+    </script>
+
+    <script>
+    $(document).ready(function(){
+      bodyauto();
+    });
+    function bodyauto(){
+        var height= document.documentElement.clientHeight - 45;
+        var winwidth=document.documentElement.clientWidth;
+        if(winwidth<750)
+            $('.emptybody').css('height',height+'px');
+    }
+    window.onresize=bodyauto;
+</script>
+</block>
+<block name="foot"></block>

@@ -1,0 +1,75 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="feedback">
+</block>
+<block name="body">
+<script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+  	<header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid " >
+    	<div class="row">
+         	<div class="col-xs-12">
+                <textarea name="op_content" id="op_content" placeholder="您如果有什么好的建议或意见，欢迎反馈给我们。"></textarea>
+                <br /><br />
+                <input type="hidden" id="op_sid" value="{$sid}" />
+                <input type="hidden" id="op_telphone" value="{$member['flu_phone']}" />
+                <button type="button" class="btn btn-danger btn-lg btn-block" onclick="submits()">确定</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <ul class="media-list" style="margin-top: 40px;">
+            <volist name="opinion" id="vo" empty="您还没有反馈过意见">
+                <li class="media" style="background: #fff; margin-bottom: 15px;">
+                    <div class="media-body" style="padding:0 0 10px 15px;">
+                        <div class="media-heading" style="margin-top: 15px;">我的意见：
+                            <div class="pull-right time">
+                                {$vo.op_addtime|date='Y-m-d H:i:s',###}
+                            </div>
+                        </div>
+                        <div class="gray">{$vo.op_content}</div>
+                        <notempty name="vo.op_replytxt">
+                            <div class="media-heading" style="margin-top: 15px;">商家回复：
+                                <div class="pull-right time">
+                                    {$vo.op_replytime|date='Y-m-d H:i:s',###}
+                                </div>
+                            </div>
+                            <div class="gray">{$vo.op_replytxt}</div>
+                        </notempty>
+                    </div>
+                </li>
+            </volist>
+                
+            </ul>
+        </div>
+    </div>
+    <script>
+    var AutoReply = "{$AutoReply?$AutoReply:'意见反馈成功！'}"; 
+    var runlink =  "{:U('/User/opinion')}"; 
+    <eq name="isApp" value="1">
+        baichuanIM('{$mid}','{$jid}');
+    </eq>
+    function submits(){
+        var op_content = $('#op_content').val();
+        var op_telphone = $('#op_telphone').val();
+        var op_sid = $('#op_sid').val();
+        if(!op_content){
+            layer.open({content: '亲！有您的意见我们会做的更好哦！',time: 2});
+            $('#op_content').focus();
+            return false;
+        }
+        $.post("{:U()}",{'op_telphone':op_telphone, 'op_content':op_content, 'op_sid':op_sid}, function(result){
+            layer.open({
+                content: AutoReply,
+                btn: ['确定'],
+                yes: function(){
+                    window.location = runlink;
+                }
+            });
+        });
+    }
+    </script>
+</block>
+<block name="footer"></block>

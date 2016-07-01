@@ -1,0 +1,169 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="addresssel">
+</block>
+<block name="body">
+    <header>
+    	<if condition="$dtype eq 2">
+    		<a href="javascript:history.go(-1)">
+    	<else/>
+    		<a href="{:U('User/index')}">
+    	</if>
+        <div class="back pull-left"></div></a>
+        {$page_name}
+    </header>
+        
+    <div class="container-fluid marginheader" >
+        <div class="row bgwhite addresslist">
+        	<volist name="address_list" id="vo">
+        	<div class="addressone row" id="class{$vo['receivingid']}" onClick="selectAdd({$vo['receivingid']})">
+            	<div class="col-xs-10">
+                    <h4 class="row">
+                        <div class="col-xs-3">
+                        {$vo['name']}
+                        </div>
+                        <div class="col-xs-3">
+                        <if condition="$vo['sex'] eq 1">男士<else/>女士</if>
+                        </div>
+                        <div class="col-xs-6">
+                        {$vo['phone']}
+                        </div>   
+                    </h4>
+                    
+                    <p class="gray">
+                    	{$vo['address']}
+                    </p>
+                </div>    
+                <div class="col-xs-2 addcontrol">
+                	 
+                	<a href="{:U('User/addressEdit', array('receivingid'=>$vo['receivingid']))}"><img src="__PUBLIC__/Merchant/images/ico_pen.png" class=" center-block"></a>
+                </div>
+                <div class="btndel"><a href="javascript:void(0)" onclick="delSel({$vo['receivingid']})">删除</a></div>
+            </div>
+            </volist>
+       </div> 
+        
+    </div>
+</block> 
+<block name="footer">
+<footer class="addressadd">
+    <div class="row">
+    	<div class="col-xs-12" >
+        	<a href="{:U('User/addressEdit', array('dtype'=>$dtype))}" style="color: #ff4400;"><img src="__PUBLIC__/Merchant/images/ico_addressadd.png" > 新增地址</a>
+        </div>
+    </div>
+</footer>
+<script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+<script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+<script>
+	function delSel(receivingid){
+		var url = "{:U('addressDel')}";
+		$.post(url, {'receivingid':receivingid}, function(data){
+			if (data) {
+				$("#class"+receivingid).remove();
+			}
+		});
+	}
+
+
+	function selectAdd(receivingid){
+		var dtype = {$dtype};
+		if (dtype == 2) {
+			// window.location.href = url;
+			window.location.href = "/Flow/confirm/dtype/3/receivingid/"+receivingid+".html";
+		}
+	}
+</script>
+    <script>
+
+        window.addEventListener('load',function(){
+            var initX;
+            var moveX;
+            var X = 0;
+            var objX = 0;
+
+            window.addEventListener('touchstart',function(event){
+                event.target.click();
+                event.preventDefault();
+                var obj = event.target.parentNode.parentNode;
+
+                if(obj.className == "col-xs-10"){
+                    obj = event.target.parentNode.parentNode.parentNode;
+                }
+                if(obj.className == "addressone row"){
+
+                    initX = event.targetTouches[0].pageX;
+                    objX =(obj.style.WebkitTransform.replace(/translateX\(/g,"").replace(/px\)/g,""))*1;
+                }
+                if( objX == 0){
+                    window.addEventListener('touchmove',function(event) {
+                        event.preventDefault();
+                        var obj = event.target.parentNode.parentNode;
+                        if(obj.className == "col-xs-10"){
+                            obj = event.target.parentNode.parentNode.parentNode;
+                        }
+                        if (obj.className == "addressone row") {
+                            moveX = event.targetTouches[0].pageX;
+                            X = moveX - initX;
+                            if (X > 0) {
+                                obj.style.WebkitTransform = "translateX(" + 0 + "px)";
+                            }
+                            else if (X < 0) {
+                                var l = Math.abs(X);
+                                obj.style.WebkitTransform = "translateX(" + -l + "px)";
+                                if(l>80){
+                                    l=80;
+                                    obj.style.WebkitTransform = "translateX(" + -l + "px)";
+                                }
+                            }
+                        }
+                    });
+                }
+                else if(objX<0){
+                    window.addEventListener('touchmove',function(event) {
+                        event.preventDefault();
+                        var obj = event.target.parentNode.parentNode;
+                        if(obj.className == "col-xs-10"){
+                            obj = event.target.parentNode.parentNode.parentNode;
+                        }
+                        if (obj.className == "addressone row") {
+
+                            moveX = event.targetTouches[0].pageX;
+                            X = moveX - initX;
+                            if (X > 0) {
+                                var r = -80 + Math.abs(X);
+                                obj.style.WebkitTransform = "translateX(" + r + "px)";
+                                if(r>0){
+                                    r=0;
+                                    obj.style.WebkitTransform = "translateX(" + r + "px)";
+                                }
+                            }
+                            else {     //向左滑动
+                                obj.style.WebkitTransform = "translateX(" + -80 + "px)";
+                            }
+                        }
+                    });
+                }
+
+            })
+            window.addEventListener('touchend',function(event){
+                event.preventDefault();
+                var obj = event.target.parentNode.parentNode;
+                if(obj.className == "col-xs-10"){
+                    obj = event.target.parentNode.parentNode.parentNode;
+                }
+                if(obj.className == "addressone row"){
+                    objX =(obj.style.WebkitTransform.replace(/translateX\(/g,"").replace(/px\)/g,""))*1;
+                    if(objX>-40){
+                        obj.style.WebkitTransform = "translateX(" + 0 + "px)";
+                    }else{
+                        obj.style.WebkitTransform = "translateX(" + -80 + "px)";
+                    }
+                }
+            })
+
+        })
+
+    </script>
+</block>

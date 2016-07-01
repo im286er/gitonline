@@ -1,0 +1,89 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="coupon">
+</block>
+<block name="body">
+  	<header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	{$page_name}
+    </header>
+    <div class="container-fluid" >
+    	 
+     	<div class="row couponstep">
+        	<div class="col-xs-4">
+            	<a href="javascript:void(0)"  class="red change-red" gid="hadcoupon">未使用({:count($hadcoupon)})</a>
+            </div>
+            <div class="col-xs-4">
+            	<a href="javascript:void(0)"  class="change-red" gid="pastcoupon">已过期({:count($pastcoupon)})</a>
+            </div>
+            <div class="col-xs-4">
+            	<a href="javascript:void(0)"  class="change-red" gid="unusedcoupon">已使用({:count($unusedcoupon)})</a>
+            </div>
+        </div>
+        <br />
+
+        <div class="hadcoupon">
+        <volist name="hadcoupon" id="vo" empty="暂无优惠券">
+        <div class="row couponone hadcoupon">
+        	<div class="col-xs-4">
+            	<a href="#"><img src="{$vo['vu_img']}" class="img-responsive"></a>
+            </div>
+            <div class="col-xs-8">
+            	<a href="#" class="gray">有效期：<php> echo date('Y-m-d',strtotime($vo[vu_stime]))</php> - <php> echo date('Y-m-d',strtotime($vo[vu_etime]))</php></a>
+            </div>
+        </div>
+        <br />
+        </volist>
+        </div>
+
+        <div class="pastcoupon" style="display: none;">
+        <volist name="pastcoupon" id="vo" empty="暂无优惠券">
+        <div class="pastcoupon">
+            <div class="col-xs-4">
+                <a href="#"><img src="{$vo['vu_img']}" class="img-responsive"></a>
+            </div>
+            <div class="col-xs-8">
+                <a href="#" class="gray">有效期：<php> echo date('Y-m-d',strtotime($vo[vu_stime]))</php> - <php> echo date('Y-m-d',strtotime($vo[vu_etime]))</php></a>
+            </div>
+        </div>
+        <br />
+        </volist>
+        </div>
+
+        <div class="unusedcoupon" style="display: none;">
+        <volist name="unusedcoupon" id="vo" empty="暂无优惠券">
+        <div class="row couponone">
+            <div class="col-xs-4">
+                <a href="#"><img src="{$vo['vu_img']}" class="img-responsive"></a>
+            </div>
+            <div class="col-xs-8">
+                <a href="#" class="gray">有效期：<php> echo date('Y-m-d',strtotime($vo[vu_stime]))</php> - <php> echo date('Y-m-d',strtotime($vo[vu_etime]))</php></a>
+            </div>
+        </div>
+        <br />
+        </volist>
+        </div>
+    </div>
+    <script>
+    $('.change-red').click(function(){
+        var gid = $(this).attr('gid');
+        $('.red').removeClass('red');
+        $(this).addClass('red');
+
+        if (gid == 'unusedcoupon') {
+            $('.unusedcoupon').show();
+            $('.pastcoupon').hide();
+            $('.hadcoupon').hide();
+        }else if (gid == 'pastcoupon') {
+            $('.pastcoupon').show();
+            $('.unusedcoupon').hide();
+            $('.hadcoupon').hide();
+        }else if (gid == 'hadcoupon') {
+            $('.hadcoupon').show();
+            $('.unusedcoupon').hide();
+            $('.pastcoupon').hide();
+        }
+    });
+    </script>
+</block>
+<block name="footer"></block>

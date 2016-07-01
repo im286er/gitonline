@@ -1,0 +1,148 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/yingxiao.css" />
+<style type="text/css">
+body{ font-family:"微软雅黑"; font-size:14px}
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%; margin-bottom:10px}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
+input[type="text"] {
+    font-size: 14px;
+    line-height: 32px;
+    padding-left: 8px;
+	background: #f4f4f4 none repeat scroll 0 0;
+    border: 1px solid #bfbfbf;
+    height: 30px;
+    width: 100px;
+}
+#sdiv{
+	margin-top: 20px;
+}
+</style>
+<div class="wrapper">
+ <h2 class="shops">选择门店：
+	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="?sid={$key}">{$vo}</a></span>
+	</volist>
+</h2>
+<div class="div_content_l">
+			<h4>消费投资</h4>
+			<div class="div_main_l">
+				<div style="width: 100%;">
+				<div class="act_main_l" style="display: block;">
+					<table class="xiaofei_tab_l">
+					<tr>
+							<td>模块状态：</td>
+							<td><input type="radio" name="status" value="1" <if condition="$tz.status eq 1">checked</if>>启用 <input type="radio" name="status" value="0" <if condition="$tz.status neq 1">checked</if>>关闭</td>
+						</tr>
+					<tr style="margin-top: 20px;">
+							<td>投资方式：</td>
+							<td><input type="radio" name="tz_type" onclick="a('1');" value="2" <if condition="$tz.tz_type eq 2">checked</if>>商品 <input type="radio" name="tz_type" onclick="a('2');" value="1" <if condition="$tz.tz_type neq 2">checked</if>>店铺</td>
+						</tr>
+						<tr id="sdiv" <if condition="$tz.tz_type neq 2">style="display:none"</if>>
+							<td>商品选择：</td>
+							<td><select multiple name="tz_goods" id="tz_goods" style="width:280px;height:150px;">
+                        	<volist name="tz_goods" id="vo">
+                            <option value="{$vo.gid}" <php>if(stristr($tz['tz_goods'],$vo['gid'])){ echo "selected"; }</php>>{$vo.gname}</option>
+                           </volist>
+                        </select></td>
+						</tr>
+						<tr style="margin-top: 20px;">
+							<td>消费金额：</td>
+							<td><input type="text" name="money" id="money" value="{$tz.money}">  元</td>
+						</tr>
+						<tr style="margin-top: 20px;">
+							<td>投资返利：</td>
+							<td><input type="text" name="fanli" id="fanli" value="{$tz.fanli}"> %</td>
+							<td><input type="button" value="级别设置" name="jibie"></td>
+						</tr>
+						<tr>
+							<td style="color: #949494;font-size: 12px;text-indent: 80px;">注：默认一级，最高可添加三级</td>
+						</tr>
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">一级返利：</td>
+							<td><input type="text" name="set1" id="set1" value="{$tz.set1}"> %</td>
+						</tr>
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">二级返利：</td>
+							<td><input type="text" name="set2" id="set2" value="{$tz.set2}"> %</td>
+						</tr>
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">三级返利：</td>
+							<td><input type="text" name="set3" id="set3" value="{$tz.set3}"> %</td>
+						</tr>
+						<tr style="margin-top: 20px;">
+							<td>投资期限：</td>
+							<td><input type="text" name="time" id="time" value="{$tz.time}">  月</td>
+						</tr>
+						<tr>
+							<td style="color: #949494;font-size: 12px;text-indent: 80px;">注：投资开始日从购买当日算起</td>
+						</tr>
+						<tr style="margin-top: 50px;">
+							<td><input type="button" value="确定" name="ding_btn_l" id="sub"></td>
+						</tr>
+					</table>	
+				</div>
+
+				</div>
+				
+			</div>
+			</div>
+		</div>
+		<script>
+		$(function(){
+			$("#sub").click(function(){
+				var sid = "{$sid}";
+				var status = $('input:radio[name="status"]:checked').val();
+				var tz_type = $('input:radio[name="tz_type"]:checked').val();
+				var tz_goods = $("#tz_goods").val();
+				var money = $("#money").val();
+				var fanli = $("#fanli").val();
+				var set1 = $("#set1").val();
+				var set2 = $("#set2").val();
+				var set3 = $("#set3").val();
+				var time = $("#time").val();
+				
+				if(sid == ''){
+					alert('请先选择分店');
+					return false;
+				}
+				if(tz_type == 2 && tz_goods == null){
+					alert('商品投资请选择对应活动商品');
+					return false;
+				}
+				if(money == ''){
+					alert('请输入消费金额');
+					return false;
+				}
+				if(fanli == '' || fanli > 100){
+					alert('请输入返利比例,0-100');
+					return false;
+				}
+				if(parseInt(set1) + parseInt(set2) + parseInt(set3) > 100){
+					alert('三级返利比例总和不能超过100%');
+					return false;
+				}
+				if(time == ''){
+					alert('请输入投资期限');
+					return false;
+				}
+				$.post('__ACTION__', {sid:sid,status:status,tz_type:tz_type,tz_goods:tz_goods,money:money,fanli:fanli,set1:set1,set2:set2,set3:set3,time:time}, function(data) {
+					alert(data);
+				})
+			})//操作按钮
+		})
+		function a(type){
+			if(type == 1){
+				$("#sdiv").show();
+			}else{
+				$("#sdiv").hide();
+			}
+			
+		}
+	</script>
+</block>
