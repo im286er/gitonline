@@ -622,9 +622,7 @@ class ManageController extends MerchantController {
 		//if( $this->type != 1 ) E('你无权查看当前页面');
 		$merchant=M('merchant')->where(array('jid'=>$this->jid))->find();
 		$this->assign('merchant',$merchant);
-		//行业列表
-		$vocation = M('vocation')->where(array('v_pid'=>0))->select();
-		$this->assign('vocation',$vocation);
+
 		if( IS_POST ) {
 			$t_sign = I('post.t_sign', '');
 			$result = M('merchant')->where(array('jid'=>$this->jid))->setField('theme',$t_sign);
@@ -642,11 +640,10 @@ class ManageController extends MerchantController {
 		}else{
 			$where = " t_status=1 ";
 		}
+		//分类
+		$t_type  = I('t_type', 'singleProduct');
+		$where  .= " AND t_type = '$t_type'";
 
-		$v_id  = I('v_id',0);
-		if ($v_id != 0) {
-			$where .= " AND t_vid like '%$v_id%' ";
-		}
 		$page   = new \Common\Org\Page(M('Theme')->where($where)->count(), 6);
 		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
 		//功能列表		
@@ -679,6 +676,9 @@ class ManageController extends MerchantController {
 		$this->assign('themes',$themes);
 		$this->assign('func', $func);
 		$this->assign('tmfunc', $tmfunc);
+		$this->assign('theme_c', C('THEME_C'));
+		$this->assign('t_code', I('t_code', 'single'));
+		$this->assign('t_type', $t_type);
 		$this->assign('jid',$this->jid);
 		$this->assign('sid',$sid);
 		$this->display();	
@@ -700,24 +700,23 @@ class ManageController extends MerchantController {
 	public function sysTheme(){
 		$shop = D('auth')->getAuthShops($this->mid);		
 		$sid = I('sid', key($shop) );
+		
+		//查询条件
+		// $t_price = I('t_price',0);
+		// if($t_price == 1){
+		// 	$where = " t_status=1 AND t_price = 0 ";
+		// }elseif($t_price == 2){
+		// 	$where = " t_status=1 AND t_price > 0 ";
+		// }else{
+		// 	$where = " t_status=1 ";
+		// }
+		$v_id  = I('v_id', 'SingleProduct');
+		if ($v_id != '') {
+			$where = " t_type = '$v_id'";
+		}
 		//查询新旧模板
 		$shop_theme = M('shop')->where(array('sid'=>$sid))->getField('theme');
 		$this->assign('shop_theme',$shop_theme);
-		
-		//条件
-		$t_price = I('t_price',0);
-		if($t_price == 1){
-			$where = " t_status=1 AND t_price = 0 ";
-		}elseif($t_price == 2){
-			$where = " t_status=1 AND t_price > 0 ";
-		}else{
-			$where = " t_status=1 ";
-		}
-
-		$v_id  = I('v_id',0);
-		if ($v_id != 0) {
-			$where .= " AND t_vid like '%,$v_id,%' ";
-		}
 		//分页
 		$page   = new \Common\Org\Page(M('Theme')->where($where)->count(), 4);
 		$themes = M('Theme')->where($where)->limit($page->firstRow.','.$page->listRows)->select();
@@ -733,6 +732,8 @@ class ManageController extends MerchantController {
 		$this->assign('v_id', $v_id);
 		$this->assign('sid', $sid);
 		$this->assign('themes',$themes);
+		$this->assign('theme_c', C('THEME_C'));
+		$this->assign('code', I('code', 'singel'));
 		$this->display();
 	}
 

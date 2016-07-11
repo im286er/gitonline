@@ -59,7 +59,7 @@ class UserController extends MerchantController {
 		$op_id  = I('post.op_id');
 		$sid    = I('sid', 0);
 		if(!$op_id)exit('0');
-		$where = array('op_sid'=>$sid);
+		$where = array();
 		$where['op_id']=$op_id;
 		if($action=='reply'){
 			$op_replytxt = I('post.op_replytxt');
@@ -89,16 +89,16 @@ class UserController extends MerchantController {
 
 	//全民返利会员管理
 	public function rebate(){
-		$where = array('s.jid'=>$this->jid);
+		$where = array('flu_sjid'=>$this->jid);
 		
 		$keywords = trim(I('keywords'));
 		
 		if( !empty($keywords) ) {			
-			$where['u.flu_phone'] = array('like', "%{$keywords}%");
+			$where['flu_phone'] = array('like', "%{$keywords}%");
 		}
 		
-		$page = new \Common\Org\Page(M('fl_user')->alias('u')->join('azd_shop_user as s on u.flu_userid=s.uid')->where($where)->count(), 10);
-		$this->assign('userlist', M('fl_user')->alias('u')->join('azd_shop_user as s on u.flu_userid=s.uid')->order('u.flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
+		$page = new \Common\Org\Page(M('fl_user')->where($where)->count(), 10);
+		$this->assign('userlist', M('fl_user')->order('flu_userid desc')->where($where)->limit($page->firstRow.','.$page->listRows)->select());
 		$this->assign('pages', $page->show());
 		$this->assign('type',$this->type);
 		$this->assign('jid',$this->jid);

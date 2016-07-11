@@ -1,0 +1,86 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/guideLayer.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/merchant/yingxiao.css" />
+<style type="text/css">
+body{ font-family:"微软雅黑"; font-size:14px}
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%; margin-bottom:10px}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
+input[type="text"] {
+    font-size: 14px;
+    line-height: 32px;
+    padding-left: 8px;
+	background: #f4f4f4 none repeat scroll 0 0;
+    border: 1px solid #bfbfbf;
+    height: 30px;
+    width: 100px;
+}
+#sdiv{
+	margin-top: 20px;
+}
+</style>
+<div class="wrapper">
+ <h2 class="shops">选择门店：
+	<span class="curr"><a href="javascript:;">所有门店</a></span>
+	
+</h2>
+<div class="div_content_l">
+			<h4>9.9元升级返利</h4>
+			<div class="div_main_l">
+				<div style="width: 100%;">
+				<div class="act_main_l" style="display: block;">
+					<table class="xiaofei_tab_l">
+					<tr>
+							<td>模块状态：</td>
+							<td><input type="radio" name="is_upfl" value="1" <if condition="$merchant.is_upfl eq 1">checked</if>>启用 <input type="radio" name="is_upfl" value="0" <if condition="$merchant.is_upfl neq 1">checked</if>>关闭</td>
+						</tr>
+					
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">一级返利：</td>
+							<td><input type="text" name="set1" id="set1" value="{$merchant.set1}"> %</td>
+						</tr>
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">二级返利：</td>
+							<td><input type="text" name="set2" id="set2" value="{$merchant.set2}"> %</td>
+						</tr>
+						<tr style="margin-top: 10px;">
+							<td style="text-indent: 80px;">三级返利：</td>
+							<td><input type="text" name="set3" id="set3" value="{$merchant.set3}"> %</td>
+						</tr>
+						
+						
+						<tr style="margin-top: 50px;">
+							<td><input type="button" value="确定" name="ding_btn_l" id="sub"></td>
+						</tr>
+					</table>	
+				</div>
+
+				</div>
+				
+			</div>
+			</div>
+		</div>
+		<script>
+		$(function(){
+			$("#sub").click(function(){
+				
+				var is_upfl = $('input:radio[name="is_upfl"]:checked').val();
+				var set1 = $("#set1").val();
+				var set2 = $("#set2").val();
+				var set3 = $("#set3").val();
+							
+				if(parseInt(set1) + parseInt(set2) + parseInt(set3) > 100){
+					alert('三级返利比例总和不能超过100%');
+					return false;
+				}
+				
+				$.post('__ACTION__', {is_upfl:is_upfl,set1:set1,set2:set2,set3:set3}, function(data) {
+					alert(data);
+				})
+			})//操作按钮
+		})
+		
+	</script>
+</block>

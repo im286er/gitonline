@@ -1,0 +1,84 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="update">
+</block>
+<block name="body">
+    <header>
+    	
+    		<a href="{:U('User/index')}">
+    	
+        <div class="back pull-left"></div></a>
+        升级消费商
+    </header>
+        
+    <div class="container-fluid" >
+    	<div class="row updatetop">
+            <a href="" class="back">9.9元轻松升级消费商 返利翻翻翻</a>
+        	<img src="__PUBLIC__/Merchant/images/xfstop.jpg" class="img-responsive center-block" />
+        </div>
+         
+        <div class="row bgwhite">
+        	<h4>升级成为消费商，即可享受以下专属特权</h4>
+            <div class="col-xs-4 text-center">
+            	<img src="__PUBLIC__/Merchant/images/update1.png" class="img-responsive img-circle center-block" >
+                <br />
+                消费返现翻倍
+            </div>
+            <div class="col-xs-4 text-center">
+            	<img src="__PUBLIC__/Merchant/images/update2.png" class="img-responsive img-circle center-block" >
+                <br />
+                扫码邀请好友
+            </div>
+            <div class="col-xs-4 text-center">
+            	<img src="__PUBLIC__/Merchant/images/update3.png" class="img-responsive img-circle center-block" >
+                <br />
+                推荐商户返利
+            </div>
+            
+        </div>
+        <br />
+        <div class="row bgwhite">
+        	<h4>如果你希望：</h4>
+            <div class="col-xs-6 text-center">
+            	<img src="__PUBLIC__/Merchant/images/update_img1.png" class="img-responsive   center-block" >
+               
+            </div>
+            <div class="col-xs-6 text-left gray">
+            	 消费同时 享受返现<br />
+邀请好友 共同得利<br />
+积少成多 消费养老
+            </div>
+             
+            
+        </div>
+        
+        <br />
+        <button type="button" class="btn btn-danger btn-lg btn-block"  data-toggle="modal" data-target="#myModal">申请成为消费商</button>
+         
+    </div>
+    
+   
+    
+    <script>
+    <if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger')">
+		var paytype = 'weixin';
+	<else/>
+		var paytype = 'alipay';
+	</if>
+	 var reqUrl = "{:U('Pay/request_alipay')}";
+	 var weixinUrl = "{:U('/Home/Wechat/dsWxJsPay@www')}";
+		$(".btn-block").click(function(event) {
+			$.post("{:U('creatUpOrder')}", {paytype:paytype}, function(data) {
+				if(data.msg == 'success'){
+					if( paytype == 'weixin'){
+						location.href = weixinUrl + "?o_id=" + data.oid + '&jump=1';
+					}else{
+						location.href = reqUrl + "?o_id=" + data.oid;
+					}
+				}else{
+					alert(data.msg);
+				}
+			})
+		});
+	</script>
+</block>

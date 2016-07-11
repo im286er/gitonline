@@ -255,6 +255,7 @@ class DesignController extends MerchantController {
 			);
 
 			M('Ghome')->where(array('g_sid'=>$sid))->save($opt);
+			$this->assign('dtype', '2');
 		}
 		$category = M('category')->where(array('sid'=>$sid, 'jid'=>$this->jid))->select();
 		$info	  = M('Ghome')->where(array('g_sid'=>$sid))->find();

@@ -54,7 +54,7 @@ class CouponController extends MobileController {
 		file_exists($path.'VoucherModule.php') && $VoucherModule=unserialize(file_get_contents($path.'VoucherModule.php'));
 		$this->assign('page_name', $VoucherModule ? $VoucherModule['Name'] : '优惠券');
 		
-		$page_url = I("from_index") == 1 ? U('Index/index',array('jid'=>$this->jid)) : U('Coupon/index',array('jid'=>$this->jid));
+		$page_url =  U('Index/new2Coupon',array('jid'=>$this->jid, 'sid'=>$this->sid,'cid'=>$coupon_info['vu_cid']));
 		$this->assign('page_url',$page_url);
 		
 		$this->assign('coupon_info', $coupon_info);

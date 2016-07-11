@@ -23,12 +23,25 @@
                         <th>模板标题</th>
                         <td><input type="text" autocomplete="off" placeholder="请输入模板标题" name="info[t_name]" value="{$themeInfo.t_name}" class="user_input" style="width:283px;" /></td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th>适合行业</th>
                         <td><select name="t_vid[]" multiple="multiple"> 
                         	<option value="0" <eq name="all" value="1"> selected="selected"</eq>>所有行业</option> 
                         	{$vocationList} 
                         </select> </td>
+                    </tr> -->
+                    <tr>
+                        <th>模板分类</th>
+                        <td>
+                            <select name="info[t_type]" multiple="multiple">
+                                <volist name="theme_c" id="vo">
+                                    <option value="{$vo.code}">{$vo['name']}</option>
+                                    <volist name="vo.next" id="va">
+                                        <option value="{$va.id}" <if condition="$va['id'] eq $themeInfo['t_type']">selected="selected"</if>>&nbsp;&nbsp;&nbsp;{$va['name']}</option>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>模板图片</th>

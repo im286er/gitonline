@@ -39,7 +39,7 @@
 <header style="float: left; width: 100%; text-align: left; vertical-align: middle;">
     <a href="{:U('Index/index')}"><div class="back pull-left"></div></a>
     <input class="search" type="search" name="keyword" id="keyword"  onkeydown="entersearch()" placeholder="请输入商家或商品名称">
-    <span class="glyphicon glyphicon-search" style="position: absolute; left: 50px; top: 14px; margin-left: 15px; color: #969696"></span>
+    <img src="__PUBLIC__/Merchant/images/ico_search_b.png" style="position: absolute;left: 50px; margin-left: 12px; top:14px; width: 18px;">
 </header>
 
 <div class="hot-list">
@@ -51,10 +51,11 @@
     </ul>
 </div>
 
-<div class="container-fluid goods-list" style="display: none;">
-    <div class="row ct-xptj" >
+<div class=" goods-list" style="display: none; margin-top: 45px; ">
+    <div class="ct-xptj" >
         <volist name="goods_list" id="vo">
-            <div class="col-xs-4">
+            <div class="ct-xptjli">
+            <div class="libody">
                 <a href="{:U('Choose/detail',array('gid'=>$vo['gid'], 'sid'=>$sid, 'jid'=>$jid))}"><img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg" ></a>
                 <div class="ct-proinfo">
                     <h5>{$vo.gname}</h5>
@@ -68,6 +69,7 @@
                     <label id="numLabel1" class="numLabel gnum_{$vo.gid}" style="display: none;"></label>
 
                 </div>
+            </div>
             </div>
         </volist>
     </div>
@@ -94,10 +96,12 @@
     // $(".searchmain li").bind("touchend",function(){
     //     $(this).siblings().removeClass("licur");
     //     $(this).addClass("licur");
+    //     $(this).addClass("licur");
     //     var text = $(this).text();
     //     $('.search').val(text);
     // });
 </script>
+
 <script>
     $(document).ready(function(){
         $('.search').val('');

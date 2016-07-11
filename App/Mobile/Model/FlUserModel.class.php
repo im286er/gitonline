@@ -9,14 +9,16 @@ class FlUserModel extends Model {
 
     );
 	
-	public function login($username=null,$password=null){
-		$user = $this->where("flu_phone=%s and flu_password='%s' and flu_status='%s'",array($username,$this->passwordmd5($password),0))->find();
+	public function login($username=null,$password=null,$jid){
+		$user = $this->where(array('flu_username'=>$username,'flu_sjid'=>$jid,'flu_status'=>0))->find();
 		if(!$user){
-			return array('errcode'=>80001,'errmsg'=>'用户名或密码错误！');
-		}else{
-			$this->where(array('flu_userid'=>$user['flu_userid']))->setField(array('flu_lastip'=>get_client_ip(),'flu_lasttime'=>date('Y-m-d H:i:s')));
-			return $user;
+			return array('errcode'=>80001,'errmsg'=>'用户未注册');
 		}
+		if($this->passwordmd5($password) != $user['flu_password']){
+			return array('errcode'=>80001,'errmsg'=>'用户名或密码错误！');
+		}
+		$this->where(array('flu_userid'=>$user['flu_userid']))->setField(array('flu_lastip'=>get_client_ip(),'flu_lasttime'=>date('Y-m-d H:i:s')));
+		return $user;
 	}
 
 	public function is_mobile($mobile){
@@ -30,7 +32,7 @@ class FlUserModel extends Model {
 
 	/***Md5密码加密***/
 	public function register($username,$password,$jid,$ismobile=1){
-		$user = $this->where(array('flu_username'=>$username))->find();
+		$user = $this->where(array('flu_username'=>$username,'flu_sjid'=>$jid))->find();
 		if($user)return array('errcode'=>80103,'errmsg'=>'该用户名已经被注册！');
 		!$ismobile or $this->is_mobile($username);
 		$data = array();

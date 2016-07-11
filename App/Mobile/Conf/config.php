@@ -78,4 +78,19 @@ return array(
 	),
 
 
+	//评价标签
+	'EVALUATE_C'		=> array(
+		array('id'=>'1', 'name'=>'服务态度非常好'),
+		array('id'=>'2', 'name'=>'味道非常好'),
+		array('id'=>'3', 'name'=>'菜量足'),
+		array('id'=>'4', 'name'=>'上菜快'),
+		array('id'=>'5', 'name'=>'环境不错'),
+		array('id'=>'6', 'name'=>'性价比高'),
+		array('id'=>'7', 'name'=>'服务态度一般'),
+		array('id'=>'8', 'name'=>'味道一般'),
+		array('id'=>'9', 'name'=>'菜量一般'),
+	),
+
+
+
 );

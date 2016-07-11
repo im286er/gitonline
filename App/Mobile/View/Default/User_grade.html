@@ -1,0 +1,72 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="center">
+</block>
+<block name="body">
+  
+     <header>
+    	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+    	分销商管理
+    </header>
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+<div class="center">
+    <ul class="distributionul " >
+    <volist name="user_list" id="vo" >
+    <li>
+    <a href="{:U('gradeInfo',array('fuid'=>$vo['flu_userid']))}">
+        <span class="distribution_top">
+        <empty name="vo.flu_avatar">
+           <img class="distribution_photo" src="__PUBLIC__/Mobile/default/img/avatar.png"> 
+                            <else />
+                           <img class="distribution_photo" src="{$vo.flu_avatar}">
+                        </empty>
+                     
+            <div class="distribution_mid">
+                <i style="font-size: 1.8rem; line-height: 2rem; margin-bottom: 0.5rem;">{$vo.flu_nickname}</i>
+                <i style="color: #878787; font-size: 1.4rem; line-height: 2rem;"><span class="glyphicon glyphicon-phone" style="color: #ff4400;"></span>{:substr_replace($vo['flu_phone'],'***',3,4)}</i>
+            </div>
+            <div class="goright"><img src="__PUBLIC__/Merchant/images/goright.jpg"></div>
+            <div class="distribution_right">
+                <i style="color: #878787; font-size: 1.8rem; line-height: 2rem; margin-bottom: 0.5rem;"><span class="glyphicon glyphicon-time"></span>&nbsp;<php>echo date("Y/m/d",strtotime($vo['flu_regtime']));</php></i>
+                <i style="font-size: 1.4rem; line-height: 2rem;color: #000">上级分销：<em class="from">{$vo.pnickname}</em></i>
+            </div>
+        </span>
+        <span class="distribution_bottom">
+            <div>
+                <i style="color: #ff9900;"><php>echo $vo['total'] > 0 ? $vo['total'] : '0.00' </php></i>
+                <em>消费金额</em>
+            </div>
+            <div>
+                <i style="color: #ff5f3e;"><php>echo $vo['fanli'] > 0 ? $vo['fanli'] : '0.00' </php></i>
+                <em>分销返利</em>
+            </div>
+        </span>
+        </a>
+    </li>
+    </volist>
+</ul>
+</div>     
+</block>
+<block name="footer">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</block>
+<script type="text/javascript">
+    function fontAuto(){
+        var winWidth=document.documentElement.clientWidth;/*可视窗口宽度*/
+        if(winWidth<=440)
+        {
+            var w=winWidth/440*62.5;
+            if(w>=50){
+                document.documentElement.style.fontSize=winWidth/440*62.5+"%";
+            }
+        }
+    }
+    fontAuto();
+    window.onresize=fontAuto;
+</script>

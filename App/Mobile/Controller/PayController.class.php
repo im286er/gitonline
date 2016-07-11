@@ -43,14 +43,23 @@ class PayController extends Controller {
 		}else{
 			D('Order')->where(array('o_id'=>$o_id))->setField('o_type','2');
 		}
-		$pay->notify_url = U('Pay/notify@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid'],'puid'=>I('get.mid')),false);
-		$pay->call_back_url = U('Pay/call_back@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid'],'puid'=>I('get.mid')),false);
-		$pay->return_url = $pay_type=='alipaypc'?$pay->call_back_url:U('Pay/merchant@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid'],'sid'=>$order_info['o_sid']),false);
+		if($pay_type == 'alipaypc'){
+			$pay->notify_url = U('Pay/notify@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid']),false);
+			$pay->return_url = U('Pay/call_back@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid']),false);
+		}else{
+			$pay->notify_url    = U('Pay/notify@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid']),false);
+			$pay->call_back_url = U('Pay/call_back@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid']),false);
+			$pay->merchant_url  = U('Pay/merchant@yd',array('type'=>$pay_type,'jid'=>$order_info['o_jid'],'sid'=>$order_info['o_sid']),false);
+		}
 		//print_r($pay);exit;
 		/** 结束**/
 		$mnickname = M('shop')->where(array('sid'=>$order_info['o_sid']))->getField('sname');
 		$gtype = D('Order')->runGtype();
-		$order_info['o_title'] = '在线下单'.'-'.$mnickname;
+		if($order_info['o_gtype'] == 'upgrade'){
+			$order_info['o_title'] = '升级消费商'.'-'.$mnickname;
+		}else{
+			$order_info['o_title'] = '在线下单'.'-'.$mnickname;
+		}
 		//print_r($pay);exit;
 		$pay->buildRequest($order_info);
 	}
@@ -170,7 +179,7 @@ class PayController extends Controller {
 			$logdata =array();
 			$logdata['oid'] = $order_info['o_id'];
 			$logdata['jid'] = $order_info['o_jid'];
-			$logdata['uid'] = I('get.puid') > 0 ? intval(I('get.puid')) : $order_info['o_uid'];
+			$logdata['uid'] = $order_info['o_uid'];
 			$logdata['gtype'] = $order_info['o_gtype'];
 			$logdata['pay_price'] = $order_info['o_price'];
 			$logdata['pay_time'] = date('Y-m-d H:i:s');
@@ -182,6 +191,10 @@ class PayController extends Controller {
 			if($result && $order_info['o_type']==2){//如果支付款是汇入系统账户，更新商家的账户余额
 				$merchant = M('merchant')->where(array('jid'=>$order_info['o_jid']))->find();
 				M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
+			}
+			if($result && $order_info['o_gtype'] == 'upgrade'){
+				M('fl_user')->where(array('flu_userid'=>$order_info['o_uid']))->save(array('flu_usertype'=>'1'));//升级消费商订单
+				D('Common/Order')->doUp($order_info['o_id']);
 			}
 			//判断是否发快递
 			if (in_array($order_info['o_jid'], array_keys(C('EXPRESS_JID')))){

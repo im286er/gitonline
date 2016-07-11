@@ -1,23 +1,51 @@
 <extend name="New2:common"/>
 <block name="header"></block>
+<!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+      
+    <link href="__PUBLIC__/Merchant/images/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/images/awesome-bootstrap-checkbox.css" rel="stylesheet">
 <block name="body">
     <header >
-        <a href="javascript:history.go(-1);"><div class="back pull-left"></div></a>
+        <a href="{:U('Index/index')}"><div class="back pull-left"></div></a>
         {$cname}
     </header>
+    <div class="coupon">
     <div class="container-fluid" >
-        <div class="row ct-promotion">
-        	<!-- <h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Coupon/index', array('jid'=>$jid))}">更多</a></small></h3> -->
-            <volist name="coupon_list" id="vo" >
-                <div class="col-xs-4">
-                    <a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}"><img src="{$vo.vu_img}" class="img-responsive center-block"></a>
-                </div>
-            </volist>
+    	<php>
+    	$hehe = array(
+    		array('',1),
+    		array('couponone2',2),
+    		array('couponone3',3),
+    		array('couponone4',4),
+    	);
+    	
+    	</php>
+    	<volist name="coupon_list" id="vo" >
+        <br/>
+        <div class="row couponone <php>$ke = rand(0,3); echo $hehe[$ke][0]</php>" >
+        	<div style="float: left; width: 120px; height: 120px; position: relative; ">
+            	<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}" >
+                    <img src="__PUBLIC__/Merchant/images/coupon<php>echo $hehe[$ke][1]</php>.jpg" class="img-responsive">
+                    <span class="coupontext">
+                        <b>{:intval($vo['vu_price'])}<font style="font-size: 1.9rem;">元</font></b>
+                        <i>满{$vo.vu_money}使用</i>
+                        <em>（点击领取）</em>
+                    </span>
+                </a>
+            </div>
+            <div class="coupononebody" >
+            	<a href="{:U('Mobile/Coupon/info', array('jid'=>$jid,'vu_id'=>$vo[vu_id],'from_index'=>1))}" class="gray">
+                    <i style="height: 50px;">店名：<volist name="shop_list" id="va"><eq name="vo.vu_sid" value="$va.sid">{$va['sname']}</eq></volist></i>
+                    <em style="height: 60px;">有效期：<php>echo date('Y-m-d',strtotime($vo[vu_stime]))</php> - <php>echo date('Y-m-d',strtotime($vo[vu_etime]))</php></em>
+                </a>
+            </div>
         </div>
-        
-        
-        <div class="nomore text-center">
-        	没有更多的了
-        </div>
+        </volist>
+       
     </div>
+    </div>
+
 </block>

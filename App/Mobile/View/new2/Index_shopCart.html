@@ -51,15 +51,15 @@
 
                     </label>
                 </div>
-                <div class="col-xs-3" style="padding:0px;"><img src="{$vo.gimg}" class="img-responsive"></div>
+                <div class="col-xs-2" style="padding:0px;"><img src="{$vo.gimg}" class="img-responsive"></div>
                 <div class="col-xs-3" style="padding:0px"> 
                     <span>{:msubstr($vo['gname'],0,6)}</span>
                 </div>
-                <div class="col-xs-1 " style="padding:0px"><span class="orange2">&yen;{$vo.gprice}</span></div>
-                <div class="col-xs-3"  >
-                    <div class="pull-left" id="jian1" style="width:33%"><img src="__PUBLIC__/Merchant/images/jie.jpg" width="20" class="btn_left jianBtn" gid="{$vo.gid}"></div>
-                    <div class="pull-left num gnum_{$vo.gid} numLabel" style="width:33%" id="numLabel1">{$vo.number}</div>
-                    <div class="pull-right" id="jia1" style="width:33%"><img src="__PUBLIC__/Merchant/images/jia.jpg" width="20" class="addBtn btn_right" gid="{$vo.gid}"></div>
+                <div class="col-xs-2" style="padding:0px"><span class="orange2">&yen;{$vo.gprice}</span></div>
+                <div class="col-xs-3" style="padding-right: 5px; padding-left: 10px;" >
+                    <div class="pull-left" id="jian1" style="width:22%"><img src="__PUBLIC__/Merchant/images/jie.jpg" width="20" class="btn_left jianBtn" gid="{$vo.gid}"></div>
+                    <div class="pull-left num gnum_{$vo.gid} numLabel" style="width:56%;text-align: center;" id="numLabel1">{$vo.number}</div>
+                    <div class="pull-right" id="jia1" style="width:22%;"><img src="__PUBLIC__/Merchant/images/jia.jpg" width="20" class="addBtn btn_right" gid="{$vo.gid}"></div>
                 </div>
             </div> 
         </volist>
@@ -93,7 +93,7 @@
     <footer class="goodfooter confirm-to" id="cartfooter">
         <div class="row">
              <div class="col-xs-8 carttotalmoney" style="margin-right: -10px;">合计&yen;<i class="cartPrice"></i></div>
-             <a href="<empty name="mid">{:U('User/login',array('backurl'=>url_param_encrypt(U('Index/shopCart'),'E'),'returnurl'=>url_param_encrypt(U('Flow/confirm'),'E')))}<else />{:U('Flow/confirm')}</empty>"><div class="col-xs-4 cartcheckout">去结算</div></a>
+             <a href="<empty name="mid">{:U('User/login',array('backurl'=>url_param_encrypt(U('Index/index'),'E'),'returnurl'=>url_param_encrypt(U('Flow/confirm'),'E')))}<else />{:U('Flow/confirm')}</empty>"><div class="col-xs-4 cartcheckout">去结算</div></a>
         </div>
     </footer>
     </empty>
@@ -145,7 +145,7 @@
             $("[name='checkbox']").attr("checked",this.checked);
         });
 
-        //删除全部
+        //删除
         $('#delGoods').click(function(){
             var float  = $('#checkbox7').is(':checked');         
             //删除全部

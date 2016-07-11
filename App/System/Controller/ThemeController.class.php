@@ -32,22 +32,24 @@ class ThemeController extends ManagerController {
     public function themeAdd() {
         if( IS_POST ){
 			array_walk($_POST['info'], function(&$value, $key) { $value=htmlentities($value, ENT_NOQUOTES, "utf-8"); });
-			$_POST['info']['t_vid'] = in_array(0, $_POST['t_vid']) ? ",0," : ','.implode(',', $_POST['t_vid']).',';	
+			// $_POST['info']['t_vid'] = in_array(0, $_POST['t_vid']) ? ",0," : ','.implode(',', $_POST['t_vid']).',';	
 			
             if( M('theme')->add($_POST['info']) ) {
                 $this->display('Jump:success');
             } else { $this->display('Jump:error'); };
         } else {
-			$vocationList = F('VocationList');
-            if( !is_array($vocationlist) || empty($vocationList) ) B('\Common\Behavior\CreateVocation', '', $vocationList);
+			// $vocationList = F('VocationList');
+   //          if( !is_array($vocationlist) || empty($vocationList) ) B('\Common\Behavior\CreateVocation', '', $vocationList);
             
-            foreach($vocationList as $vid=>$vocation) {
-				$vocation['pid'] = $vocation['v_pid'];
-                $rulesListArray[$vid] = $vocation; 
-            }
-            $str = "<option value=\$v_id \$selected>\$spacer \$v_title</option>"; 
-            $this->assign('vocationList', \Common\Org\Tree::ItreeInitialize()->initialize($rulesListArray)->treeRule(0, $str));
-            
+   //          foreach($vocationList as $vid=>$vocation) {
+			// 	$vocation['pid'] = $vocation['v_pid'];
+   //              $rulesListArray[$vid] = $vocation; 
+   //          }
+   //          $str = "<option value=\$v_id \$selected>\$spacer \$v_title</option>"; 
+   //          $this->assign('vocationList', \Common\Org\Tree::ItreeInitialize()->initialize($rulesListArray)->treeRule(0, $str));
+        	$theme_c = C('THEME_C');
+
+			$this->assign('theme_c', $theme_c);            
 			$this->display();
         }
     }
@@ -82,6 +84,9 @@ class ThemeController extends ManagerController {
             $str = "<option value=\$v_id \$selected>\$spacer \$v_title</option>"; 
             $this->assign('vocationList', \Common\Org\Tree::ItreeInitialize()->initialize($rulesListArray)->treeRule(0, $str));
             $this->assign('themeInfo', $themeInfo);
+            $theme_c = C('THEME_C');
+
+			$this->assign('theme_c', $theme_c);    
             $this->display();   
         }
     }

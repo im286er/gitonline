@@ -29,7 +29,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 					<td>{$v.tphone}</td>
 					<td><if condition="$v.mstatus eq 1">正常<else />禁止</if></td>
 					<td>
-					<a href="edit/tmid/{$v.tmid}.html">编辑</a>
+					<a href="{:U('Account/edit',array('tmid'=>$v['tmid']))}">编辑</a>
 					<if condition="$v.mstatus eq 1"><a href="javascript:;" onclick="jinyong({$v.tmid},0)">禁用</a><else /><a href="javascript:;" onclick="jinyong({$v.tmid},1)">启用</a></if>
 					</td>
 					</tr>

@@ -21,7 +21,7 @@
                 </empty>
                 </small></a>
             </li>
-            <li class="list-group-item "><a href="#">用户名<small class="gray" >{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</small></a></li>
+            <li class="list-group-item "><a href="{:U('editAccount')}">昵称<small class="gray" >{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</small></a></li>
             <li class="list-group-item "><a href="#" data-toggle="modal" data-target="#myModal">我的二维码<small class="gray" ><span class="glyphicon glyphicon-qrcode"></span></small></a>
         </ul> 
         
@@ -37,7 +37,7 @@
       <a href="{:U('logout')}"><button type="button" class="btn btn-danger btn-lg btn-block"  >退出登陆</button></a>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-         <div class="modal-dialog" role="document">
+         <div class="modal-dialog" role="document" style="margin-top: 55px;">
              <div class="modal-content">
                  <div class="modal-header"  style="border:0;">
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

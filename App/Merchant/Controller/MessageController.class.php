@@ -31,7 +31,9 @@ class MessageController extends MerchantController {
 				}
 
 				if($user_str2){
-					sendmsg($user_str2, $data['pcontent']);
+					$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+					$foottxt  = '['.$merchant['mabbreviation'].']';
+					sendmsg($user_str2, $data['pcontent'],$foottxt);
 				}
 				$this->success('推送成功', U('/Message/listmsg', '', true));
 			} else { $this->error('推送失败'); }			

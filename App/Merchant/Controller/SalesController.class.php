@@ -28,7 +28,7 @@ class SalesController extends MerchantController {
 			}
 		}
 		
-		//$where['o_gtype'] = 'Choose';//订单类型 
+		$where['o_gtype'] = 'Choose';//订单类型 
 		
 		$shops = D('auth')->getAuthShops($this->mid);
 		
@@ -250,52 +250,118 @@ class SalesController extends MerchantController {
     
 	//我的预定
 	public function myreserve(){
-		$where =  $userids = array();
-		$where['o_gtype'] = 'Seat';
-
-		if( I('get.o_id') != '' ) {
+		$where = $userids = array();
+		!$_GET['dstatus'] && $_GET['dstatus']=0;
+		
+		//如果是品牌登录，则显示所有门店，如果是店长登录，只显示自己的门店订单
+		$sid = I('sid',0);
+		if($this->role == 1){
+			$sid > 0 ? $where['o_sid']=$sid : $where['o_jid']=$this->jid;
+		}else{
+			$where['o_sid']=$sid;
+		}
+			
+		if($this->role != 1 && $sid > 0){
+			$sinfo = M('shop')->where(array('sid'=>$sid))->find();
+			if($this->shift == 2){
+				if($sinfo['bb_stime'] != '' && $sinfo['bb_etime'] != ''){
+					$where['o_dstime'] = array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['bb_stime'].' and '.$sinfo['bb_etime']);
+				}
+			}elseif($this->shift == 3){
+				if($sinfo['wb_stime'] != '' && $sinfo['wb_etime'] != ''){
+					$where['o_dstime'] = array('exp'," and DATE_FORMAT(o_dstime,'%H.%i') between ".$sinfo['wb_stime'].' and '.$sinfo['wb_etime']);
+				}
+			}
+		}
+		
+		$where['o_gtype'] = 'Seat';//订单类型
+		
+		$shops = D('auth')->getAuthShops($this->mid);
+		
+		//搜索
+		if( I('get.o_id') != '' )
+		{
 			$where['o_id'] = array('like', '%'.I('get.o_id').'%');
 		}
-		if( I('get.o_dstatus') != '' ) {
+		if( I('get.o_dstatus') != '' )
+		{
 			$where['o_dstatus'] = I('get.o_dstatus');
 		}
-		if( I('get.o_pstatus') != '' ) {
+		if( I('get.o_pstatus') != '' )
+		{
 			$where['o_pstatus'] = I('get.o_pstatus');
 		}
-
+		if( I('get.o_seat') != '' )
+		{
+			$where['o_seat'] = I('get.o_seat');
+		}
+		
 		if( I('get.statime', '') && I('get.statime', '') ) {
-			$where['o_dstime'] = array(array('egt', date('Y-m-d 00:00:00', strtotime(I('get.statime')))), array('elt', date('Y-m-d 23:59:59', strtotime(I('get.endtime')))), 'and');          					
+			$where['o_dstime'] = array(array('egt', date('Y-m-d 00:00:00', strtotime(I('get.statime')))), array('elt', date('Y-m-d 23:59:59', strtotime(I('get.endtime')))), 'and');
 		} elseif( I('get.statime', '') ) {
-			$where['o_dstime'] = array('egt', date('Y-m-d 00:00:00', strtotime(I('get.statime'))));	
+			$where['o_dstime'] = array('egt', date('Y-m-d 00:00:00', strtotime(I('get.statime'))));
 		} elseif( I('get.endtime', '') ) {
-			$where['o_dstime'] = array('elt', date('Y-m-d 23:59:59', strtotime(I('get.endtime'))));    	
+			$where['o_dstime'] = array('elt', date('Y-m-d 23:59:59', strtotime(I('get.endtime'))));
 		}
-
-
-		$this->type == 1 ? $where['o_jid']=$this->jid : $where['o_sid']=$this->tsid;
-	    $page = new \Common\Org\Page(M('Order')->where($where)->count(), 6); 
+		
+		
+		//订单状态选择
+		if( I('get.dstatus', 0, 'intval') != 0 )
+		{
+			$where['o_dstatus'] = I('get.dstatus', 0, 'intval');
+		}
+		
+		$page = new \Common\Org\Page(M('Order')->where($where)->count(), 2);
 		$datalist = M('Order')->where($where)->order('o_dstime desc')->limit($page->firstRow.','.$page->listRows)->select();
-		if(is_array($datalist) && !empty($datalist) ) {
+		if( is_array($datalist) && !empty($datalist) ) {
 			foreach( $datalist as $_key=>$_value ) {
-				if($_value['o_table'])$ogoods = $datalist[$_key]['ogoods'] = M($_value['o_table'])->where(array('sp_oid'=>$_value['o_id']))->order('sp_id')->select();
-				$datalist[$_key]['sp_date'] = $ogoods['0']['sp_date'];
-				$datalist[$_key]['sp_number'] = $ogoods['0']['sp_number'];
+				if($_value['o_table'])
+					$datalist[$_key]['ogoods'] = M($_value['o_table'])->where(array('sp_oid'=>$_value['o_id'],'sp_status'=>1))->order('sp_id')->select();
 				$datalist[$_key]['voucher'] = M('VoucherOrder')->where('o_id='.$_value['o_id'])->find();
-				$goods = array_column($ogoods,'sp_name','sp_gid');
-				$datalist[$_key]['goodsname'] =  implode("、",$goods);
-				$userids[] = $_value['o_uid'];
-			}	
+				//$userids[] = $_value['o_uid'];
+			}
 		}
-		$shops = M('shop')->where(array('jid'=>$this->jid))->getField('sid,sname');
-		if($userids)$users = M('user')->where(array('u_id'=>array('in',$userids)))->getField('u_id,u_name,u_ename,u_phone');
-		$this->assign('users', $users);
+		
+		
+		//支付类型
+		$order_type = array(
+				0=>'<span style="color:#339900;">线下支付到商家</span>',
+				1=>'<span style="color:#ff9900;">线上支付到商家</span>',
+				2=>'<span style="color:#000000;">线上支付到平台</span>'
+		);
+		$this->assign('order_type', $order_type);
+		
+		//支付状态
+		$order_pstatus = array(
+				0=>'<span style="color:red;">未支付</span>',
+				1=>'<span style="color:#339900;">已支付</span>',
+				2=>'<span style="color:#ff9900;">已退款</span>',
+				3=>'<span style="color:red;"><b>待退款</b></span>',
+		);
+		$this->assign('order_pstatus', $order_pstatus);
+		
+		//处理状态
+		$order_dstatus = array(
+				1=>'<span style="color:red;">待处理</span>',
+				3=>'<span style="color:#339900;">待完成</span>',
+				4=>'<span style="color:#ff9900;">已完成</span>',
+				5=>'<span style="color:#ff9900;">已关闭</span>'
+		);
+		$this->assign('order_dstatus', $order_dstatus);
+		
+		$o_seat = M('table')->where(array('sid'=>$sid))->select();
+		$this->assign('o_seat',$o_seat);
+		$this->assign('sid',$sid);
+		
+		$this->assign('countOrder', $this->countOrder2($sid));
+		//$this->assign('users', $users);
 		$this->assign('shops', $shops);
-        $this->assign('pages', $page->show());
-		$this->assign('datalist', $datalist);
-		$this->assign('odstatus', $this->odstatus(2));
+		$this->assign('pages', $page->show());
+		$this->assign('odstatus', $this->odstatus(1));
 		$this->assign('oostatus', $this->oostatus());
+		$this->assign('datalist', $datalist);
 		$this->assign('type', $this->type);
-    	$this->display();
+		$this->display();
     }
 
 	public function oostatus(){
@@ -621,7 +687,7 @@ class SalesController extends MerchantController {
 			$_POST['gvrebate'] = $_POST['gdprice'] > 0 ? $_POST['gvrebate']/$_POST['gdprice']*100 : $_POST['gvrebate']/$_POST['goprice']*100;
 			$_POST['isboutique'] = isset($_POST['isboutique']) && $_POST['isboutique']==1 ? '1' : '0';
 			
-			if(empty($_POST['gstock'])){
+			if($_POST['gstock'] === ''){
 				$_POST['gstock'] = -1;
 			}
 			
@@ -698,7 +764,7 @@ class SalesController extends MerchantController {
 			//$_POST['gvrebate'] = $_POST['gdprice'] > 0 ? $_POST['gvrebate']/$_POST['gdprice']*100 : $_POST['gvrebate']/$_POST['goprice']*100;
 			$_POST['isboutique'] = isset($_POST['isboutique']) && $_POST['isboutique']==1 ? '1' : '0'; 
 			
-			if(empty($_POST['gstock'])){
+			if($_POST['gstock'] === ''){
 				$_POST['gstock'] = -1;
 			}
 			if(is_array(I('post.printid'))){
@@ -1441,7 +1507,9 @@ class SalesController extends MerchantController {
 		$user_phone = M("order")->where(array("o_id"=>$orderid))->getField("o_phone");
 		if( !$user_phone ) $user_phone = $userInfo['flu_phone'];
 		if( $user_phone ) {
-			sendmsg( $user_phone,  $content );
+			$merchant = M('merchant')->where(array('jid'=>$jid))->find();
+			$foottxt  = '['.$merchant['mabbreviation'].']';
+			sendmsg( $user_phone,  $content , $foottxt);
 		}
 				
 		$sid = M('order')->where(array('o_id'=>$orderid))->getField('o_sid');
@@ -1492,7 +1560,7 @@ class SalesController extends MerchantController {
 		
 		$corder = I('post.corder');
 		$r = array(
-			"new_order" => $orderCount-$corder,
+			"new_order" => abs($orderCount-$corder),
 			"close_order"     => M('order')->where(array_merge($where, array('o_close'=>1,'o_gtype'=>'Choose') ))->count()
 		);
 		die(json_encode($r));

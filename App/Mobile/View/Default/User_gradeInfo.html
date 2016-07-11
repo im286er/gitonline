@@ -1,0 +1,68 @@
+<extend name="New2:common"/>
+<block name="header">
+    <body class="center">
+</block>
+<block name="body">
+  
+     <header>
+    	<a href="{:U('grade')}"><div class="back pull-left"></div></a>
+    	分销商详情
+    </header>
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+<div class="center">
+    <div class="distributionbody">
+    <span style="color: #878787; line-height: 4.5rem;">累计消费</span>
+    <span style="line-height: 5.5rem; font-size: 3rem;">+<php>echo $fuser['total'] > 0 ? $fuser['total'] : '0.00' </php></span>
+    <span style="height: 2.8rem; line-height: 3rem; font-size: 1.4rem; color: #ff4400"><i style="color:#a0a0a0; ">获利</i>：<php>echo $fuser['fanli'] > 0 ? $fuser['fanli'] : '0.00' </php></span>
+</div>
+<div style="float: left; background: #fff; width: 100%; padding: 2rem 1.5rem; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; ">
+    <empty name="fuser.flu_avatar">
+      <img style="width: 4rem; border-radius: 50%; float: left;" src="__PUBLIC__/Mobile/default/img/avatar.png"> 
+                            <else />
+                           <img style="width: 4rem; border-radius: 50%; float: left;" src="{$fuser.flu_avatar}">
+                        </empty>
+    <div style="margin-left: 1.8rem;float:left; width: 15rem; line-height: 4rem;">{$fuser.flu_nickname}</div>
+    <img src="__PUBLIC__/Merchant/images/goright.jpg" style="width: 1rem; float: right;">
+</div>
+<ul class="distributionmain">
+<volist name="fl_list" id="vo" >
+ <li>
+        <i><php>echo date("Y/m/d",strtotime($vo['time']));</php>:</i>
+        <span>
+           <php>if($vo['type']==0){ echo "订单".$vo['oid']."消费";}else{ echo "注册分销会员消费";}</php>
+            <em>{$vo.oprice}</em>
+            元
+        </span>
+        <span style="margin-left: 20%;">
+            获利
+            <em>{$vo.money}</em>
+            元
+        </span>
+    </li>
+</volist>
+</ul>
+</div>     
+</block>
+<block name="footer">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</block>
+<script type="text/javascript">
+    function fontAuto(){
+        var winWidth=document.documentElement.clientWidth;/*可视窗口宽度*/
+        if(winWidth<=440)
+        {
+            var w=winWidth/440*62.5;
+            if(w>=50){
+                document.documentElement.style.fontSize=winWidth/440*62.5+"%";
+            }
+        }
+    }
+    fontAuto();
+    window.onresize=fontAuto;
+</script>

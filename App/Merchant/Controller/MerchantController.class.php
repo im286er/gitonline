@@ -97,11 +97,13 @@ class MerchantController extends ManagerController {
 			$this->redirect('Shop/addShop', array('guide'=>1));
 		}*/
 		
+		
+		$tt = D('Auth')->getUserMenu($this->mid);
+		$t0 = array_keys($tt);
 		$tm = I('menucode');
 		$menucode = empty($tm) ? session('menucode') : $tm;
-		$menucode = empty($menucode) ? 'shop' : $menucode;
+		$menucode = empty($menucode) ? $t0[0] : $menucode;
 		session('menucode',$menucode);
-		$tt = D('Auth')->getUserMenu($this->mid);
 		$nextmenu = $tt[$menucode]['next'];
 		//洗衣信息模块
 		if ($tt[$menucode]['code'] == 'message' && $this->jid == 438){

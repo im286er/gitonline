@@ -510,7 +510,9 @@ class IndexController extends MobileController {
 		$cname   = M('category')->where(array('id'=>$cid, 'status'=>1, 'jid'=>$this->jid))->getField('cname');
 
 		//商品分类列表   start
-		$theme  = M('shop')->where(array('sid'=>$sid))->getField('theme');
+		$sinfo   = M('shop')->field('theme,sname')->where(array('sid'=>$sid))->find();
+		$theme   = $sinfo['theme'];
+		$sname   = $sinfo['sname'];
 		
 		$category = M('category')->alias('c')->join('azd_module m on c.model=m.module_sign')->where(array('c.sid'=>$sid, 'c.status'=>1, 'c.jid'=>$this->jid))->field('c.*,m.module_link')->order('c.corder')->select();
 		foreach($category as $k=>$v){
@@ -529,6 +531,7 @@ class IndexController extends MobileController {
 		$this->assign('goods', $goods);
 		$this->assign('cname', $cname);
 		$this->assign('dtype', $dtype);
+		$this->assign('sname', $sname);
 		$this->assign('sid', $sid);
 		$this->assign('cid', $cid);
 		$this->newdisplay();

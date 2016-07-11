@@ -1,0 +1,99 @@
+<extend name="New2:common"/>
+<block name="header">
+    <link rel="stylesheet" href="__PUBLIC__/Merchant/evaluate/css/css.css" />
+    <script type="text/javascript" src="__PUBLIC__/Merchant/evaluate/js/jquery-1.8.3.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/Merchant/evaluate/js/script.js" ></script>
+</block>
+<block name="body">
+	<header>
+		<a href="javascript:history.back(-1)"><div class="before"></div></a>
+		{$sinfo['sname']}
+	</header>
+	<div class="evaluate_top">
+		<div class="evaluate_logo">
+			<img class="logo_img" src="__PUBLIC__/Merchant/evaluate/img/logo_p.png">
+			<p>{$sinfo['sname']}</p>
+<!--代码开始-->
+			<div class="starBox">
+				<ul class="star">
+					<li><a href="javascript:void(0)" title="1" class="one-star xing"></a></li>
+					<li><a href="javascript:void(0)" title="2" class="two-stars xing"></a></li>
+					<li><a href="javascript:void(0)" title="3" class="three-stars xing"></a></li>
+					<li><a href="javascript:void(0)" title="4" class="four-stars xing"></a></li>
+					<li><a href="javascript:void(0)" title="5" class="five-stars xing"></a></li>
+				</ul>
+				<div class="current-rating" id="showb"></div>
+			</div>
+			<!--评价文字-->
+			<div class="description"></div>
+		</div>
+	</div>
+	<div class="evaluate_all">
+		<div class="evaluate_all_top">总体评价</div>
+		<div class="evaluate_all_font">
+            <ul class="evaluate_all_fontul"><!-- class="licur" -->
+                <volist name="evaluate_c" id="vo">
+                    <li id="{$vo['id']}">{$vo['name']}</li>
+                </volist>
+            </ul>
+			<div class="evaluate_all_text" style="display: none">
+				<textarea placeholder="其他意见和建议，（内容匿名）可放心写" class="contA"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="evaluate_buy">
+		<div class="evaluate_all_top">评价商品</div>
+		<div class="evaluate_all_main">
+            <volist name="goods" id="vo">
+            <div class="demobox">
+                <div class="evaluate_buy_font">
+                    <span>{$vo['sp_name']}</span>
+                    <div class="xzw_starBox{$vo['sp_id']}">
+                        <ul class="star{$vo['sp_id']}">
+                            <li><a href="javascript:void(0)" title="1" class="one-star{$vo['sp_id']}"></a></li>
+                            <li><a href="javascript:void(0)" title="2" class="two-stars{$vo['sp_id']}"></a></li>
+                            <li><a href="javascript:void(0)" title="3" class="three-stars{$vo['sp_id']}"></a></li>
+                            <li><a href="javascript:void(0)" title="4" class="four-stars{$vo['sp_id']}"></a></li>
+                            <li><a href="javascript:void(0)" title="5" class="five-stars{$vo['sp_id']}"></a></li>
+                        </ul>
+                        <div class="current-rating{$vo['sp_id']}"></div>
+                    </div>
+                </div>
+                <div class="evaluate_buy_rice" style="display: none;">
+                    <textarea type="text" placeholder="请说说你有什么评价吗"/></textarea>
+                </div>
+            </div>
+            </volist>
+
+			<div class="evaluate_buy_bg">
+				<img src="__PUBLIC__/Merchant/evaluate/img/evaluate_buy_time.png">
+				<span>请在下单后7天内评价</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="evaluate_bottom">
+		<span>评价后获得<font style="color: #ff4400;">1次大转盘</font></span>
+		<input type="button" value="提交" onclick="check_sub()" />
+        <input type="hidden" name="xingA" id="xingA" />
+	</div>
+
+    <script>
+    function check_sub(){
+        var gradeA = $('.licur').attr('id');
+        var xingA  = $('#xingA').val();
+        var contA  = $('.contA').val();alert(contA);
+
+        var data = {
+            gradeA : gradeA,
+            xingA  : xingA,
+        };
+    }
+
+    $('.xing').click(function(){
+        var xingA = $(this).attr('title');
+        $('#xingA').val(xingA);
+    });
+    </script>
+</block>
+<block name="footer"></block>

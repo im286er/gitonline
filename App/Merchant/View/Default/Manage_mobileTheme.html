@@ -128,7 +128,7 @@ $(".guide-layer").click(function(event) {
             		
             		<!--模版选项-->
             		<div class="moban-div-content">
-            				<div class="whiteBg">
+            				<!-- <div class="whiteBg">
             				
 		            			<div class="moban-kindA border-1s000 vocation" value="{:U('Manage/mobileTheme',array('sid'=>$sid,'t_price'=>1))}">
 		            				<label class="moban-kind-label yh16">免费模版</label>
@@ -137,19 +137,39 @@ $(".guide-layer").click(function(event) {
 		            			<div class="moban-kindB border-1s000 vocation" value="{:U('Manage/mobileTheme',array('sid'=>$sid,'t_price'=>2))}">
 		            				<label class="moban-kind-label yh16">收费模版</label>
 		            			</div>
-		            		</div>
+		            		</div> -->
+
+                            <div class="whiteBg borderBottom">
+                                <volist name="theme_c" id="vo">
+                                    <div id="lm-name" class='lm-choseBtn border-1s000'>
+                                        <label class="moban-kind-label yh16 <?php if($t_code == $vo['code']){ echo 'blueWhite';}?>"><a href="{:U('Manage/mobileTheme', array('sid'=>$sid,'t_code'=>$vo['code'],'t_type'=>$vo['next'][0]['id']))}">{$vo['name']}</a></label>
+                                    </div>
+                                </volist>
+                            </div>
 		            		
-		            		<div class="UlWhiteBg borderBottom">
+		            		<!-- <div class="UlWhiteBg borderBottom">
 		            			<div class="typeKindDiv mLeft10">
 		            				<ul class="typeListUl">
-		            				<li style="width: 80px;"><a href="{:U('Manage/mobileTheme',array('sid'=>$sid,'v_id'=>0))}"><label class="yh16 <?php if(0 == $v_id){ echo 'blueWhite';}?>">全部行业</label></a></li>
 		            					<volist name="vocation" id="vo">
 		            						<li style="width: 80px;"><a href="{:U('Manage/mobileTheme',array('sid'=>$sid,'v_id'=>$vo['v_id']))}"><label class="yh16 <?php if($vo['v_id'] == $v_id){ echo 'blueWhite';}?>">{$vo.v_title}</label></a></li>
 		            					</volist>
-		            					<!-- <li><label class="yh16 blueWhite">旅游</label></li> -->
 		            				</ul>
 		            			</div>
-		            		</div>
+		            		</div> -->
+
+                            <div class="UlWhiteBg borderBottom">
+                                <div class="typeKindDiv mLeft10">
+                                    <ul class="typeListUl">
+                                        <volist name="theme_c" id="vo">
+                                            <volist name="vo.next" id="va">
+                                                <if condition="$t_code eq $vo['code']">
+                                                    <li style="width: 80px;"><a href="{:U('Manage/mobileTheme',array('sid'=>$sid,'t_type'=>$va['id'], 't_code'=>$vo['code']))}"><label class="yh16 <?php if($t_type == $va['id']){ echo 'blueWhite';}?>">{$va.name}</label></a></li>
+                                                </if>
+                                            </volist>
+                                        </volist>
+                                    </ul>
+                                </div>
+                            </div>
 		            		
 		            		<div class="mobanListDiv nano">
 		            			<ul class="moban-List-Ul nano-content">
@@ -421,48 +441,69 @@ $(".guide-layer").click(function(event) {
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">消费投资</label>		
+			            					<label class="marketing-kind-label">消费投资</label>	
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            						<a href="{:U('Invest/index',array('sid'=>$sid,'menucode'=>'marketing'))}"><div>设置</div></a>
+	            							</div>	
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">限时购</label>					
+			            					<label class="marketing-kind-label">限时购</label>		
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>		
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">限量购</label>					
+			            					<label class="marketing-kind-label">限量购</label>		
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>				
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">团购</label>					
+			            					<label class="marketing-kind-label">团购</label>	
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>					
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">红包</label>					
+			            					<label class="marketing-kind-label">红包</label>		
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>				
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">1元购</label>					
+			            					<label class="marketing-kind-label">1元购</label>	
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>					
 					            		</div>
 			            			</li>
 			            			<li>
 			            				<div class="marketing-kind-div yh16">		
 			            					<input type="checkbox" class="marketing-check" />
-			            					<label class="marketing-kind-label">投票</label>					
+			            					<label class="marketing-kind-label">投票</label>	
+			            					<div class="gongneng-marketingBtnA yh14 blockOrNo">
+			            					升级中	
+			            					</div>					
 					            		</div>
 			            			</li>
 		            			   
 			            			<li>
-			            				<div class="gongneng-save">
+			            				<div class="marketing-kind-div yh16 gongneng-save">
                         					<div class="yh18 ModuleSet">保存</div>
                         				</div>
 			            			</li>

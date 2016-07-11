@@ -2,10 +2,10 @@
 <block name="header"></block>
 <block name="body">
     <header >
-        <a href="javascript:history.go(-1);"><div class="back pull-left"></div></a>
+        <a href="{:U('Index/index')}"><div class="back pull-left"></div></a>
         {$cname}
     </header>
-      <div class="container-fluid" >
+      <div class="container-fluid" style="margin-top:45px;">
         <div class="row ct-activity">
         	<!-- <h3 class="ct-title">{$cname}<small class="more"><a href="{:U('Mobile/Active/index', array('jid'=>$jid))}">更多</a></small></h3> -->
             <volist name="active_list" id="vo" >

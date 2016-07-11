@@ -33,12 +33,14 @@
         	</if>
         	<div class="text-center ct-topmy2">
 			<empty name="member">
+                <a style="text-decoration:none;color: #eee;" href="{:U('login')}">
                 <div class="col-xs-3">
                     <img src="__PUBLIC__/Mobile/default/img/avatar.png" class="img-circle center-block">
                 </div>
-                <div class="col-xs-9 text-left">
-	                <h4><a class="btn" style="text-decoration:none;color: #eee;" href="{:U('login')}"><label>登录/注册</label></a></h4>
+                <div class="col-xs-9 text-left" style="margin-top: 10px;">
+	                <h4 style="font-weight: normal; padding-left: 40px; font-size: 16px;"><label>登录/注册</label></h4>
                 </div>
+                </a>
 			<else />
                 <a href="{:U('myaccount')}" style="color: #eee">
                     <div class="col-xs-3">
@@ -61,23 +63,25 @@
 		</div> 
 	</div> 
 	<div class="usermoney">
+        <a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('wallet'),'E')))}<else />{:U('wallet')}</empty>">
     	<div class="col-xs-4 text-center">
         	<h3 class="orange1">{$member['flu_balance']?$member['flu_balance']:0}<small class="orange1">元</small></h3>
             <h5>我的余额</h5>
         </div>
+        </a>
         <div class="col-xs-4 text-center">
         	<h3 class="red">0<small class="red">个</small></h3>
             <h5>我的红包</h5>
         </div>
         <div class="col-xs-4 text-center">
-        	<h3 class="green">0<small class="green">分</small></h3>
+        	<h3 class="green">{$member['fanli']?$member['fanli']:0}<small class="green">元</small></h3>
             <h5>我的返利</h5>
         </div>
     </div>
     <br/>
 	<ul class="list-group ct-centerlist">
 		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myorder'),'E')))}<else />{:U('myorder')}</empty>"><li class="list-group-item center-order">我的订单<span></span></li></a>
-		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve', array('dtype'=>2))}</empty>"><li class="list-group-item center-yy">我的预约<span></span></li></a>
+		<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('myreserve'),'E')))}<else />{:U('myreserve', array('dtype'=>2, 'o_dstatus'=>1))}</empty>"><li class="list-group-item center-yy">我的预约<span></span></li></a>
 	  	<a href="<empty name="member">{:U('login',array('backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U('addressList'),'E')))}<else />{:U('addressList')}</empty>"><li class="list-group-item center-address">收货地址<span></span></li></a>
 	</ul>
 	
@@ -87,7 +91,11 @@
 	</ul> 
 	
 	<ul class="list-group ct-centerlist">	 
-		<a href="javascript:;"><li class="list-group-item center-99">9.9元升级消费商，返现翻翻翻<span></span></li></a>
+		<if condition="$member.flu_usertype eq 1">
+	<a href="{:U('grade')}"><li class="list-group-item center-99">消费商管理<span></span></li></a>
+	<else />
+	<a href="{:U('upgrade')}"><li class="list-group-item center-99">9.9元升级消费商，返现翻翻翻<span></span></li></a>
+	</if>
 		<a href="{:U('aboutus')}"><li class="list-group-item center-about">关于我们<span></span></li></a>
 	</ul> 
 

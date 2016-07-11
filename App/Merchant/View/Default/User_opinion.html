@@ -45,7 +45,7 @@ td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10
 						<td><span title="{$v.op_replytxt}">{$v.op_replytxt|msubstr=0,10,'utf-8'}</span></td>
 						<td>
 						<if condition="$v['op_status'] eq 1 and !$v['op_replytxt']">
-							<input type="button" onClick="reply('{$v.op_id}', '{$v.op_content|trim|str_replace="'","",###}', '{$v.flu_nickname|trim}', '{$v.op_sid}')" value="回复">
+							<input type="button" onClick="reply('{$v.op_id}', '{$v.op_content|trim|str_replace="'","",###}', '{$v.flu_nickname|trim}','', '{$v.op_sid}')" value="回复">
 							<input type="button" onClick="Operation('0','{$v.op_id}',this.value)" value="删除">
 						<elseif condition="$v['op_replytxt']"/>
 							<span style="color:#336600;">已回复</span>

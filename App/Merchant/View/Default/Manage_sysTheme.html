@@ -58,14 +58,17 @@ function Operation(t_sign,t_name){
                     </volist>    
                 </select></h4>
                 <h3 class="hy-style">
-                	<a href="{:U('Manage/sysTheme',array('t_price'=>0))}"><label class="moban-kind-label yh16 <?php if($t_price == 0){ echo 'blueWhite';}?>" >全部模版</label></a>
-                    <a href="{:U('Manage/sysTheme',array('t_price'=>1))}"><label class="moban-kind-label yh16 <?php if($t_price == 1){ echo 'blueWhite';}?>" >免费模版</label></a>
-                    <a href="{:U('Manage/sysTheme',array('t_price'=>2))}"><label class="moban-kind-label yh16 <?php if($t_price == 2){ echo 'blueWhite';}?>" >收费模版</label></a>
+                    <volist name="theme_c" id="vo">
+                        <a href="{$vo['url']}"><label class="moban-kind-label yh16 <?php if($vo['code'] == $code){ echo 'blueWhite';}?>" >{$vo['name']}&nbsp;</label></a>
+                    </volist>
                 </h3><br/>
                 <h4 class="hy-style">
-                <i style="width: 80px;font-size: 20px;"><a href="{:U('Manage/sysTheme',array('v_id'=>0, 't_price'=>$t_price))}"><label class="yh16 <?php if(0 == $v_id){ echo 'blueWhite';}?>" >全部行业|</label></a></i>
-                <volist name="vocation" id="vo">
-                    <i style="width: 80px;font-size: 20px;"><a href="{:U('Manage/sysTheme',array('v_id'=>$vo['v_id'], 't_price'=>$t_price))}"><label class="yh16 <?php if($vo['v_id'] == $v_id){ echo 'blueWhite';}?>" >{$vo.v_title}|</label></a></i>
+                <volist name="theme_c" id="vo">
+                    <eq name="vo.code" value="$code">
+                        <volist name="vo.next" id="va">
+                            <i style="width: 80px;font-size: 20px;"><a href="{$va['url']}"><label class="yh16 <?php if($va['id'] == $v_id){ echo 'blueWhite';}?>" >{$va.name}|</label></a></i>
+                        </volist>
+                    </eq>
                 </volist>
                 </h4>
                     <ul class="tem-list clearfix">

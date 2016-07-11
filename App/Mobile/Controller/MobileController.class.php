@@ -40,9 +40,7 @@ class MobileController extends Controller {
 		if($table){
 			session('table',$table);
 		}
-		if(session('table') > 0){
-			D('Tsbind')->hebing($this->sid);
-		}
+		
 		$suid = $_GET['suid'];//我的二维码进来的
 		if($suid){
 			$smid = \Think\Crypt\Driver\Base64::decrypt($suid, C('CODEKEY'));
@@ -79,6 +77,7 @@ class MobileController extends Controller {
 			if(!$s){
 				$this->redirect('Index/index', array('jid' => $this->jid));
 			}
+			$this->assign('shop',$s);
 		}
 		
 		$this->assign('jid', $this->jid);
@@ -87,9 +86,11 @@ class MobileController extends Controller {
 		$this->mid = 0;
 		$uid = cookie('mid')?cookie('mid'):0;
 		if($uid){
-			$m = M('FlUser')->where(array('flu_userid'=>$uid))->find();
+			$m = M('FlUser')->where(array('flu_userid'=>$uid,'flu_sjid'=>$this->jid,'flu_status'=>0))->find();
 			if($m){
 				$this->mid = $uid;
+			}else{
+				cookie('mid',null);
 			}
 		}
 
@@ -222,7 +223,7 @@ class MobileController extends Controller {
 			}
 		}
 		//背景图
-		$backImg = M('shop')->field('img_url,img_height')->where(array('sid'=>$sid))->find();
+		$backImg = M('shop')->field('img_url,img_height,sname')->where(array('sid'=>$sid))->find();
 		$banner = M('banner');
 		$opt = array(
 			'jid' => $this->jid,
@@ -244,7 +245,7 @@ class MobileController extends Controller {
 		//底部文字
 		$foot     = M('merchant')->where(array('jid'=>$this->jid))->getField('footer_content');
 		//商铺列表
-		$shop_list = M('shop')->field('sid,sname')->where(array('jid'=>$this->jid))->select(); 
+		$shop_list = M('shop')->field('sid,sname')->where(array('jid'=>$this->jid,'status'=>'1'))->select(); 
 		//公告
 		$this->path = APP_DIR.'/Public/Data/'.$this->jid.'/';
 		$path = $this->path.'Notice3.php';

@@ -219,7 +219,11 @@ class WechatController extends Controller {
 		}
 		$mnickname = M('shop')->where(array('sid'=>$order_info['o_sid']))->getField('sname');
 		$gtype = D('Mobile/Order')->runGtype();
-		$order_info['o_title'] = '在线下单'.'-'.$mnickname;
+		if($order_info['o_gtype'] == 'upgrade'){
+			$order_info['o_title'] = '升级消费商'.'-'.$mnickname;
+		}else{
+			$order_info['o_title'] = '在线下单'.'-'.$mnickname;
+		}
 		vendor("Weixin.JsApiPay");
 		$logHandler= new \CLogFileHandler(\WxPayConfig::Log());
 		$log = \Log::Init($logHandler, 15);
@@ -293,6 +297,10 @@ class WechatController extends Controller {
 			if($result){//如果支付款是汇入系统账户，更新商家的账户余额
 				$merchant = M('merchant')->where(array('jid'=>$order_info['o_jid']))->find();
 				M('member')->where(array('mid'=>$merchant['mid']))->setInc('money',$order_info['o_price']); 
+			}
+			if($result && $order_info['o_gtype'] == 'upgrade'){
+				M('fl_user')->where(array('flu_userid'=>$order_info['o_uid']))->save(array('flu_usertype'=>'1'));//升级消费商订单
+				D('Common/Order')->doUp($order_info['o_id']);
 			}
 			return true;
 		}else return false;

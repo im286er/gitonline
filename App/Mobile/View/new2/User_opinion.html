@@ -21,15 +21,15 @@
 
         <div class="row">
             <ul class="media-list" style="margin-top: 40px;">
-            <volist name="opinion" id="vo" empty="您还没有反馈过意见">
-                <li class="media" style="background: #fff; margin-bottom: 15px;">
-                    <div class="media-body" style="padding:0 0 10px 15px;">
+                <volist name="opinion" id="vo" empty="&nbsp;&nbsp;您还没有反馈过意见" >
+                <li class="media" style="background: #fff; margin-bottom: 15px;padding:0 15px 10px 15px;">
+                    <div class="">
                         <div class="media-heading" style="margin-top: 15px;">我的意见：
                             <div class="pull-right time">
                                 {$vo.op_addtime|date='Y-m-d H:i:s',###}
                             </div>
                         </div>
-                        <div class="gray">{$vo.op_content}</div>
+                        <div class="gray" style="width: 100%;">{$vo.op_content}</div>
                         <notempty name="vo.op_replytxt">
                             <div class="media-heading" style="margin-top: 15px;">商家回复：
                                 <div class="pull-right time">

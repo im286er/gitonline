@@ -60,7 +60,14 @@ class VideoController extends MobileController {
 		file_exists($path.'InfoMenu3Name.php') && $InfoMenu3Name=file_get_contents($path.'InfoMenu3Name.php');
 		$this->assign('page_name', $InfoMenu3Name ? $InfoMenu3Name : '微视频');
 		if(I('get.cid') && $cids[I('get.cid')])$this->assign('page_name',$cids[I('get.cid')]);
-		$this->assign('page_url',U('Index/index',array('jid'=>$this->jid)));
+		//回调页面
+		if (I('dtype', 1) == 1) {
+			$page_url = U('Index/index',array('jid'=>$this->jid, 'sid'=>$this->sid));
+		}else{
+			$page_url = U('User/aboutus',array('jid'=>$this->jid, 'sid'=>$this->sid, 'dtype'=>2));
+		}
+		
+		$this->assign('page_url', $page_url);
 		$this->assign('category_list',$category_list);
 		$this->assign('video_list',$video_list);
 		$this->mydisplay();

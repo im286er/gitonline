@@ -112,8 +112,8 @@ class AccountController extends MerchantController {
 			$shopauth = I('shopauth');
 			$shift = I('shift');
 			$role = I('role');
-			$mpwd = I('mpwd', 0, 'intval');
-				
+			$mpwd = I('mpwd');
+						
 			$auth = array();
 			$auth['top'] = $top;
 			$auth['next'] = $next;
@@ -133,9 +133,9 @@ class AccountController extends MerchantController {
 
 			//判断是否更改密码
 			if ($mpwd) {
-				M('member')->where('mid='.$tmid)->setField('mpwd', md5(md5($password)));
+				$t = M('member')->where('mid='.$tmid)->setField('mpwd', md5(md5($mpwd)));
 			}
-			if($r){
+			if($r || $t){
 				$this->success('修改成功');
 			}else{
 				$this->error('修改失败');

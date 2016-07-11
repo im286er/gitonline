@@ -1,0 +1,44 @@
+<extend name="Public:common"/>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/login.css">
+	<link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/ios.css">
+    <script src="__PUBLIC__/Js/layerm/layer.m.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/swiper.min.js"></script>
+	<script src="__PUBLIC__/Mobile/default/Js/iscroll-4.2.js"></script>
+	
+
+<div class="main container p-tb">
+  <div class="login-body">
+    <ul class="form-wrap">   
+      <li class="form-mod">
+        <label class="mod-tit">新用户名</label>
+        <div class="mod-wrap">
+          <input type="text" name="account" class="input-wrap"  placeholder="新用户名" id="account" maxlength="16" required>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="login-btn" href="javascript:;" onclick="submits()"> <span id="J_login_btn">确定</span> </div>
+  
+</div>
+<script src="__PUBLIC__/Mobile/default/Js/zepto.min.js"></script>
+<script>
+function submits(){
+	var account = $("#account").val();
+	if(account == ''){
+		layer.open({content: '请输入新用户名',time: 2});
+		return false;	
+	}
+
+	$.post('__ACTION__', {account:account}, function(data) {
+		if(data == 1){
+			layer.open({content: '修改失败',time: 2});
+		}else{
+			layer.open({content: '修改成功',time: 2});
+			window.location.href = "/User/myaccount.html";
+		}
+	})
+}
+</script>
+
+</block>

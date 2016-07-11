@@ -1,11 +1,14 @@
 <block name="header">
     <if condition="$dtype eq 2">
-		<div class="container-fluid" >
+		<div class="container-fluid" style="margin-top: 25px;">
         <div class="ct-top" >
             <div class="row ct-topnav">
-                <div class="col-xs-2 text-center ct-navlist">
+                <div class="col-xs-3">
+                    <img src="{$shop.logo}" style="height: 30px; width: 60px; vertical-align: top;">
+                </div>
+                <div class="col-xs-6 text-center ct-navlist">
                     <span class="btn btn-link dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >
-                    店铺
+                    {:msubstr($sname,0,8)}
                     </span>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <volist name="shop_list" id="vo">
@@ -13,16 +16,18 @@
                         </volist>
                     </ul>
                 </div>
-                <div class="col-xs-7  ct-notice ">
-                    <MARQUEE scrollAmount=3 direction=left>{$notice}&nbsp;</MARQUEE>
-                </div>
+
+
+
                 <div class="col-xs-3 ct-control">
-                    <a href="{:U('Index/search')}"><img src="__PUBLIC__/Merchant/images/ico_search.png" id="top-share" class="img-responsive"></a>
-                    <a data-toggle="modal" data-target="#share"><img src="__PUBLIC__/Merchant/images/ico_share.png"  id="top-search" class="img-responsive"></a>
+                    <a href="{:U('Index/search')}" ><img src="__PUBLIC__/Merchant/images/ico_search_hover.png" id="top-search" class="img-responsive"></a>
+                    <a data-toggle="modal" data-target="#share" ><img src="__PUBLIC__/Merchant/images/ico_share_hover.png" id="top-share" class="img-responsive"></a>
                 </div>
                 
             </div>
-            
+            <div class="ct-notice">
+                <MARQUEE style="margin-top: 5px;" scrollAmount=3 direction=left>{$notice}&nbsp;</MARQUEE>
+            </div>
             <div class="row grayhover"><img src="__PUBLIC__/Merchant/images/grayhover.png"> </div>
             <div class="row whitehover"><img src="__PUBLIC__/Merchant/images/whitehover.png"></div>
 
@@ -40,36 +45,28 @@
                 </div>
             </div>
         </div>
-            <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
+
+        <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document" style="margin-top: 55px;">
                     <div class="modal-content">
                         <div class="modal-header"  style="border:0;">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body" style="padding-bottom:0; border:0;">
-                            <h3 class="text-center" style="margin-bottom: 20px;">饮店88888</h3>
+                            <h3 class="text-center" style="margin-bottom: 20px;">{$shop.sname}</h3>
                             <div class="row">
                                 <div style="margin-left: calc(50% - 100px)">
-                                    <img src="images/erwm.png" style="width: 200px;"/>
+                                    <img src="{:U('Common/makeQrcode@sj', array('jid'=>$jid,'sid'=>$sid))}" style="width: 200px;"/>
                                 </div>
                             </div>
                             <h5 class="text-center gray">长按或扫描二维码进入店铺</h5>
-                            <h6 class="text-center gray2" >www.hzazhaiding.com</h6>
                         </div>
                         <div class="modal-footer"  style="   border:0px;  text-align:center;  overflow:hidden;  ">
                             <div class="row"  style="background:#f6f6f6; height:7rem; margin-bottom:-1.5rem; border-radius:0 0 5px 5px; padding-top:1.5rem; padding-left:2rem; padding-right:2rem;">
-                                <div class="col-xs-3">
-                                    <img src="__PUBLIC__/Merchant/images/ico_sina.png" class="img-responsive img-circle center-block" style="width:4rem;" >
-                                </div>
-                                <div class="col-xs-3">
-                                    <img src="__PUBLIC__/Merchant/images/ico_weixin.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
-                                </div>
-                                <div class="col-xs-3">
-                                    <img src="__PUBLIC__/Merchant/images/ico_qq.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
-                                </div>
-                                <div class="col-xs-3">
-                                    <img src="__PUBLIC__/Merchant/images/ico_weixin2.png" class="img-responsive img-circle center-block"  style="width:4rem;" >
-                                </div>
+                                <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdUrl":"{:U('Index/index',array('jid'=>$jid,'sid'=>$sid))}","bdText":"{$shop.sname}","bdMini":"2","bdMiniList":false,"bdPic":"{:U('Common/makeQrcode@sj', array('jid'=>$jid,'sid'=>$sid))}","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+        
+                     </div>
                             </div>
                         </div>
                     </div>
@@ -88,6 +85,12 @@
                 maxItems: 5,
                // pausePlay: true
                directionNav: false
+            });
+            $('.ct-banner').unslider({
+                autoplay: true,
+                arrows: false,
+                fluid: true,
+                dots: true
             });
         }); 
         </script>
@@ -123,15 +126,18 @@
             topAuto();
         });
         $(window).onresize=topAuto;
+
+
     </script>
 
 
         <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider.css" rel="stylesheet">
         <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider-dots.css" rel="stylesheet">
+        <script src="__PUBLIC__/Merchant/plugins/unslider/dist/js/unslider-min.js"></script>
         <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.move.js"></script>
         <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.swipe.js"></script>
 
-        <div class="row ct-menu">
+        <div class="ct-menu">
             <div class="flexslider carousel ">
                 <ul class="slides">
                     <volist name="category" id="vo">
@@ -153,12 +159,20 @@
                     </a>
                 </div>
             </volist> -->
-        </div>
-        <br />
+        </div><br/>
+
     <else />
         <header >
             <a href="javascript:history.go(-1);"><div class="back pull-left"></div></a>
             {$cname}
         </header>
     </if>
+    <div id="loader">
+        <img src="__PUBLIC__/Merchant/images/loading.gif" style="margin: 150px auto; display: block; width: 100px; height: 100px;">
+    </div>
+    <script>
+       window.onload=function(){
+            $('#loader').hide();
+        }
+    </script>
 </block>

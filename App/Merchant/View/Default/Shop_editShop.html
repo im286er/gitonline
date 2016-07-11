@@ -64,10 +64,11 @@ select {
             <div class="set">
                 <label>平均配送时间</label><input type="text" name="info[ps_time]" placeholder="请输入平均配送时间" value="{$shop.ps_time}">分钟
             </div>
+            <!-- 
             <div class="set">
                 <label>允许合并时间</label><input type="text" name="info[hb_time]" value="{$shop.hb_time}">分钟
                 <font color="red"> 允许同一桌号二维码未付款订单在这段时间内合并为同一个订单,可以直接使用默认值10 </font>
-            </div>
+            </div> -->
              <div class="set">
                 <label>营业时间</label><input type="text" name="info[yy_stime]" id="yy_stime" value="{$shop.yy_stime}"> - <input type="text" name="info[yy_etime]" id="yy_etime" value="{$shop.yy_etime}">
               <font color="red"> 正确的时间格式为:  HH.MM     例如:05:05或者14.30 </font>
@@ -85,7 +86,7 @@ select {
             </div>
             <div class="set">
                 <label>营业执照</label><input type="text" name="info[license]" id="UPLOAD_license_VALUE" placeholder="请上传营业执照" readonly="readonly" value="{$shop.license}">
-                <input type="button" onclick="uploadImageFun('license')" value="上传营业执照" class="btn btn-pwd" />
+                <input type="button" onclick="uploadImageFun('license')" value="上传营业执照" class="btn btn-pwd" style="padding: 0;"/>
             </div>
             <div class="set">
                 <label>餐饮服务许可证</label><input type="text" name="info[permit]" id="UPLOAD_permit_VALUE" placeholder="请上传餐饮服务许可证" readonly="readonly" value="{$shop.permit}">
@@ -97,7 +98,7 @@ select {
             <div class="set">
                 <label>二维码</label><input type="text" name="info[weixin_pic]" id="UPLOAD_weixin_pic_VALUE" placeholder="请上传二维码" readonly="readonly" value="{$shop.weixin_pic}">
                 <input type="button" onclick="uploadImageFun('weixin_pic')" value="上传二维码" class="btn btn-pwd" />
-                <a href="/Shop/makeQrcodeDown/sid/{$sid}.html" target="_blank"><input type="button"  value="下载二维码" class="btn btn-pwd"/></a>
+                <a href="/Shop/makeQrcodeDown/sid/{$sid}.html" target="_blank"><input type="button"  value="下载二维码" class="btn btn-pwd" style="margin-right: 10px;"/></a>可上传公众号二维码或是个人微信二维码
             </div>
             <div class="set">
             	<label></label>

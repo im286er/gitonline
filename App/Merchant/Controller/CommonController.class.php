@@ -14,4 +14,17 @@ class CommonController extends Controller {
 		$QRcode = new \QRcode();
 		echo $QRcode::png($qcUrl, false, 'H', $size);
 	}
+	
+	public function makeQrcode(){
+		$id = I('id');
+		$sid = I('sid');
+		$jid = I('jid');
+		$size = 3;
+		
+		$qcUrl = U('Index/index@yd',array('jid'=>$jid,'sid'=>$sid));
+		
+		vendor("phpqrcode.phpqrcode");
+		$QRcode = new \QRcode();
+		echo $QRcode::png($qcUrl, false, 'H', $size);
+	}
 }

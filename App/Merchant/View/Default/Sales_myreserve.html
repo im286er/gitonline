@@ -1,21 +1,48 @@
 <extend name="Public:common"/>
 <block name="body">
-	<style type="text/css">
+<link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
+<script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+<script src="__PUBLIC__/Js/jquery1.8.min.js"></script>
+<style type="text/css">
+body{ font-family:"微软雅黑"; font-size:14px}
 input[type="text"] {border: 1px solid #e7e7eb;height: 26px;line-height: 26px;padding-left: 5px;width: 125px;}
 .button { background:#00bae7; border:0 none; border-radius:2px; color:#Fff; min-width:80px; padding:8px 18px; position:relative; top:-2px; }
 td a { border:1px solid #e7e7eb; color:#5da3ea; margin-right:5px; padding:5px 10px; }
 .table td, .table th { border-top:none; vertical-align:middle; }
 select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #cccccc #cccccc #666666;border-style: solid;border-width: 1px;color: #333333;padding: 2px;vertical-align: middle; height: 30px;}
-
-.category_order { height:50px; display:block; line-height:50px; }
-.category_order li { float:left; text-align:center; width:20%; }
+.category_order { height:58px; display:block; line-height:35px; }
+.category_order li { float:left; text-align:center; width:8%;border:#a5a5a5 solid 1px; margin-left:20px; margin-top:20px}
 .category_order li a { display:block; width:100%; height:100%; font-size:14px; }
-.category_order li.on { border-bottom:2px solid #0099ff; }
+.category_order li.on { border-bottom:2px solid #00bbe8;}
+.category_order ul span{width:100px;height:35px; float:left; margin-top:20px; line-height:35px; text-align:center; font-family:"微软雅黑"; font-size:16px}
+.category_order_l{ height:58px; display:block; line-height:35px;}
+.category_order_l li{ float:left; text-align:center; width:8%;border:#a5a5a5 solid 1px; margin-left:20px; margin-top:20px; cursor:pointer}
+.category_order_l ul span{width:100px;height:35px; float:left; margin-top:20px; line-height:35px; text-align:center; font-family:"微软雅黑"; font-size:16px}
+
+
+.shops {border-bottom: 1px solid #e7e7eb;color: #222;font-size: 12px;font-weight: normal;line-height: 34px;min-height: 34px;padding-left: 35px;width: 95%; margin-bottom:10px}
+.shops span{margin-left:15px;}
+.shops .curr{background:#00bae7;padding:10px;color:#ffffff;}
+.shops .curr a{color:#ffffff;}
+.content_top_l{width:100%;height:130px;background:#f4f4f4;border:#d5d5d5 solid 1px; margin-bottom:50px}
 </style>
 <div class="wrapper">
-    <h2 class="title">预约管理 | <a href="{:U('Sales/rebateReserve')}" style="text-decoration:underline;">返利预约管理</a></h2>
+    <h2 class="shops">选择门店：
+	<if condition="$role eq 1"><span <eq name="Think.get.sid" value="">class="curr"</eq>><a href="?sid=">全部门店</a></span></if>
+	<volist name="shops" id="vo">
+		
+		<span <eq name="Think.get.sid" value="$key">class="curr"</eq>><a href="/Sales/myreserve/sid/{$key}.html">{$vo}</a></span>
+	</volist>
+</h2>
+
+    
+    <div id="category_order" class="category_order" style="display:none;background:#ff8040;color:#ffffff;height:30px; display:block; line-height:30px;">
+		<h3 style="text-align:center;"><a href="/Sales/myreserve/sid/{$sid}/o_dstatus/1.html" style="color:#ffffff;">您有<span id="sp1"></span>条新订单，<span id="sp2"></span>条等待取消订单,点击查看</a></h3>
+    </div>
+
     <div class="mian padding">
-		<div class="content_c">
+        
+        <div class="content_c">
             <form action="__ACTION__" method="get">
             	<input type="text" class="user_input" placeholder="开始时间" readonly="readonly" size="6" value="{$Think.get.statime}" id="statime" name="statime">
                 <label class="fl mlr5">-</label>
@@ -23,27 +50,79 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                 
                 <input type="text" autocomplete="off" placeholder="订单号"  value="{$Think.get.o_id}" name="o_id" />&nbsp;
                 <select name="o_dstatus" class="fl">
-                    <option value="" <if condition="$_GET['o_dstatus']==''">selected="selected"</if>>全部</option>
+                    <option value="" <if condition="$_GET['o_dstatus']==''">selected="selected"</if>>订单状态</option>
                     <volist name="odstatus" id="vo">
                         <option value="{$key}" <if condition="$_GET['o_dstatus'] == $key && $_GET['o_dstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
                     </volist>
                 </select>
 
                 <select name="o_pstatus" class="fl">
-                    <option value="" <if condition="$_GET['o_pstatus']==''">selected="selected"</if>>全部</option>
+                    <option value="" <if condition="$_GET['o_pstatus']==''">selected="selected"</if>>支付状态</option>
                     <volist name="oostatus" id="vo">
                         <option value="{$key}" <if condition="$_GET['o_pstatus'] == $key && $_GET['o_pstatus']!=''">selected="selected"</if>>{$vo|strip_tags=###}</option>
                     </volist>
                 </select>
+                
+                <select name="o_seat" class="fl">
+                    <option value="" <if condition="$_GET['o_seat']==''">selected="selected"</if>>桌号</option>
+                    <volist name="o_seat" id="vo">
+                        <option value="{$vo.title}" <if condition="$_GET['o_seat'] == $vo[title] && $_GET['o_seat']!=''">selected="selected"</if>>{$vo.title}</option>
+                    </volist>
+                </select>
+                <input type="hidden" name="sid" value="{$sid}" />
                 <input type="submit" value="开始搜索" class="button">
             </form>
         </div>
         <div style="width:100%;height:15px;"></div>
+       
+		
+        <div class="content_top_l">
+        	 <div class="category_order">
+                <ul>
+                	<span>订单状态:</span>
+                    <li <eq name="Think.get.o_dstatus" value="">class="on"</eq>><a href="{:U('/Sales/myreserve', array('sid'=>$sid))}">全部订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="1">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_dstatus'=>1,'sid'=>$sid))}">待处理订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="3">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_dstatus'=>3,'sid'=>$sid))}">待完成订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="4">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_dstatus'=>4,'sid'=>$sid))}">已完成订单</a></li>
+                    <li <eq name="Think.get.o_dstatus" value="5">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_dstatus'=>5,'sid'=>$sid))}">已关闭订单</a></li>
+                </ul>
+   			</div>
+             <div class="category_order">
+                <ul>
+                	<span>付款状态:</span>
+                	<li <eq name="Think.get.o_pstatus" value="">class="on"</eq>><a href="{:U('/Sales/myreserve', array('sid'=>$sid))}">全部订单</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="0">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_pstatus'=>0,'sid'=>$sid))}">未支付</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="1">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_pstatus'=>1,'sid'=>$sid))}">已支付</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="3">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_pstatus'=>3,'sid'=>$sid))}">待退款</a></li>
+                    <li <eq name="Think.get.o_pstatus" value="2">class="on"</eq>><a href="{:U('/Sales/myreserve', array('o_pstatus'=>2,'sid'=>$sid))}">已退款</a></li>
+                </ul>
+   			</div>
+        </div>
 
-    	<volist name="datalist" id="v" empty="暂无预约信息">
-        <div class="content_a" <neq name="i" value="1">top</neq>>
+    	<volist name="datalist" id="v">
+        <div class="content_a" <neq name="i" value="1">top</neq> id="OID_{$v.o_id}">
             <h3 class="font-12">
-            	<span><php>echo $shops[$v['o_sid']];</php></span> <span>订单号：{$v.o_id}</span><span>下单人：<if condition="$v['o_name']">{$v.o_name}<elseif condition="$users[$v['o_uid']]['u_ename']"/><php>echo $users[$v['o_uid']]['u_ename'];</php><else /><php>echo $users[$v['o_uid']]['u_name'];</php></if></span><span>电话：{$v.o_phone}</span>
+            	<span><php>echo $shops[$v['o_sid']];</php></span>
+                <span>{$v.o_dstime|strtotime|date='m-d H:i',###}</span> 
+                <span>{$v.extendstr}</span> 
+                <span>订单号：{$v.o_id}</span>
+				<span>下单人：{$v.o_name}</span><span>电话：{$v.o_phone}</span>
+            
+            </h3>
+            <h3 class="font-12">
+            <if condition="$v['o_gtype']=='Choose'">
+            	<if condition="$v['o_xftype']==1">
+					<span>订单类型：店内消费</span>
+                	<span>座位号：{$v.o_seat}</span> 
+				<else/>
+					<span>订单类型：外送上门</span>
+                	<span>收货地址：{$v.o_address}</span> 
+				</if>
+            <else/>
+            		<span>订单类型：预约消费</span>
+                	<span>座位号：{$v.o_seat}</span>
+                	<span>预约时间：{$v.o_gdate}</span> 
+            </if>
             </h3>
 			<if condition="$v['o_remarks']">
             <h3 class="font-12">
@@ -51,77 +130,279 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
             </h3>
 			</if>
 			<table class="table">
-				<tr>
-                    <th width="20%">包厢名称</th>
-                    
-                    <th width="20%">下单时间</th>
-                    <th width="20%">到店时间</th>
-                    <th width="8%">最低消费</th>
-                    <th width="8%">人数</th>
-					<th width="9%">当前状态</th>
-					<th width="15%">操作</th>
+				<tr style="border-bottom:solid #e7e7eb 1px">
+                    <th width="150px">商品</th>
+					<th>名称</th>
+                    <th>单价(元）</th>
+                    <th>数量</th>
+                    <th>下单时间</th>
+                    <th style="text-align:left; padding-left:60px;">付款/状态</th>
+                    <th>实付款(元)/操作</th>
                 </tr>
+                <php>$_j = 1; $rowspan = count($v[ogoods])</php>
+                <volist name="v.ogoods" id="g" empty="暂无订单信息">
                 <tr>
-                    <td>{$v.goodsname}</td>
-                    <td>{$v.o_dstime}</td>
-                    <td>{$v.sp_date}</td>
-                    <td>{$v.o_price}元</td>
-                    <td>{$v.sp_number}</td>
-					<td><php>echo $odstatus[$v['o_dstatus']];</php></td>
-					<td>
-					<if condition="$v['o_dstatus'] eq 1 ">
-						<input type="button" onclick="Operation('3','{$v.o_id}',this.value)" value="接受预约">
-						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="拒绝预约">
-					<elseif condition="$v['o_dstatus']  eq 3"/>
-						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
-					<elseif condition="$v['o_dstatus']  eq 4"/>
-						<input type="button" onclick="Operation('5','{$v.o_id}',this.value)" value="关闭预约">
-					<elseif condition="$v['o_dstatus']  eq 5"/>
-						-
-					</if>
-					<input type="button" onclick="dayin('{$v.o_id}')" value="打印订单">
-					</td>
+                    <td style=""><img src="{$g.sp_img}" alt="" width="60" height="50"> </td>
+					<td  style="border-left:1px solid #e7e7eb;">{$g.sp_name}</td>
+                    <td  style="border-left:1px solid #e7e7eb;">{$g.sp_gdprice}</td>
+                    <td  style="border-left:1px solid #e7e7eb;">{$g.sp_number}</td>
+                    <eq name="_j" value="1">
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle;">{$v.o_dstime|strtotime|date='H:i:s',###} </td>
+						<td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle; text-align:left; padding-left:25px;">
+
+                            <p style="line-height:25px">支付类型：{$order_type[$v['o_type']]}</p>
+                            <p  style="line-height:25px">支付状态：{$order_pstatus[$v['o_pstatus']]}</p>
+                            <if condition="$v['o_pstatus'] eq 1">
+                            	<p>支付时间： {$v.o_pstime|strtotime|date='m-d H:i',###}</p>
+                            </if>
+                            <eq name="Think.get.dstatus" value="0">
+                            	<p  style="line-height:25px">订单状态：{$order_dstatus[$v['o_dstatus']]}</p>
+                            </eq>
+							<if condition="$v['voucher']"><span style="line-height:25px">优惠券抵：-{$v.voucher.o_price} 元</span></if>
+                            
+						</td>
+                        <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle;">
+							￥{$v.o_price} <br/>
+                            
+                            <if condition="$v['o_dstatus']==1"><!-- 待处理 -->
+                                <!--如果用户取消了订单-->
+                                <?php if($v['o_close']==1) { ?>
+                                    <p>
+                                    	<input type="button" onclick="AgreeCancelOrder('<?php echo $v['o_id']; ?>')" value="同意取消">
+										<br />
+										原因：<?php echo $v['o_close_reason']; ?>
+                                    </p>
+                                <?php } else {?>
+                                    <!-- 如果是线上支付，并且支付失败 -->
+                                    <?php if($v['o_type']!=0 && $v['o_pstatus']==0): ?>
+										
+											<p><input type="button" onclick="SetMessageForUser(this, '<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="提醒支付"></p>
+										 
+											<p><input type="button" onclick="AgreeCancelOrder('<?php echo $v['o_id']; ?>')" value="关闭订单"></p>
+										 
+                                    <!-- 如果是线上支付，并且支付成功 或者 是下线支付 -->
+                                    <?php elseif($v['o_type']==0 || ($v['o_type']!=0 && $v['o_pstatus']==1)):?>
+                                        <p><input type="button" onclick="GetOrderInfo('<?php echo $v['o_id']; ?>')" value="接受订单"></p>
+                                		<p><input type="button" onclick="SetOrderInfo('<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="拒绝订单"></p>
+                                		<p><input type="button" onclick="location.href='/Sales/editOrder/oid/<?php echo $v['o_id']; ?>.html'" value="编辑订单"></p>
+                                    <?php else:?>
+                                        <p style="color:red">订单出现问题，请联系帝鼠平台</p>
+                                    <?php endif; ?>
+                                <?php } ?> 
+                            <elseif condition="$v['o_dstatus']==3"/><!-- 待完成 -->
+                                <!--如果用户取消了订单-->
+                                <?php if($v['o_close']==1) { ?>
+                                    <p>
+                                    	<input type="button" onclick="AgreeCancelOrder('<?php echo $v['o_id']; ?>')" value="同意取消">
+										<br />
+										原因：<?php echo $v['o_close_reason']; ?>
+                                    </p>
+                                    <p><input type="button" onClick="RefuseCancleOrder('<?php echo $v['o_id']; ?>', '<?php echo $v['o_sid']; ?>', '<?php echo $v['o_uid']; ?>')" value="拒绝取消"></p>
+                                    <p><input type="button" onclick="SendOrder('<?php echo $v['o_id']; ?>')" value="确认完成"></p>
+                                <?php } else {?>
+                                    <!-- 如果是线上支付，并且支付成功 或者 是下线支付 --> 
+                                    <?php if($v['o_type']==0 || ($v['o_type']!=0 && $v['o_pstatus']==1)):?>
+                                    	<p><input type="button" onclick="SetOrderInfo('<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="拒绝订单"></p>
+                                        <p><input type="button" onclick='SendOrder("<?php echo $v["o_id"]; ?>")' value="确认完成"></p>
+                                    <?php else:?>
+                                        <span style="color:red">订单出现问题，请联系帝鼠平台</span>
+                                    <?php endif; ?>
+                                <?php } ?> 
+                            <elseif condition="$v['o_dstatus']==4"/><!-- 已完成 -->
+                                <p>已完成</p>
+                            <elseif condition="$v['o_dstatus']==5"/>
+                                <p>已关闭</p>
+                            </if>
+                            <input type="button" onclick="dayin('<?php echo $v['o_id']; ?>')" value="打印订单">
+						</td>
+                    </eq>
                 </tr>
+                <php>$_j++;</php>
+                </volist>
 		  </table>
         </div>
 		</volist>
     </div>
+    
 	<!-- 分页 -->
-	       <if condition="$pages">
-                <div class="page clearfix">
-                    <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
-                    <input type="text" onBlur="document.getElementById('btnpre').href='<php>$get=I('get.');unset($get['page']);echo U().'?'.http_build_query($get);</php>&page='+this.value">{$pages}
-                </div>
-            </if>
-</div>
-<script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
-<script type="text/javascript">
-Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
-Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
-function dayin(oid){
-	if (confirm("确认要打印这个预约订单吗?")) {
-		$.post("{:U('/Sales/printOrder', '', true)}", {oid:oid}, function( data ) {
-			if(data == 1){
-				alert('操作成功');
-			}else{
-				alert('操作失败');
+   <if condition="$pages">
+        <div class="page clearfix">
+            <a href="javascript:void(0)" class="btnpre" id="btnpre">跳转</a>  
+            <input style="width:40px;" type="text" onBlur="document.getElementById('btnpre').href='<php>$get=I('get.');unset($get['page']);echo U().'?'.http_build_query($get);</php>&page='+this.value">{$pages}
+        </div>
+    </if>
+    <script type="text/javascript" src="__PUBLIC__/Js/Calendar/calendar.js"></script>
+	<script type="text/javascript">
+	Calendar.setup({ inputField:"statime", trigger:"statime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+	Calendar.setup({ inputField:"endtime", trigger:"endtime", dateFormat:"%Y-%m-%d", showTime:false, minuteStep:1, onSelect:function() { this.hide(); } });
+
+	function dayin(oid){
+		if (confirm("确认要打印这个订单吗?")) {
+			$.post("{:U('/Sales/printOrder', '', true)}", {oid:oid}, function( data ) {
+				if(data == 1){
+					alert('操作成功');
+				}else{
+					alert('操作失败');
+				}
+			})
+		}
+	}
+	//同意取消
+	function AgreeCancelOrder( orderid )
+	{
+		if( !orderid ) return false;		
+		if( !confirm('确定要同意取消此订单吗') ) return false;
+		
+		$.post('{:U("/Sales/AjaxagreeCancelOrder")}', {oid:orderid}, function(data) {
+			if( parseInt(data)==1 ) {
+				$("#OID_"+orderid).remove();
+				alert("你的订单已经取消，请在 '已关闭订单' 中查看！ ");
+			} else {
+				alert("操作失败,请重新操作");			
 			}
+		})		
+	}
+	
+	//提醒支付
+	function SetMessageForUser(obj, oid, uid) {
+		$.post("/Sales/setMessageForUser", {o:oid, u:uid}, function(data) {
+			if( parseInt(data)==1 ) {
+				$(obj).attr("disabled", true).val("180 S可再次提醒");
+				var timeInterval = setInterval(function() {
+					var value=parseInt( $(obj).val() ); var time = -- value;
+					$(obj).val( time + " S可再次提醒");
+					if(parseInt(time) <= 0) { 
+						$(obj).attr("disabled", false).val("提醒支付"); clearInterval(timeInterval); 
+					}
+				}, 1000);
+			} else {
+				alert("发送失败，请重新发送");	
+			}
+		});	
+	}
+	
+	//接受订单
+	function GetOrderInfo(oid)
+	{
+		if( !confirm('确认要接受此订单吗？') ) return false;
+		$.post("/Sales/setOrderStatus", {o:oid}, function(data) {
+			if( parseInt(data)==1 ) {
+				$("#OID_"+oid).remove();
+				alert("您已经接受此订单，请在 '待完成订单' 中查看！ ");
+			} else {
+				alert("接受失败，请重新接受");	
+			}
+		});	
+	}
+	
+	//拒绝订单
+	function SetOrderInfo(oid, uid)
+	{
+		var d = dialog({
+			id:'replymsg',
+			title: '拒绝订单',
+			opacity: 0.87,
+			lock: true,
+			background: '#600', // 背景色
+			content: '<div><select id="op_reason"><option value="">请选择拒绝订单原因</option><option value="库存不全">库存不全</option><option value="消费高峰">消费高峰</option><option value="店铺休息">店铺休息</option><option value="其他原因">其他原因</option></select></p>',
+			okValue: '确认拒绝',
+			cancel: true,
+			cancelValue: '取消',
+			ok: function () {
+				var op_reason = $('#op_reason').val();
+				if(!op_reason) { alert('请选择拒绝原因！'); return false; }
+				$.post("{:U('/Sales/refuseOrderStatus/')}", {'oid':oid,'uid':uid, 'reason':op_reason},function(result) {
+					if( parseInt(result) == 1) { 
+						$("#OID_"+oid).remove(); 
+						alert("您已经拒绝此订单，请在 '已关闭订单' 中查看！ ");
+					} else { alert('操作失败，请重新尝试！'); }
+				});
+			}
+		});
+		d.show();
+	}
+	
+	//拒绝取消
+	function RefuseCancleOrder(oid, sid, uid)
+	{
+		if( !confirm('你确认要拒绝此订单的取消申请吗') ) return false;
+		$.post("/Sales/refuseCancleOrder", {o:oid, s:sid, u:uid}, function(data) {
+			if( parseInt(data)==1 ) {
+				alert("已将拒绝通知发送到用户");
+				window.location.reload();
+			} else {
+				alert("操作失败，请重新操作");	
+			}
+		});	
+	}
+	
+	//确认订单
+	function SendOrder(oid)
+	{
+		if( !confirm('你确认此订单已经完成了吗') ) return false;
+		$.post("/Sales/confirmOrderStatus", {o:oid}, function(data) {
+			if( parseInt(data)==1 ) {
+				$("#OID_"+oid).remove();
+				alert("您已确认完成，请在 '已完成订单' 中查看！ ");
+			} else {
+				alert("操作失败，请重新操作");	
+			}
+		});	
+	}
+	var CountUrl = "{:U('/Sales/countOrder')}";
+	var countOrder = "{$countOrder}";
+	var sid = "{$sid}";
+	<literal>
+   $(document).ready(function(){
+	   $("#category_order").hide();
+	   function CountNum(){
+	         $.ajax({
+				 type:"POST",
+				 dataType:"json",
+				 url:CountUrl,
+				 async:false,
+				 cache:false,
+				 timeout:80000,     //ajax请求超时时间80秒     
+				 data:{corder:countOrder,sid:sid}, //40秒后无论结果服务器都返回数据     
+	             success:function(data){//从服务器得到数据，显示数据并继续查询 
+					if(data.new_order>0 || data.close_order>0){
+						$("#category_order").slideDown("slow");; //清空前一次刷新数据，不清除索表会出错
+						$("#sp1").html(data.new_order);
+						$("#sp2").html(data.close_order);
+						warning();
+					}else{
+						$("#category_order").slideUp("slow");
+					}
+	             },error:function(data){     
+	                      $("#msg").append("链接有误，请查看网络链接");   
+	             }     
+	           });
+	        };
+        setInterval(function(){CountNum();}, 10000);
+     });
+	 </literal>
+
+	var msecs = 3000;	//改变时间得到不同的闪烁间隔；
+	setTimeout("blink()", msecs);
+	function blink() {	//这是闪烁程序的核心
+		category_order.style.visibility =
+		(category_order.style.visibility == "hidden") ? "visible" : "hidden";	//得到与当前状态相反的属性值
+		setTimeout("blink()", ((category_order.style.visibility == "hidden") ? msecs/10 : msecs));	//设定下一次改变状态的时间
+	}
+	function warning(){
+		if($.browser.msie && $.browser.version=='8.0'){
+			$('#newMessageDIV').html('<embed src="/Public/Js/ordermsg.wav"/>');
+		}else{
+			$('#newMessageDIV').html('<audio autoplay="autoplay"><source src="/Public/Js/warningmsg.wav"'+'type="audio/wav"/></audio>');
+		}
+	}
+	$(function(){
+		$(".category_order_l ul li").click(function(){
+			var index=$(this).index()
+			$(this).css("border-bottom","2px solid #00bbe8").siblings("li").css("border","#a5a5a5 solid 1px")
+			})
 		})
-	}
-}
-function Operation(status,o_id,buttons){
-	if(!status && !o_id){
-		alert('参数错误');return false;
-	}
-
-	if(confirm("确定要执行“"+buttons+"”操作吗？")==false){
-		return false;
-	}
-	$.post("{:U('operation')}",{'type':'o_dstatus','status':status,'o_id':o_id},function(result){
-		if(result==1)window.location.reload();
-		if(result==0)alert('操作错误');
-
-	});
-}
-</script>
+	</script>
+	<div id="newMessageDIV" style="display:none"></div> 
+</div>
 </block>

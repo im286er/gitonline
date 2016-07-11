@@ -1,6 +1,11 @@
 <extend name="New2:common"/>
 <block name="header">
     <script src="__PUBLIC__/Js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/Merchant/plugins/unslider/dist/js/unslider-min.js"></script>
+    <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider.css" rel="stylesheet">
+    <link href="__PUBLIC__/Merchant/plugins/unslider/dist/css/unslider-dots.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.move.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/unslider/jquery.event.swipe.js"></script>
     <if condition="$dtype eq 1">
         <script src="__PUBLIC__/Js/Mobile/flow4.js"></script>
     <else/>
@@ -8,7 +13,9 @@
     </if>
     <link rel="stylesheet" href="__PUBLIC__/Js/artDialog/css/ui-dialog.css">
     <link rel="stylesheet" href="__PUBLIC__/Mobile/default/Css/productdetails.css?v=20151013">
+
     <script src="__PUBLIC__/Js/artDialog/dist/dialog-min.js"></script>
+
     <script>
     var reqUrl = "{:U('Mobile/Choose/new_search',array('jid'=>$jid,'sid'=>$sid))}";
     var flowUrl = "{:U('Mobile/Flow/confirm',array('jid'=>$jid,'sid'=>$sid))}";
@@ -26,26 +33,42 @@
         $pictureset = unserialize( $goods_info['pictureset'] );
         if( empty($pictureset) ) $pictureset[] = $goods_info['gimg'];
     ?>
+
+
     <div class="container-fluid" >
     	<div class="row goodtop">
             <div class="ct-banner">
                 <a href="javascript:history.go(-1)" class="back"></a>
                 <volist name="pictureset" id="vo">
-                    <img src="{$vo}" class="img-responsive center-block" />
+                    <ul>
+                        <li><a href="##"><img src="{$vo}" class="img-responsive center-block"></a></li>
+                    </ul>
                 </volist>
             </div>
+
         </div>
+        <script>
+            $(function() {
+                $('.ct-banner').unslider({
+                    autoplay: true,
+                    arrows: false,
+                    fluid: true,
+                    dots: true
+                });
+            });
+        </script>
+
         <div class="row goodprice">
         	 <h5>{$goods_info.gname}</h5>
              <div class="goodsale">
              	<div class="star start-3-5 pull-left"></div>
-                <div class="pull-left goodsaledtl">3评价 月售{$goods_info['gsales']}份 库存{$goods_info['gstock']}份</div>
+                <div class="pull-left goodsaledtl">1评价 月售{$goods_info['gsales']}份 <if condition="$goods_info.gstock eq -1">库存无限制<else />库存{$goods_info['gstock']}份</if></div>
              </div>
              <div class="goodpricedtl">
              	价格：<span class="red">&yen;{$goods_info['gdprice']>0 ? $goods_info['gdprice'] : $goods_info['goprice'] }</span>
                 <div class="pull-right" id="productjiaandjie">
                 	<div class="pull-left" style="width:33%"><img src="__PUBLIC__/Merchant/images/jie2.png" width="20" gid="{$goods_info.gid}" class="btn_left jianBtn"></div>
-                    <span class="gnum_{$goods_info.gid} numLabel" id="number_{$goods_info.gid}">{$cart_key}</span>
+                    <span style="line-height: 23px; height: 23px;" class="gnum_{$goods_info.gid} numLabel" id="number_{$goods_info.gid}">{$cart_key}</span>
                     <div class="pull-right" style="width:33%"><img src="__PUBLIC__/Merchant/images/jia2.png" width="20" gid="{$goods_info.gid}" class="btn_right addBtn"></div>
                 </div>
              </div>
@@ -58,7 +81,7 @@
              
             <p>{$goods_info.gcontent|default='商品暂无信息'}</p>
       </div>   
-      
+      <!-- 
        <br />
         <div class="row gooddetail">
         	<h3 class="ct-title2">商品评论 （20）</h3>
@@ -69,7 +92,7 @@
             <p>具有果木的清香与鱿鱼的鲜美，口口生香，美味难以复制，久经
 咀嚼，便可感受到鱿鱼特有的鲜香口感和柔韧性。</p>
       </div>  
-        
+        -->
         
          
     </div>
@@ -81,4 +104,5 @@
             <a href="{:U('Index/shopCart',array('sid'=>$sid))}" id="okBtn" class="col-xs-4 cartcheckout">选好了</a>
         </div>
     </footer>
+
 </block>

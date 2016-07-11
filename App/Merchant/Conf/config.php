@@ -41,6 +41,8 @@ return array(
 				    array('type'=>0,'id'=>'Messageparammsg','name'=>'特权价格','url'=>'/Message/parammsg.html'),
 		)),
 
+	
+
 
 	//模板功能
 	'FUNC_MENU'	=> array(
@@ -90,6 +92,9 @@ return array(
 					array('id'=>'Salesmyorder2','name'=>'全部订单','url'=>'/Sales/myorder.html','next'=>array(
 							array('id'=>'Salesmyorder','name'=>'消费订单','url'=>'/Sales/myorder.html'),
 					)),
+					array('id'=>'Salesmyreserve2','name'=>'预约管理','url'=>'/Sales/myreserve.html','next'=>array(
+							array('id'=>'Salesmyreserve','name'=>'预约订单','url'=>'/Sales/myreserve.html'),
+					)),
 					
 					array('id'=>'SalesrecedeOrderGoods2','name'=>'退货管理','url'=>'/Sales/recedeOrderGoods.html','next'=>array(
 							array('id'=>'SalesrecedeOrderGoods','name'=>'退货商品','url'=>'/Sales/recedeOrderGoods.html'),
@@ -127,6 +132,7 @@ return array(
 			)),
 			'marketing' =>    array('code'=>'marketing','name'=>'营销管理','url'=>'/Invest/index.html?menucode=marketing','next'=>array(
 					array('id'=>'Investindex','name'=>'消费投资','url'=>'/Invest/index.html'),
+					array('id'=>'Investupgrade','name'=>'9.9升级','url'=>'/Invest/upgrade.html'),
 			)),
 	),
 );

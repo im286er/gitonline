@@ -175,9 +175,12 @@ class OrderModel extends Model {
 	}
 	//判断是否满足条件
 	public function checkTz($oid){
-		$order = M('order')->where(array('o_id'=>$oid))->field('o_sid,o_price')->find();
+		$order = M('order')->where(array('o_id'=>$oid))->field('o_sid,o_price,o_pway')->find();
 		$tz    = M('touzi')->where(array('sid'=>$order['o_sid'],'status'=>1))->find();
 		if(empty($tz)){
+			return false;
+		}
+		if($order['o_pway'] == 'cod'){
 			return false;
 		}
 		if($tz['tz_type'] == 1){//店铺投资
@@ -212,6 +215,8 @@ class OrderModel extends Model {
 				'money' => round($total * $set1 / 100,2),
 				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
 				'addtime' => date("Y-m-d H:i:s"),
+				'oprice' => $order['o_price'],
+				'ouid' => $order['o_uid'],
 			);
 			M('touzi_hb')->add($opt1);//一级
 
@@ -223,6 +228,8 @@ class OrderModel extends Model {
 				'money' => round($total * $set2 / 100,2),
 				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
 				'addtime' => date("Y-m-d H:i:s"),
+				'oprice' => $order['o_price'],
+				'ouid' => $order['o_uid'],
 			);
 			M('touzi_hb')->add($opt2);//二级	
 		}
@@ -233,6 +240,8 @@ class OrderModel extends Model {
 				'money' => round($total * $set3 / 100,2),
 				'time'  => date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m")+intval($tz['time']),date("d"),date("Y"))),
 				'addtime' => date("Y-m-d H:i:s"),
+				'oprice' => $order['o_price'],
+				'ouid' => $order['o_uid'],
 			);
 			M('touzi_hb')->add($opt3);//三级	
 		}
@@ -252,6 +261,73 @@ class OrderModel extends Model {
 			'status' => 0,
 		);
 		M('user_msg')->add($opt);
+		return true;
+	}
+	
+	//升级返利
+	public function doUp($oid){
+		$order = M('order')->where(array('o_id'=>$oid))->field('o_jid,o_uid,o_price,o_gtype')->find();
+		if($order['o_gtype'] != 'upgrade'){
+			return false;
+		}
+		$mer = M('merchant')->where(array('jid'=>$order['o_jid']))->field('is_upfl,set1,set2,set3')->find();
+		if($mer['is_upfl'] == 0){
+			return false;
+		}
+		$total = $order['o_price'];
+		$user2 = M('fl_user')->where(array('flu_userid'=>$order['o_uid']))->getField('flu_puserid');
+		$user3 = M('fl_user')->where(array('flu_userid'=>$user2))->getField('flu_puserid');
+		if($mer['set1'] > 0){
+			$p1 = round($total * $mer['set1'] / 100,2);
+			M('fl_user')->where(array('flu_userid'=>$order['o_uid']))->setInc('flu_balance',$p1);
+			$opt1 = array(
+					'oid' => $oid,
+					'uid' => $order['o_uid'],
+					'money' => $p1,
+					'time'  => date("Y-m-d H:i:s"),
+					'addtime' => date("Y-m-d H:i:s"),
+					'type'   => 1,
+					'status'  => 1,
+					'oprice' => $order['o_price'],
+					'ouid' => $order['o_uid'],
+			);
+			M('touzi_hb')->add($opt1);//一级
+		
+		}
+		if($mer['set2'] > 0 && $user2 > 0){
+			$p2 = round($total * $mer['set2'] / 100,2);
+			M('fl_user')->where(array('flu_userid'=>$user2))->setInc('flu_balance',$p2);
+			$opt1 = array(
+					'oid' => $oid,
+					'uid' => $user2,
+					'money' => $p2,
+					'time'  => date("Y-m-d H:i:s"),
+					'addtime' => date("Y-m-d H:i:s"),
+					'type'   => 1,
+					'status'  => 1,
+					'oprice' => $order['o_price'],
+					'ouid' => $order['o_uid'],
+			);
+			M('touzi_hb')->add($opt1);//二级
+		
+		}
+		if($mer['set3'] > 0 && $user3 > 0){
+			$p3 = round($total * $mer['set3'] / 100,2);
+			M('fl_user')->where(array('flu_userid'=>$user3))->setInc('flu_balance',$p3);
+			$opt1 = array(
+					'oid' => $oid,
+					'uid' => $user3,
+					'money' => $p3,
+					'time'  => date("Y-m-d H:i:s"),
+					'addtime' => date("Y-m-d H:i:s"),
+					'type'   => 1,
+					'status'  => 1,
+					'oprice' => $order['o_price'],
+					'ouid' => $order['o_uid'],
+			);
+			M('touzi_hb')->add($opt1);//三级
+		
+		}
 		return true;
 	}
 }

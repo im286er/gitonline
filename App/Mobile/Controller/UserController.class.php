@@ -11,6 +11,7 @@ class UserController extends MobileController {
 		$msgCount = 0;
 		if($this->mid){
 			$member = M('FlUser')->find($this->mid);
+			$member['fanli'] = M('touzi_hb')->where(array('uid'=>$this->mid,'status'=>1))->getField('sum(money) as fanli');
 			$this->assign('member',$member);
 			$msgCount = M('user_msg')->where(array('sid'=>$this->sid,'userid'=>$this->mid,'status'=>0))->count();//未读消息数
 		}
@@ -185,9 +186,13 @@ class UserController extends MobileController {
 		}else{
 		$this->assign('page_url',U('User/index@yd',array('opentype'=>cookie('opentype'),'jid'=>$this->jid))); 	
 		}
+
+		//联系电话
+		$numb  = M('shop')->where(array('sid'=>$this->sid))->getField('mservetel');
  
 		$page_name = '我的订单';
 		$this->assign('page_name',$page_name);
+		$this->assign('numb', $numb);
 		$this->newdisplay();
 	}
 
@@ -198,7 +203,10 @@ class UserController extends MobileController {
 		//订单详情
 		$order = M('order')->where(array('o_id'=>$o_id))->find();
 		//联系电话
-		$numb  = M('shop')->where(array('sid'=>$this->sid))->getField('mservetel');
+		$info  = M('shop')->field('mservetel,ps_time')->where(array('sid'=>$this->sid))->find();
+		$numb  = $info['mservetel'];
+		//送达时间
+		$ptime = $info['ps_time'];
 		//订单商品
 		$goods = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
 		//合计
@@ -206,6 +214,7 @@ class UserController extends MobileController {
 		foreach ($goods as $key => $value) {
 			$total_price += $value['sp_number']*$value['sp_gdprice'];
 		}
+		
 		//推荐产品
 		$list  = M('goods')->where(array('sid'=>$this->sid, 'gstatus'=>1))->order('gsales desc')->limit(6)->select(); 
 		$page_name = '订单详情';
@@ -215,6 +224,7 @@ class UserController extends MobileController {
 		$this->assign('goods',$goods);
 		$this->assign('total_price',$total_price);
 		$this->assign('list', $list);
+		$this->assign('ptime', $ptime);
 		$this->newdisplay();
 	}
 	
@@ -228,7 +238,7 @@ class UserController extends MobileController {
 		$odstatus =  array(
 			1 => '预定待处理',
 			3 => '同意预定',
-			4 => '拒绝预定',
+			4 => '预约已完成',
 			5 => '预定关闭',
 		);
 
@@ -278,7 +288,7 @@ class UserController extends MobileController {
 		$this->assign('page_url',U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid)));	
 		}		
 		$this->assign('order',$order);
-		$page_name = '我的预定';
+		$page_name = '我的预约';
 		$this->assign('page_name',$page_name);
 		$this->newdisplay();
 	}
@@ -418,6 +428,7 @@ class UserController extends MobileController {
 
 		$this->funcMenu();
 		$this->assign('shop_tel', $shop_tel);
+		$this->assign('dtype', I('dtype', 1));
 		$this->assign('shop_info', $shop_info);
 		$this->newdisplay();
 	}
@@ -448,13 +459,13 @@ class UserController extends MobileController {
 			$password = I('post.password');
 			$username or die(JSON(array('errcode'=>80101,'errmsg'=>'请填写用户名')));
 			$password or die(JSON(array('errcode'=>80102,'errmsg'=>'请填写密码')));
-			$result = D('FlUser')->login($username,$password);
+			$result = D('FlUser')->login($username,$password,$this->jid);
 			if($result['errcode']>0)die(JSON($result));
 			cookie('mid', $result['flu_userid'],604800);
-			$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
-			if(empty($u)){
-				M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
-			}
+			//$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
+			//if(empty($u)){
+				//M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
+			//}
 			die(JSON(array('errcode'=>0,'errmsg'=>'登录成功')));
 		}
 		if($this->mid)U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid));
@@ -488,17 +499,17 @@ class UserController extends MobileController {
 		}
 		
 		if($verify=='user_unique'){
-			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile))->find();
+			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile,'flu_sjid'=>$this->jid))->find();
 			!$is_mobile or die(JSON(array('errcode'=>81013,'errmsg'=>'您要绑定的手机号码已存在！')));
 		}elseif($verify=='user_exist'){
-			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile))->find();
+			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile,'flu_sjid'=>$this->jid))->find();
 			!$is_mobile or die(JSON(array('errcode'=>81014,'errmsg'=>'该手机号码已注册用户！')));
 		}elseif($verify=='mobile_verify'){
 			$this->common();
 			$this->userinfo['flu_phone'] or die(JSON(array('errcode'=>81015,'errmsg'=>'请先绑定手机后再操作')));
 			$this->userinfo['flu_phone'] == $mobile or die(JSON(array('errcode'=>81016,'errmsg'=>'您输入的手机号码与您绑定的手机号码不一致')));
 		}elseif($verify=='mobile_findpwd'){
-			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile))->find();
+			$is_mobile = D('FlUser')->where(array('flu_phone'=>$mobile,'flu_sjid'=>$this->jid))->find();
 			$is_mobile or die(JSON(array('errcode'=>81014,'errmsg'=>'您输入的手机号码未注册帐号')));
 		}
 		$content = \Org\Util\String::randString(4, 1);
@@ -507,7 +518,9 @@ class UserController extends MobileController {
 		session('sendsmsTel', $mobile);
 		session('SendSms', $content);
 		//die(JSON(array('errcode'=>'ok','errmsg'=>$content)));
-		die(flsendmsg( $mobile, $content, $this->jid) ? JSON(array('errcode'=>'ok','errmsg'=>$content)):JSON(array('errcode'=>81444,'errmsg'=>'短信发送失败')));		
+		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+		$foottxt  = '['.$merchant['mabbreviation'].']';
+		die(sendmsg( $mobile, $content, $foottxt) ? JSON(array('errcode'=>'ok','errmsg'=>$content)):JSON(array('errcode'=>81444,'errmsg'=>'短信发送失败')));		
 	}
 	
 	//手机注册
@@ -520,16 +533,16 @@ class UserController extends MobileController {
 			$username or die(JSON(array('errcode'=>80101,'errmsg'=>'请填写手机号码')));
 			$password or die(JSON(array('errcode'=>80102,'errmsg'=>'请填写密码')));
 			$sendcode or die(JSON(array('errcode'=>80103,'errmsg'=>'请填写验证码')));
-			$sendcode == session('sendcode') or die(JSON(array('errcode'=>80104,'errmsg'=>'填写的验证码有误')));
+			//$sendcode == session('sendcode') or die(JSON(array('errcode'=>80104,'errmsg'=>'填写的验证码有误')));
 			$result = D('FlUser')->register($username,$password,$this->jid);
 			if($result['errcode']>0)die(JSON($result));
-			$result = D('FlUser')->login($username,$password);
+			$result = D('FlUser')->login($username,$password,$this->jid);
 			if($result['errcode']>0)die(JSON($result));
 			cookie('mid', $result['flu_userid'],604800);
-			$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
-			if(empty($u)){
-				M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
-			}
+			//$u = M('shop_user')->where(array('jid'=>$this->jid,'uid'=>$result['flu_userid']))->getField('id');
+			//if(empty($u)){
+				//M('shop_user')->add(array('jid'=>$this->jid,'uid'=>$result['flu_userid'],'add_time'=>date("Y-m-d H:i:s")));
+			//}
 			die(JSON(array('errcode'=>'ok','errmsg'=>'注册成功')));
 		}
 		if($this->mid)U('User/index',array('opentype'=>cookie('opentype'),'jid'=>$this->jid));
@@ -976,6 +989,24 @@ class UserController extends MobileController {
 			$this->newdisplay();
 		}
 	}
+
+
+	//修改密码
+	public function editAccount(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		if(IS_POST){
+			$account = I('account');
+
+			$s = M('FlUser')->where(array('flu_userid'=>$this->mid))->save(array('flu_nickname'=>$account));
+			exit('0');
+		}else{
+			$this->assign('page_name','修改用户名');
+			$this->newdisplay();
+		}
+	}
 	
 	//上传头像
 	public function upTX(){
@@ -990,7 +1021,7 @@ class UserController extends MobileController {
 			'rootPath'	=> $uploadPath,
 			'subName'	=> $subName,
 			'exts'		=> 'jpg,jpeg,png',
-			'maxSize'	=> 256000
+			'maxSize'	=> 2560000
 		);
 		$attachment = new \Think\Upload($uploadConfig);
 		$attachmentInfo = $attachment->uploadOne($_FILES['file']);
@@ -1001,4 +1032,125 @@ class UserController extends MobileController {
 		redirect('myaccount');
 	}
 	
+	//升级vip
+	public function upgrade(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		$user = M('fl_user')->where(array('flu_userid'=>$this->mid))->find();
+		if($user['flu_usertype'] == 1){
+			redirect('grade');
+		}
+		$this->newdisplay();
+	}
+	//创建升级订单 
+	public function creatUpOrder(){
+		$opt = array(
+			'o_jid' => $this->jid,
+			'o_uid' => $this->mid,
+			'o_gtype' => 'upgrade',
+			'o_pstatus' => 0,
+		);
+		$oid = M('order')->where($opt)->getField('o_id');
+		if($oid){
+			$data = array(
+					'msg' => 'success',
+					'oid' => $oid
+			);
+			$this->ajaxReturn($data);
+		}
+		
+		$oid = orderNumber();
+		$opt = array(
+				'o_id' => $oid,
+				'o_sid' => $this->sid,
+				'o_jid' => $this->jid,
+				'o_uid' => $this->mid,
+				'o_type' => 2,
+				'o_dstime' => date("Y-m-d H:i:s"),
+				'o_dstatus' => 1,
+				'o_pstatus' => 0,
+				'o_price'   => '9.9',
+				'o_gtype'   =>  'upgrade',
+				'o_table'   => 'goods_snapshot',
+				'o_pway'   => I('post.paytype'),
+		);
+		$r = M('order')->add($opt);
+		if($r){
+			$data = array(
+					'msg' => 'success',
+					'oid' => $oid
+			);
+			$this->ajaxReturn($data);
+		}
+		$data = array(
+				'msg' => '创建订单失败,暂时无法升级',
+		);
+		$this->ajaxReturn($data);
+	}
+	//已经是vip
+	public function grade(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		$user = M('fl_user')->where(array('flu_userid'=>$this->mid))->find();
+		if($user['flu_usertype'] == 0){
+			redirect('upgrade');
+		}
+		$user2_list = M('fl_user')->where(array('flu_puserid'=>$this->mid))->field('flu_userid,flu_avatar,flu_nickname,flu_phone,flu_regtime,flu_puserid')->select();//下级
+		$user3_arr  = array_column($user2_list, 'flu_userid');
+		$user3_list = M('fl_user')->where(array('flu_puserid'=>array('in',join(',',$user3_arr))))->field('flu_userid,flu_avatar,flu_nickname,flu_phone,flu_regtime,flu_puserid')->select();//下下级
+		$user_list  = array_merge($user2_list,$user3_list);
+		foreach($user_list as $k=>$v){
+			$user_list[$k]['pnickname'] = M('fl_user')->where(array('flu_userid'=>$v['flu_puserid']))->getField('flu_nickname');
+			$user_list[$k]['total'] = M('order')->where(array('o_uid'=>$v['flu_userid'],'o_pstatus'=>1))->getField('sum(o_price) as total');
+			$user_list[$k]['fanli'] = M('touzi_hb')->where(array('uid'=>$this->mid,'ouid'=>$v['flu_userid'],'status'=>1))->getField('sum(money) as fanli');
+		}
+		$this->assign('user_list',$user_list);
+		$this->newdisplay();
+	}
+	
+	public function gradeInfo(){
+		if(!$this->mid){
+			redirect(U('User/login',array('sid'=>$this->sid,'jid'=>$this->jid,'backurl'=>url_param_encrypt(U('User/index'),'E'),'returnurl'=>url_param_encrypt(U(),'E'))));
+			exit;
+		}
+		$user = M('fl_user')->where(array('flu_userid'=>$this->mid))->find();
+		if($user['flu_usertype'] == 0){
+			redirect('upgrade');
+		}
+		$fuid = I('fuid',0);
+		$fuser = M('fl_user')->where(array('flu_userid'=>$fuid))->field('flu_avatar,flu_nickname')->find();
+		$fuser['total'] = M('order')->where(array('o_uid'=>$fuid,'o_pstatus'=>1))->getField('sum(o_price) as total');
+		$fl_list = M('touzi_hb')->where(array('uid'=>$this->mid,'ouid'=>$fuid,'status'=>1))->select();
+		foreach($fl_list as $k=>$v){
+			$fuser['fanli'] += $v['money'];
+		}
+		$this->assign('fuser',$fuser);
+		$this->assign('fl_list',$fl_list);
+		$this->newdisplay();
+	}
+
+
+	//评价
+	public function  evaluate(){
+		$o_id  = I('o_id', 0);
+		//订单商品
+		$goods = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
+		//商铺信息
+		$sinfo = M('shop')->field('sid,sname,exterior')->where(array('sid'=>$this->sid))->find();
+
+		$page_name = '预约详情';
+		$this->assign('page_name',$page_name);
+		$this->assign('goods', $goods);
+		$this->assign('sinfo', $sinfo);
+		$this->assign('evaluate_c', C('EVALUATE_C'));
+		$this->newdisplay();
+	}
+
+
+
+
 }

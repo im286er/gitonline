@@ -5,41 +5,184 @@
     	<a href="{:U('User/index')}"><div class="back pull-left"></div></a>
     	{$page_name}
     </header>
-    <div class="container-fluid myappoint" >
+    <link href="__PUBLIC__/Merchant/images/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
+    <div class="myappoint" >
         <div class="row myappointstep">
-            <div class="col-xs-6" >
-                <a href="{:U('User/myreserve',array('dtype'=>2))}" <if condition="$o_dstatus neq '1'"> class="red" </if>>已处理</a>
-            </div>
             <div class="col-xs-6">
                 <a href="{:U('User/myreserve',array('dtype'=>2, 'o_dstatus'=>1))}" <if condition="$o_dstatus eq '1'"> class="red" </if>>未处理</a>
+            </div>
+            <div class="col-xs-6" >
+                <a href="{:U('User/myreserve',array('dtype'=>2))}" <if condition="$o_dstatus neq '1'"> class="red" </if>>已处理</a>
             </div>
         </div><br />
     	<if condition="!empty($order)">
         <volist name="order" id="vo">
-        <a href="{:U('reserveDetail',array('o_id'=>$vo['o_id']))}" style="color: #878787;">
-         	<div class="row orderpros">
+
+         	<div class="row orderpros" >
+                <a href="{:U('reserveDetail',array('o_id'=>$vo['o_id']))}" style="color: #878787;">
                 <div class="ordernotitle">
                     <div class="pull-left">
                         <h5 class="f14">{$vo.o_name}</h5>
-                        <p class="gray">手机：{$vo.o_phone}</p>
+                        <p class="gray" style="font-size: 1.2rem">手机：{$vo.o_phone}</p>
                     </div>
-                    <div class="pull-right">
+                    <div class="pull-right timepic" style="margin-top: 2rem;">
                         {$vo.o_dstime}
                     </div>
                 </div>
              
-                <div class="ordertotal">
-                    <div class="col-xs-8 text-left"><volist name="vo.ogoods" id="value" key="keys"><egt name="keys" value="2">、</egt>{$value.sp_name}</volist></div> 
-                    <div class="col-xs-4 text-right">{$vo.status_name}</div>
+                <div class="ordertotal" style="padding-top: 0 ;padding-bottom: 10px;">
+                    <div class="col-xs-7 text-left"><volist name="vo.ogoods" id="value" key="keys"><egt name="keys" value="2">、</egt>{$value.sp_name}</volist></div>
+                    <div class="col-xs-5 text-right"><if condition="($vo['o_close'] eq 1) and ($vo['o_dstatus'] neq 5)">取消待处理<else/>{$vo.status_name}</if></div>
                 </div>
+                </a>
+
+                <if condition="$vo['o_close'] eq 0 && $vo['o_dstatus'] neq 4 && $vo['o_dstatus'] neq 5">
+                <div class="orderbuttons">
+                    <a class="btn btn-o" href="javascript:;" onclick="ch_dtype('{$vo.o_id}',3);" data-toggle="modal" data-target="#myModal">取消预约</a>
+                </div>
+                </if>
+
+                <if condition="$vo['o_pstatus'] eq 0  && $vo['o_type'] eq 2 && $vo['o_dstatus'] neq 5">
+                <div class="orderbuttons">
+                    <if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger')">
+                        <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',2);">微信付款</a>
+                    <else />
+                        <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',1);">支付宝付款</a>
+                    </if>
+                </div>
+                </if>
             </div>
-        </a>
-            <br />
+
         </volist>
         <else />
-        <div style="width:50%;margin:10% auto;font-size:16px;color:#666;text-align:center;">暂时没有预订！</div>
+<!--             <div style="width:50%;margin:10% auto;font-size:16px;color:#666;text-align:center;">暂时没有预订！</div> -->
+            <div class="emptybody">
+
+                <img src="__PUBLIC__/Merchant/images/myappoint_emp.jpg" style="width: 100%; float: left;">
+
+                <a class="goback" href="{:U('Index/index',array('sid'=>$sid, 'jid'=>$jid))}">去预约</a>
+
+            </div>
+            <script>
+                $(document).ready(function(){
+                    bodyauto();
+                });
+                function bodyauto(){
+                    var height= document.documentElement.clientHeight - 45;
+                    var winwidth=document.documentElement.clientWidth;
+                    $('body').css('paddingBottom','0');
+                    if(winwidth<750)
+                        $('.emptybody').css('height',height+'px');
+                }
+                window.onresize=bodyauto;
+            </script>
         </if>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade con-qx" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title text-center" >确定要取消该笔订单吗</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px; border:0px;">
+             <!-- <ul class="modalczselect">
+                <li>
+                    <div class="col-xs-5 text-left strong">1号座</div>
+                    <div class="col-xs-5 text-left gray">6人位</div>
+                    <div class="col-xs-2 text-right"><div class="checkbox checkbox-warning  checkbox-circle">
+                        <input id="checkbox1" type="checkbox">
+                        <label for="checkbox1">
+                        </label>
+                    </div></div>
+                </li>
+             </ul> -->
+          </div>
+          <div class="modal-footer"  style=" border:0px;  text-align:center; ">
+            <button type="button" class="btn btn-danger btn-lg" style="width:40% ; margin:0 auto;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">取消</span></button>
+            <button type="button" class="btn btn-danger btn-lg btn-qx-yes"  style="width:40% ; margin:0 auto;"> 确认 </button>
+          </div>
+        </div>
+      </div>
+    </div> 
      
+
+    <script>
+        var reqUrl = "{:U('Pay/request_alipay')}";
+        var weixinUrl = "{:U('/Home/Wechat/dsWxJsPay@www')}";
+        var o_id  = "";
+        var ctype = 3;
+        var isApp = 0;
+
+        function ch_dtype(oid,ct){
+            o_id  = oid;
+            ctype = ct;
+        }
+
+
+        function ch_pay(oid,r){
+            if(isApp > 0){
+                payOrder('alipay',oid);
+            }else{
+                if(r == 2){
+                    location.href = weixinUrl + "?o_id=" + oid + '&jump=1&mid={$mid}';
+                }else{
+                    location.href = reqUrl + "?o_id=" + oid + '&mid=' + {$mid};
+                }
+            }
+        }
+
+
+        $(document).ready(function(){
+            
+            $('.btn-qx-yes').click(function(){
+                var reqUrl = "{:U('Mobile/User/changeOrder')}";
+                var qx_reason = '';
+                if(ctype == 3){
+                    qx_reason = $("#qx-reason").val();
+                    if(qx_reason == ''){
+                        //return false;
+                    }
+                }
+                var qet_data = {
+                        type  : 'dtype',
+                        o_id  : o_id,
+                        ctype : ctype,
+                        qx_reason : '取消订单',
+                };
+                $("#myModal").hide();
+                send_qet(reqUrl,qet_data);
+            });
+        }); 
+
+
+        function send_qet(reqUrl,qet_data){
+            $.ajax( {    
+                url:reqUrl,   
+                data:qet_data,
+                type:'post',    
+                cache:false,    
+                dataType:'json',    
+                success:function(data) {    
+                    if(data.msg =="true" ){
+                        // $("#play-success").show();
+                        window.location.reload();
+                    }
+                 },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    if(XMLHttpRequest.status == '200'){
+                        var data = eval('('+ XMLHttpRequest.responseText +')');
+                        if(data.msg =="true" ){
+                            $("#play-success").show();
+                            //window.location.reload();
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </block> 
 <block name="footer"></block>

@@ -5,7 +5,8 @@ use Think\Controller;
 class TestController extends Controller {
 
     public function index(){
-		print_r(C('default_theme'));
+		//print_r(C('default_theme'));
+		echo phpinfo();
     }
     //后置操作方法
 

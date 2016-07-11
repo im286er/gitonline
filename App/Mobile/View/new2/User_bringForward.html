@@ -26,7 +26,7 @@
         <br />
 
         <input type="hidden" name="bmention" id="bmention" value="{$member.flu_balance}" >
-		<button type="button" class="btn btn-danger btn-lg btn-block" id="DialogSave">确定</button>
+		<button type="button" class="btn btn-danger btn-lg btn-block" style="margin: 0;" id="DialogSave">确定</button>
  
         
     </div>
@@ -66,27 +66,6 @@
         
     });
 
-
-    function fontAuto(){
-        var winWidth=document.documentElement.clientWidth;/*可视窗口宽度*/
-        if(winWidth<=500)
-        {
-            var f=winWidth/500*14 ;
-            if(f>12){
-                f=f + "px";
-                $('label').css({'fontSize':f});
-            }
-            else{
-                f=12 + "px";
-                $('label').css({'fontSize':f});
-            }
-        }
-
-    }
-    window.onresize=fontAuto;
-    $(document).ready(function(){
-        fontAuto();
-    })
     </script>
 
 </block>

@@ -45,4 +45,20 @@ class InvestController extends MerchantController {
 			$this->display();
 		}
 	}
+	
+	public function upgrade(){
+		if(IS_POST){
+			$info = array();
+			$info['is_upfl'] = I('is_upfl','');
+			$info['set1'] = I('set1','');
+			$info['set2'] = I('set2','');
+			$info['set3'] = I('set3','');
+			M('merchant')->where(array('jid'=>$this->jid))->save($info);
+			exit('保存成功');
+		}else{
+			$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+			$this->assign('merchant',$merchant);
+			$this->display();
+		}
+	}
 }

@@ -1,0 +1,15 @@
+{
+	"index.html": {
+		"resources": [
+			"img/qiezi.png",
+			"css/css.css",
+			"img/qiezi2.png",
+			"img/logo_p.png",
+			"img/star2_p.png",
+			"img/evaluate_buy_time.png",
+			"js/jquery-1.8.3.js",
+			"img/before_p.png",
+			"img/star_p.png"
+		]
+	}
+}

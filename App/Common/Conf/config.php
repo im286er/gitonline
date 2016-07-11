@@ -87,5 +87,24 @@ return array(
 		),
 	),
 	'CODEKEY' => 'yhujikuytgfrtyhu',
+
+	//模板分类
+	'THEME_C'   => array(
+			'single' =>	array('code'=>'single', 'name'=>'个人模板', 'url'=>'/Manage/sysTheme/code/single.html', 'next'=>array(
+					array('id'=>'singleProduct', 'name'=>'单品', 'url'=>'/Manage/sysTheme/v_id/singleProduct/code/single.html'),
+					array('id'=>'singleOrder', 'name'=>"点餐", 'url'=>'/Manage/sysTheme/v_id/singleOrder/code/single.html'),
+				)),
+			'seller' =>	array('code'=>'seller', 'name'=>'商户模板', 'url'=>'/Manage/sysTheme/code/seller.html', 'next'=>array(
+					array('id'=>'sellerProduct', 'name'=>'单品', 'url'=>'/Manage/sysTheme/v_id/sellerProduct/code/seller.html'),
+					array('id'=>'sellerOrder', 'name'=>"点餐", 'url'=>'/Manage/sysTheme/v_id/sellerOrder/code/seller.html'),
+					array('id'=>'sellerOnlineStore', 'name'=>'网店', 'url'=>'/Manage/sysTheme/v_id/sellerOnlineStore/code/seller.html'),
+				)),
+			'company' =>	array('code'=>'company', 'name'=>'企业模板', 'url'=>'/Manage/sysTheme/code/company.html', 'next'=>array(
+					array('id'=>'companySingleProduct', 'name'=>'单品', 'url'=>'/Manage/sysTheme/v_id/companySingleProduct/code/company.html'),
+					array('id'=>'companyOrder', 'name'=>"点餐", 'url'=>'/Manage/sysTheme/v_id/companyOrder/code/company.html'),
+					array('id'=>'companyOnlineStore', 'name'=>'网店', 'url'=>'/Manage/sysTheme/v_id/companyOnlineStore/code/company.html'),
+					array('id'=>'companyMall', 'name'=>'商城', 'url'=>'/Manage/sysTheme/v_id/companyMall/code/company.html'),
+				)),
+		),
 );
 

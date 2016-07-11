@@ -26,6 +26,11 @@ class FlowController extends MobileController {
 			}
 			cookie('ProductList', $string);
 		}
+		
+		if(session('table') > 0){
+			D('Tsbind')->saveCart($this->sid);
+			$_COOKIE['ProductList'] = D('Tsbind')->getCart($this->sid);
+		}
 		//查询购物车商品
 		$cart = $_COOKIE['ProductList'];
 		
@@ -173,6 +178,10 @@ class FlowController extends MobileController {
 					'msg' => 'false3',
 			);
 			$this->ajaxReturn($data);
+		}
+		
+		if(session('table') > 0){
+			$_COOKIE['ProductList'] = D('Tsbind')->getCart($this->sid);
 		}
 		
 		$used_coupon = I('used_coupon');
@@ -353,8 +362,11 @@ class FlowController extends MobileController {
 			
 			$app_con[] = $v['gname'];
 			$total_num += $v['gnum'];
+			
+			//更新商品销量
+			M('goods')->where(array('gid'=>$v['gid']))->setInc('gsales',$v['gnum']);
 		}
-		$appcontent = implode(',',$app_con);
+	/*	$appcontent = implode(',',$app_con);
 		
 		//提交成功,把消息发送到商家APP里
 		$appmsg = array();
@@ -374,7 +386,7 @@ class FlowController extends MobileController {
 		$appmsg['extend'] = serialize($appmsg_extend);
 		M('appmsg')->add($appmsg);
 		//推送消息到商家app
-		D('Tsbind')->send($oid);
+		D('Tsbind')->send($oid);*/
 
 		//库存
 		D('Goods')->reduceRepertory($oid,'setDec',1);

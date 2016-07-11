@@ -17,7 +17,7 @@ class BookkeepingModel extends Model {
 		/**
 		 * 如果小于350 元，收 2元，如果高于 350 按 0.6%，最高为 25元
 		 */
-		$data['bjs'] = 0;
+		$data['bjs'] = $this->_GetRound( $bmention * 6 / 1000 );
 		if( $bmention <= 350 ) {
 			$data['bjy'] = $bjy = 2;
 		} else {
@@ -25,7 +25,7 @@ class BookkeepingModel extends Model {
 			if( $bjy >= 25 ) $bjy = 25;
 			$data['bjy'] = $bjy;
 		}
-		$data['bsj'] = $bmention - $bjy;
+		$data['bsj'] = $bmention - $bjy - $data['bjs'];
 		return $data;	
 	}
 

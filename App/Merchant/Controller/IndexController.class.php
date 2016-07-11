@@ -206,21 +206,16 @@ class IndexController extends MerchantController {
 			if( session('SendSms') != $smscode ) { $this->error('验证码输入错误，请重新修改'); }
 			$member = M('member')->where('mid='.$this->mid)->find();
 			if( md5(md5($password)) == $member["mpwd"] ) { $this->error('新密码和旧密码不能相同'); }
-			if( M('member')->where('mid='.$this->mid)->setField('mpwd', md5(md5($password))) !== false ) {
-				if( $this->type == 1){
-					M('merchant')->where('jid='.$this->jid)->save(array('pwd_changed'=>1));
-				}				
+			if( M('member')->where('mid='.$this->mid)->setField('mpwd', md5(md5($password))) !== false ) {	
 				unset($_SESSION[C('USER_AUTH_KEY')], $_SESSION); session_destroy();
 				\Common\Org\Cookie::delete(array('mid', C('USER_COOKIE_JID'), C('USER_COOKIE_SID'), C('USER_COOKIE_TPE')));
 				$this->success('修改成功',U('/Public/login@sj', '', true, true));
 			} else { $this->error('修改失败，请重新修改'); }			
 		} else {
-			$member = M('member')->where('mid='.$this->mid)->find();
-			if( $this->type == 1){
-				$this->assign('linkmobile', ($member['mphone']?$member['mphone']:M('merchant')->where(array('jid'=>$this->jid))->getField('mlptel')));
-			}elseif( $this->type == 2 ) {
-				$this->assign('linkmobile', M('shop')->where(array('sid'=>$this->tsid, 'jid'=>$this->jid))->getField('scontactstel'));
-			}
+			$tel = M('merchant_user')->where(array('tmid'=>$this->mid))->getField('tphone');
+			
+			$this->assign('linkmobile', $tel);
+			
 			$this->assign('guide',I('guide'));
 			$this->display();
 		}	
@@ -257,21 +252,18 @@ class IndexController extends MerchantController {
 			$smscode=I('post.smscode');
 			if( !$mlptel || !$smscode ) { $this->error('请把信息填写完整'); }
 			if( session('SendSms') != $smscode ||  session('SendSmsTel') != $mlptel) { $this->error('验证码输入错误，请重新修改'); }
-			
-			if( $this->type == 1){
-				//M('merchant')->where('jid='.$this->jid)->setField(array('mlptel'=>$mlptel,'mlptel_verified'=>1));
-				M('merchant')->where('jid='.$this->jid)->save(array('mlptel_verified'=>1));
-				M('member')->where('mid='.$this->mid)->setField(array('mphone'=>$mlptel));
-			}
+				
+			M('member')->where('mid='.$this->mid)->setField(array('mphone'=>$mlptel));
+			M('merchant_user')->where('tmid='.$this->mid)->setField(array('tphone'=>$mlptel));
 			
 			session('SendSms', null);
 			session('SendSmsTel', null);
 			$this->success('验证成功');
 			
 		} else {
-			$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+			$tel = M('merchant_user')->where(array('tmid'=>$this->mid))->getField('tphone');
 			$this->assign('guide',I('guide'));
-			$this->assign('merchant',$merchant);
+			$this->assign('tel',$tel);
 			$this->display();
 		}
 	}

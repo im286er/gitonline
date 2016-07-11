@@ -2,14 +2,19 @@
 <block name="header"></block>
 <block name="body">
     <header>
-      <a href="{:U('User/index')}"><div class="back pull-left"></div></a>
+      <if condition="$dtype eq 2">
+        <a href="{:U('User/index')}">
+      <else/>
+        <a href="javascript:history.back(-1)">
+      </if>
+      <div class="back pull-left"></div></a>
       {$page_name}
     </header>
     <div class="container-fluid moneylistdetail" >
         <div class="row ct-shop">
             <h4 class="ct-title tred" style="float: left; width: 100%; line-height: 24px;">
-                <font style="float: left; width: 42%;">{$shop_info.sname}</font>
-                <span class="tel" style="float: left; width: 58%; font-size: 1.6rem; text-align: right;"><a href="tel:">热线：{$shop_info.mservetel}</a></span>
+                <font style="float: left; width: 34%;">{$shop_info.sname}</font>
+                <span class="tel" style="float: left; width: 66%; font-size: 1.6rem; text-align: right;"><a href="tel:{$shop_info.mservetel}">热线：{$shop_info.mservetel}</a></span>
             </h4>
 
             <div class="col-xs-4 first">
@@ -32,9 +37,10 @@
               <li class="list-group-item">{$shop_info.mexplain|nl2br}</li>
               <li class="list-group-item">营业时间：{$shop_info.yy_stime}-{$shop_info.yy_etime}</li>  
               <li class="list-group-item">商家地址：{$shop_info.saddress}</li>
-              <li class="list-group-item itemmore">营业执照： <img src="{$shop_info.license}" style="width:100px;height:100px"></li>
-              <li class="list-group-item itemmore">餐饮服务许可证： <img src="{$shop_info.permit}" style="width:100px;height:100px"></li>
-              <a href="{:U('Video/index')}" style="color:#000;"><li class="list-group-item itemmore">视频展示</li></a>
+              <if condition="$shop_info['license']"> <li class="list-group-item itemmore">营业执照： <img src="{$shop_info.license}" style="width:100px;height:100px;margin: 10px 0;"></li>  </if>
+             <if condition="$shop_info['permit']"> <li class="list-group-item itemmore">餐饮服务许可证： <img src="{$shop_info.permit}" style="width:100px;height:100px;margin: 10px 0;"></li> </if>
+
+              <a href="{:U('Video/index', array('dtype'=>2))}" style="color:#000;"><li class="list-group-item itemmore">视频展示</li></a>
             </ul>
       </div>     
         

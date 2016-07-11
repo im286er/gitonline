@@ -56,15 +56,25 @@ function setsmsip( $phone, $code='' )
 
 
 //短信发送
-function sendmsg($phone, $content, $foottxt = '【阿宅订】',$verify=true) {
+function sendmsg($phone, $content, $foottxt = '',$verify=true) {
 	if($verify){ if( ! setsmsip( $phone, $content ) ) return false; }
 	$url = "http://58.83.147.92:8080/qxt/smssenderv2?user=CS_azd&password=".md5('66313768')."&tele=".$phone;
 	if(  is_numeric($content) ) {
-		$data = "msg=您的验证码为：".$content."【阿宅订】";
+		$data = "msg=您的验证码为：".$content;
+		if($foottxt){
+			$data .= iconv('UTF-8', 'GB2312', $foottxt);
+		}else{
+			$data .= "【阿宅订】";
+		}
 	} else {
-		$data = "msg=".$content;
-		$data = iconv('UTF-8', 'GB2312', $data);
-		$data = $data."【阿宅订】";
+		if($foottxt){
+			$data = "msg=".$content.$foottxt;
+			$data = iconv('UTF-8', 'GB2312', $data);
+		}else{
+			$data = "msg=".$content;
+			$data = iconv('UTF-8', 'GB2312', $data);
+			$data .= "【阿宅订】";
+		}
 	}
 	$ch = curl_init($url);
 	//curl_setopt($ch, CURLOPT_ENCODING , 'gbk');
@@ -82,7 +92,7 @@ function flsendmsg($phone, $content , $qm) {
 	if( setsmsip($phone, $content) == false) return false;
 	$url = "http://58.83.147.92:8080/qxt/smssenderv2?user=CS_azd&password=".md5('66313768')."&tele=".$phone;
 	if(  is_numeric($content) ) {
-		$data = "msg=您的验证码为：".$content."【全民返利】";
+		$data = "msg=您的验证码为：".$content."【阿宅订】";
 		if($qm == '438'){
 			$data = "msg=您的验证码为：".$content."【天湖洗衣】";
 		}
@@ -92,7 +102,7 @@ function flsendmsg($phone, $content , $qm) {
 		if($qm == '438'){
 			$data = $data . "【天湖洗衣】";
 		}else{
-			$data = $data . "【全民返利】";
+			$data = $data . "【阿宅订】";
 		}
 		
 	}

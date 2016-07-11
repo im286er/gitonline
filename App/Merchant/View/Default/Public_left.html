@@ -5,7 +5,8 @@
              
             <div class="sideBar_nav">
                 <ul>
-				 	<foreach name="nextmenu" item="vo" >
+                <if condition="$nextmenu">
+				 	<foreach name="nextmenu" item="vo">
            	<li><a <if condition="$vo[id] eq $CurrentUrl">class='childCurr'</if> href="{$vo.url}" target="_self">{$vo.name}</a>
            		<div class="childddd">
            			<foreach name="vo.next" item="voo" >
@@ -16,7 +17,9 @@
            	</li>
            	
             </foreach>
-            
+<else />
+<li><a>无菜单</a></li>
+</if>
 	
                 </ul>
             </div>

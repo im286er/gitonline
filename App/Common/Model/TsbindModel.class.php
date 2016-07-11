@@ -87,38 +87,43 @@ class TsbindModel extends Model {
 		return true;
 	}
 	
-	public function hebing($sid){
+	//保存本地购物车到服务器	
+	public function saveCart($sid){
+		M('temp_cart')->where(array('phpsessid'=>$_COOKIE['PHPSESSID'],'tableid'=>session('table')))->delete();
 		$cart = $_COOKIE['ProductList'];
-		//提交购物车数据
-		if(!empty($cart) && in_array(CONTROLLER_NAME.ACTION_NAME,array('IndexshopCart','Flowconfirm'))){		
-			M('temp_cart')->where(array('tableid'=>session('table')))->delete();
-			$cart_arr2 = explode('|', $cart);
-			foreach($cart_arr2 as $k1=>$v1){
-				if(!empty($v1)){
-					$temp = explode('_', $v1);
-					$opt = array(
+		$cart_arr2 = explode('|', $cart);
+		foreach($cart_arr2 as $k1=>$v1){
+			if(!empty($v1)){
+				$temp = explode('_', $v1);
+				$opt = array(
+						'phpsessid' => $_COOKIE['PHPSESSID'],
 						'tableid' => session('table'),
 						'gid' => $temp[1],
 						'gnumber' => $temp[2],
 						'sid' => $sid,
 						'add_time' => date("Y-m-d H:i:s"),
-					);
-					M('temp_cart')->add($opt);
-				}
+				);
+				M('temp_cart')->add($opt);
 			}
-		}else{
-			//读取购物车数据
-			$r = M('temp_cart')->where(array('tableid'=>session('table')))->select();
-			$cc = array();
-			foreach($r as $k2=>$v2){
-				$str = $sid.'_'.$v2['gid'].'_'.$v2['gnumber'];
-				$cc[] = $str;
-			}
-			$cd = join('|',$cc);
-			cookie('ProductList',$cd);
-			//$_COOKIE['ProductList'] = $cd;
 		}
-		
+	}
+	
+	//读取服务器购物车的值
+	public function getCart($sid){
+		$result = '';
+		$temp_cart = M('temp_cart')->where(array('sid'=>$sid,'tableid'=>session('table')))->select();
+		$r = array();
+		foreach($temp_cart as $k=>$v){
+			if(isset($r[$v['gid']])){
+				$r[$v['gid']]['gnumber'] += $v['gnumber'];
+			}else{
+				$r[$v['gid']] = array('sid'=>$v['sid'],'gid'=>$v['gid'],'gnumber'=>$v['gnumber']);
+			}
+		}
+		foreach($r as $k2 => $v2){
+			$result .= $v2['sid'].'_'.$v2['gid'].'_'.$v2['gnumber'].'|';
+		}
+		return $result;
 	}
 }
 

@@ -5,7 +5,7 @@
 		<div class="video-detail">
 			<div class="video-box">
 				<if condition="$info['gfile']">
-				    <video id="myVideo" class="video-js vjs-ds-skin" controls preload="none" width="100%" height="100%" poster="{$info.gimg}" data-setup="{}">
+				    <video id="myVideo" class="video-js vjs-ds-skin"  controls preload="none" width="100%" height="100%" poster="{$info.gimg}" data-setup="{}">
                         <!-- 如果本地有视频，则调用本地的视频，如果本地没有视频，则调用服务器上的视频 -->
                         <source id="VideoSrc" src="{$info.gfile}" type='video/mp4' />
                         <source src="{$info.gfile}" type='video/mp4' /> <!-- 保证视频可以正常打开 -->
@@ -32,8 +32,8 @@
 						</script>
                 </if>
 			</div>
-			<h6 class="video-title">视频简介：</h6>
-			<p class="video-desc">{$info.gdescription}</p>
+            <h6 class="video-title">视频简介：</h6>
+            <p class="video-desc">{$info.gdescription}</p>
 		</div>
 	</div>
 	<script src="__PUBLIC__/Mobile/default/Js/video.js"></script>

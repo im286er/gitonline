@@ -34,18 +34,29 @@
         })
 
     </script>
-    
+
     <if condition="$dtype eq 1">
-        <div class="container-fluid" >
+        <!-- <div class="container-fluid" > -->
     </if>
-            <div class="row ct-xptj">
+            <div class="ct-xptj">
+            <if condition="$dtype neq 1">
             <h3 class="ct-title" style="float: left; width: 100%">
                 <font style="float: left;">{$cname}</font>
                 <a href="{:U('Index/new2',array('cid'=>$cid, 'dtype'=>1))}" class="indexmore">更多</a>
             </h3>
+            <else/>
+            <h3 style="height: 15px;"></h3>
+            </if>
+            
             <volist name="goods" id="vo">
-                <div class="col-xs-4">
-                    <a href="{:U('Choose/detail',array('gid'=>$vo['gid'], 'sid'=>$sid, 'jid'=>$jid))}"><img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg" ></a>
+                <div class="ct-xptjli">
+                <div class="libody">
+                    <if condition="$vo.gstock eq 0">
+                    <a href="javascript:alert('此商品暂无库存');"><img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg" ></a>
+                    <else />
+                     <a href="{:U('Choose/detail',array('gid'=>$vo['gid'], 'sid'=>$sid, 'jid'=>$jid))}"><img src="{$vo.gimg}" class="img-responsive  center-block ct-proimg" ></a>
+                    </if>
+
                     <div class="ct-proinfo">
                         <h5>{$vo.gname}</h5>
                         <div class="star start-5"></div>
@@ -56,16 +67,48 @@
                             <div class="addtocart" data-id="{$vo.gid}" data-gstock="{$vo.gstock}" data-pic="{$vo.gimg}" ></div>
                         </div>
                         <label id="numLabel1" class="numLabel gnum_{$vo.gid}" style="display: none;"></label>
-
                     </div>
                 </div>
+                </div>
             </volist>
-        </div>
-        <div class="nomore text-center">
-            没有更多的了
-        </div>
-        
+        <!-- </div> -->
     </div>
-    
-    
+    <div class="nomore text-center">
+        没有更多的了
+    </div>
+    <script type="text/javascript">
+        /*var isQQ,isWeixin,isIphone;
+        isQQ = navigator.userAgent.indexOf("QQ") > -1;
+        isWeixin=navigator.userAgent.indexOf("MicroMessenger") > -1;
+        isIphone=navigator.userAgent.indexOf('iPhone') > -1;*/
+        var op,np,flag,nt;
+        $(document).scroll(function(){
+            if ( $(document).scrollTop() >= nt ) {
+                $(".ct-topnav").addClass("ct-topnav-hover");
+            }
+            else {
+                $(".ct-topnav").removeClass("ct-topnav-hover");
+            }
+        });
+        $(document).bind("touchstart",function(e){
+            var pointer=e.originalEvent.targetTouches[0];
+            op = pointer.pageY;
+        });
+        $(document).bind("touchmove",function(ev){
+            nt=$('.ct-banner').height() - 20;
+            var pointer=ev.originalEvent.targetTouches[0];
+            np = pointer.pageY;
+            flag=np-op;
+
+        });
+        $(document).bind("touchend",function(){
+            if($(document).scrollTop()<nt){
+                if(flag<0)
+                    $('body').animate({scrollTop: nt},300);
+                else
+                    $('body').animate({scrollTop: '0'},300);
+            }
+        });
+    </script>
+
 </block>
