@@ -1508,7 +1508,7 @@ class SalesController extends MerchantController {
 		if( !$user_phone ) $user_phone = $userInfo['flu_phone'];
 		if( $user_phone ) {
 			$merchant = M('merchant')->where(array('jid'=>$jid))->find();
-			$foottxt  = '['.$merchant['mabbreviation'].']';
+			$foottxt  = '【'.$merchant['mabbreviation'].'】';
 			sendmsg( $user_phone,  $content , $foottxt);
 		}
 				

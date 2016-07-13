@@ -24,18 +24,25 @@
     </footer>
     <input type="hidden" id="rimg" value="__PUBLIC__/Merchant/images/ico_search_hover.png" />
 
+    <!--
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog show-style" role="document" style="margin-top: 100px;">
+        <div class="modal-dialog show-style kefu" role="document" >
             <div class="modal-content">
                 <div class="modal-header"  style="border:0;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-left: 20px;"><span aria-hidden="true">&times;</span>
 </button>
                 </div>
                 <div class="modal-body" style="padding-bottom:0; border:0;">
                     <div class="row" style="text-align: center; color: #fff;">
+                        <notempty name="link.tel">
                         <a href="{$link['tel']}" style="color: #fff"><span style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #fb2a2a; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">电&nbsp;话</span></a>
+                        </notempty>
+                        <notempty name="link.qq">
                         <a href="{$link['qq']}" style="color: #fff"><span style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #09a3dc; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">Q&nbsp;Q</span></a>
+                        </notempty>
+                        <notempty name="link.wx">
                         <span class="show-wx" style="float: left; width: 84%; height: 4rem; line-height: 4rem;  background: #81d741; margin-left: 8%; margin-bottom: 30px; border-radius: 5px;">微&nbsp;信</span>
+                        </notempty>
                     </div>
                     <br />
                 </div>
@@ -44,7 +51,7 @@
         </div>
         <div class="modal-dialog" role="document" id="wx_inc" style="margin-top: 70px;display: none; background: #fff; border-radius: 5px;">
             <div class="modal-header"  style="border:0;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-left: 20px;"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="row" style="text-align: center; color: #fff;">
@@ -53,30 +60,75 @@
             </div>
         </div>
     </div>
-
+    -->
+    <div class="kefu" style="display: none;">
+        <div class="kefubody" >
+            <ul class="kefuul" style="display: none;">
+                <if condition="$info['mservetel']">
+                <li>                   
+                    <a href="{$link['tel']}">
+                        <img src="__PUBLIC__/Merchant/images/ico_phone.jpg">
+                        电话
+                    </a>
+                </li>
+                </if>
+                <if condition="$info['qq']">
+                <li>
+                    <a href="{$link['qq']}">
+                        <img src="__PUBLIC__/Merchant/images/ico_qq.jpg">
+                        QQ
+                    </a>
+                </li>
+                </if>
+                <if condition="$info['weixin_pic']">
+                <li>
+                    <a class="weixinkefu">
+                        <img src="__PUBLIC__/Merchant/images/ico_weixin.jpg">
+                        微信
+                    </a>
+                </li>
+                </if>
+                <div class="kefuclose"><img src="__PUBLIC__/Merchant/images/kefuclose.png" width="30px"></div>
+            </ul>
+            <div class="weixin" style="display: none;">
+                <div class="weixinclose"><img src="__PUBLIC__/Merchant/images/kefuclose.png" width="30px"></div>
+                <img src="{$link['wx']}" class="QR">
+            </div>
+        </div>
+    </div>
 
 
     <script type="text/javascript"> 
      
     $(document).ready(function() {
-        widthAuto();
-
-
-        $('.show-wx').click(function(){
+       /* $('.show-wx').click(function(){
              $('#wx_inc').fadeIn();
              $('.show-style').fadeOut();
         });
         $('.close').click(function(){
             $('#wx_inc').fadeOut();
             $('.show-style').fadeIn();
+        });*/
+
+        $('.nav-down').click(function(){
+            $('.kefu').fadeIn();
+            $('.kefuul').slideToggle();
         });
-         
+        $('.kefuclose').click(function(){
+            $('.kefuul').slideToggle();
+            $('.kefu').fadeOut();
+        });
+        $('.weixinkefu').click(function(){
+            $('.kefuul').slideToggle('500',function(){
+                $('.weixin').fadeIn();
+            });
+        });
+        $('.weixinclose').click(function(){
+            $('.weixin').fadeOut();
+            $('.kefu').fadeOut();
+        });
     });
 
-    function widthAuto() {
-        var Width=document.documentElement.clientWidth - 160 +'px';/*可视窗口宽度*/
-        $('#wx_inc img').css({'width':Width,'maxWidth':'600px','marginBottom':'20px'});
-    }
    </script>
 
 

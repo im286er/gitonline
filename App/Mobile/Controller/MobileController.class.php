@@ -250,7 +250,8 @@ class MobileController extends Controller {
 		$this->path = APP_DIR.'/Public/Data/'.$this->jid.'/';
 		$path = $this->path.'Notice3.php';
 		file_exists($path) && $notice=file_get_contents($path);
-
+		
+		$this->assign('info',$info);
 		$this->assign('notice', $notice ? $notice : '');
 		$this->assign('banner_list',$banner_list);
 		$this->assign('shop_list', $shop_list);

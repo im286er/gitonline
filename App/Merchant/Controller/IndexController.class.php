@@ -227,7 +227,9 @@ class IndexController extends MerchantController {
 		$content = \Org\Util\String::randString(4, 1);
 		session('SendSms', $content);
 		session('SendSmsTel', $tpl);
-		exit(sendmsg( $tpl, $content,'【阿宅订】',false) ? "1" : "0");		
+		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
+		$foottxt  = '【'.$merchant['mabbreviation'].'】';
+		exit(sendmsg( $tpl, $content,$foottxt,false) ? "1" : "0");		
 	}
 	
 	

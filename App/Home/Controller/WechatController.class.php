@@ -247,7 +247,14 @@ class WechatController extends Controller {
 		$this->assign('order_info', $order_info);
 		//$this->assign('editAddress', $editAddress);
 		$this->assign('jsApiParameters', $jsApiParameters);
-		$this->assign('returnurl', U('/User/myorder@yd',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump'))) );//更改url地址
+		if($order_info['o_gtype'] == 'Seat'){
+			$bk_url = U('User/myreserve',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump') ));
+		}elseif($order_info['o_gtype'] == 'upgrade'){
+			$bk_url = U('User/index',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump') ));
+		}else{
+			$bk_url = U('User/myorder',array('jid'=>$order_info['o_jid'],'jump'=>cookie('payjump') ));
+		}
+		$this->assign('returnurl',$bk_url );//更改url地址
 		$this->display();
 	}
 

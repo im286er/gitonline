@@ -15,15 +15,23 @@
                             <li><a href="{:U('Index/index',array('sid'=>$vo['sid'], 'jid'=>$jid))}">{$vo.sname}</a></li>
                         </volist>
                     </ul>
+                    <script>
+                        var w=$('.ct-topnav .col-xs-3').width()+1;
+                        $('.dropdown-menu').css('left',-w);
+                    </script>
                 </div>
 
 
 
                 <div class="col-xs-3 ct-control">
                     <a href="{:U('Index/search')}" ><img src="__PUBLIC__/Merchant/images/ico_search_hover.png" id="top-search" class="img-responsive"></a>
-                    <a data-toggle="modal" data-target="#share" ><img src="__PUBLIC__/Merchant/images/ico_share_hover.png" id="top-share" class="img-responsive"></a>
+                    <div data-toggle="modal" data-target="#share" class="ddd" ><img src="__PUBLIC__/Merchant/images/ico_share_hover.png" id="top-share" class="img-responsive"></div>
                 </div>
-                
+                <script>
+                   $('.ct-control').click(function(){
+                    //空函数，不能去掉，否则部分iphone用微信浏览器打开时无法点击分享按钮
+                   })
+                </script>
             </div>
             <div class="ct-notice">
                 <MARQUEE style="margin-top: 5px;" scrollAmount=3 direction=left>{$notice}&nbsp;</MARQUEE>
@@ -50,16 +58,16 @@
                 <div class="modal-dialog" role="document" style="margin-top: 55px;">
                     <div class="modal-content">
                         <div class="modal-header"  style="border:0;">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-left: 20px;"><span aria-hidden="true">&times;</span></button>
                         </div>
-                        <div class="modal-body" style="padding-bottom:0; border:0;">
-                            <h3 class="text-center" style="margin-bottom: 20px;">{$shop.sname}</h3>
-                            <div class="row">
+                        <div class="modal-body" style="padding:0; border:0;">
+                            <h3 class="text-center" style="margin:5px 0;">{$shop.sname}</h3>
+                            <div>
                                 <div style="margin-left: calc(50% - 100px)">
                                     <img src="{:U('Common/makeQrcode@sj', array('jid'=>$jid,'sid'=>$sid))}" style="width: 200px;"/>
                                 </div>
                             </div>
-                            <h5 class="text-center gray">长按或扫描二维码进入店铺</h5>
+                            <h5 class="text-center gray" style="margin: 0;">长按或扫描二维码进入店铺</h5>
                         </div>
                         <div class="modal-footer"  style="   border:0px;  text-align:center;  overflow:hidden;  ">
                             <div class="row"  style="background:#f6f6f6; height:7rem; margin-bottom:-1.5rem; border-radius:0 0 5px 5px; padding-top:1.5rem; padding-left:2rem; padding-right:2rem;">
@@ -71,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
         <link rel="stylesheet" type="text/css" href="__PUBLIC__/Merchant/plugins/flexslider/flexslider.css" />
         <script type="text/javascript" src="__PUBLIC__/Merchant/plugins/flexslider/jquery.flexslider-min.js"></script>
         <script type="text/javascript">
@@ -126,8 +134,6 @@
             topAuto();
         });
         $(window).onresize=topAuto;
-
-
     </script>
 
 
@@ -159,7 +165,48 @@
                     </a>
                 </div>
             </volist> -->
-        </div><br/>
+        </div>
+
+        <!-- <div class="ct-hotact">
+            <div class="col-xs-4">
+                <h3 class="redx">限时购</h3>
+            <span style="font-size: 9px; ">
+                <div style="background: #f2f2f2;">
+                    距开始
+                    <i class="redx" id="hour">02</i>：
+                    <i class="redx" id="minute">45</i>：
+                    <i class="redx" id="second">37</i>
+                </div>
+            </span>
+                <div class="hotactbom">
+                    <em>肯德基</em>
+                    <font class="redx">
+                        ￥<i>18</i>
+                        <b>特价<strong class="tri"></strong></b>
+                    </font>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <h3 class="bluex">限量购</h3>
+            <span class="bluex">
+                <div  style="background: #e9fcfe;">精品限量抢购</div>
+            </span>
+                <div class="hotactbom">
+                    <img src="__PUBLIC__/Merchant/images/hotact_pic1.jpg">
+                </div>
+
+            </div>
+            <div class="col-xs-4">
+                <h3 class="yellowx">1元购</h3>
+            <span class="yellowx" >
+                <div style="background: #fef2d5;">新客专享</div>
+            </span>
+                <div class="hotactbom">
+                    <img src="__PUBLIC__/Merchant/images/hotact_pic2.jpg">
+                </div>
+
+            </div>
+        </div> -->
 
     <else />
         <header >
@@ -174,5 +221,26 @@
        window.onload=function(){
             $('#loader').hide();
         }
+    </script>
+    <script>
+        /*function getRTime(){
+            var EndTime= new Date('2016/07/11 18:00:00'); //截止时间
+            var NowTime = new Date();
+            var t =EndTime.getTime() - NowTime.getTime();
+
+            var h=Math.floor(t/1000/60/60);
+            var m=Math.floor(t/1000/60%60);
+            var s=Math.floor(t/1000%60);
+            if(h<10)
+                h= '0'+ h;
+            if(m<10)
+                m= '0'+ m;
+            if(s<10)
+                s= '0'+ s;
+            document.getElementById("hour").innerHTML = h ;
+            document.getElementById("minute").innerHTML = m ;
+            document.getElementById("second").innerHTML = s ;
+        }
+        setInterval(getRTime,1000);*/
     </script>
 </block>

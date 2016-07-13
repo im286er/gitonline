@@ -187,7 +187,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                                 		<p><input type="button" onclick="SetOrderInfo('<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="拒绝订单"></p>
                                 		<p><input type="button" onclick="location.href='/Sales/editOrder/oid/<?php echo $v['o_id']; ?>.html'" value="编辑订单"></p>
                                     <?php else:?>
-                                        <p style="color:red">订单出现问题，请联系帝鼠平台</p>
+                                        
                                     <?php endif; ?>
                                 <?php } ?> 
                             <elseif condition="$v['o_dstatus']==3"/><!-- 待完成 -->
@@ -206,7 +206,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                                     	<p><input type="button" onclick="SetOrderInfo('<?php echo $v['o_id']; ?>', '<?php echo $v['o_uid']; ?>')" value="拒绝订单"></p>
                                         <p><input type="button" onclick='SendOrder("<?php echo $v["o_id"]; ?>")' value="确认完成"></p>
                                     <?php else:?>
-                                        <span style="color:red">订单出现问题，请联系帝鼠平台</span>
+                                        
                                     <?php endif; ?>
                                 <?php } ?> 
                             <elseif condition="$v['o_dstatus']==4"/><!-- 已完成 -->

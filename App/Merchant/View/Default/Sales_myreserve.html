@@ -137,6 +137,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
                     <th>数量</th>
                     <th>下单时间</th>
                     <th style="text-align:left; padding-left:60px;">付款/状态</th>
+                    <th>备注</th>
                     <th>实付款(元)/操作</th>
                 </tr>
                 <php>$_j = 1; $rowspan = count($v[ogoods])</php>
@@ -161,6 +162,7 @@ select {background: none repeat scroll 0 0 #f9f9f9; border-color: #666666 #ccccc
 							<if condition="$v['voucher']"><span style="line-height:25px">优惠券抵：-{$v.voucher.o_price} 元</span></if>
                             
 						</td>
+                        <td style="border-left:1px solid #e7e7eb;">{$v.o_remarks}</td>
                         <td rowspan="{$rowspan}" style="border-left:1px solid #e7e7eb; vertical-align:middle;">
 							￥{$v.o_price} <br/>
                             

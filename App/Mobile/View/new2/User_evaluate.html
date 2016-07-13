@@ -48,19 +48,19 @@
             <div class="demobox">
                 <div class="evaluate_buy_font">
                     <span>{$vo['sp_name']}</span>
-                    <div class="xzw_starBox{$vo['sp_id']}">
-                        <ul class="star{$vo['sp_id']}">
-                            <li><a href="javascript:void(0)" title="1" class="one-star{$vo['sp_id']}"></a></li>
-                            <li><a href="javascript:void(0)" title="2" class="two-stars{$vo['sp_id']}"></a></li>
-                            <li><a href="javascript:void(0)" title="3" class="three-stars{$vo['sp_id']}"></a></li>
-                            <li><a href="javascript:void(0)" title="4" class="four-stars{$vo['sp_id']}"></a></li>
-                            <li><a href="javascript:void(0)" title="5" class="five-stars{$vo['sp_id']}"></a></li>
+                    <div class="xzw_starBox2">
+                        <ul class="star2">
+                            <li><a href="javascript:void(0)" title="1" gid="{$vo['sp_gid']}" class="one-star2 xingB"></a></li>
+                            <li><a href="javascript:void(0)" title="2" gid="{$vo['sp_gid']}"  class="two-stars2 xingB"></a></li>
+                            <li><a href="javascript:void(0)" title="3" gid="{$vo['sp_gid']}"  class="three-stars2 xingB"></a></li>
+                            <li><a href="javascript:void(0)" title="4" gid="{$vo['sp_gid']}"  class="four-stars2 xingB"></a></li>
+                            <li><a href="javascript:void(0)" title="5" gid="{$vo['sp_gid']}"  class="five-stars2 xingB"></a></li>
                         </ul>
-                        <div class="current-rating{$vo['sp_id']}"></div>
+                        <div class="current-rating2"></div>
                     </div>
                 </div>
                 <div class="evaluate_buy_rice" style="display: none;">
-                    <textarea type="text" placeholder="请说说你有什么评价吗"/></textarea>
+                    <textarea type="text" placeholder="请说说你有什么评价吗" gid="{$vo['sp_gid']}" class="contB cont{$vo['sp_gid']}" /></textarea>
                 </div>
             </div>
             </volist>
@@ -79,20 +79,42 @@
 	</div>
 
     <script>
+    var dataB = {};
+    var contB = {};
+    var o_id  = {$o_id};
     function check_sub(){
-        var gradeA = $('.licur').attr('id');
+        var assess = $('.licur').attr('id');
         var xingA  = $('#xingA').val();
-        var contA  = $('.contA').val();alert(contA);
+        var contA  = $('.contA').val();
 
-        var data = {
-            gradeA : gradeA,
+        var dataA = {
+            tag    : assess,
             xingA  : xingA,
+            contA  : contA,
         };
+
+        $.post('/User/evaluate', {'dataA':dataA, 'dataB':dataB, 'contB':contB, 'o_id':o_id}, function(re){
+        	window.location.href = "/User/orderDetail/o_id/"+o_id;
+        });
     }
 
     $('.xing').click(function(){
         var xingA = $(this).attr('title');
         $('#xingA').val(xingA);
+    });
+
+    $('.xingB').click(function(){
+        var xingB  = $(this).attr('title');
+        var gid    = $(this).attr('gid');
+
+        dataB[gid] = xingB;
+    });
+
+    $('.contB').blur(function(){
+    	var gid    = $(this).attr('gid');
+    	var cont   = $(this).val();
+    	
+    	contB[gid] = cont;
     });
     </script>
 </block>

@@ -91,7 +91,8 @@ class UserController extends MobileController {
 		}
 
 		$user = M('FlUser')->find($this->mid);
-
+		$sname = M('shop')->where(array('sid'=>$this->sid))->getField('sname');
+		$this->assign('sname',$sname);
 		$page_name = '账户信息';
 		
 		$suid = \Think\Crypt\Driver\Base64::encrypt($this->mid, C('CODEKEY'));
@@ -113,6 +114,7 @@ class UserController extends MobileController {
 				3 => '待完成',
 				4 => '已完成',
 				5 => '已关闭',
+				6 => '已评价',
 			);
 		//$oostatus = array(0=>'未付款',1=>'已付款');
 		$this->assign('odstatus',$odstatus);
@@ -203,7 +205,7 @@ class UserController extends MobileController {
 		//订单详情
 		$order = M('order')->where(array('o_id'=>$o_id))->find();
 		//联系电话
-		$info  = M('shop')->field('mservetel,ps_time')->where(array('sid'=>$this->sid))->find();
+		$info  = M('shop')->field('mservetel,ps_time,sname')->where(array('sid'=>$this->sid))->find();
 		$numb  = $info['mservetel'];
 		//送达时间
 		$ptime = $info['ps_time'];
@@ -225,6 +227,7 @@ class UserController extends MobileController {
 		$this->assign('total_price',$total_price);
 		$this->assign('list', $list);
 		$this->assign('ptime', $ptime);
+		$this->assign('info', $info);
 		$this->newdisplay();
 	}
 	
@@ -308,7 +311,13 @@ class UserController extends MobileController {
 		foreach ($goods as $key => $value) {
 			$total_price += $value['sp_number']*$value['sp_gdprice'];
 		}
-
+		$odstatus =  array(
+				1 => '预约待处理',
+				3 => '同意预约',
+				4 => '预约已完成',
+				5 => '预约关闭',
+		);
+		$this->assign('odstatus', $odstatus);
 		$page_name = '预约详情';
 		$this->assign('page_name',$page_name);
 		$this->assign('order', $order);
@@ -519,7 +528,7 @@ class UserController extends MobileController {
 		session('SendSms', $content);
 		//die(JSON(array('errcode'=>'ok','errmsg'=>$content)));
 		$merchant = M('merchant')->where(array('jid'=>$this->jid))->find();
-		$foottxt  = '['.$merchant['mabbreviation'].']';
+		$foottxt  = '【'.$merchant['mabbreviation'].'】';
 		die(sendmsg( $mobile, $content, $foottxt) ? JSON(array('errcode'=>'ok','errmsg'=>$content)):JSON(array('errcode'=>81444,'errmsg'=>'短信发送失败')));		
 	}
 	
@@ -1137,6 +1146,51 @@ class UserController extends MobileController {
 	//评价
 	public function  evaluate(){
 		$o_id  = I('o_id', 0);
+		if (IS_POST) {
+			$p_data = I('post.');
+			$model  = M('evaluate');
+			//开启事务
+			$model->startTrans();
+
+			$optA = array(
+				'oid'    => $p_data['o_id'],
+				'sid'    => $this->sid,
+				'grade'  => $p_data['dataA']['xingA'],
+				'assess' => $p_data['dataA']['contA'],
+				'tag'    => $p_data['dataA']['tag'],
+				'type'   => 1,
+				'date'   => date('Y-m-d H:i:s'),
+			);
+			$data = $model->add($optA);
+			//判断结果
+			if ($data) {
+				$optB = array(
+					'oid'    => $p_data['o_id'],
+					'sid'    => $this->sid,
+					'type'   => 2,
+					'date'   => date('Y-m-d H:i:s'),
+				);
+
+				foreach ($p_data['dataB'] as $key => $val) {
+					$optB['gid']    = $key;
+					$optB['grade']  = $val;
+					$optB['assess'] = $p_data['contB'][$key];
+					$re = $model->add($optB);
+				}
+				
+				if ($re) {
+					$model->commit();
+					
+					$res = M('order')->where(array('o_id'=>$o_id))->setField('o_dstatus', '6');
+					return $res;
+				}else{
+					$model->rollback();
+				}
+			}else{
+				// 事务回滚
+   				$model->rollback();
+			}
+		}
 		//订单商品
 		$goods = M('goodsSnapshot')->where(array('sp_oid'=>$o_id))->select();
 		//商铺信息
@@ -1147,6 +1201,7 @@ class UserController extends MobileController {
 		$this->assign('goods', $goods);
 		$this->assign('sinfo', $sinfo);
 		$this->assign('evaluate_c', C('EVALUATE_C'));
+		$this->assign('o_id', $o_id);
 		$this->newdisplay();
 	}
 

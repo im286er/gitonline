@@ -146,19 +146,28 @@ class PayController extends Controller {
 			$pay_info['out_trade_no'] = $get['out_trade_no'];
 			$trade_status = $get['trade_status'];
 			//($trade_status=='TRADE_SUCCESS' || $trade_status=='TRADE_FINISHED') or die('success');//交易成功，否则直接退回，返回接受数据成功
+			
+			if($order_info['o_gtype'] == 'Seat'){
+				$bk_url = U('User/myreserve',array('jid'=>$this->jid,'jump'=>cookie('payjump') ));
+			}elseif($order_info['o_gtype'] == 'upgrade'){
+				$bk_url = U('User/index',array('jid'=>$this->jid,'jump'=>cookie('payjump') ));
+			}else{
+				$bk_url = U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') ));
+			}
+			
 			if($pay_type=='alipaypc'){
 				$result = $this->pay_success($pay_info);//支付成功处理
 				if($result) {
-					$this->success('支付成功',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
+					$this->success('支付成功',$bk_url);
 				}else{
-					$this->error('支付失败',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
+					$this->error('支付失败',$bk_url);
 				}
 			}elseif($pay_type=='alipaywap'){
 				if($get['result']=='success') {
 					$re = $this->pay_success($pay_info);//支付成功处理
-					$this->success('支付成功',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
+					$this->success('支付成功',$bk_url);
 				}else{
-					$this->error('支付失败',U('User/myorder',array('jid'=>$this->jid,'jump'=>cookie('payjump') )));
+					$this->error('支付失败',$bk_url);
 				}
 			}
 		} else {

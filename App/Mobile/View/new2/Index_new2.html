@@ -35,6 +35,9 @@
 
     </script>
 
+
+
+
     <if condition="$dtype eq 1">
         <!-- <div class="container-fluid" > -->
     </if>
@@ -103,12 +106,13 @@
         });
         $(document).bind("touchend",function(){
             if($(document).scrollTop()<nt){
-                if(flag<0)
+                if(flag<-7)
                     $('body').animate({scrollTop: nt},300);
-                else
+                if(flag>0)
                     $('body').animate({scrollTop: '0'},300);
             }
         });
+
     </script>
 
 </block>

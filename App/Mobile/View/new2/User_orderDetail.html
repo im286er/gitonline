@@ -71,7 +71,9 @@
         </if>
          
         <ul class="row list-group orderinfo">
+
            <li class="list-group-item"><h4>订单详情<small>订单号：{$order['o_id']}</small></h4></li>
+           <li class="list-group-item"><h5>消费商铺：{$info['sname']}</h5></li>
            <li class="list-group-item"><h5>联系电话：{$numb}</h5></li>
            <li class="list-group-item"><h5><if condition="$order['o_xftype'] eq 1">消费方式：店内消费<else/>收货地址：{$order['o_address']}</if></h5></li>
            <li class="list-group-item"><h5>支付方式：<if condition="$order['o_type'] eq '0'">到店支付<else/>线上支付</if></h5></li>

@@ -11,7 +11,7 @@
     <script src="__PUBLIC__/Merchant/bootstrap/js/jquery.min.js"></script>
     <script src="__PUBLIC__/Merchant/bootstrap/js/bootstrap.min.js"></script>
     <script src="__PUBLIC__/Merchant/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
-    <div class=" order tab-nav" >
+    <div class=" order tab-nav">
      	<div class="row myorderstep">
         	<div class="col-xs-2">
             	<a href="{:U('User/myorder',array('dtype'=>2))}" <if condition="$o_dstatus eq ''">class="red"</if>>全部</a>
@@ -32,7 +32,7 @@
         <br />
         <if condition="!empty($order)">
         <volist name="order" id="vo" >
-        <div class="row orderpros">
+        <div class="row orderpros" style="padding: 0 15px;">
         <a href="{:U('orderDetail',array('o_id'=>$vo['o_id']))}" style="color: #1b1b1b;">
             <div class="ordernotitle">
                 <h5 class="gray" style="float: left; width: 100%">
@@ -76,7 +76,7 @@
                     <if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> 
                     <a class="btn btn-o btn2"  href="javascript:;" data-toggle="modal" data-target="#myModal" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a>
                     </if>
-                    <if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger') && !cookie('opentype') && $vo['o_pway'] eq 'weixin'">
+                    <if condition="strpos(I('server.HTTP_USER_AGENT'), 'MicroMessenger')">
                             <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',2);">微信付款</a>
                     <else />
                         <a class="btn btn-o" href="javascript:;" onclick="ch_pay('{$vo.o_id}',1);">支付宝付款</a>
@@ -88,6 +88,10 @@
                 <elseif condition="$vo['o_dstatus'] eq 3"/>
                     
                     <if condition="$vo['o_close'] eq 0 || $vo['o_close'] eq 3"> <a class="btn btn-o" href="javascript:;" data-toggle="modal" data-target="#myModal" onclick="ch_dtype('{$vo.o_id}',3);">取消订单</a></if>
+
+                <elseif condition="$vo['o_dstatus'] eq 4"/>
+                    
+                    <a class="btn btn-o" href="{:U('evaluate', array('o_id'=>$vo['o_id']))}">去评价</a>
                     
                 <else />
                     
@@ -112,6 +116,7 @@
                 function bodyauto(){
                     var height= document.documentElement.clientHeight - 45;
                     var winwidth=document.documentElement.clientWidth;
+                    $('body').css('paddingBottom','0');
                     if(winwidth<750)
                         $('.emptybody').css('height',height+'px');
                 }

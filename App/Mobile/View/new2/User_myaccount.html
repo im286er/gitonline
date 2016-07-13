@@ -40,12 +40,12 @@
          <div class="modal-dialog" role="document" style="margin-top: 55px;">
              <div class="modal-content">
                  <div class="modal-header"  style="border:0;">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-left: 20px;"><span aria-hidden="true">&times;</span></button>
 
                  </div>
-                 <div class="modal-body" style="padding-bottom:0; border:0;">
-                     <h3 class="text-center" style="margin-bottom: 20px;">{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</h3>
-                     <div class="row">
+                 <div class="modal-body" style="padding:0; border:0;">
+                     <h3 class="text-center" style="margin: 10px 0 ;">{$user['flu_nickname']?$user['flu_nickname']:$user['flu_username']}</h3>
+                     <div>
                          <div style="margin-left: calc(50% - 100px)">
                              <img src="{:U('Common/creatMyQrcode@sj', array('sid'=>$sid, 'jid'=>$jid, 'mid'=>$mid))}" style="width: 200px;">
                          </div>
@@ -55,7 +55,7 @@
                  <div class="modal-footer"  style="   border:0px;  text-align:center;  overflow:hidden;  ">
                      <div class="row"  style="background:#f6f6f6; height:7rem; margin-bottom:-1.5rem; border-radius:0 0 5px 5px; padding-top:1.5rem; padding-left:2rem; padding-right:2rem;">
                         <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a></div>
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdUrl":"{$bdUrl}","bdText":"我的二维码","bdMini":"2","bdMiniList":false,"bdPic":"{:U('Common/creatMyQrcode@sj', array('sid'=>$sid, 'jid'=>$jid, 'mid'=>$mid))}","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdUrl":"{$bdUrl}","bdText":"{$user.flu_nickname}的二维码_{$sname}","bdMini":"2","bdMiniList":false,"bdPic":"{:U('Common/creatMyQrcode@sj', array('sid'=>$sid, 'jid'=>$jid, 'mid'=>$mid))}","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
         
                      </div>
                  </div>
@@ -68,7 +68,7 @@
              <div class="modal-content">
                  <div class="modal-header"  style="border:0;">
                      <div style="font-size: 1.6rem; float: left; margin-left: calc(50% - 30px);">修改头像</div>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-left: 20px;"><span aria-hidden="true">&times;</span></button>
 
                  </div>
                  <div class="myphotobody">

@@ -12,11 +12,11 @@
     	<br />
      	<div class="orderstep img-rounded">
         	<div class="steptitle">
-            	<h4 class="orange"><if condition="$order['o_dstatus'] eq '1'">预约已提交<else/>预约成功</if></h4>
+            	<h4 class="orange">{$odstatus[$order['o_dstatus']]}</h4>
                 <h5>{$order['o_seat']}</h5>
             </div>
             <div class="stepinfo">
-            	  <if condition="$order['o_dstatus'] eq '1'">预约已提交<else/>预约成功</if>
+            	  {$odstatus[$order['o_dstatus']]}
             </div>
         </div>
          <br />
